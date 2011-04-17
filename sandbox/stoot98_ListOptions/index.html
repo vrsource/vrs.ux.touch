@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="../../deps/sencha_touch/resources/css/sencha-touch.css" type="text/css">
+        <title>Ext.ux.touch.ListOptions</title>
+        <script type="text/javascript" src="../../deps/sencha_touch/sencha-touch-debug.js">
+        </script>
+		<link rel="stylesheet" href="css/Ext.ux.touch.ListOptions.css" type="text/css">
+		<link rel="stylesheet" href="css/ListOptionsDemo.css" type="text/css">
+        <script type="text/javascript" src="Ext.ux.touch.ListOptions.js">
+        </script>
+
+        <script type="text/javascript">
+            
+            Ext.setup({
+                tabletStartupScreen: 'tablet_startup.png',
+                phoneStartupScreen: 'phone_startup.png',
+                icon: 'icon.png',
+                glossOnIcon: false,
+                onReady: function(){
+                
+                
+                    Ext.regModel('Contact', {
+                        fields: ['firstName', 'lastName']
+                    });
+                    
+                    var store = new Ext.data.JsonStore({
+                        model: 'Contact',
+                        
+                        getGroupString: function(record){
+                            return record.get('lastName')[0];
+                        },
+                        
+                        data: [{
+                            firstName: 'Tommy',
+                            lastName: 'Maintz'
+                        }, {
+                            firstName: 'Rob',
+                            lastName: 'Dougan'
+                        }, {
+                            firstName: 'Ed',
+                            lastName: 'Spencer'
+                        }, {
+                            firstName: 'Jamie',
+                            lastName: 'Avins'
+                        }, {
+                            firstName: 'Aaron',
+                            lastName: 'Conran'
+                        }, {
+                            firstName: 'Dave',
+                            lastName: 'Kaneda'
+                        }, {
+                            firstName: 'Michael',
+                            lastName: 'Mullany'
+                        }, {
+                            firstName: 'Abraham',
+                            lastName: 'Elias'
+                        }, {
+                            firstName: 'Jay',
+                            lastName: 'Robinson'
+                        }, {
+                            firstName: 'Tommy',
+                            lastName: 'Maintz'
+                        }, {
+                            firstName: 'Rob',
+                            lastName: 'Dougan'
+                        }, {
+                            firstName: 'Ed',
+                            lastName: 'Spencer'
+                        }, {
+                            firstName: 'Jamie',
+                            lastName: 'Avins'
+                        }, {
+                            firstName: 'Aaron',
+                            lastName: 'Conran'
+                        }, {
+                            firstName: 'Dave',
+                            lastName: 'Kaneda'
+                        }, {
+                            firstName: 'Michael',
+                            lastName: 'Mullany'
+                        }, {
+                            firstName: 'Abraham',
+                            lastName: 'Elias'
+                        }, {
+                            firstName: 'Jay',
+                            lastName: 'Robinson'
+                        }, {
+                            firstName: 'Tommy',
+                            lastName: 'Maintz'
+                        }, {
+                            firstName: 'Rob',
+                            lastName: 'Dougan'
+                        }, {
+                            firstName: 'Ed',
+                            lastName: 'Spencer'
+                        }, {
+                            firstName: 'Jamie',
+                            lastName: 'Avins'
+                        }, {
+                            firstName: 'Aaron',
+                            lastName: 'Conran'
+                        }, {
+                            firstName: 'Dave',
+                            lastName: 'Kaneda'
+                        }, {
+                            firstName: 'Michael',
+                            lastName: 'Mullany'
+                        }, {
+                            firstName: 'Abraham',
+                            lastName: 'Elias'
+                        }, {
+                            firstName: 'Jay',
+                            lastName: 'Robinson'
+                        }]
+                    });
+                   
+                    var list = new Ext.List({
+                        fullscreen: true,
+                        itemTpl: '{firstName} {lastName}',
+                        indexBar: true,
+                        store: store,
+                        disableSelection: false,
+						grouped: false,
+						onItemDisclosure: function(record, node, index, e){
+							alert('disclose');
+						},
+                  plugins: [new Ext.ux.touch.ListOptions({
+							enableSoundEffects: true,
+							allowMultiple: true,
+							hideOnScroll: true,
+                            menuOptions: [{
+                                id: 'Team Icon Tapped',
+                                cls: 'team',
+								enabled: true
+                            }, {
+                                id: 'Favourite Icon Tapped',
+                                cls: 'favourite'
+                            }, {
+                                id: 'Cart Icon Tapped',
+                                cls: 'shop'
+                            }, {
+                                id: 'Share Icon Tapped',
+                                cls: 'share'
+                            }]
+                        })]
+                    });
+					
+					list.on('beforelistoptionstap', function(menuItemData, model){
+						return (model.get('firstName') !== 'Ed');
+					}, this);
+                    
+                    list.on('menuoptiontap', function(data, record){
+                        Ext.Msg.alert('List Option Tapped', data.id + ' for ' + record.data.firstName + ' ' + record.data.lastName, Ext.emptyFn);
+                    });
+                    list.show();
+                    
+                }
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

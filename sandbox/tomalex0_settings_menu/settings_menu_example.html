@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <title>Test App</title>
+    <link rel="stylesheet" href="../../deps/sencha_touch/resources/css/sencha-touch.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    <style type="text/css">
+       .blackback{
+            -webkit-background-size: 0.438em 100%;
+            background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#C5CCD4), color-stop(0.71, #C5CCD4), color-stop(0.72, #CBD2D8), to(#CBD2D8));
+            background-color:black;
+        }
+        .settingscls{
+            background:transparent;
+        }
+        .settingscls  .x-list-header{
+          background-image:none  ;
+          background-color:transparent;
+          border:none;
+          -webkit-box-shadow:none;
+          text-shadow: #000 0 1px 1px;
+        }
+        .settingscls .x-list-group-items,.coachlist_items .x-list-group-items{
+             padding:1em 1em 0em 1em;
+             text-shadow: #fff 0 1px 1px;
+        }
+        .settingscls,.coachlist_items{
+             padding-top:20px !important;
+        }
+        
+        /** Rounding for first and last element in a group. */
+        .settingscls .x-list-group-items :first-child, .coachlist_items .x-panel-body :first-child{
+             -webkit-border-top-left-radius: 0.4em ;
+             -webkit-border-top-right-radius: 0.4em;
+        }
+        
+        .settingscls .x-list-group-items :last-child, .coachlist_items .x-panel-body :last-child{
+             -webkit-border-bottom-left-radius: 0.4em;
+             -webkit-border-bottom-right-radius: 0.4em;
+        }
+       .settingscls .x-list-disclosure{
+             width: 10px;
+             height: 13px;
+             margin-top:0.6em;
+             right:1em !important;
+             -webkit-mask:none;
+             -webkit-mask-box-image: url('chevron_mask.png');
+        }
+        .settingscls .x-list-item{
+            background:white;
+        }
+        
+        /** Spacing for the icon. */
+        .icon{
+          margin-right:20px;
+          vertical-align:middle;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+Ext.SettingsPanel = Ext.extend(Ext.List, {
+        groupTpl : [
+        '<tpl for=".">',
+            '<div class="x-list-group x-group-{id}">',,
+                '<h3 class="x-list-header x-settings-header" ></h3>',
+                '<div class="x-list-group-items">',
+                    '{items}',
+                '</div>',
+            '</div>',
+        '</tpl>'
+	]
+});
+
+Ext.reg('settingspanel',Ext.SettingsPanel);
+Ext.setup({
+    tabletStartupScreen: 'tablet_startup.png',
+    phoneStartupScreen: 'phone_startup.png',
+    icon: 'icon.png',
+    glossOnIcon: false,
+    onReady : function() {
+            Ext.regModel('settingsModel', {
+                fields: ['section', 'type','childpanel']
+            });
+
+            var settingsStore = new Ext.data.JsonStore({
+                model  : 'settingsModel',
+                getGroupString : function(record) {
+                    return record.get('type');
+                },
+                data: [
+                    {"section":"Airplane Mode","type":"network","childpanel" : "bookSettingsPanel","icon":'icon.png'},
+                    {"section":"Wifi","type":"network","childpanel" : "bookServiceGroupsPanel","icon":'icon.png'},                    
+                    {"section":"Sound","type":"utility","childpanel" : "sellSetingsPanel","icon":'icon.png'},
+                    {"section":"Brightness","type":"utility","childpanel" : "sellVendorPanel","icon":'icon.png'},
+                    {"section":"Wallpaper","type":"utility","childpanel" : "sellProductGroupsPanel","icon":'icon.png'}
+                ]
+            });
+            var settingsBasePanel =  new Ext.Panel({
+                layout:{
+                    type:'vbox',
+                    align:'stretch'
+                },
+                baseCls: 'blackback',
+                fullscreen:true,
+                scroll:'vertical',
+                items: [{
+                    fullscreen:true,
+                    scroll:false,
+                    xtype: 'settingspanel',
+                    cls:'settingscls',
+                    grouped     : true,
+                    indexBar    : false,
+                    singleSelect: true,
+                    onItemDisclosure: true,
+                    store:settingsStore,
+                    itemTpl: '<tpl for="."><div ><img src ="{icon}" class="icon" /><strong>{section}</strong></div></tpl>',
+                    listeners:{
+                        itemtap : function(dataview,index,item,e){
+                            console.log(dataview.store.getAt(index).data.childpanel);
+                        }
+                    }
+                }]
+            });
+            var baseSettingsPanel = new Ext.Panel({
+                layout:'card',
+                scroll:false,
+                fullscreen:true,
+                items:[settingsBasePanel]
+            });
+    }
+});
+</script>
+</body>
+</html>

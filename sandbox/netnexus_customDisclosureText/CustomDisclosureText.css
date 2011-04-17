@@ -1,0 +1,27 @@
+/* 
+    Document   : CustomDisclosureText
+    Created on : 27.01.2011, 15:18:23
+    Author     : Johannes Pfeiffer - http://netnexus.de
+    Description:
+        Show the disclosure button with a custom text.
+*/
+
+.x-list .custom-disclosure-text {
+    margin-right: .5em;
+    margin-left: .5em;
+    overflow: visible;
+    -webkit-mask: none;
+    -webkit-mask-size: 0;
+    background-color: inherit;
+    background-image: none;
+    width: auto;
+    height: auto;
+}
+
+.x-list .custom-disclosure-btn {
+    color: #630;
+    text-shadow: #FC9 0px 0.08em 0px;
+    background: -webkit-gradient( linear, left bottom, left top, color-stop(0, #F3900C), color-stop(1, #F8B115) );
+    font-size: .7em;
+    font-weight: bold;
+}

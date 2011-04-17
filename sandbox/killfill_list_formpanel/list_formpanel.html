@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <title>Test App</title>
+    <link rel="stylesheet" href="../../deps/sencha_touch/resources/css/sencha-touch.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    
+</head>
+<body>
+<script type="text/javascript">
+/**
+* See: http://www.sencha.com/forum/showthread.php?128448
+*/
+Ext.regApplication({
+        launch: function() {
+
+                Ext.regModel('Contact', {
+                        fields: ['name']
+                });
+                Ext.regStore('contacts', {
+                        model: 'Contact',
+                        data: [
+                                {name: '1'},
+                                {name: '2'},
+                                {name: '3'},
+                                {name: '4'},
+                                {name: '5'},
+                                {name: '6'},
+                                {name: '7'},
+                                {name: '8'},
+                                {name: '9'},
+                                {name: '10'},
+                                {name: '11'},
+                                {name: '12'},
+                                {name: '13'},
+                                {name: '14'},
+                                {name: '15'},
+                                {name: '16'},
+                        ]
+                });
+                new Ext.form.FormPanel({
+                        fullscreen: true,
+                        layout: {
+                           type: 'vbox',
+                           //padding: '10',
+                           align: 'stretch'
+                        },
+                        items: [
+                                {
+                                 xtype: 'textfield',
+                                 flex: 0
+                                },
+                                {
+                                 flex: 1,
+                                 xtype: 'list',
+                                        store: 'contacts',
+                                        itemTpl: '{name}',
+                                }
+                        ]
+                });
+        }
+});
+</script>
+</body>
+</html>

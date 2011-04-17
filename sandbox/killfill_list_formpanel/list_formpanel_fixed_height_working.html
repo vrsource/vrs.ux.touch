@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <title>Test App</title>
+    <link rel="stylesheet" href="../../deps/sencha_touch/resources/css/sencha-touch.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    
+</head>
+<body>
+<script type="text/javascript">
+/**
+* Based upon: http://www.sencha.com/forum/showthread.php?128448
+*/
+
+var scrollable_list = false;
+var num_contacts = 6;
+var num_sections = 3;
+
+Ext.regApplication({
+        launch: function() {
+
+                Ext.regModel('Contact', {
+                        fields: ['name']
+                });
+                data = []
+                for(var x=0; x<num_contacts; x++)
+                { data.push({name: String(x)}); }
+                
+                Ext.regStore('contacts', {
+                        model: 'Contact',
+                        data: data
+                });
+                var all_items = [];
+                for(var i=0; i<num_sections; i++)
+                {
+                  all_items.push({
+                     xtype: 'fieldset',
+                     //title: 'section',
+                     //instructions: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet accumsan mauris, vitae suscipit est congue eget.',
+                     items: [
+                      {
+                        xtype: 'textfield',
+                        label: 'name',
+                        placeHolder: 'bob',
+                        flex: 0
+                      },
+                      {
+                        //flex: 1,
+                        scroll: (scrollable_list ? 'vertical' : false),
+                        xtype: 'list',
+                        store: 'contacts',
+                        itemTpl: '{name}',
+                        height: (scrollable_list ? 200 : undefined),
+                        onItemDisclosure: function() {console.log('selected'); },
+                        listeners: {
+			  itemtap: function() {console.log('item tapped');}
+                        }
+                       },
+                       {
+                        xtype: 'togglefield',
+                        label: 'toggle'
+                       }
+                       ]
+                    });
+
+                }
+                
+                                  all_items.push({
+                    xtype: 'fieldset',
+                    title: 'section',
+                    items: [
+                      {
+                        xtype: 'textfield',
+                        label: 'name',
+                        placeHolder: 'enter text'
+                      },
+                       {
+                        xtype: 'textfield',
+                        label: 'name',
+                        placeHolder: 'enter text'
+                      },
+                      {
+                        xtype: 'textfield',
+                        label: 'name',
+                        placeHolder: 'enter text'
+                      },
+                     
+                      {
+                        xtype: 'textfield',
+                        label: 'name',
+                        placeHolder: 'enter text'
+                      }
+                    ]
+                  });
+
+                new Ext.form.FormPanel({
+                        fullscreen: true,
+                        scroll: 'vertical',
+                        layout: {
+                           type: 'vbox',
+                           //padding: '10',
+                           align: 'stretch'
+                        },
+                        items: all_items
+                });
+        }
+});
+</script>
+</body>
+</html>
