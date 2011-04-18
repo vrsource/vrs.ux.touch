@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Test Suite</title>
+
+    <!-- CSS Files -->
+<link rel="stylesheet" href="deps/jasmine/lib/jasmine-1.0.1/jasmine.css" type="text/css"/>
+<link rel="stylesheet" href="resources/css/app.css" type="text/css"/>
+
+    <!-- TEST FRAMEWORK -->
+<script type="text/javascript" src="deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+<script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine.js"></script>
+<script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine-html.js"></script>
+<script type="text/javascript" src="deps/jasmine-species/jasmine-grammar.js"></script>
+<script type="text/javascript" src="deps/jasmine-species/jasmine-reporting.js"></script>
+
+   <!-- LIBRARIES -->
+<script type="text/javascript" src="src/vrs.ux.touch.FormPanel.js"></script>
+   
+
+   <!-- SPECS -->
+<script type="text/javascript" src="spec/bootstrap_spec.js"></script>
+
+    <!-- JS Coverage Code -->
+    <button type="button" onclick="window.open('jscoverage.html');">Cov</button>
+
+    <!-- Boot Jasmine Support -->
+    <script type="text/javascript">
+        var config = {};
+
+        if (!Ext.is.Desktop) {
+            config.fullscreen = true;
+        }
+
+        config.onReady = function() {
+            var jasmineEnv = jasmine.getEnv(),
+                styledReporter = new jasmine.reporting.StyledHtmlReporter();            
+            jasmineEnv.addReporter(styledReporter);
+            jasmineEnv.specFilter = function(spec) {
+               return styledReporter.specFilter(spec);
+            }
+            jasmineEnv.execute();
+
+            //jasmine.getEnv().addReporter(new SenchaReporter());
+            //jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        }
+
+        // Not sure if I need this
+        var eventSimulator = new Ext.util.EventSimulator();
+        Ext.setup(config);
+    </script>
+
+</head>
+<body></body>
+</html>
