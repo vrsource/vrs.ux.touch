@@ -53,8 +53,8 @@ $include-default-icons: true;
  * @example
  * @include pictos-iconmask('attachment');
  */
-@mixin pictos-formlist-iconmask($name) {
-  .x-formlist-row img.x-formlist-icon-mask.#{$name} {
+@mixin pictos-menupanel-iconmask($name) {
+  .x-menupanel-row img.x-menupanel-icon-mask.#{$name} {
     -webkit-mask-image: theme_image($theme-name, "pictos/" + $name + ".png");
   }
 }
@@ -71,7 +71,7 @@ $include-default-icons: true;
 //@include pictos-iconmask('add1');
 
 // stripped background for settings panel
-$formlist-iconmask-size: 1em; // 1.7em;
+$menupanel-iconmask-size: 1em; // 1.7em;
 
 /*
 .x-form-settings-panel > .x-panel-body {
@@ -80,7 +80,7 @@ $formlist-iconmask-size: 1em; // 1.7em;
 }
 */
 
-.x-formlist-row {
+.x-menupanel-row {
    @include display-box;
    @include box-orient(horizontal);
    @include box-align(center);
@@ -90,7 +90,7 @@ $formlist-iconmask-size: 1em; // 1.7em;
    width: 100%;
    //background: $form-field-bg-color none;
 
-   &.x-formlist-row-selected {
+   &.x-menupanel-row-selected {
       @include background-gradient($list-active-color, $list-active-gradient);
       @include color-by-background($list-active-color);
       @include bevel-by-background($list-active-color);
@@ -102,12 +102,12 @@ $formlist-iconmask-size: 1em; // 1.7em;
    }
 
    // The content should take up all the space available
-   .x-formlist-content
+   .x-menupanel-content
    {
       @include box-flex(1);
    }
 
-   .x-formlist-content {
+   .x-menupanel-content {
       @include label;
       @include bevel-text('light');
 
@@ -117,41 +117,41 @@ $formlist-iconmask-size: 1em; // 1.7em;
    }
 
    // Allow space between the items and the content
-   .x-formlist-leftitem
+   .x-menupanel-leftitem
    { margin-left: $form-spacing; }
-   .x-formlist-rightitem
+   .x-menupanel-rightitem
    { margin-right: $form-spacing; }
 
    // Set a minimum size for all icons so we get good spacing
    // when we have empty rows and varying icons
-   .x-formlist-leftitem, .x-formlist-rightitem
+   .x-menupanel-leftitem, .x-menupanel-rightitem
    {
       // Use display box to center all the icons inside the div box
       @include display-box;
       @include box-orient(horizontal);
       @include box-align(center);
       @include box-pack(center);
-      min-width: $formlist-iconmask-size;
-      min-height: $formlist-iconmask-size;
+      min-width: $menupanel-iconmask-size;
+      min-height: $menupanel-iconmask-size;
    }
 
    // Set the size and color of masked icons
    // customize the color by matching this class and the icon of interest.
-   img.x-formlist-icon-mask
+   img.x-menupanel-icon-mask
    {
-      width: $formlist-iconmask-size;
-      height: $formlist-iconmask-size;
-      -webkit-mask-size: $formlist-iconmask-size;
+      width: $menupanel-iconmask-size;
+      height: $menupanel-iconmask-size;
+      -webkit-mask-size: $menupanel-iconmask-size;
       @include background-gradient(saturate($active-color, 10%));
    }
 
    // Example of customizing color and size
-   img.x-formlist-icon-mask.arrow_right
+   img.x-menupanel-icon-mask.arrow_right
    {
       @include background-gradient(gray);
    }
 
-   img.x-formlist-icon-mask.check1
+   img.x-menupanel-icon-mask.check1
    {
       width: 1em;
       height: 1em;
@@ -162,14 +162,14 @@ $formlist-iconmask-size: 1em; // 1.7em;
 }
 
 
-// include the icons you may want to use on the formlist
-@include pictos-formlist-iconmask('action');
-@include pictos-formlist-iconmask('add');
-@include pictos-formlist-iconmask('arrow_down');
-@include pictos-formlist-iconmask('arrow_left');
-@include pictos-formlist-iconmask('arrow_right');
-@include pictos-formlist-iconmask('arrow_up');
-@include pictos-formlist-iconmask('star');
-@include pictos-formlist-iconmask('check1');
+// include the icons you may want to use on the menupanel
+@include pictos-menupanel-iconmask('action');
+@include pictos-menupanel-iconmask('add');
+@include pictos-menupanel-iconmask('arrow_down');
+@include pictos-menupanel-iconmask('arrow_left');
+@include pictos-menupanel-iconmask('arrow_right');
+@include pictos-menupanel-iconmask('arrow_up');
+@include pictos-menupanel-iconmask('star');
+@include pictos-menupanel-iconmask('check1');
 
 

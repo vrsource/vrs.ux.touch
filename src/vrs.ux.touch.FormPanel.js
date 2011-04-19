@@ -40,22 +40,22 @@ future:
 * or menus as selectable items with decorations.
 *
 */
-FormList = Ext.extend(Ext.Component, {
-   componentCls: 'x-form-list',
+MenuPanel = Ext.extend(Ext.Component, {
+   componentCls: 'x-menu-panel',
 
    /**
    * CSS class to use for decorating all rows in the list.
    */
-   rowCls: 'x-formlist-row',
+   rowCls: 'x-menupanel-row',
 
    /**
     * @cfg {String} iconMaskCls
     * CSS class to be added to the items that need mask applied
     * Defaults to 'x-icon-mask'
     */
-   iconMaskCls: 'x-formlist-icon-mask',
+   iconMaskCls: 'x-menupanel-icon-mask',
 
-   pressedCls: 'x-formlist-row-selected',  // Dataview x-item-pressed
+   pressedCls: 'x-menupanel-row-selected',  // Dataview x-item-pressed
 
    /**
      * @cfg {Number} pressedDelay
@@ -64,9 +64,9 @@ FormList = Ext.extend(Ext.Component, {
     */
    pressedDelay: 100,
 
-   contentCls: 'x-formlist-content',
-   leftItemCls: 'x-formlist-leftitem',
-   rightItemCls: 'x-formlist-rightitem',
+   contentCls: 'x-menupanel-content',
+   leftItemCls: 'x-menupanel-leftitem',
+   rightItemCls: 'x-menupanel-rightitem',
 
 
    /**
@@ -86,13 +86,13 @@ FormList = Ext.extend(Ext.Component, {
    formItemDefaults: {},
 
    initComponent: function() {
-      FormList.superclass.initComponent.call(this);
+      MenuPanel.superclass.initComponent.call(this);
 
       this.addEvents(
          /**
           * @event itemtap
           * Fires when a item is tapped on
-          * @param {FormList} this The FormList object.
+          * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the row that was tapped
           */
          'itemtap',
@@ -100,7 +100,7 @@ FormList = Ext.extend(Ext.Component, {
          /**
           * @event itemdoubletap
           * Fires when an item is double tapped on
-          * @param {FormList} this The FormList object.
+          * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the item that was tapped
           * @param {Ext.Element} item The item element
           * @param {Ext.EventObject} e The event object
@@ -110,7 +110,7 @@ FormList = Ext.extend(Ext.Component, {
          /**
           * @event itemswipe
           * Fires when a node is swipped
-          * @param {FormList} this The FormList object.
+          * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the item that was tapped
           * @param {Ext.Element} item The item element
           * @param {Ext.EventObject} e The event object
@@ -120,7 +120,7 @@ FormList = Ext.extend(Ext.Component, {
          /**
           * @event lefttap
           * Fires when a item's left icon is tapped on
-          * @param {FormList} this The FormList object.
+          * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the row that was tapped
           */
          'lefttap',
@@ -128,7 +128,7 @@ FormList = Ext.extend(Ext.Component, {
          /**
           * @event righttap
           * Fires when a item's right icon is tapped on
-          * @param {FormList} this The FormList object.
+          * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the row that was tapped
           */
          'lefttap'
@@ -140,7 +140,7 @@ FormList = Ext.extend(Ext.Component, {
    // @private
    afterRender: function() {
       var me = this;
-      FormList.superclass.afterRender.call(me);
+      MenuPanel.superclass.afterRender.call(me);
 
       // Setup all the event handlers we need to monitor.
       me.mon(me.getTargetEl(), {
@@ -159,7 +159,7 @@ FormList = Ext.extend(Ext.Component, {
      * @param {Ext.EventObject} e
      */
    findItemByEvent: function(e) {
-      // Search up parents for the row element and stop at the formlist element
+      // Search up parents for the row element and stop at the menupanel element
       return e.getTarget('.' + this.rowCls, this.getTargetEl());
    },
 
@@ -185,7 +185,7 @@ FormList = Ext.extend(Ext.Component, {
    * We add our structure by calling refresh to reload everything.
    */
    onRender : function() {
-      FormList.superclass.onRender.apply(this, arguments);
+      MenuPanel.superclass.onRender.apply(this, arguments);
       this.refresh();
    },
 
@@ -196,16 +196,16 @@ FormList = Ext.extend(Ext.Component, {
    *       out to be more complex then just doing this directly.
    */
    /*
-    <div class="x-form-list">
-      <div class="x-formlist-row">
-         <div class="x-formlist-leftitem leftClass">opt_image</div>
-         <div class="x-formlist-content">content</div>
-         <div class="x-formlist-rightitem rightClass">opt_image</div>
+    <div class="x-menu-panel">
+      <div class="x-menupanel-row">
+         <div class="x-menupanel-leftitem leftClass">opt_image</div>
+         <div class="x-menupanel-content">content</div>
+         <div class="x-menupanel-rightitem rightClass">opt_image</div>
       </div>
-      <div class="x-formlist-row">
-         <div class="x-formlist-leftitem leftClass">opt_image</div>
-         <div class="x-formlist-content">content</div>
-         <div class="x-formlist-rightitem rightClass">opt_image</div>
+      <div class="x-menupanel-row">
+         <div class="x-menupanel-leftitem leftClass">opt_image</div>
+         <div class="x-menupanel-content">content</div>
+         <div class="x-menupanel-rightitem rightClass">opt_image</div>
       </div>
     </div>
    */

@@ -26,7 +26,7 @@ onReady: function() {
 
    ]
 
-   var form_list = new FormList({
+   var form_list = new MenuPanel({
       formItems: form_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
@@ -48,7 +48,7 @@ onReady: function() {
       formList.refresh();
    };
 
-   var menu_list = new FormList({
+   var menu_list = new MenuPanel({
       formItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
