@@ -33,13 +33,13 @@ future:
 - It should support configuring with a component to use
 - It should support fields in righthand side
 */
-
+Ext.ns('vrs.ux.touch');
 /**
 * Class for creating 'list' of items that can be used in forms
 * or menus as selectable items with decorations.
 *
 */
-MenuPanel = Ext.extend(Ext.Component, {
+vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    componentCls: 'x-menu-panel',
 
    /**
@@ -85,7 +85,7 @@ MenuPanel = Ext.extend(Ext.Component, {
    formItemDefaults: {},
 
    initComponent: function() {
-      MenuPanel.superclass.initComponent.call(this);
+      vrs.ux.touch.MenuPanel.superclass.initComponent.call(this);
 
       this.addEvents(
          /**
@@ -209,7 +209,7 @@ MenuPanel = Ext.extend(Ext.Component, {
    // @private
    afterRender: function() {
       var me = this;
-      MenuPanel.superclass.afterRender.call(me);
+      vrs.ux.touch.MenuPanel.superclass.afterRender.call(me);
 
       // Setup all the event handlers we need to monitor.
       me.mon(me.getTargetEl(), {
@@ -261,7 +261,7 @@ MenuPanel = Ext.extend(Ext.Component, {
    * We add our structure by calling refresh to reload everything.
    */
    onRender : function() {
-      MenuPanel.superclass.onRender.apply(this, arguments);
+      vrs.ux.touch.MenuPanel.superclass.onRender.apply(this, arguments);
       this.refresh();
    },
 
@@ -292,7 +292,8 @@ MenuPanel = Ext.extend(Ext.Component, {
           hasLeftContent = false,
           hasRightContent = false,
           htmlFrags = [],
-          htmlContent;
+          htmlContent,
+          getSectionDivStr;
 
       // Determine if we have content on left and right to include
       for(x=0; x<this.formItems.length; x++) {
@@ -312,9 +313,9 @@ MenuPanel = Ext.extend(Ext.Component, {
          icon_cls_str = (Ext.isEmpty(iconCls) ? ""
                                  : 'class="' + (me.iconMaskCls + ' ' + iconCls) + '"');
 
-         var img = '<img ' + icon_cls_str + ' src="' + itemIcon + '">';
+         img = '<img ' + icon_cls_str + ' src="' + itemIcon + '">';
          return '<div class="' + itemCls + '">' + img + '</div>';
-      }
+      };
 
       // build up contents
       for(x=0; x<this.formItems.length; x++) {
@@ -380,8 +381,8 @@ MenuPanel = Ext.extend(Ext.Component, {
    // @private
    onTapStart: function(e, t) {
       console.log('onTapStart called');
-      var me = this;
-      var item = this.findItemByEvent(e);
+      var me = this,
+          item = this.findItemByEvent(e);
 
       if (item) {
          // If we should delay press, create the delay and manage it here.

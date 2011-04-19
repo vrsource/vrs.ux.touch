@@ -25,7 +25,7 @@ onReady: function() {
       }
    ]
 
-   var form_list = new MenuPanel({
+   var form_list = new vrs.ux.touch.MenuPanel({
       formItems: form_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
@@ -49,7 +49,7 @@ onReady: function() {
       formList.refresh();
    };
 
-   var menu_list = new MenuPanel({
+   var menu_list = new vrs.ux.touch.MenuPanel({
       formItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
@@ -75,7 +75,7 @@ onReady: function() {
       });
    };
 
-   var menu_list2 = new MenuPanel({
+   var menu_list2 = new vrs.ux.touch.MenuPanel({
       formItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
