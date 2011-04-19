@@ -7,7 +7,7 @@
 #
 *.[oa]
 *~
-
+*.wpr
 .sass-cache
 
 # Compiled source #
