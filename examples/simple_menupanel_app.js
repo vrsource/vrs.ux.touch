@@ -71,8 +71,6 @@ onReady: function() {
       // Change the check to be on the one that was just selected
       Ext.each(formList.formItems, function(item, i) {
          var left_icon_cls = ((i === index) ? 'check1' : null);
-         if(i===index)
-         { formList.updateItem(i, {content: 'selected'}); }
          formList.updateItem(i, {leftIconCls: left_icon_cls});
       });
    };
