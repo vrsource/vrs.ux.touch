@@ -8,9 +8,8 @@ Config and Structure:
 * It should allow specifying a class that is used for mask styling instead
 * It should use an item selector internally.
 * It should support setting defaults for configuration (ex: right chevron for all items)
-- It should support updating the configuration (in place?)
-
-
+* It should support updating the configuration (in place?)
+- It should support fast updating in place.  (ie. no DOM changes)
 
 Events:
 * It should support events for when the lead/trail objects are tapped
@@ -133,8 +132,78 @@ MenuPanel = Ext.extend(Ext.Component, {
           */
          'lefttap'
       );
+   },
 
+   /** Update an item in the menu based upon the itemObj
+   * properties passed in.
+   * itemObj overrides the existing settings but does not replace them.
+   * ie. you don't have to set all properties.
+   *
+   * The method trys to intelligently determine which properties have
+   * have changed by comparing them to the current settings.  Because
+   * of this, you can not pass the same object in that is already
+   * in the formItems.
+   */
+   updateItem: function(index, itemObj) {
+      var me = this,
+          cur_values,
+          cur_icon_cls,
+          icon_selector,
+          img_node,
+          new_icon,
+          node;
 
+      node = this.getNodeByIndex(index);
+
+      // Loop over all settings and update based upon that specific setting.
+      Ext.iterate(itemObj, function(key, value) {
+         // Get it each time because the values may have changed with a refresh call below
+         cur_values = me.getItemValues(index);
+
+         // If no change, skip it
+         if(cur_values[key] === value)
+         { return; }
+
+         if('content' === key)
+         {
+            Ext.fly(node).down('.' + me.contentCls).update(value);
+         }
+         else if(('leftIconCls' === key) || ('rightIconCls' === key) ||
+                 ('leftIcon' === key) || ('rightIcon' === key)) {
+            // Try to find the img element we are using
+            icon_selector = (('leftIconCls' === key) ? me.leftItemCls : me.rightItemCls);
+            img_node = Ext.fly(node).down('.' + icon_selector + ' > img');
+
+            // If we don't find an img node, resort to a full update because
+            // the current DOM doesn't have the icons in it.
+            if(!img_node)
+            {
+               Ext.apply(me.formItems[index], itemObj);
+               me.refresh();
+               return;
+            }
+
+            if(('leftIconCls' === key) || ('rightIconCls' === key)) {
+               cur_icon_cls = (('leftIconCls' === key) ?
+                                 cur_values['leftIconCls'] : cur_values['rightIconCls']);
+               if(Ext.isEmpty(value))  // Remove the mask classes
+               { img_node.removeCls([me.iconMaskCls, cur_icon_cls]); }
+               else  // Replace (or set) the classes
+               {
+                  img_node.replaceCls(cur_icon_cls, value);
+                  img_node.addCls(me.iconMaskCls);
+               }
+            }
+            else { //(('leftIcon' === key) || ('rightIcon' === key))
+               // Replace the icon
+               new_icon = (Ext.isEmpty(value) ? (Ext.BLANK_IMAGE_URL) : value);
+               img_node.set({src: new_icon});
+            }
+         }  // if iconcls or icon
+
+         // Assign the new value
+         me.formItems[index][key] = value;
+      });
    },
 
    // @private
@@ -169,6 +238,13 @@ MenuPanel = Ext.extend(Ext.Component, {
    indexOf: function(itemNode) {
       var row_elts = this.getTargetEl().query('.' + this.rowCls);
       return row_elts.indexOf(itemNode);
+   },
+
+   /** Return the DOM node for the row at the given index.
+   */
+   getNodeByIndex: function(index) {
+      var row_elts = this.getTargetEl().query('.' + this.rowCls);
+      return row_elts[index];
    },
 
    /** Return a object containing the values to use

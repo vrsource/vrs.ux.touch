@@ -23,7 +23,6 @@ onReady: function() {
          lefttap: function() {console.log('custom lefttap', arguments);},
          righttap: function() {console.log('custom righttap', arguments);}
       }
-
    ]
 
    var form_list = new MenuPanel({
@@ -39,6 +38,8 @@ onReady: function() {
    });
 
 
+   // --- MENU SELECTION TEST --- //
+   // Demo of doing selection on a menu (slow method of refresh)
    menuItemSelected = function(formList, index, el, ev) {
       console.log('Item selected: ', index);
       // Change the check to be on the one that was just selected
@@ -54,6 +55,34 @@ onReady: function() {
       },
       listeners: {
          itemTap: menuItemSelected
+      },
+      formItems: [
+         {content: 'Area 1'},
+         {content: 'Area 2'},
+         {content: 'Area 3'},
+         {content: 'Area 4'}
+      ]
+   });
+
+   // -- FAST MENU TEST -- //
+   //
+   fastMenuItemSelected = function(formList, index, el, ev) {
+      console.log('Item selected: ', index);
+      // Change the check to be on the one that was just selected
+      Ext.each(formList.formItems, function(item, i) {
+         var left_icon_cls = ((i === index) ? 'check1' : null);
+         if(i===index)
+         { formList.updateItem(i, {content: 'selected'}); }
+         formList.updateItem(i, {leftIconCls: left_icon_cls});
+      });
+   };
+
+   var menu_list2 = new MenuPanel({
+      formItemDefaults: {
+         rightIcon: 'img/chevron.png'
+      },
+      listeners: {
+         itemTap: fastMenuItemSelected
       },
       formItems: [
          {content: 'Area 1'},
@@ -85,8 +114,14 @@ onReady: function() {
          {
             xtype: 'fieldset',
             title: 'Menu Example',
-            instructions: 'This is a nifty little panel.',
+            instructions: 'This menu uses a full update and refresh.',
             items: [menu_list]
+         },
+         {
+            xtype: 'fieldset',
+            title: 'Faster Menu Example',
+            instructions: 'This menu uses updateItem for updates.',
+            items: [menu_list2]
          }
       ]
 
