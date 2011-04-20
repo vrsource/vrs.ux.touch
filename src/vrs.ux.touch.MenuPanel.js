@@ -27,7 +27,7 @@ Style:
 * It should support being used inside a fieldset
 * It should allow setting a class that gets set for each row.  (allows styling items)
 - It should be able to be styled to look fine outside of a form
-- It should support a style that looks iPhone-ish
+* It should support a style that looks iPhone-ish
 
 future:
 - It should support configuring with a component to use
