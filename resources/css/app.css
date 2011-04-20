@@ -5215,17 +5215,11 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
 /** Icons to include embedded. */
 /** TODO: stripped background for settings panel. */
 /** Size of icon mask to use for the settings. */
-/* Pinstripe background.
-.x-form-settings-panel > .x-panel-body {
-   -webkit-background-size: 0.438em 100%;
-   background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
-}
-*/
 /** Customizations for the field row.
 * note: remember that we also put a field class on the row
 * to get all the form field defaults.
 */
-/* line 43, ../sass/_menu_panel.scss */
+/* line 36, ../sass/_menu_panel.scss */
 .x-menupanel-row {
   display: -webkit-box;
   display: box;
@@ -5243,7 +5237,7 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   * when we have empty rows and varying icons
   */
 }
-/* line 53, ../sass/_menu_panel.scss */
+/* line 46, ../sass/_menu_panel.scss */
 .x-menupanel-row.x-menupanel-row-selected {
   background-color: #1a70dd;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #9dc3f3), color-stop(2%, #5899eb), color-stop(30%, #3985e7), color-stop(65%, #1a70dd), color-stop(100%, #1559af));
@@ -5253,12 +5247,12 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   border-top-color: #428be8;
   border-bottom-color: #124d98;
 }
-/* line 66, ../sass/_menu_panel.scss */
+/* line 59, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-content {
   -webkit-box-flex: 1;
   box-flex: 1;
 }
-/* line 70, ../sass/_menu_panel.scss */
+/* line 63, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-content {
   text-shadow: #fff 0 1px 1px;
   color: #333333;
@@ -5267,15 +5261,15 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   margin-right: 0.6em;
   margin-left: 0.6em;
 }
-/* line 81, ../sass/_menu_panel.scss */
+/* line 74, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-leftitem {
   margin-left: 0.6em;
 }
-/* line 83, ../sass/_menu_panel.scss */
+/* line 76, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-rightitem {
   margin-right: 0.6em;
 }
-/* line 89, ../sass/_menu_panel.scss */
+/* line 82, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-leftitem, .x-menupanel-row .x-menupanel-rightitem {
   /* Use display box to center all the icons inside the div box. */
   display: -webkit-box;
@@ -5293,7 +5287,7 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
 /* Set the size and color of masked icons
 * customize the color by matching this class and the icon of interest.
 */
-/* line 104, ../sass/_menu_panel.scss */
+/* line 97, ../sass/_menu_panel.scss */
 img.x-menupanel-icon-mask {
   width: 1em;
   height: 1em;
@@ -5307,14 +5301,14 @@ img.x-menupanel-icon-mask {
 * Change the background-gradient to change the color
 * and change the width, height, mask-size to change the size.
 */
-/* line 116, ../sass/_menu_panel.scss */
+/* line 109, ../sass/_menu_panel.scss */
 img.x-menupanel-icon-mask.arrow_right {
   background-color: gray;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a6a6a6), color-stop(50%, #8d8d8d), color-stop(51%, #808080), color-stop(100%, #737373));
   background-image: linear-gradient(#a6a6a6, #8d8d8d 50%, #808080 51%, #737373);
 }
 
-/* line 121, ../sass/_menu_panel.scss */
+/* line 114, ../sass/_menu_panel.scss */
 img.x-menupanel-icon-mask.check1 {
   width: 1em;
   height: 1em;
@@ -5338,12 +5332,12 @@ img.x-menupanel-icon-mask.check1 {
 * Next rule removes this border if our menu panel is the last item
 * in the fieldset panel.
 */
-/* line 143, ../sass/_menu_panel.scss */
+/* line 136, ../sass/_menu_panel.scss */
 .x-menupanel-row.x-field:last-child {
   border-bottom: 1px solid #dddddd;
 }
 
-/* line 147, ../sass/_menu_panel.scss */
+/* line 140, ../sass/_menu_panel.scss */
 .x-menu-panel:last-child .x-menupanel-row.x-field:last-child {
   border-bottom: 0;
 }
@@ -5351,7 +5345,7 @@ img.x-menupanel-icon-mask.check1 {
 /** Override the default x-field rouding to cover the case
 * were we may not be the first or last item in a fieldset.
 */
-/* line 154, ../sass/_menu_panel.scss */
+/* line 147, ../sass/_menu_panel.scss */
 .x-form-fieldset .x-menu-panel .x-menupanel-row.x-field {
   -webkit-border-radius: 0;
   border-radius: 0;
@@ -5361,7 +5355,7 @@ img.x-menupanel-icon-mask.check1 {
 * is the first item or last item in the fieldset then we need to round
 * ourselves.
 */
-/* line 163, ../sass/_menu_panel.scss */
+/* line 156, ../sass/_menu_panel.scss */
 .x-form-fieldset .x-menu-panel:first-child .x-menupanel-row.x-field:first-child {
   -webkit-border-top-left-radius: 0.4em;
   border-top-left-radius: 0.4em;
@@ -5369,7 +5363,7 @@ img.x-menupanel-icon-mask.check1 {
   border-top-right-radius: 0.4em;
 }
 
-/* line 172, ../sass/_menu_panel.scss */
+/* line 165, ../sass/_menu_panel.scss */
 .x-form-fieldset .x-menu-panel:last-child .x-menupanel-row.x-field:last-child {
   -webkit-border-bottom-left-radius: 0.4em;
   border-bottom-left-radius: 0.4em;
@@ -5419,4 +5413,26 @@ img.x-menupanel-icon-mask.check1 {
 /* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.check1 {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFUklEQVRoBeWbfYgVZRTG790PEYPMdBVEDSRSRAhECFbwIxGRQElQAiNRc6n+yFgoKDDwH/9TUBRXkWVFQkiUAsUPXLIoU/EDV4W2yA21rdUiFLHScv09OrPc3XvnzrxnZu7OZQ88zNyZ9znnPHPm/ZiZ3Xxvb29uKFnNUBIrrUNOcF21VTifzzeS8yKQN+R+J19NfRixIxG5F8wxiBVlW7VV+G2Sng9GKHtH66D9rpwqXA0g2bngF6BpxRV34CwHNVUxaHErDyfZJjARWOwwpGMU9lFVCCbZWeA1YMn3D3it4C4wORCvYkZ1RxPsXfCsIahu/XbwDdXVfvYFk+NioOpa7FdILWh94JMtt4jPTX1LdacSZD1QH3a1/yHsAacKiZkVjFgtLD4ALxQm7LB/lbb9qituZgWT2wKwxJij+msL6Ab9LJOCKe5zZNkMxvXLNvqP4zQ9qGloICWTgklyHZgHLOtlTT+bEdvDtsgyJ5jqqs++AYYVZRvtwD6anQ5qminBiNVo/A54KSjhkOP+NPRkkVGqbaYEk+DLYC2w5KVp6AC4AoJNC5AsgAz1BHQUaIS14Ed408K0WK4kflOxZXh91ej5P3g7wA+h/LArUonzJDkeXAKWyopzFoyOkmtWKqzl4zRgsX8gbUDsn1HIgy6Ykfl1EtXtbH37chDu11HEqs2gCkasHvmagB4BLXYd0laqey8quY6gL9JYnd5ivxHsXwuRuFpF6e3jQgsfjvrubnDeha+g34MxLiSvrQJuRHCbgZtDr9bJX4JXLHw4P4MFxO9y5a+CoOQt0DTQQFDnuRzeFmNM5fk3+NAYNzcK8jlj8Ifwml0Dw5kJtPyzXGRxNA097xpX7Z9UBvKbQI9SlgTUhyZEDU7benDIGEv5qborosYb2M4XrIn/JLAI1qD1yUDHQb9puxrEqe4X8GuD/Icd7+t7OHkLaLS2iFaXGBUaLJfTp5LLxhjKSxdqdliccucLBU/AmQYhi+AH8JaUDfT0YV5PQtauo7y2gWHl4oSd6xOshtinQEs1i2itdsYEBeTcDNBl9K18LoEpQf6jHh8oWHOjtcrqDstLBeb4M2AnsFxIn/Me/JpS/l2O9RMsItYMNN34gVy2Z+AV9WWOLY3hU/Hld7yLsKC2pQTrjWEncBHqt1X/XFkYjN9jQYfRn/xqGmoq9Blnv0iwnGF6a6hXJr4Ql+0peCM9P7XsfwziDFQn4BfdNVbRQYK1tr4AXIT6bTVivw+0TtdXv27gn3Pd6hm30SquFC9IsJJdA6zz8ndwJ4L9wFpd8VpA7IGqUHhJwWqATQLfAteqqP1fQMtHfZu18MW5AaYXJpvEfqBgT7T+psI6YluFiqdu8RGoT0JkoY+wNx7HCarnzkqbnob2kagudqJWVjAB9QpFny60+qqU3SPQJmLrlk7cygr2orWylfBKmRYZx9IKFirYu9JtJJD47VVC1C2ObSfm/RLnkjmE87IDl85jDeAnEGcgCuNqobMX1EXJydomtMIkoAtym40W/5ob07LfcbyFWJr7U7NIgr3on7NNa8RWd/kMsXqRkKq5CL5JJptBGn35In71cJ+6RRbM1dftrHnZ6cV3BAV6GtJAdT1C29hNIgv2InWx3QOS7Gd6GZ/aNOTl3bdxEkwVNNKqytf6PMTbuQu9Dbc98dxEZzsJlluSk9gjIG5f1sVrB/rUUzlT0VxBdpNBJwibW8ud13PyLNfYcdvXEdTZCHqNj2GtEPUXN7XODp4SdrM5beSaaeb/efC+/s0nskWwRvyvuHCqckXNLLiiWSYYzHnQSjD2oLgacoIfA92Es2D+M247AAAAAElFTkSuQmCC');
+}
+
+/** IOS Form Settings.
+* - Make the rows/fields all white backgrounds.
+* - Add a pinstripe background to the page.
+*/
+/** Set all fields to white. */
+/* line 198, ../sass/_menu_panel.scss */
+.x-form-label, .x-menupanel-row {
+  background-color: white;
+}
+
+/* Pinstripe background. */
+/* line 203, ../sass/_menu_panel.scss */
+.x-form .x-panel-body {
+  -webkit-background-size: 0.438em 100%;
+  background: -webkit-gradient(linear, left top, right top, from(#c5ccd4), color-stop(71%, #c5ccd4), color-stop(72%, #cbd2d8), to(#cbd2d8));
+}
+
+/* line 208, ../sass/_menu_panel.scss */
+.x-form-fieldset-instructions {
+  font-weight: bold;
 }

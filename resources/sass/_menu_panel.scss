@@ -29,13 +29,6 @@
 /** Size of icon mask to use for the settings. */
 $menupanel-iconmask-size: 1em !default;
 
-/* Pinstripe background.
-.x-form-settings-panel > .x-panel-body {
-   -webkit-background-size: 0.438em 100%;
-   background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
-}
-*/
-
 /** Customizations for the field row.
 * note: remember that we also put a field class on the row
 * to get all the form field defaults.
@@ -192,5 +185,32 @@ img.x-menupanel-icon-mask.check1
 @include pictos-menupanel-iconmask('arrow_up');
 @include pictos-menupanel-iconmask('star');
 @include pictos-menupanel-iconmask('check1');
+
+
+/** IOS Form Settings.
+* - Make the rows/fields all white backgrounds.
+* - Add a pinstripe background to the page.
+*/
+@if $use-ios-style-forms {
+   /** Set all fields to white. */
+   $form-field-bg-color: white;
+
+   .x-form-label, .x-menupanel-row {
+      background-color: white;
+   }
+
+   /* Pinstripe background. */
+   .x-form .x-panel-body {
+      -webkit-background-size: 0.438em 100%;
+      background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
+   }
+
+   .x-form-fieldset-instructions {
+      font-weight: bold;
+   }
+
+}
+
+
 
 
