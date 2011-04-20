@@ -9,7 +9,7 @@ Config and Structure:
 * It should use an item selector internally.
 * It should support setting defaults for configuration (ex: right chevron for all items)
 * It should support updating the configuration (in place?)
-- It should support fast updating in place.  (ie. no DOM changes)
+* It should support fast updating in place.  (ie. no DOM changes)
 
 Events:
 * It should support events for when the lead/trail objects are tapped
