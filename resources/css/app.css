@@ -459,200 +459,200 @@ input, textarea {
   font-size: .8em;
   padding: 1.2em;
 }
-/* line 33, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 33, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html body {
   line-height: 1.5;
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
   color: #333333;
   font-size: 75%;
 }
-/* line 51, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 51, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h1, .x-html h2, .x-html h3, .x-html h4, .x-html h5, .x-html h6 {
   font-weight: normal;
   color: #222222;
 }
-/* line 52, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 52, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h1 img, .x-html h2 img, .x-html h3 img, .x-html h4 img, .x-html h5 img, .x-html h6 img {
   margin: 0;
 }
-/* line 53, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 53, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h1 {
   font-size: 3em;
   line-height: 1;
   margin-bottom: 0.50em;
 }
-/* line 54, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 54, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h2 {
   font-size: 2em;
   margin-bottom: 0.75em;
 }
-/* line 55, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 55, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h3 {
   font-size: 1.5em;
   line-height: 1;
   margin-bottom: 1.00em;
 }
-/* line 56, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 56, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h4 {
   font-size: 1.2em;
   line-height: 1.25;
   margin-bottom: 1.25em;
 }
-/* line 57, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 57, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h5 {
   font-size: 1em;
   font-weight: bold;
   margin-bottom: 1.50em;
 }
-/* line 58, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 58, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html h6 {
   font-size: 1em;
   font-weight: bold;
 }
-/* line 59, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 59, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html p {
   margin: 0 0 1.5em;
 }
-/* line 60, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 60, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html p .left {
   display: inline;
   float: left;
   margin: 1.5em 1.5em 1.5em 0;
   padding: 0;
 }
-/* line 61, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 61, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html p .right {
   display: inline;
   float: right;
   margin: 1.5em 0 1.5em 1.5em;
   padding: 0;
 }
-/* line 62, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 62, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html a {
   text-decoration: underline;
   color: #0066cc;
 }
-/* line 18, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
+/* line 18, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
 .x-html a:visited {
   color: #004c99;
 }
-/* line 21, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
+/* line 21, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
 .x-html a:focus {
   color: #0099ff;
 }
-/* line 24, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
+/* line 24, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
 .x-html a:hover {
   color: #0099ff;
 }
-/* line 27, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
+/* line 27, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/compass/stylesheets/compass/typography/links/_link-colors.scss */
 .x-html a:active {
   color: #bf00ff;
 }
-/* line 63, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 63, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html blockquote {
   margin: 1.5em;
   color: #666666;
   font-style: italic;
 }
-/* line 64, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 64, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html strong, .x-html dfn {
   font-weight: bold;
 }
-/* line 65, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 65, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html em, .x-html dfn {
   font-style: italic;
 }
-/* line 66, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 66, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html sup, .x-html sub {
   line-height: 0;
 }
-/* line 67, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 67, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html abbr, .x-html acronym {
   border-bottom: 1px dotted #666666;
 }
-/* line 68, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 68, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html address {
   margin: 0 0 1.5em;
   font-style: italic;
 }
-/* line 69, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 69, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html del {
   color: #666666;
 }
-/* line 70, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 70, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html pre {
   margin: 1.5em 0;
   white-space: pre;
 }
-/* line 71, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 71, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html pre, .x-html code, .x-html tt {
   font: 1em "andale mono", "lucida console", monospace;
   line-height: 1.5;
 }
-/* line 72, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 72, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html li ul, .x-html li ol {
   margin: 0;
 }
-/* line 73, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 73, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html ul, .x-html ol {
   margin: 0 1.5em 1.5em 0;
   padding-left: 1.5em;
 }
-/* line 74, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 74, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html ul {
   list-style-type: disc;
 }
-/* line 75, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 75, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html ol {
   list-style-type: decimal;
 }
-/* line 76, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 76, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html dl {
   margin: 0 0 1.5em 0;
 }
-/* line 77, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 77, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html dl dt {
   font-weight: bold;
 }
-/* line 78, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 78, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html dd {
   margin-left: 1.5em;
 }
-/* line 79, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 79, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html table {
   margin-bottom: 1.4em;
   width: 100%;
 }
-/* line 80, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 80, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html th {
   font-weight: bold;
 }
-/* line 81, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 81, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html thead th {
   background: #c3d9ff;
 }
-/* line 82, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 82, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html th, .x-html td, .x-html caption {
   padding: 4px 10px 4px 5px;
 }
-/* line 85, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 85, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html table.striped tr:nth-child(even) td,
 .x-html table tr.even td {
   background: #e5ecf9;
 }
-/* line 86, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 86, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html tfoot {
   font-style: italic;
 }
-/* line 87, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 87, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html caption {
   background: #eeeeee;
 }
-/* line 88, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 88, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html .quiet {
   color: #666666;
 }
-/* line 89, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.6/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
+/* line 89, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.beta.7/frameworks/blueprint/stylesheets/blueprint/_typography.scss */
 .x-html .loud {
   color: #111111;
 }
@@ -1125,10 +1125,10 @@ input, textarea {
  * @example
  * // SCSS
  * @include sencha-toolbar-ui('sub', #58710D, 'glossy');
- *
+ * 
  * // JS
  * var myTb = new Ext.Toolbar({title: 'My Green Glossy Toolbar', ui: 'sub'})
- *
+ * 
  * @class Ext.Toolbar
  * @xtype toolbar
  */
@@ -1325,10 +1325,10 @@ input, textarea {
  * @example
  * // SCSS
  * @include sencha-button-ui('secondary', #99A4AE, 'glossy');
- *
+ * 
  * // JS
  * var cancelBtn = new Ext.Button({text: 'Cancel', ui: 'secondary'});
- *
+ * 
  * @class Ext.Button
  * @xtype button
  */
@@ -1557,7 +1557,7 @@ input, textarea {
  * @example
  * // SCSS
  * @include sencha-button-ui('pink', #333, 'matte', #AE537A);
- *
+ * 
  * // JS
  * var tabs = new Ext.TabPanel({
  *    tabBar: {
@@ -1567,7 +1567,7 @@ input, textarea {
  *    },
  *    ...
  * });
- *
+ * 
  * @class Ext.TabBar
  * @xtype tabbar
  */
@@ -1736,7 +1736,7 @@ input, textarea {
  * @param {string} $gradient Default gradient for the UI.
  * @param {color} $active-color Active color for the UI.
  * @param {string} $active-gradient Active gradient for the UI.
- *
+ * 
  * @class Ext.Carousel.Indicator
  * @xtype carouselindicator
  */
@@ -2894,12 +2894,14 @@ input, textarea {
 .x-button, .x-button.x-button-back:after, .x-button.x-button-forward:after, .x-toolbar .x-button, .x-toolbar .x-button.x-button-back:after, .x-toolbar .x-button.x-button-forward:after {
   background-color: #cccccc;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #dedede), color-stop(100%, #bababa));
+  background-image: -webkit-linear-gradient(#ffffff, #dedede 2%, #bababa);
   background-image: linear-gradient(#ffffff, #dedede 2%, #bababa);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-button img.x-icon-mask, .x-toolbar .x-button img.x-icon-mask {
   background-color: black;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4d4d4d), color-stop(2%, #121212), color-stop(100%, #000000));
+  background-image: -webkit-linear-gradient(#4d4d4d, #121212 2%, #000000);
   background-image: linear-gradient(#4d4d4d, #121212 2%, #000000);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -2910,6 +2912,7 @@ input, textarea {
 .x-button.x-button-pressed, .x-button.x-button-pressed:after, .x-button.x-button-active, .x-button.x-button-active:after, .x-toolbar .x-button.x-button-pressed, .x-toolbar .x-button.x-button-pressed:after, .x-toolbar .x-button.x-button-active, .x-toolbar .x-button.x-button-active:after {
   background-color: #bababa;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a1a1a1), color-stop(10%, #adadad), color-stop(65%, #bababa), color-stop(100%, #bbbbbb));
+  background-image: -webkit-linear-gradient(#a1a1a1, #adadad 10%, #bababa 65%, #bbbbbb);
   background-image: linear-gradient(#a1a1a1, #adadad 10%, #bababa 65%, #bbbbbb);
 }
 /* line 86, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
@@ -3101,12 +3104,14 @@ input, textarea {
   background: none;
   -webkit-box-shadow: none;
   background-image: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 24, color-stop(0%, rgba(119, 178, 248, 0.7)), color-stop(100%, rgba(119, 178, 248, 0)));
+  background-image: -webkit-radial-gradient(rgba(119, 178, 248, 0.7), rgba(119, 178, 248, 0) 24px);
   background-image: radial-gradient(rgba(119, 178, 248, 0.7), rgba(119, 178, 248, 0) 24px);
 }
 /* line 253, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_buttons.scss */
 .x-button.x-button-plain.x-button-pressed img, .x-toolbar .x-button.x-button-plain.x-button-pressed img {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e6e6e6), color-stop(10%, #f2f2f2), color-stop(65%, #ffffff), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#e6e6e6, #f2f2f2 10%, #ffffff 65%, #ffffff);
   background-image: linear-gradient(#e6e6e6, #f2f2f2 10%, #ffffff 65%, #ffffff);
 }
 
@@ -3163,6 +3168,7 @@ input, textarea {
   max-width: 100%;
   background-color: #990000;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e60000), color-stop(50%, #b30000), color-stop(51%, #990000), color-stop(100%, #800000));
+  background-image: -webkit-linear-gradient(#e60000, #b30000 50%, #990000 51%, #800000);
   background-image: linear-gradient(#e60000, #b30000 50%, #990000 51%, #800000);
   display: inline-block;
 }
@@ -3273,12 +3279,14 @@ input, textarea {
 .x-button.x-button-action, .x-button.x-button-action.x-button-back:after, .x-button.x-button-action.x-button-forward:after, .x-toolbar .x-button.x-button-action, .x-toolbar .x-button.x-button-action.x-button-back:after, .x-toolbar .x-button.x-button-action.x-button-forward:after, .x-button.x-button-action-round, .x-button.x-button-action-round.x-button-back:after, .x-button.x-button-action-round.x-button-forward:after, .x-toolbar .x-button.x-button-action-round, .x-toolbar .x-button.x-button-action-round.x-button-back:after, .x-toolbar .x-button.x-button-action-round.x-button-forward:after, .x-button.x-button-action-small, .x-button.x-button-action-small.x-button-back:after, .x-button.x-button-action-small.x-button-forward:after, .x-toolbar .x-button.x-button-action-small, .x-toolbar .x-button.x-button-action-small.x-button-back:after, .x-toolbar .x-button.x-button-action-small.x-button-forward:after {
   background-color: #06346a;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #167bf3), color-stop(2%, #07448c), color-stop(100%, #042348));
+  background-image: -webkit-linear-gradient(#167bf3, #07448c 2%, #042348);
   background-image: linear-gradient(#167bf3, #07448c 2%, #042348);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-button.x-button-action img.x-icon-mask, .x-toolbar .x-button.x-button-action img.x-icon-mask, .x-button.x-button-action-round img.x-icon-mask, .x-toolbar .x-button.x-button-action-round img.x-icon-mask, .x-button.x-button-action-small img.x-icon-mask, .x-toolbar .x-button.x-button-action-small img.x-icon-mask {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #ffffff), color-stop(100%, #ddecfd));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 2%, #ddecfd);
   background-image: linear-gradient(#ffffff, #ffffff 2%, #ddecfd);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -3289,6 +3297,7 @@ input, textarea {
 .x-button.x-button-action.x-button-pressed, .x-button.x-button-action.x-button-pressed:after, .x-button.x-button-action.x-button-active, .x-button.x-button-action.x-button-active:after, .x-toolbar .x-button.x-button-action.x-button-pressed, .x-toolbar .x-button.x-button-action.x-button-pressed:after, .x-toolbar .x-button.x-button-action.x-button-active, .x-toolbar .x-button.x-button-action.x-button-active:after, .x-button.x-button-action-round.x-button-pressed, .x-button.x-button-action-round.x-button-pressed:after, .x-button.x-button-action-round.x-button-active, .x-button.x-button-action-round.x-button-active:after, .x-toolbar .x-button.x-button-action-round.x-button-pressed, .x-toolbar .x-button.x-button-action-round.x-button-pressed:after, .x-toolbar .x-button.x-button-action-round.x-button-active, .x-toolbar .x-button.x-button-action-round.x-button-active:after, .x-button.x-button-action-small.x-button-pressed, .x-button.x-button-action-small.x-button-pressed:after, .x-button.x-button-action-small.x-button-active, .x-button.x-button-action-small.x-button-active:after, .x-toolbar .x-button.x-button-action-small.x-button-pressed, .x-toolbar .x-button.x-button-action-small.x-button-pressed:after, .x-toolbar .x-button.x-button-action-small.x-button-active, .x-toolbar .x-button.x-button-action-small.x-button-active:after {
   background-color: #042348;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #010c18), color-stop(10%, #031730), color-stop(65%, #042348), color-stop(100%, #04244b));
+  background-image: -webkit-linear-gradient(#010c18, #031730 10%, #042348 65%, #04244b);
   background-image: linear-gradient(#010c18, #031730 10%, #042348 65%, #04244b);
 }
 
@@ -3308,12 +3317,14 @@ input, textarea {
 .x-button.x-button-confirm, .x-button.x-button-confirm.x-button-back:after, .x-button.x-button-confirm.x-button-forward:after, .x-toolbar .x-button.x-button-confirm, .x-toolbar .x-button.x-button-confirm.x-button-back:after, .x-toolbar .x-button.x-button-confirm.x-button-forward:after, .x-button.x-button-confirm-round, .x-button.x-button-confirm-round.x-button-back:after, .x-button.x-button-confirm-round.x-button-forward:after, .x-toolbar .x-button.x-button-confirm-round, .x-toolbar .x-button.x-button-confirm-round.x-button-back:after, .x-toolbar .x-button.x-button-confirm-round.x-button-forward:after, .x-button.x-button-confirm-small, .x-button.x-button-confirm-small.x-button-back:after, .x-button.x-button-confirm-small.x-button-forward:after, .x-toolbar .x-button.x-button-confirm-small, .x-toolbar .x-button.x-button-confirm-small.x-button-back:after, .x-toolbar .x-button.x-button-confirm-small.x-button-forward:after {
   background-color: #6c9804;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c2fa3b), color-stop(2%, #85bb05), color-stop(100%, #547503));
+  background-image: -webkit-linear-gradient(#c2fa3b, #85bb05 2%, #547503);
   background-image: linear-gradient(#c2fa3b, #85bb05 2%, #547503);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-button.x-button-confirm img.x-icon-mask, .x-toolbar .x-button.x-button-confirm img.x-icon-mask, .x-button.x-button-confirm-round img.x-icon-mask, .x-toolbar .x-button.x-button-confirm-round img.x-icon-mask, .x-button.x-button-confirm-small img.x-icon-mask, .x-toolbar .x-button.x-button-confirm-small img.x-icon-mask {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #ffffff), color-stop(100%, #f4fedc));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 2%, #f4fedc);
   background-image: linear-gradient(#ffffff, #ffffff 2%, #f4fedc);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -3324,6 +3335,7 @@ input, textarea {
 .x-button.x-button-confirm.x-button-pressed, .x-button.x-button-confirm.x-button-pressed:after, .x-button.x-button-confirm.x-button-active, .x-button.x-button-confirm.x-button-active:after, .x-toolbar .x-button.x-button-confirm.x-button-pressed, .x-toolbar .x-button.x-button-confirm.x-button-pressed:after, .x-toolbar .x-button.x-button-confirm.x-button-active, .x-toolbar .x-button.x-button-confirm.x-button-active:after, .x-button.x-button-confirm-round.x-button-pressed, .x-button.x-button-confirm-round.x-button-pressed:after, .x-button.x-button-confirm-round.x-button-active, .x-button.x-button-confirm-round.x-button-active:after, .x-toolbar .x-button.x-button-confirm-round.x-button-pressed, .x-toolbar .x-button.x-button-confirm-round.x-button-pressed:after, .x-toolbar .x-button.x-button-confirm-round.x-button-active, .x-toolbar .x-button.x-button-confirm-round.x-button-active:after, .x-button.x-button-confirm-small.x-button-pressed, .x-button.x-button-confirm-small.x-button-pressed:after, .x-button.x-button-confirm-small.x-button-active, .x-button.x-button-confirm-small.x-button-active:after, .x-toolbar .x-button.x-button-confirm-small.x-button-pressed, .x-toolbar .x-button.x-button-confirm-small.x-button-pressed:after, .x-toolbar .x-button.x-button-confirm-small.x-button-active, .x-toolbar .x-button.x-button-confirm-small.x-button-active:after {
   background-color: #547503;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #304402), color-stop(10%, #425c02), color-stop(65%, #547503), color-stop(100%, #557803));
+  background-image: -webkit-linear-gradient(#304402, #425c02 10%, #547503 65%, #557803);
   background-image: linear-gradient(#304402, #425c02 10%, #547503 65%, #557803);
 }
 
@@ -3343,12 +3355,14 @@ input, textarea {
 .x-button.x-button-decline, .x-button.x-button-decline.x-button-back:after, .x-button.x-button-decline.x-button-forward:after, .x-toolbar .x-button.x-button-decline, .x-toolbar .x-button.x-button-decline.x-button-back:after, .x-toolbar .x-button.x-button-decline.x-button-forward:after, .x-button.x-button-decline-round, .x-button.x-button-decline-round.x-button-back:after, .x-button.x-button-decline-round.x-button-forward:after, .x-toolbar .x-button.x-button-decline-round, .x-toolbar .x-button.x-button-decline-round.x-button-back:after, .x-toolbar .x-button.x-button-decline-round.x-button-forward:after, .x-button.x-button-decline-small, .x-button.x-button-decline-small.x-button-back:after, .x-button.x-button-decline-small.x-button-forward:after, .x-toolbar .x-button.x-button-decline-small, .x-toolbar .x-button.x-button-decline-small.x-button-back:after, .x-toolbar .x-button.x-button-decline-small.x-button-forward:after {
   background-color: #c70505;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fb6a6a), color-stop(2%, #ea0606), color-stop(100%, #a40404));
+  background-image: -webkit-linear-gradient(#fb6a6a, #ea0606 2%, #a40404);
   background-image: linear-gradient(#fb6a6a, #ea0606 2%, #a40404);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-button.x-button-decline img.x-icon-mask, .x-toolbar .x-button.x-button-decline img.x-icon-mask, .x-button.x-button-decline-round img.x-icon-mask, .x-toolbar .x-button.x-button-decline-round img.x-icon-mask, .x-button.x-button-decline-small img.x-icon-mask, .x-toolbar .x-button.x-button-decline-small img.x-icon-mask {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #ffffff), color-stop(100%, #fedcdc));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 2%, #fedcdc);
   background-image: linear-gradient(#ffffff, #ffffff 2%, #fedcdc);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -3359,6 +3373,7 @@ input, textarea {
 .x-button.x-button-decline.x-button-pressed, .x-button.x-button-decline.x-button-pressed:after, .x-button.x-button-decline.x-button-active, .x-button.x-button-decline.x-button-active:after, .x-toolbar .x-button.x-button-decline.x-button-pressed, .x-toolbar .x-button.x-button-decline.x-button-pressed:after, .x-toolbar .x-button.x-button-decline.x-button-active, .x-toolbar .x-button.x-button-decline.x-button-active:after, .x-button.x-button-decline-round.x-button-pressed, .x-button.x-button-decline-round.x-button-pressed:after, .x-button.x-button-decline-round.x-button-active, .x-button.x-button-decline-round.x-button-active:after, .x-toolbar .x-button.x-button-decline-round.x-button-pressed, .x-toolbar .x-button.x-button-decline-round.x-button-pressed:after, .x-toolbar .x-button.x-button-decline-round.x-button-active, .x-toolbar .x-button.x-button-decline-round.x-button-active:after, .x-button.x-button-decline-small.x-button-pressed, .x-button.x-button-decline-small.x-button-pressed:after, .x-button.x-button-decline-small.x-button-active, .x-button.x-button-decline-small.x-button-active:after, .x-toolbar .x-button.x-button-decline-small.x-button-pressed, .x-toolbar .x-button.x-button-decline-small.x-button-pressed:after, .x-toolbar .x-button.x-button-decline-small.x-button-active, .x-toolbar .x-button.x-button-decline-small.x-button-active:after {
   background-color: #a40404;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #720303), color-stop(10%, #8b0404), color-stop(65%, #a40404), color-stop(100%, #a70404));
+  background-image: -webkit-linear-gradient(#720303, #8b0404 10%, #a40404 65%, #a70404);
   background-image: linear-gradient(#720303, #8b0404 10%, #a40404 65%, #a70404);
 }
 
@@ -3368,6 +3383,7 @@ input, textarea {
   border-top: 1px solid #030507;
   background-color: rgba(0, 0, 0, 0.9);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(50, 74, 103, 0.9)), color-stop(2%, rgba(12, 17, 24, 0.9)), color-stop(100%, rgba(0, 0, 0, 0.9)));
+  background-image: -webkit-linear-gradient(rgba(50, 74, 103, 0.9), rgba(12, 17, 24, 0.9) 2%, rgba(0, 0, 0, 0.9));
   background-image: linear-gradient(rgba(50, 74, 103, 0.9), rgba(12, 17, 24, 0.9) 2%, rgba(0, 0, 0, 0.9));
 }
 /* line 51, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_sheets.scss */
@@ -3415,6 +3431,7 @@ input, textarea {
   border-bottom-right-radius: 0.4em;
   bottom: 0;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #bbbbbb));
+  background-image: -webkit-linear-gradient(#ffffff, #bbbbbb);
   background-image: linear-gradient(#ffffff, #bbbbbb);
 }
 /* line 38, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_picker.scss */
@@ -3424,6 +3441,7 @@ input, textarea {
   -webkit-border-top-right-radius: 0.4em;
   border-top-right-radius: 0.4em;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bbbbbb), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#bbbbbb, #ffffff);
   background-image: linear-gradient(#bbbbbb, #ffffff);
 }
 
@@ -3464,6 +3482,7 @@ input, textarea {
   height: 2.5em;
   background-color: rgba(13, 117, 242, 0.3);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(158, 200, 250, 0.3)), color-stop(2%, rgba(47, 137, 244, 0.3)), color-stop(100%, rgba(11, 101, 208, 0.3)));
+  background-image: -webkit-linear-gradient(rgba(158, 200, 250, 0.3), rgba(47, 137, 244, 0.3) 2%, rgba(11, 101, 208, 0.3));
   background-image: linear-gradient(rgba(158, 200, 250, 0.3), rgba(47, 137, 244, 0.3) 2%, rgba(11, 101, 208, 0.3));
   -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0.2em 0.2em;
 }
@@ -3472,6 +3491,7 @@ input, textarea {
 .x-picker-slot-title {
   background-color: #345b89;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #85a7d1), color-stop(2%, #3e6ca3), color-stop(100%, #2a496f));
+  background-image: -webkit-linear-gradient(#85a7d1, #3e6ca3 2%, #2a496f);
   background-image: linear-gradient(#85a7d1, #3e6ca3 2%, #2a496f);
   border-top: 1px solid #345b89;
   border-bottom: 1px solid #182a3f;
@@ -3621,6 +3641,7 @@ input, textarea {
 .x-tabbar-light {
   background-color: #475c76;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #96a9c0), color-stop(2%, #546e8c), color-stop(100%, #394b5f));
+  background-image: -webkit-linear-gradient(#96a9c0, #546e8c 2%, #394b5f);
   background-image: linear-gradient(#96a9c0, #546e8c 2%, #394b5f);
   border-color: #3d5066;
 }
@@ -3645,12 +3666,14 @@ input, textarea {
 .x-tabbar-light.x-docked-bottom .x-tab img {
   background-color: #768fad;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5dde6), color-stop(2%, #8ca1ba), color-stop(100%, #607d9f));
+  background-image: -webkit-linear-gradient(#d5dde6, #8ca1ba 2%, #607d9f);
   background-image: linear-gradient(#d5dde6, #8ca1ba 2%, #607d9f);
 }
 /* line 282, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_tabs.scss */
 .x-tabbar-light.x-docked-bottom .x-tab-active {
   background-color: #506986;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a6b6c9), color-stop(2%, #5e7a9c), color-stop(100%, #43576f));
+  background-image: -webkit-linear-gradient(#a6b6c9, #5e7a9c 2%, #43576f);
   background-image: linear-gradient(#a6b6c9, #5e7a9c 2%, #43576f);
   text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
 }
@@ -3658,6 +3681,7 @@ input, textarea {
 .x-tabbar-light.x-docked-bottom .x-tab-active img {
   background-color: #003370;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0056bd), color-stop(50%, #003f8a), color-stop(51%, #003370), color-stop(100%, #002757));
+  background-image: -webkit-linear-gradient(#0056bd, #003f8a 50%, #003370 51%, #002757);
   background-image: linear-gradient(#0056bd, #003f8a 50%, #003370 51%, #002757);
 }
 
@@ -3665,6 +3689,7 @@ input, textarea {
 .x-tabbar-light.x-docked-top .x-tab-active {
   background-color: #3d5066;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2a3746), color-stop(10%, #344356), color-stop(65%, #3d5066), color-stop(100%, #3e5167));
+  background-image: -webkit-linear-gradient(#2a3746, #344356 10%, #3d5066 65%, #3e5167);
   background-image: linear-gradient(#2a3746, #344356 10%, #3d5066 65%, #3e5167);
   color: white;
 }
@@ -3673,6 +3698,7 @@ input, textarea {
 .x-tabbar-dark {
   background-color: #141e29;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #466890), color-stop(2%, #1f2f41), color-stop(100%, #080c11));
+  background-image: -webkit-linear-gradient(#466890, #1f2f41 2%, #080c11);
   background-image: linear-gradient(#466890, #1f2f41 2%, #080c11);
   border-color: #0c1118;
 }
@@ -3697,12 +3723,14 @@ input, textarea {
 .x-tabbar-dark.x-docked-bottom .x-tab img {
   background-color: #354f6e;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7c9bc0), color-stop(2%, #416086), color-stop(100%, #293e56));
+  background-image: -webkit-linear-gradient(#7c9bc0, #416086 2%, #293e56);
   background-image: linear-gradient(#7c9bc0, #416086 2%, #293e56);
 }
 /* line 282, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_tabs.scss */
 .x-tabbar-dark.x-docked-bottom .x-tab-active {
   background-color: #1c2a3a;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4e74a2), color-stop(2%, #283b52), color-stop(100%, #111922));
+  background-image: -webkit-linear-gradient(#4e74a2, #283b52 2%, #111922);
   background-image: linear-gradient(#4e74a2, #283b52 2%, #111922);
   text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
 }
@@ -3710,6 +3738,7 @@ input, textarea {
 .x-tabbar-dark.x-docked-bottom .x-tab-active img {
   background-color: #0a7aff;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #57a3ff), color-stop(50%, #2488ff), color-stop(51%, #0a7aff), color-stop(100%, #006df0));
+  background-image: -webkit-linear-gradient(#57a3ff, #2488ff 50%, #0a7aff 51%, #006df0);
   background-image: linear-gradient(#57a3ff, #2488ff 50%, #0a7aff 51%, #006df0);
 }
 
@@ -3717,6 +3746,7 @@ input, textarea {
 .x-tabbar-dark.x-docked-top .x-tab-active {
   background-color: #0c1118;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #000000), color-stop(10%, #030507), color-stop(65%, #0c1118), color-stop(100%, #0c121a));
+  background-image: -webkit-linear-gradient(#000000, #030507 10%, #0c1118 65%, #0c121a);
   background-image: linear-gradient(#000000, #030507 10%, #0c1118 65%, #0c121a);
   color: white;
 }
@@ -3769,6 +3799,7 @@ input, textarea {
 .x-toolbar-dark {
   background-color: #24364c;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5a81af), color-stop(2%, #304864), color-stop(100%, #192533));
+  background-image: -webkit-linear-gradient(#5a81af, #304864 2%, #192533);
   background-image: linear-gradient(#5a81af, #304864 2%, #192533);
   border-color: black;
 }
@@ -3793,12 +3824,14 @@ input, textarea {
 .x-toolbar-dark .x-button, .x-toolbar-dark .x-button.x-button-back:after, .x-toolbar-dark .x-button.x-button-forward:after, .x-toolbar .x-toolbar-dark .x-button, .x-toolbar .x-toolbar-dark .x-button.x-button-back:after, .x-toolbar .x-toolbar-dark .x-button.x-button-forward:after, .x-toolbar-dark .x-field-select .x-input-text, .x-toolbar-dark .x-field-select .x-input-text.x-button-back:after, .x-toolbar-dark .x-field-select .x-input-text.x-button-forward:after, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-back:after, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-forward:after, .x-toolbar-dark .x-field-select:before, .x-toolbar-dark .x-field-select:before.x-button-back:after, .x-toolbar-dark .x-field-select:before.x-button-forward:after, .x-toolbar .x-toolbar-dark .x-field-select:before, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-back:after, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-forward:after {
   background-color: #141e29;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #466890), color-stop(2%, #1f2f41), color-stop(100%, #080c11));
+  background-image: -webkit-linear-gradient(#466890, #1f2f41 2%, #080c11);
   background-image: linear-gradient(#466890, #1f2f41 2%, #080c11);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-toolbar-dark .x-button img.x-icon-mask, .x-toolbar .x-toolbar-dark .x-button img.x-icon-mask, .x-toolbar-dark .x-field-select .x-input-text img.x-icon-mask, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text img.x-icon-mask, .x-toolbar-dark .x-field-select:before img.x-icon-mask, .x-toolbar .x-toolbar-dark .x-field-select:before img.x-icon-mask {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #ffffff), color-stop(100%, #e7edf3));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 2%, #e7edf3);
   background-image: linear-gradient(#ffffff, #ffffff 2%, #e7edf3);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -3809,6 +3842,7 @@ input, textarea {
 .x-toolbar-dark .x-button.x-button-pressed, .x-toolbar-dark .x-button.x-button-pressed:after, .x-toolbar-dark .x-button.x-button-active, .x-toolbar-dark .x-button.x-button-active:after, .x-toolbar .x-toolbar-dark .x-button.x-button-pressed, .x-toolbar .x-toolbar-dark .x-button.x-button-pressed:after, .x-toolbar .x-toolbar-dark .x-button.x-button-active, .x-toolbar .x-toolbar-dark .x-button.x-button-active:after, .x-toolbar-dark .x-field-select .x-input-text.x-button-pressed, .x-toolbar-dark .x-field-select .x-input-text.x-button-pressed:after, .x-toolbar-dark .x-field-select .x-input-text.x-button-active, .x-toolbar-dark .x-field-select .x-input-text.x-button-active:after, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-pressed, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-pressed:after, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-active, .x-toolbar .x-toolbar-dark .x-field-select .x-input-text.x-button-active:after, .x-toolbar-dark .x-field-select:before.x-button-pressed, .x-toolbar-dark .x-field-select:before.x-button-pressed:after, .x-toolbar-dark .x-field-select:before.x-button-active, .x-toolbar-dark .x-field-select:before.x-button-active:after, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-pressed, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-pressed:after, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-active, .x-toolbar .x-toolbar-dark .x-field-select:before.x-button-active:after {
   background-color: #080c11;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #000000), color-stop(10%, #000000), color-stop(65%, #080c11), color-stop(100%, #090d13));
+  background-image: -webkit-linear-gradient(#000000, #000000 10%, #080c11 65%, #090d13);
   background-image: linear-gradient(#000000, #000000 10%, #080c11 65%, #090d13);
 }
 
@@ -3816,6 +3850,7 @@ input, textarea {
 .x-toolbar-light {
   background-color: #354f6e;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7c9bc0), color-stop(2%, #416086), color-stop(100%, #293e56));
+  background-image: -webkit-linear-gradient(#7c9bc0, #416086 2%, #293e56);
   background-image: linear-gradient(#7c9bc0, #416086 2%, #293e56);
   border-color: black;
 }
@@ -3840,12 +3875,14 @@ input, textarea {
 .x-toolbar-light .x-button, .x-toolbar-light .x-button.x-button-back:after, .x-toolbar-light .x-button.x-button-forward:after, .x-toolbar .x-toolbar-light .x-button, .x-toolbar .x-toolbar-light .x-button.x-button-back:after, .x-toolbar .x-toolbar-light .x-button.x-button-forward:after, .x-toolbar-light .x-field-select .x-input-text, .x-toolbar-light .x-field-select .x-input-text.x-button-back:after, .x-toolbar-light .x-field-select .x-input-text.x-button-forward:after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-back:after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-forward:after, .x-toolbar-light .x-field-select:before, .x-toolbar-light .x-field-select:before.x-button-back:after, .x-toolbar-light .x-field-select:before.x-button-forward:after, .x-toolbar .x-toolbar-light .x-field-select:before, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-back:after, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-forward:after {
   background-color: #24364c;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5a81af), color-stop(2%, #304864), color-stop(100%, #192533));
+  background-image: -webkit-linear-gradient(#5a81af, #304864 2%, #192533);
   background-image: linear-gradient(#5a81af, #304864 2%, #192533);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-toolbar-light .x-button img.x-icon-mask, .x-toolbar .x-toolbar-light .x-button img.x-icon-mask, .x-toolbar-light .x-field-select .x-input-text img.x-icon-mask, .x-toolbar .x-toolbar-light .x-field-select .x-input-text img.x-icon-mask, .x-toolbar-light .x-field-select:before img.x-icon-mask, .x-toolbar .x-toolbar-light .x-field-select:before img.x-icon-mask {
   background-color: white;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #ffffff), color-stop(100%, #e7edf3));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 2%, #e7edf3);
   background-image: linear-gradient(#ffffff, #ffffff 2%, #e7edf3);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -3856,6 +3893,7 @@ input, textarea {
 .x-toolbar-light .x-button.x-button-pressed, .x-toolbar-light .x-button.x-button-pressed:after, .x-toolbar-light .x-button.x-button-active, .x-toolbar-light .x-button.x-button-active:after, .x-toolbar .x-toolbar-light .x-button.x-button-pressed, .x-toolbar .x-toolbar-light .x-button.x-button-pressed:after, .x-toolbar .x-toolbar-light .x-button.x-button-active, .x-toolbar .x-toolbar-light .x-button.x-button-active:after, .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar-light .x-field-select .x-input-text.x-button-pressed:after, .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar-light .x-field-select .x-input-text.x-button-active:after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-pressed:after, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-active, .x-toolbar .x-toolbar-light .x-field-select .x-input-text.x-button-active:after, .x-toolbar-light .x-field-select:before.x-button-pressed, .x-toolbar-light .x-field-select:before.x-button-pressed:after, .x-toolbar-light .x-field-select:before.x-button-active, .x-toolbar-light .x-field-select:before.x-button-active:after, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-pressed, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-pressed:after, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-active, .x-toolbar .x-toolbar-light .x-field-select:before.x-button-active:after {
   background-color: #192533;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #080c11), color-stop(10%, #111922), color-stop(65%, #192533), color-stop(100%, #1a2635));
+  background-image: -webkit-linear-gradient(#080c11, #111922 10%, #192533 65%, #1a2635);
   background-image: linear-gradient(#080c11, #111922 10%, #192533 65%, #1a2635);
 }
 
@@ -4085,6 +4123,7 @@ input, textarea {
   -webkit-mask-size: 1.7em;
   background-color: #003370;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0a7aff), color-stop(2%, #004394), color-stop(100%, #00234c));
+  background-image: -webkit-linear-gradient(#0a7aff, #004394 2%, #00234c);
   background-image: linear-gradient(#0a7aff, #004394 2%, #00234c);
   width: 1.7em;
   height: 1.7em;
@@ -4138,6 +4177,7 @@ input, textarea {
 .x-list .x-list-item.x-item-selected {
   background-color: #06346a;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #167bf3), color-stop(2%, #07448c), color-stop(100%, #042348));
+  background-image: -webkit-linear-gradient(#167bf3, #07448c 2%, #042348);
   background-image: linear-gradient(#167bf3, #07448c 2%, #042348);
   color: white;
   text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
@@ -4149,6 +4189,7 @@ input, textarea {
 .x-list-header {
   background-color: #4d80bc;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bccfe6), color-stop(2%, #6792c5), color-stop(100%, #3f6ea6));
+  background-image: -webkit-linear-gradient(#bccfe6, #6792c5 2%, #3f6ea6);
   background-image: linear-gradient(#bccfe6, #6792c5 2%, #3f6ea6);
   color: #1f3651;
   text-shadow: rgba(255, 255, 255, 0.25) 0 0.08em 0;
@@ -4686,12 +4727,14 @@ input, textarea {
 .x-spinner-body .x-spinner-down, .x-spinner-body .x-spinner-down.x-button-back:after, .x-spinner-body .x-spinner-down.x-button-forward:after, .x-toolbar .x-spinner-body .x-spinner-down, .x-toolbar .x-spinner-body .x-spinner-down.x-button-back:after, .x-toolbar .x-spinner-body .x-spinner-down.x-button-forward:after, .x-spinner-body .x-spinner-up, .x-spinner-body .x-spinner-up.x-button-back:after, .x-spinner-body .x-spinner-up.x-button-forward:after, .x-toolbar .x-spinner-body .x-spinner-up, .x-toolbar .x-spinner-body .x-spinner-up.x-button-back:after, .x-toolbar .x-spinner-body .x-spinner-up.x-button-forward:after {
   background-color: #dddddd;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #efefef), color-stop(100%, #cbcbcb));
+  background-image: -webkit-linear-gradient(#ffffff, #efefef 2%, #cbcbcb);
   background-image: linear-gradient(#ffffff, #efefef 2%, #cbcbcb);
 }
 /* line 65, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
 .x-spinner-body .x-spinner-down img.x-icon-mask, .x-toolbar .x-spinner-body .x-spinner-down img.x-icon-mask, .x-spinner-body .x-spinner-up img.x-icon-mask, .x-toolbar .x-spinner-body .x-spinner-up img.x-icon-mask {
   background-color: black;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #4d4d4d), color-stop(2%, #121212), color-stop(100%, #000000));
+  background-image: -webkit-linear-gradient(#4d4d4d, #121212 2%, #000000);
   background-image: linear-gradient(#4d4d4d, #121212 2%, #000000);
 }
 /* line 74, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/_mixins.scss */
@@ -4702,6 +4745,7 @@ input, textarea {
 .x-spinner-body .x-spinner-down.x-button-pressed, .x-spinner-body .x-spinner-down.x-button-pressed:after, .x-spinner-body .x-spinner-down.x-button-active, .x-spinner-body .x-spinner-down.x-button-active:after, .x-toolbar .x-spinner-body .x-spinner-down.x-button-pressed, .x-toolbar .x-spinner-body .x-spinner-down.x-button-pressed:after, .x-toolbar .x-spinner-body .x-spinner-down.x-button-active, .x-toolbar .x-spinner-body .x-spinner-down.x-button-active:after, .x-spinner-body .x-spinner-up.x-button-pressed, .x-spinner-body .x-spinner-up.x-button-pressed:after, .x-spinner-body .x-spinner-up.x-button-active, .x-spinner-body .x-spinner-up.x-button-active:after, .x-toolbar .x-spinner-body .x-spinner-up.x-button-pressed, .x-toolbar .x-spinner-body .x-spinner-up.x-button-pressed:after, .x-toolbar .x-spinner-body .x-spinner-up.x-button-active, .x-toolbar .x-spinner-body .x-spinner-up.x-button-active:after {
   background-color: #cbcbcb;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #b2b2b2), color-stop(10%, #bebebe), color-stop(65%, #cbcbcb), color-stop(100%, #cccccc));
+  background-image: -webkit-linear-gradient(#b2b2b2, #bebebe 10%, #cbcbcb 65%, #cccccc);
   background-image: linear-gradient(#b2b2b2, #bebebe 10%, #cbcbcb 65%, #cccccc);
 }
 /* line 462, ../../deps/sencha_touch/resources/themes/stylesheets/sencha-touch/default/widgets/_form.scss */
@@ -4792,6 +4836,7 @@ input, textarea {
   border-radius: 0.925em;
   background-color: #dddddd;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #efefef), color-stop(100%, #cbcbcb));
+  background-image: -webkit-linear-gradient(#ffffff, #efefef 2%, #cbcbcb);
   background-image: linear-gradient(#ffffff, #efefef 2%, #cbcbcb);
   -webkit-box-shadow: inset rgba(255, 255, 255, 0.5) 0 0 0.1em, inset rgba(255, 255, 255, 0.3) 0 -0.1em 0;
   -webkit-background-clip: padding;
@@ -4805,6 +4850,7 @@ input, textarea {
 .x-thumb.x-dragging:before {
   background-color: #d0d0d0;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(2%, #e2e2e2), color-stop(100%, #bebebe));
+  background-image: -webkit-linear-gradient(#ffffff, #e2e2e2 2%, #bebebe);
   background-image: linear-gradient(#ffffff, #e2e2e2 2%, #bebebe);
 }
 
@@ -4825,6 +4871,7 @@ input, textarea {
   margin: 0 0.925em;
   background-color: #dddddd;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c4c4c4), color-stop(10%, #d0d0d0), color-stop(65%, #dddddd), color-stop(100%, #dedede));
+  background-image: -webkit-linear-gradient(#c4c4c4, #d0d0d0 10%, #dddddd 65%, #dedede);
   background-image: linear-gradient(#c4c4c4, #d0d0d0 10%, #dddddd 65%, #dedede);
   border: 0.1em solid rgba(0, 0, 0, 0.1);
   border-bottom: 0;
@@ -4847,6 +4894,7 @@ input, textarea {
   border: 0.1em solid #b7b7b7;
   background-color: #dddddd;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c4c4c4), color-stop(10%, #d0d0d0), color-stop(65%, #dddddd), color-stop(100%, #dedede));
+  background-image: -webkit-linear-gradient(#c4c4c4, #d0d0d0 10%, #dddddd 65%, #dedede);
   background-image: linear-gradient(#c4c4c4, #d0d0d0 10%, #dddddd 65%, #dedede);
   z-index: 2;
 }
@@ -4866,6 +4914,7 @@ input, textarea {
 .x-field-toggle .x-slider.x-toggle-on {
   background-color: #92cf00;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6e9c00), color-stop(10%, #80b500), color-stop(65%, #92cf00), color-stop(100%, #94d200));
+  background-image: -webkit-linear-gradient(#6e9c00, #80b500 10%, #92cf00 65%, #94d200);
   background-image: linear-gradient(#6e9c00, #80b500 10%, #92cf00 65%, #94d200);
 }
 
@@ -4940,6 +4989,7 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
 .x-msgbox-dark .x-msgbox-input {
   background-color: rgba(186, 202, 222, 0.9);
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(152, 176, 205, 0.9)), color-stop(10%, rgba(169, 189, 214, 0.9)), color-stop(65%, rgba(186, 202, 222, 0.9)), color-stop(100%, rgba(188, 204, 223, 0.9)));
+  background-image: -webkit-linear-gradient(rgba(152, 176, 205, 0.9), rgba(169, 189, 214, 0.9) 10%, rgba(186, 202, 222, 0.9) 65%, rgba(188, 204, 223, 0.9));
   background-image: linear-gradient(rgba(152, 176, 205, 0.9), rgba(169, 189, 214, 0.9) 10%, rgba(186, 202, 222, 0.9) 65%, rgba(188, 204, 223, 0.9));
   border: 0.1em solid rgba(66, 99, 138, 0.9);
 }
@@ -5189,6 +5239,10 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   }
 }
 
+/** Custom classes in vrs.ux.touch. */
+/** Common sass style settings for
+* the MenuPanel usage.
+*/
 /** Helper methods */
 /**
  * @param {string} $name The name of the icon to be included. This is to match the name of the icon file (located at resources/themes/images/default/pictos) without its extention (.png).
@@ -5203,13 +5257,17 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
 * }
 */
 /** Icons to include embedded. */
-/*
+/* Pinstripe background.
 .x-form-settings-panel > .x-panel-body {
    -webkit-background-size: 0.438em 100%;
    background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
 }
 */
-/* line 83, ../sass/app.scss */
+/** Customizations for the field row.
+* note: remember that we also put a field class on the row
+* to get all the form field defaults.
+*/
+/* line 42, ../sass/_menu_panel.scss */
 .x-menupanel-row {
   display: -webkit-box;
   display: box;
@@ -5219,23 +5277,25 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   box-align: center;
   min-height: 2.5em;
   width: 100%;
+  background-color: #f7f7f7;
 }
-/* line 93, ../sass/app.scss */
+/* line 52, ../sass/_menu_panel.scss */
 .x-menupanel-row.x-menupanel-row-selected {
   background-color: #06346a;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #167bf3), color-stop(2%, #07448c), color-stop(100%, #042348));
+  background-image: -webkit-linear-gradient(#167bf3, #07448c 2%, #042348);
   background-image: linear-gradient(#167bf3, #07448c 2%, #042348);
   color: white;
   text-shadow: rgba(0, 0, 0, 0.5) 0 -0.08em 0;
   border-top-color: #084b9b;
   border-bottom-color: #021022;
 }
-/* line 106, ../sass/app.scss */
+/* line 65, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-content {
   -webkit-box-flex: 1;
   box-flex: 1;
 }
-/* line 110, ../sass/app.scss */
+/* line 69, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-content {
   text-shadow: #fff 0 1px 1px;
   color: #333333;
@@ -5243,15 +5303,15 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   margin-right: 0.6em;
   margin-left: 0.6em;
 }
-/* line 121, ../sass/app.scss */
+/* line 80, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-leftitem {
   margin-left: 0.6em;
 }
-/* line 123, ../sass/app.scss */
+/* line 82, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-rightitem {
   margin-right: 0.6em;
 }
-/* line 128, ../sass/app.scss */
+/* line 87, ../sass/_menu_panel.scss */
 .x-menupanel-row .x-menupanel-leftitem, .x-menupanel-row .x-menupanel-rightitem {
   display: -webkit-box;
   display: box;
@@ -5264,67 +5324,70 @@ div.x-sheet.x-msgbox .x-toolbar.x-docked-bottom {
   min-width: 1em;
   min-height: 1em;
 }
-/* line 141, ../sass/app.scss */
+/* line 100, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask {
   width: 1em;
   height: 1em;
   -webkit-mask-size: 1em;
   background-color: #003370;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0a7aff), color-stop(2%, #004394), color-stop(100%, #00234c));
+  background-image: -webkit-linear-gradient(#0a7aff, #004394 2%, #00234c);
   background-image: linear-gradient(#0a7aff, #004394 2%, #00234c);
 }
-/* line 150, ../sass/app.scss */
+/* line 109, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.arrow_right {
   background-color: gray;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cccccc), color-stop(2%, #929292), color-stop(100%, #6e6e6e));
+  background-image: -webkit-linear-gradient(#cccccc, #929292 2%, #6e6e6e);
   background-image: linear-gradient(#cccccc, #929292 2%, #6e6e6e);
 }
-/* line 155, ../sass/app.scss */
+/* line 114, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.check1 {
   width: 1em;
   height: 1em;
   -webkit-mask-size: 1em;
   background-color: green;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1aff1a), color-stop(2%, #00a400), color-stop(100%, #005c00));
+  background-image: -webkit-linear-gradient(#1aff1a, #00a400 2%, #005c00);
   background-image: linear-gradient(#1aff1a, #00a400 2%, #005c00);
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.action {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFI0lEQVRoBe2YW4hVVRjHZ0yzq6lFEaMlE0PShYRAJIl6iEqKHnqI6WJB0IvdICkfEk0aIyo0KFCph8giCitI7CkoohQL7SoZDaQmXSgKo4uWNf1+zt7DOXvOOXuvvc85bc+cD36ssy/r+77/Xmt9e+3TOzIy0jORbNJEEqvWruBOH/HuCHdHuMOeQOmmdO+ozaA5oxXPunSC2Re4MbgCNiB6vvqbKbx0giNxp9BeBU/BIJqnRecLN2UVrLDj4GIYgscRfSltYSuzYMUdA/0wCI8ieglM5XduK7vgWJhTegGshucRfQHkyj1XpziLNrfmOh2ug1dhMaJn0gbZZDpNpsexQb2y3azfKXCAwns4W5dMd7m2B2ANLCT/x/A/nKknN5mUhWFp1g4Z7vM14jrbBZvgEwi1tAdkDEf3ZrgI0S/RrkP4IdqGpuA+cJo0yw7iyNfJmzAcMrokfjp93HC4XrPYCdzkgPXDPPqvJN7eRh0VrBWqfKMuev6k3Qzr4SP4HWqOFIkZ73iYA/NhLpwPZ4LLS+FZzUp+GtwAA/heS/sGwv+irWnXc9bdTRF20/8eOBWmEKwnCectOrPhSlgF2+Bb+Bl+AxP8B/6FvLn8Td8fYQXMSubgsVZU8Cv4mAeNhC7k+jLYCopzrRURlvZA9P8WLIJJlcI5zi1Ypw+Dr4oqp3EAzlsbLCjfg1PeEUxLtlnXXU4/wQboq8gpl2BHx2l5UuyosuW8I6rQb8Bp1iwRefy4VN6FReaopU3pX7jnhwSO7MmVIiNnJ3L+DtgHCm3ltA0RH4/26rhKk1tdu4kr7yeuHkKgU3rMqI5ncfAQDIKbg14oi1nJv4OvTShthC9LjmTyGB8XwhZw+oQ8+Xbc68C8AOboK6+YYPpfDV+B06YdAkJiuMtzhvrOP1JYafMLpu/Z8CmEJNGOe60fz0J/cjZmWcP0G2+sWZ/aUnCqhFosOq7gyf6uOT888th+Ot0HmxF7MOkgt2AcXQNLkg5rHPv+dffjVvPX6PdeWtf7MJhUssD578ZtEGL6sY4MIfTjeh1zCWZ0Z+DwQXAkapkjtzviPdoPYB+JuJVMNfy7QQkR7MbGPfRaYhi7ruUSjLcbwe1k0tw2vgivwy6C70/ekPE4JK+N+HySWDuz+A5xXOnvlsqD6Lf/QjwBnxNc4a02YwzBeuIdyBosWDDT7RKcn1MRYA+/V8ImAv9Rcb5VP53ufoQ8AB8S0+PMFiwYz5fDzCjCF7SLCbojOm514zZ3HViYLIZVxmD4h8B0rtWtFXkEn4tTv22thPe2SawVeDs8TTz/NqoyhLqDGoC7wervt3lNCxKMY/fIc+BLuJXgn9G20pyuVuA1sJF4vt7GjHx8nZnT7XAXzIXnoK4FCcbLVHAqLW+DWF8v78Aq2EY8v7zGDK2+EmfBI3AtTAPNTU1dCxXs/a6ht+t6bM4FNykvw/0IdYSrDLHu8iyeQ7Cg6mLKQahgd0pbSOJwit/cl6Np6p+BrxGn6hNUp1z3m/tOWAH+DrIgwSTQcBcTFLnOzcRwSjZ6j/vdvQyCxRrSanu0mWvZqp3LjkbBuYTGnSac4CxreCQqJPFD+r/bhq+dtOSyCO7DyWzIcm9avKLXXb+FcskiYjlBfB0lP9KLJp+nv6N7ZL+cp7N9sgg+L6/zMvabcEWrK7iM07CZOXVHuJlPs4y+rNJ74JkyJpczp62N+vWOfpw0uqWzrnXXcGeN53g13REe/0w660x3hDtrPMer+Q9LNCcV91c+jgAAAABJRU5ErkJggg==');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.add {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAABqUlEQVRoBe2awWnDUBBE843B4NxcQSAFOC4lJeTkoxtJDykgvRhcgCFNJCFgIs+ChEHSJX93YT6ZD4ssmR3NztNFH5Wu6+6iVynlEZpbp+4J3s5OjWm7DRxZuMMCdUB9oyzNmrJe01hEejMtM5exIh6bCI3JbFkDT27EckEDs5DI8iHCWcmy6IowC4ksHyKclSyLrgizkMjyIcJZybLoijALiSwfIpyVLItuOGFso/xiuEvAgJdeK0DqJrHEhtsTTh9ul9y/ChR2KE+Y1ruDt2ccI7d6PszcK+oFFblWELt3Cn6i/8epMW5/W+LKGrUZ/0NwboF5QxuPsfY8dmOxJs41cBOYHCZF2BFeE60i3AQmh0kRdoTXRKsIN4HJYVKEHeE10frvCNvr4RH1HojH3rGHr3hqA7VdkxPKvuKJ3AA4hn7BM3xxA5N71Fdv1gz/tax3P+hFHmsJwM/8wraMadqOh5GuXda76rVqNWb7wgeevQvRRQ1MBCPFiginxEokKsJEMFKsiHBKrESiIkwEI8WKCKfESiQqwkQwUqyIcEqsRKIiTAQjxcoVrP83/9czD9EAAAAASUVORK5CYII=');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.arrow_down {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpGRTdGMTE3NDA3MjA2ODExOTJDQUMyNUQwRUE4NjdEQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxQTFBMDFDQ0I5NEYxMURGQUU1RjlGMEFERUNDQTVEMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyMkRCMDIxMkI5NEUxMURGQUU1RjlGMEFERUNDQTVEMCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjMwRTE0QzVBNDIyMjY4MTFCQ0ZCOTAzOTcwNzcyRkVCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkZFN0YxMTc0MDcyMDY4MTE5MkNBQzI1RDBFQTg2N0RCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+HfrH/AAAAeVJREFUeNrs2cFHBGEUAPA3zYqIiIhOnTpFRHSKrp26RqeuEV077R/QqWtE166dOkVERHRa9hQRnZalFcv0Hk/W1Mx+38z3vvlm5j3eZW+/9+abne+9KEkSaFPMQMtCwQpWsIIVrGAFK1jBClawgo2ik/4hiqJGwLKuvfpIc5xSkWqYr5hzU1s/mRNxXTPsJ+ZqluvXlwOmSj3XBDvG3M1rpAmYYoUrFzr4ZNqTawqm2MH8Dhh7ZXJUbcAUx4FinzBnJcAUl4FhP/jIgRSYKvkYCJaO2LbNv08RMMUy5nsA4COTLy0XYIqtil9iF6aflq7AwBWuAvuQ9ZKSBgNX2ieWjtKSzeXBNZgqfe8J+4W5aXtbcg0GrvibB/BhkeuhBJhigzsghT0veh+WAlMcCGHvMOMQwcCdcIntYy6WmXhIg2PuiAvsEHO97IhHGgzckb4D8L6LmZYPMHBnhiWwXVdDPF9g4A4Vwd66nFr6BAN3ygbbw1yoMzjmjplgB5hrrufSvsHAHesZDOD2JAbxVYCBOzfIAZ9JbR6qAgN3cPwP9kZy1VIlGLiTdluCmoOBO/pnS9Bk8DzmS3pL4BMcpZEe1qX0GI/atC4dQYXRMa1MU0IX4gpWsIIVrGAFK1jBCnYUPwIMAPUPAyFL+nRdAAAAAElFTkSuQmCC');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.arrow_left {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpGRTdGMTE3NDA3MjA2ODExOTJDQUMyNUQwRUE4NjdEQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGMDZEQTFBREFDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGMDZEQTFBQ0FDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkFGQzJEMjQxRjIyMDY4MTE4QTZEQzUxMDg5Q0Y0RTRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkZFN0YxMTc0MDcyMDY4MTE5MkNBQzI1RDBFQTg2N0RCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+FXGmxAAAAghJREFUeNrsm09ERFEUxt+rxBAxqyFm1SqiRYpMSpFapUVaRGpTRIpIbWLaFJEoRZtilChRWiRKsyklilYRERERERGZvsN57Wfmvnnnznkfv+WM+bn3e/ePN24mk3E0pcRRllC42FOWy4dc1w30R+fz3LFthEs1TelZ0KlBuAIcgmRgHS5gqlm2RsNTmqbvrUlZycLT4BhUiliWfEwEbII+UeuwT4nzqNZq2Gm1gTu/ZaUIj4NTEBW7tTTY1zUwKH4vbaive6BBw2kpAa6DkA1CeBicgZhVx8McUg5WWNi+83CWiXFfE9ZeAGQR6ukBqJKyu/Gzw7TcXEiS9UuYbiWWeU8ckXYqMT2lozyFW6SeOU0K1/FhPS75RsHUlKbj3KV0WRPC1Nd5sCuxr6anNPV12zFwk2jLCCdtk81XeAIsahL+BVOgH3xrEPayA5rAixZhyj2oB2ktwpR30A5WtQh7vR4DQ+BHg7CXLdAMXrUIU26411dahClvoBVsaBF2uMsjYFRCrwt5a7kOOnjUVQg7vE43cr9VCDu8I6Nep7QIO7z3HgCTvHYXvbCXJe71hxZhyjmv1w9ahCnP/DDb1yLs9boXzGgR9rIAusCnFmHKCff6UYsw5Ymlj7QIU75AN5gz9YVuLu8eB/S+dA+v1+l83pe2Sfg/BRe2OeGfPELhUDgUtip/AgwAw4tbozZtKFwAAAAASUVORK5CYII=');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.arrow_right {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpGRTdGMTE3NDA3MjA2ODExOTJDQUMyNUQwRUE4NjdEQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpGMDZEQTFCMUFDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpGMDZEQTFCMEFDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkFGQzJEMjQxRjIyMDY4MTE4QTZEQzUxMDg5Q0Y0RTRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkZFN0YxMTc0MDcyMDY4MTE5MkNBQzI1RDBFQTg2N0RCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+xvZexwAAAhhJREFUeNrsm8FHRFEUxu9rxhARsxqiVauYXWoTpTYtUkRqlWkz0WaiTW2iNi3atGhTm4k2E5GYSJRaZcZQtIqIISIiYhgyfZdv/oF59913X+cdfst5733u+c495743XqvVUpKiSwmLWPB/j2QnP/I8L9SH9lN3/KxwQlpKT4FtaR7eAhegR1LRmgEVMCCpSg+CGtNczLbUC8pgQ9I+rCv3LiiBbkmNxwJ93S+p08qCRzAhqbVMg2tQkNRLa1/vg6ILvrY5POTAXdi+tj0tDbOYjUoaDzPgBuQlzcMpcEhSkg4A8lztjBTBin6u0d8iBOvoYwXPSRGsuEcXuWcnJAhuR4G+TksRrGOMfXhWimDFjqzCyUuE4LavS5yxExIEt0OfopRN+DpKbx6MHAtHSfAeWPN7kWQEhDbAMjg1cTHXBdfBLHiSUKXvwZBJsS4LPgCT4NP0hV1L6SZYAcdB3cAlwe9gDlQlTEsP9Gs16Bu5IPgIjIOP/34AoP26Ss82bd00LA/r1Vzk1mM1whCsfTrPpsJ62E7pE/q1HpaPbAn+Betgib1xaGEjpb+Ywrcu7H9BC35m8//mSncTZEqfgRGXxAYpeJNp3FCOhemU/ub+euXqzGlS8AuYBq8unyiYSulLNv9OizUleIcr+6MiEF4n3x7ze2n9OkSfE5/bfmg/30v7ERxaWBcc5Yj/5BELjgXHgiMVfwIMAGPkXbHq6ClAAAAAAElFTkSuQmCC');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.arrow_up {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpGRTdGMTE3NDA3MjA2ODExOTJDQUMyNUQwRUE4NjdEQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDQUZBQUM3NEFDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDQUZBQUM3M0FDOTMxMURGOEQ2MUVDMjM0MzY2NTBDQSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkFGQzJEMjQxRjIyMDY4MTE4QTZEQzUxMDg5Q0Y0RTRFIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkZFN0YxMTc0MDcyMDY4MTE5MkNBQzI1RDBFQTg2N0RCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+ar3jxgAAAbFJREFUeNrs2j9ExGEcx/H71YmmpoiIaIq4KSKi6dabbo1oiqamm1qboimiNZpuuikiIqLppiPipqYjIuLp+/D95vy6X/frfr/n730e3sst53XP9x7u+V2ilKpM05qpTNkCGGCAAQYYYIABBhhggAEGeNSqpl9IkiQKWNbvfBc7PDdNIz1PPVK7Trd+OMPrRr8l9Uat2nT9+CyCW4yVnnnHowTXqa8UWHcdI3iNGozASscxgReo7h9YxTtfjwXcHoOVBjwJQYNPcmKlLk9EkODGP7FSO0TwOvU+IVjxZAQD1iPZK4CVGiGAZ6lOCVjFE7LhO/i0JKzUK3KImQY3S8ZKHZ4cr8A16sMQWPHkeANepF4MYqWmD2A9arcWsIonqOYafGYJK73yRDkB71nGSnd5r4jKBG9Sn47AunOb4CWq7xAr7dsA61G69wCreMK2TIMvPMFKfZ44I+ADz7DSQ9YhVgS87fiQGtdlmeBlvkNWnndYBljfGT8FgJVDbKco+CoQrBp6mrEyKfgoMOyvpxlZ4CT9vcXj0shWNe8nE8vCfzwABhhggAEGGGCATa1vAQYAZekAmr8OukgAAAAASUVORK5CYII=');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.star {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFfUlEQVRoBd2aXahVRRTHz/Ujv+2mZRGZB7W6mtpFikC7+UWUZiqBD0JPFdRL1EMFPfjoU4baS0FUD/UWZBEVShA+BCpmWApRSkgllNpDmZWZt9//eOay72afvWfWOTPn3rvgz8yeWbPW+s/XmT379AwODtZSSQ+CryVgA/gVfIx/pelEhFMBVlvBOaBeFo6Cean8y09KsnMg932TqCOs9M2UhMfhMJVsxtHcAmcbmekLCsqjFKUkvAYG1xSwmEHZqoLyKEVJCDOCNxH9HUCbVl6mULAuXxjrOQlhgl8Bbi0h0Uen3FBS37GqVIQHiHh2SdR16jTlo0t0woycpuxiUDSdHcFeMv3uIWYanTDB3wIWVZBQHP10zuQKvbarUxDWT1HRz1E++Ds99fLtgp6jEmbExhPNcs+IbkZPiCpRCRP5TPCQJ4MJ6A3QSUqjSWzC2ozuC4j+fnSnB+gHq8YmvJKIJgVEpRPX9QH6waqxCa8PjEhHT981H2j6qno0wqzF63BhOUxsom3Zb7aJqGsUjTAONFJlpysXQz7VuXpavrBTzzEJaz1adlzNjHs6RTBvJyZhjZTF/kTaWZZCnlvhsyWgQkPZQpagzsX1bFlAXjGtDdAPUu1p3PPQhCCXkdwG/mta0PWLds060AuAnqtEOjpdbQR3VymX1P9F3UfgGJA9X9F92c/ADaQ2P8V0DJ4/kDbeYKaSvgI2AN0+OGJK1VAbSIhTOXEOybYll2kte77yD4rqrHyb85S9Cl4HtReAyI11/A7HpRq5PSD6oR0f3Rad+H7S1DvV7UgS+tc1cU3n3V/AWJ/SX8BxVuMinow2rNNjlPQVeH0GFg378kDBfLAPXARjZbTPwmUXmOG+bgz71EKFfqKeAUWfREZbJxyCxyOOqEuHER4qrNUWovwy0CFktBHV4eNZMNvxyaaFhKWAaBt/HJwEo4W0luSKLMF8viVhp4iBeeBd8CcYqcQ1qi+CKS7uVmklYdcQY0+C42Ckkf6EmO51cVal3oRlCFkCdKgfCWtbo7obDO3AVWQbHHyUsjo40E6uq9cvQbdG+wN892fj8s0HjXDWKA51/t4JUo72H/jTDtybjSUkbyYsJ0gdfAtSjfTn+JoWQjCv2+57a4M1QaQSvZvrMsIs7RJejGcdUlLJUhzpZsYsZsJcCen6ZwCE3IaYA2021OfUdU3fJltmwni7Fvh+KDMF16KR3ux0lWuSdgjPxeNdJq/tNdKNqJaSSUyEmVK6JNPomtqbIh3eSKNsEmvAarfJ5LEzjbbR59MtpqyEb8eZjpndkhtxvNri3Er4YZxpx+yW6Jdhi8V5MOHm+n0QZ9afo0u0fQO8A5S3iPaQ1cTSG9w4f/SqesZBH/gRWI6T+gyyxfkgvw2cMdrS+/lTzpZvGnyWxsnTwHLRd4R2a/OBqQyoztKBe/P2qp6DCBOUptKHhuA+pU1fq2Co0/F0L9CVaghxXTbWW9ktKg8lrFfCrwODeh/9wgu1bEDo6OT2Fvgb+JLWq+nQEsnaa5UPJbwKBxc8A9KXPG1O3u+u6E4F24GvD3XMDjCxFcF8uTdhjGpHfwn49L42lCeAdyDZwGi3HpwAPr6+Q29htn1ZPoSwfuz3ewShXVcBNz62lzkvq6O9DjZHgQ9p72kdQljvob9VBPAN9Q+UEQmpw5b+Sf8e0FotI/4a9ZN8bIcQXlnh9AD1y3ychuhgU0tpJyhb14epn+ljN+Sk9S9G1ct50d8SdgF9x9EO3lHB5hXwPEYfA8dbGD9LuWZBtfj0inSQWUDTKzu1dAB5Dkz2tdOOHn70LvwVyMag/FYwzse295Rukq5j+G1wEOib66PAy5FPMD46+NPmqTV7CpwGGvkJPm2l8z8GWDNDloqpGQAAAABJRU5ErkJggg==');
 }
 
-/* line 57, ../sass/app.scss */
+/* line 12, ../sass/_menu_panel.scss */
 .x-menupanel-row img.x-menupanel-icon-mask.check1 {
   -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFUklEQVRoBeWbfYgVZRTG790PEYPMdBVEDSRSRAhECFbwIxGRQElQAiNRc6n+yFgoKDDwH/9TUBRXkWVFQkiUAsUPXLIoU/EDV4W2yA21rdUiFLHScv09OrPc3XvnzrxnZu7OZQ88zNyZ9znnPHPm/ZiZ3Xxvb29uKFnNUBIrrUNOcF21VTifzzeS8yKQN+R+J19NfRixIxG5F8wxiBVlW7VV+G2Sng9GKHtH66D9rpwqXA0g2bngF6BpxRV34CwHNVUxaHErDyfZJjARWOwwpGMU9lFVCCbZWeA1YMn3D3it4C4wORCvYkZ1RxPsXfCsIahu/XbwDdXVfvYFk+NioOpa7FdILWh94JMtt4jPTX1LdacSZD1QH3a1/yHsAacKiZkVjFgtLD4ALxQm7LB/lbb9qituZgWT2wKwxJij+msL6Ab9LJOCKe5zZNkMxvXLNvqP4zQ9qGloICWTgklyHZgHLOtlTT+bEdvDtsgyJ5jqqs++AYYVZRvtwD6anQ5qminBiNVo/A54KSjhkOP+NPRkkVGqbaYEk+DLYC2w5KVp6AC4AoJNC5AsgAz1BHQUaIS14Ed408K0WK4kflOxZXh91ej5P3g7wA+h/LArUonzJDkeXAKWyopzFoyOkmtWKqzl4zRgsX8gbUDsn1HIgy6Ykfl1EtXtbH37chDu11HEqs2gCkasHvmagB4BLXYd0laqey8quY6gL9JYnd5ivxHsXwuRuFpF6e3jQgsfjvrubnDeha+g34MxLiSvrQJuRHCbgZtDr9bJX4JXLHw4P4MFxO9y5a+CoOQt0DTQQFDnuRzeFmNM5fk3+NAYNzcK8jlj8Ifwml0Dw5kJtPyzXGRxNA097xpX7Z9UBvKbQI9SlgTUhyZEDU7benDIGEv5qborosYb2M4XrIn/JLAI1qD1yUDHQb9puxrEqe4X8GuD/Icd7+t7OHkLaLS2iFaXGBUaLJfTp5LLxhjKSxdqdliccucLBU/AmQYhi+AH8JaUDfT0YV5PQtauo7y2gWHl4oSd6xOshtinQEs1i2itdsYEBeTcDNBl9K18LoEpQf6jHh8oWHOjtcrqDstLBeb4M2AnsFxIn/Me/JpS/l2O9RMsItYMNN34gVy2Z+AV9WWOLY3hU/Hld7yLsKC2pQTrjWEncBHqt1X/XFkYjN9jQYfRn/xqGmoq9Blnv0iwnGF6a6hXJr4Ql+0peCM9P7XsfwziDFQn4BfdNVbRQYK1tr4AXIT6bTVivw+0TtdXv27gn3Pd6hm30SquFC9IsJJdA6zz8ndwJ4L9wFpd8VpA7IGqUHhJwWqATQLfAteqqP1fQMtHfZu18MW5AaYXJpvEfqBgT7T+psI6YluFiqdu8RGoT0JkoY+wNx7HCarnzkqbnob2kagudqJWVjAB9QpFny60+qqU3SPQJmLrlk7cygr2orWylfBKmRYZx9IKFirYu9JtJJD47VVC1C2ObSfm/RLnkjmE87IDl85jDeAnEGcgCuNqobMX1EXJydomtMIkoAtym40W/5ob07LfcbyFWJr7U7NIgr3on7NNa8RWd/kMsXqRkKq5CL5JJptBGn35In71cJ+6RRbM1dftrHnZ6cV3BAV6GtJAdT1C29hNIgv2InWx3QOS7Gd6GZ/aNOTl3bdxEkwVNNKqytf6PMTbuQu9Dbc98dxEZzsJlluSk9gjIG5f1sVrB/rUUzlT0VxBdpNBJwibW8ud13PyLNfYcdvXEdTZCHqNj2GtEPUXN7XODp4SdrM5beSaaeb/efC+/s0nskWwRvyvuHCqckXNLLiiWSYYzHnQSjD2oLgacoIfA92Es2D+M247AAAAAElFTkSuQmCC');
 }

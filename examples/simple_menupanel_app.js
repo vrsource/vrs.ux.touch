@@ -91,6 +91,27 @@ onReady: function() {
    });
 
 
+   // -- TEST WITH FORM FIELDS -- //
+   var menu_part1 = new vrs.ux.touch.MenuPanel({
+      formItemDefaults: {
+         rightIcon: 'img/chevron.png'
+      },
+      formItems: [
+         {content: 'Item 1'},
+         {content: 'Item 2'}
+      ]
+   });
+   var menu_part2 = new vrs.ux.touch.MenuPanel({
+      formItemDefaults: {
+         rightIcon: 'img/chevron.png'
+      },
+      formItems: [
+         {content: 'Item 3'},
+         {content: 'Item 4'}
+      ]
+   });
+
+
    var panel = new Ext.form.FormPanel({
       fullscreen: true,
       scroll: 'vertical',
@@ -120,6 +141,88 @@ onReady: function() {
             title: 'Faster Menu Example',
             instructions: 'This menu uses updateItem for updates.',
             items: [menu_list2]
+         },
+         {
+            xtype: 'fieldset',
+            title: 'Mixed Menu and Form Fields',
+            instructions: 'This shows how to mix menu in with other fields.',
+            items: [
+               menu_part1,
+               {
+                  xtype: 'textfield',
+                  name: 'name',
+                  label: 'Name',
+                  placeHolder: 'Tom Roy',
+                  autoCapitalize : true,
+                  required: true,
+                  useClearIcon: true
+               }, {
+                   xtype: 'passwordfield',
+                   name: 'password',
+                   label: 'Password',
+                   useClearIcon: true
+               }, {
+                   xtype: 'emailfield',
+                   name: 'email',
+                   label: 'Email',
+                   placeHolder: 'me@sencha.com',
+                   useClearIcon: true
+               }, {
+                   xtype: 'urlfield',
+                   name: 'url',
+                   label: 'Url',
+                   placeHolder: 'http://sencha.com',
+                   useClearIcon: true
+               }, {
+                   xtype: 'checkboxfield',
+                   name: 'cool',
+                   label: 'Cool'
+               }, {
+                   xtype: 'datepickerfield',
+                   name: 'birthday',
+                   label: 'Birthday',
+                   picker: { yearFrom: 1900 }
+               }, {
+                   xtype: 'selectfield',
+                   name: 'rank',
+                   label: 'Rank',
+                   options: [{
+                       text: 'Master',
+                       value: 'master'
+                   }, {
+                       text: 'Journeyman',
+                       value: 'journeyman'
+                   }, {
+                       text: 'Apprentice',
+                       value: 'apprentice'
+                   }]
+               }, {
+                   xtype: 'hiddenfield',
+                   name: 'secret',
+                   value: false
+               },
+               menu_part2,
+               {
+                  xtype: 'sliderfield',
+                  name: 'value',
+                  label: 'Value'
+               }, {
+                  xtype: 'togglefield',
+                  name: 'enable',
+                  label: 'Enable'
+               }, {
+                  xtype: 'spinnerfield',
+                  label: 'spinner',
+                  minValue: 0,
+                  maxValue: 100,
+                  cycle: true
+               }, {
+                  xtype: 'searchfield',
+                  placeHolder: 'Search',
+                  name: 'searchfield'
+               }
+               //*/
+            ]
          }
       ]
 
