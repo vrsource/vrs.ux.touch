@@ -23,10 +23,11 @@
 */
 
 /** Icons to include embedded. */
-//@include pictos-iconmask('add1');
 
-// stripped background for settings panel
-$menupanel-iconmask-size: 1em; // 1.7em;
+/** TODO: stripped background for settings panel. */
+
+/** Size of icon mask to use for the settings. */
+$menupanel-iconmask-size: 1em !default;
 
 /* Pinstripe background.
 .x-form-settings-panel > .x-panel-body {
@@ -43,7 +44,7 @@ $menupanel-iconmask-size: 1em; // 1.7em;
    @include display-box;
    @include box-orient(horizontal);
    @include box-align(center);
-//   @include box-pack(justify);
+/*   @include box-pack(justify); */
 
    min-height: $form-field-height;
    width: 100%;
@@ -60,7 +61,7 @@ $menupanel-iconmask-size: 1em; // 1.7em;
       }
    }
 
-   // The content should take up all the space available
+   /* The content should take up all the space available */
    .x-menupanel-content
    {
       @include box-flex(1);
@@ -70,22 +71,23 @@ $menupanel-iconmask-size: 1em; // 1.7em;
       @include label;
       @include bevel-text('light');
 
-      // Get spacing between the items
+      /* Get spacing between the items */
       margin-right: $form-spacing;
       margin-left: $form-spacing;
    }
 
-   // Allow space between the items and the content
+   /* Allow space between the items and the content */
    .x-menupanel-leftitem
    { margin-left: $form-spacing; }
    .x-menupanel-rightitem
    { margin-right: $form-spacing; }
 
-   // Set a minimum size for all icons so we get good spacing
-   // when we have empty rows and varying icons
+   /* Set a minimum size for all icons so we get good spacing
+   * when we have empty rows and varying icons
+   */
    .x-menupanel-leftitem, .x-menupanel-rightitem
    {
-      // Use display box to center all the icons inside the div box
+      /* Use display box to center all the icons inside the div box. */
       @include display-box;
       @include box-orient(horizontal);
       @include box-align(center);
@@ -93,35 +95,95 @@ $menupanel-iconmask-size: 1em; // 1.7em;
       min-width: $menupanel-iconmask-size;
       min-height: $menupanel-iconmask-size;
    }
+}
 
-   // Set the size and color of masked icons
-   // customize the color by matching this class and the icon of interest.
-   img.x-menupanel-icon-mask
-   {
-      width: $menupanel-iconmask-size;
-      height: $menupanel-iconmask-size;
-      -webkit-mask-size: $menupanel-iconmask-size;
-      @include background-gradient(saturate($active-color, 10%));
+/* Set the size and color of masked icons
+* customize the color by matching this class and the icon of interest.
+*/
+img.x-menupanel-icon-mask
+{
+   width: $menupanel-iconmask-size;
+   height: $menupanel-iconmask-size;
+   -webkit-mask-size: $menupanel-iconmask-size;
+   @include background-gradient(saturate($active-color, 10%));
+}
+
+/** Example of customizing color and size of an icon mask
+* Change the background-gradient to change the color
+* and change the width, height, mask-size to change the size.
+*/
+img.x-menupanel-icon-mask.arrow_right
+{
+   @include background-gradient(gray);
+}
+
+img.x-menupanel-icon-mask.check1
+{
+   width: 1em;
+   height: 1em;
+   -webkit-mask-size: 1em;
+   @include background-gradient(saturate(green, 30%));
+}
+
+/**
+* note: this rule still leaves rounded edges when we should
+* not have them.  disabled for now.
+* TODO: no border radius on fields in fieldset unless
+*       we are the first or last element.
+* see: .x-field style.
+*/
+/** We need to add a bottom border in the case where we
+* have another field that follows us in a fieldset.
+*
+* First rule gives last row in menu panel a bottom border.
+* Next rule removes this border if our menu panel is the last item
+* in the fieldset panel.
+*/
+.x-menupanel-row.x-field:last-child
+{
+   border-bottom: 1px solid $form-light;
+}
+.x-menu-panel:last-child .x-menupanel-row.x-field:last-child
+{
+   border-bottom: 0;
+}
+
+/** Override the default x-field rouding to cover the case
+* were we may not be the first or last item in a fieldset.
+*/
+.x-form-fieldset .x-menu-panel .x-menupanel-row.x-field {
+   @include border-radius(0);
+}
+
+/** If we are a field in the menu panel in a fieldset and the menu panel
+* is the first item or last item in the fieldset then we need to round
+* ourselves.
+*/
+.x-form-fieldset .x-menu-panel:first-child .x-menupanel-row.x-field {
+   &:first-child {
+      @if $include-border-radius {
+         @include border-top-left-radius($form-fieldset-radius);
+         @include border-top-right-radius($form-fieldset-radius);
+      }
    }
+}
 
-   // Example of customizing color and size
-   img.x-menupanel-icon-mask.arrow_right
-   {
-      @include background-gradient(gray);
+.x-form-fieldset .x-menu-panel:last-child .x-menupanel-row.x-field {
+   &:last-child {
+      @if $include-border-radius {
+         @include border-bottom-left-radius($form-fieldset-radius);
+         @include border-bottom-right-radius($form-fieldset-radius);
+      }
    }
-
-   img.x-menupanel-icon-mask.check1
-   {
-      width: 1em;
-      height: 1em;
-      -webkit-mask-size: 1em;
-      @include background-gradient(saturate(green, 30%));
-   }
-
 }
 
 
-// include the icons you may want to use on the menupanel
+
+/** Custom settings for the case that we are in a form panel that
+* has been configured to look iPhone-ish.
+*/
+
+/* Include the icons you may want to use on the menupanel */
 @include pictos-menupanel-iconmask('action');
 @include pictos-menupanel-iconmask('add');
 @include pictos-menupanel-iconmask('arrow_down');

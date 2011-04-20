@@ -6,22 +6,26 @@
 *      can be overridden
 */
 
-/*
-// Let's start with the basics
+/** Let's start with the basics */
 $base-color: #7c92ae;
 $base-gradient: 'glossy';
 
-// Lists
+/* Lists */
 $list-active-gradient: 'bevel';
 $list-header-bg-color: transparentize(saturate($base-color, 10%), .25);
 $list-header-gradient: 'matte';
 
-// Tabs
+/* Tabs */
 $tabs-dark: #111;
-*/
 
 /** Config options */
 $include-default-icons: true;
+
+/** vrs.ux.touch settings. */
+/** Size of the icon mask to use on menu panels. */
+$menupanel-iconsmask-size: 1em;
+/** Format the form panel and fields to have an iOs feel. */
+$ios-style-forms: true;
 
 /* -- INCLUDE STYLES --
 * 2. Include Sencha Touch styles
