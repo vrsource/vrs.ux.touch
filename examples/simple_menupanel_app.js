@@ -128,7 +128,7 @@ onReady: function() {
          {
             xtype: 'fieldset',
             title: 'Section 1',
-            instructions: 'This is a nifty little panel.',
+            instructions: 'This panel uses the MenuPanel to display items in a field set.',
             items: [form_list]
          },
          {
