@@ -1,49 +1,16 @@
-/**
-
-Required functionality:
-
-Config and Structure:
-* It should support simple configuration and specification of "rows"
-* It should allow specifying lead icon and/or disclosure icon
-* It should allow specifying a class that is used for mask styling instead
-* It should use an item selector internally.
-* It should support setting defaults for configuration (ex: right chevron for all items)
-* It should support updating the configuration (in place?)
-* It should support fast updating in place.  (ie. no DOM changes)
-
-Events:
-* It should support events for when the lead/trail objects are tapped
-* It should support itemtap
-* It should support itemdoubletap
-* It should support itemswipe
-* It should support events callbacks getting an index of the item selected
-* It should support per item events (itemtap, itemdoubletap, itemswipe)
-* It should support custom events (per item) for the lead/trail objects tapped
-
-
-Style:
-* It should have a style for when an item is selected (pressedItemCls)
-* It should be styled to look like part of a form
-* It should support being used inside a fieldset
-* It should allow setting a class that gets set for each row.  (allows styling items)
-- It should be able to be styled to look fine outside of a form
-* It should support a style that looks iPhone-ish
-
-future:
-- It should support configuring with a component to use
-- It should support fields in righthand side
-*/
 Ext.ns('vrs.ux.touch');
 /**
-* Class for creating 'list' of items that can be used in forms
+* Class for creating menu of items that can be used in forms
 * or menus as selectable items with decorations.
 *
+* It supports updating in place or en-mass and provides
+* flexibility in how to specify the decorations (masks, icons, etc).
 */
 vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    componentCls: 'x-menu-panel',
 
    /**
-   * CSS class to use for decorating all rows in the list.
+   * CSS class to use for decorating all rows in the menu.
    */
    rowCls: 'x-menupanel-row',
 
@@ -69,7 +36,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
 
    /**
-   * List of configurations for each row in the form panel.
+   * List of configurations for each row in the menu panel.
    * Each row item supports the following properties:
    *  - content: string - The text content to put on the row.
    *  - leftIcon / rightIcon: URL of an icon to display.
@@ -77,12 +44,12 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    *  - itemtap, itemdoubletap, itemswipe, lefttap, righttap: function to call when
    *         the event happens for that specific row.
    */
-   formItems: [],
+   menuItems: [],
 
    /** Default values for the form items.
    * Can be used for example to set a common rightIcon.
    */
-   formItemDefaults: {},
+   menuItemDefaults: {},
 
    initComponent: function() {
       vrs.ux.touch.MenuPanel.superclass.initComponent.call(this);
@@ -134,15 +101,16 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       );
    },
 
-   /** Update an item in the menu based upon the itemObj
-   * properties passed in.
+   /**
+   * Update an item in the menu based upon the itemObj properties passed.
+   *
    * itemObj overrides the existing settings but does not replace them.
    * ie. you don't have to set all properties.
    *
    * The method trys to intelligently determine which properties have
    * have changed by comparing them to the current settings.  Because
    * of this, you can not pass the same object in that is already
-   * in the formItems.
+   * in the menuItems.
    */
    updateItem: function(index, itemObj) {
       var me = this,
@@ -178,7 +146,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
             // the current DOM doesn't have the icons in it.
             if(!img_node)
             {
-               Ext.apply(me.formItems[index], itemObj);
+               Ext.apply(me.menuItems[index], itemObj);
                me.refresh();
                return;
             }
@@ -194,7 +162,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
                   img_node.addCls(me.iconMaskCls);
                }
             }
-            else { //(('leftIcon' === key) || ('rightIcon' === key))
+            else { // assert: (('leftIcon' === key) || ('rightIcon' === key))
                // Replace the icon
                new_icon = (Ext.isEmpty(value) ? (Ext.BLANK_IMAGE_URL) : value);
                img_node.set({src: new_icon});
@@ -202,7 +170,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
          }  // if iconcls or icon
 
          // Assign the new value
-         me.formItems[index][key] = value;
+         me.menuItems[index][key] = value;
       });
    },
 
@@ -248,11 +216,11 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    },
 
    /** Return a object containing the values to use
-   * for the given form item index.
+   * for the given menu item index.
    * This combines the configured values with the default values.
    */
    getItemValues: function(index) {
-      return Ext.apply({}, this.formItems[index], this.formItemDefaults);
+      return Ext.apply({}, this.menuItems[index], this.menuItemDefaults);
    },
 
    // ---- RENDERING OF CONTENT --- //
@@ -266,7 +234,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    },
 
    /**
-   * Refresh the content to the most recent state of the formData.
+   * Refresh the content to the most recent state of the menuItems.
    *
    * Note: could try to use XTemplate in the future, but for now turned
    *       out to be more complex then just doing this directly.
@@ -296,7 +264,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
           getSectionDivStr;
 
       // Determine if we have content on left and right to include
-      for(x=0; x<this.formItems.length; x++) {
+      for(x=0; x<this.menuItems.length; x++) {
          item = this.getItemValues(x);
          if(!(Ext.isEmpty(item.leftIcon) && Ext.isEmpty(item.leftIconCls)))
          { hasLeftContent = true; }
@@ -318,7 +286,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       };
 
       // build up contents
-      for(x=0; x<this.formItems.length; x++) {
+      for(x=0; x<this.menuItems.length; x++) {
          item = this.getItemValues(x);
 
          htmlFrags.push('<div class="' + me.rowCls + ' x-field">');
@@ -341,30 +309,30 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    // @private
    onTap: function(e) {
       console.log('onTap called');
-      var index, form_item,
+      var index, menu_item,
           itemNode = this.findItemByEvent(e);
       if (itemNode) {
          Ext.fly(itemNode).removeCls(this.pressedCls);
          index = this.indexOf(itemNode);
-         form_item = this.getItemValues(index);
+         menu_item = this.getItemValues(index);
          if (this.onItemTap(index, e) !== false) {
             // Now determine if it was the left, right, or center that was clicked.
             if(e.getTarget('.' + this.leftItemCls, this.getTargetEl()))
             {
-               if(!Ext.isEmpty(form_item.lefttap))
-               { form_item.lefttap(this, index, itemNode, e); }
+               if(!Ext.isEmpty(menu_item.lefttap))
+               { menu_item.lefttap(this, index, itemNode, e); }
                this.fireEvent('lefttap', this, index, itemNode, e);
             }
             else if(e.getTarget('.' + this.rightItemCls, this.getTargetEl()))
             {
-               if(!Ext.isEmpty(form_item.righttap))
-               { form_item.righttap(this, index, itemNode, e); }
+               if(!Ext.isEmpty(menu_item.righttap))
+               { menu_item.righttap(this, index, itemNode, e); }
                this.fireEvent('righttap', this, index, itemNode, e);
             }
             else
             {
-               if(!Ext.isEmpty(form_item.itemtap))
-               { form_item.itemtap(this, index, itemNode, e); }
+               if(!Ext.isEmpty(menu_item.itemtap))
+               { menu_item.itemtap(this, index, itemNode, e); }
                this.fireEvent("itemtap", this, index, itemNode, e);
             }
          }
@@ -426,13 +394,13 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    // @private
    onDoubleTap: function(e) {
       console.log('onDoubleTap called');
-      var index, form_item,
+      var index, menu_item,
           item = this.findItemByEvent(e);
       if (item) {
          index = this.indexOf(item);
-         form_item = this.getItemValues(index);
-         if(!Ext.isEmpty(form_item.itemdoubletap))
-         { form_item.itemdoubletap(this, index, item, e); }
+         menu_item = this.getItemValues(index);
+         if(!Ext.isEmpty(menu_item.itemdoubletap))
+         { menu_item.itemdoubletap(this, index, item, e); }
          this.fireEvent("itemdoubletap", this, this.indexOf(item), item, e);
       }
    },
@@ -440,13 +408,13 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    // @private
    onSwipe: function(e) {
       console.log('onSwipe called');
-      var index, form_item,
+      var index, menu_item,
           item = this.findItemByEvent(e);
       if (item) {
          index = this.indexOf(item);
-         form_item = this.getItemValues(index);
-         if(!Ext.isEmpty(form_item.itemswipe))
-         { form_item.itemswipe(this, index, item, e); }
+         menu_item = this.getItemValues(index);
+         if(!Ext.isEmpty(menu_item.itemswipe))
+         { menu_item.itemswipe(this, index, item, e); }
          this.fireEvent("itemswipe", this, this.indexOf(item), item, e);
       }
    },

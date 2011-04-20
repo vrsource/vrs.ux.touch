@@ -5,7 +5,7 @@ onReady: function() {
       console.log("Clicked");
    }
 
-   form_items = [
+   menu_items = [
       {content: 'Item 1', leftIcon: 'img/checked.png', rightIcon: 'img/chevron.png'},
       {content: 'Item 1.5', leftIcon: 'img/checked.png', rightIcon: 'img/chevron.png'},
       {content: 'Just Right', rightIcon: 'img/chevron.png'},
@@ -26,7 +26,7 @@ onReady: function() {
    ]
 
    var form_list = new vrs.ux.touch.MenuPanel({
-      formItems: form_items,
+      menuItems: menu_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
          itemDoubleTap: function(fl, index) { console.log('Double tapped index: ', index); },
@@ -43,20 +43,20 @@ onReady: function() {
    menuItemSelected = function(formList, index, el, ev) {
       console.log('Item selected: ', index);
       // Change the check to be on the one that was just selected
-      Ext.each(formList.formItems, function(item, i) {
+      Ext.each(formList.menuItems, function(item, i) {
          item.leftIconCls = ((i === index) ? 'check1' : null);
       });
       formList.refresh();
    };
 
    var menu_list = new vrs.ux.touch.MenuPanel({
-      formItemDefaults: {
+      menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
       listeners: {
          itemTap: menuItemSelected
       },
-      formItems: [
+      menuItems: [
          {leftIconCls: 'check1', content: 'Area 1'},
          {content: 'Area 2'},
          {content: 'Area 3'},
@@ -69,20 +69,20 @@ onReady: function() {
    fastMenuItemSelected = function(formList, index, el, ev) {
       console.log('Item selected: ', index);
       // Change the check to be on the one that was just selected
-      Ext.each(formList.formItems, function(item, i) {
+      Ext.each(formList.menuItems, function(item, i) {
          var left_icon_cls = ((i === index) ? 'check1' : null);
          formList.updateItem(i, {leftIconCls: left_icon_cls});
       });
    };
 
    var menu_list2 = new vrs.ux.touch.MenuPanel({
-      formItemDefaults: {
+      menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
       listeners: {
          itemTap: fastMenuItemSelected
       },
-      formItems: [
+      menuItems: [
          {leftIconCls: 'check1', content: 'Area 1'},
          {content: 'Area 2'},
          {content: 'Area 3'},
@@ -93,19 +93,19 @@ onReady: function() {
 
    // -- TEST WITH FORM FIELDS -- //
    var menu_part1 = new vrs.ux.touch.MenuPanel({
-      formItemDefaults: {
+      menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
-      formItems: [
+      menuItems: [
          {content: 'Item 1'},
          {content: 'Item 2'}
       ]
    });
    var menu_part2 = new vrs.ux.touch.MenuPanel({
-      formItemDefaults: {
+      menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
-      formItems: [
+      menuItems: [
          {content: 'Item 3'},
          {content: 'Item 4'}
       ]
@@ -121,7 +121,7 @@ onReady: function() {
          {
             dock : 'top',
             xtype: 'toolbar',
-            title: 'Form List',
+            title: 'Menu Panel Test',
          }
       ],
       items: [
