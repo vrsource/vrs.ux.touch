@@ -57,7 +57,7 @@ onReady: function() {
          itemTap: menuItemSelected
       },
       formItems: [
-         {content: 'Area 1'},
+         {leftIconCls: 'check1', content: 'Area 1'},
          {content: 'Area 2'},
          {content: 'Area 3'},
          {content: 'Area 4'}
@@ -83,7 +83,7 @@ onReady: function() {
          itemTap: fastMenuItemSelected
       },
       formItems: [
-         {content: 'Area 1'},
+         {leftIconCls: 'check1', content: 'Area 1'},
          {content: 'Area 2'},
          {content: 'Area 3'},
          {content: 'Area 4'}
@@ -116,6 +116,7 @@ onReady: function() {
       fullscreen: true,
       scroll: 'vertical',
       cls: 'x-form-settings-panel',
+      id: 'MyFormPanel',
       dockedItems: [
          {
             dock : 'top',
@@ -133,13 +134,13 @@ onReady: function() {
          {
             xtype: 'fieldset',
             title: 'Menu Example',
-            instructions: 'This menu uses a full update and refresh.',
+            instructions: 'Select item to check it. This menu uses a full update and refresh.',
             items: [menu_list]
          },
          {
             xtype: 'fieldset',
             title: 'Faster Menu Example',
-            instructions: 'This menu uses updateItem for updates.',
+            instructions: 'Select item to check it. This menu uses updateItem for updates.',
             items: [menu_list2]
          },
          {
@@ -160,6 +161,7 @@ onReady: function() {
                    xtype: 'passwordfield',
                    name: 'password',
                    label: 'Password',
+                   placeHolder: 'Select each time',
                    useClearIcon: true
                }, {
                    xtype: 'emailfield',
