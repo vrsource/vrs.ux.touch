@@ -1,7 +1,12 @@
-/** Common sass style settings for
-* the MenuPanel usage.
+/** Common sass style settings for the MenuPanel usage. */
+
+/** Variables */
+
+/** If true, use styling for forms that will make them
+* look more like ios.
 */
-/** Helper methods */
+$use-ios-style-forms: false !default;
+
 /**
  * @param {string} $name The name of the icon to be included. This is to match the name of the icon file (located at resources/themes/images/default/pictos) without its extention (.png).
  *
@@ -14,17 +19,6 @@
   }
 }
 
-
-/***** CUSTOM STYLES ******
-* 3. Define custom styles (can use SASS/Compass), example:
-* .mybox {
-*     @include border-radius(4px);
-* }
-*/
-
-/** Icons to include embedded. */
-
-/** TODO: stripped background for settings panel. */
 
 /** Size of icon mask to use for the settings. */
 $menupanel-iconmask-size: 1em !default;
@@ -176,6 +170,7 @@ img.x-menupanel-icon-mask.check1
 * has been configured to look iPhone-ish.
 */
 
+/** Icons to include embedded. */
 /* Include the icons you may want to use on the menupanel */
 @include pictos-menupanel-iconmask('action');
 @include pictos-menupanel-iconmask('add');

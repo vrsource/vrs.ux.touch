@@ -11,6 +11,11 @@ images_dir = File.join(sass_path, "..", "img")
 sencha_touch_dir = File.join(sass_path, "..", "..", "deps", "sencha_touch")
 load File.join(sencha_touch_dir, "resources", "themes")
 
+# Add path for vrs_compass files
+vrs_compass_path = File.join(sass_path, "..", "compass", "stylesheets")
+add_import_path vrs_compass_path
+
+
 # Setup the output style/environment
 output_style = :expanded    # :expanded, :compact, :compressed
 environment = :development  # :development or :production
