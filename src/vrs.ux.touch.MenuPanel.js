@@ -263,6 +263,10 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
           htmlContent,
           getSectionDivStr;
 
+      // Don't refresh if we haven't been rendered yet.
+      if(!this.rendered)
+      { return; }
+
       // Determine if we have content on left and right to include
       for(x=0; x<this.menuItems.length; x++) {
          item = this.getItemValues(x);
