@@ -44,15 +44,19 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    *  - itemtap, itemdoubletap, itemswipe, lefttap, righttap: function to call when
    *         the event happens for that specific row.
    */
-   menuItems: [],
+   menuItems: null,
 
    /** Default values for the form items.
    * Can be used for example to set a common rightIcon.
+   *   object of default settings.
    */
-   menuItemDefaults: {},
+   menuItemDefaults: null,
 
    initComponent: function() {
       vrs.ux.touch.MenuPanel.superclass.initComponent.call(this);
+
+      this.menuItems        = this.menuItems || [];
+      this.menuItemDefaults = this.menuItemDefaults || {};
 
       this.addEvents(
          /**
