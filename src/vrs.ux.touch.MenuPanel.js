@@ -101,7 +101,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
           * @param {MenuPanel} this The MenuPanel object.
           * @param {Number} index The index of the row that was tapped
           */
-         'lefttap'
+         'righttap'
       );
    },
 
