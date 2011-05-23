@@ -25,7 +25,7 @@ $menupanel-iconmask-size: 1em !default;
 
 /** Customizations for the field row.
 * note: remember that we also put a field class on the row
-* to get all the form field defaults.
+* to get all the normal form field defaults. (see _form.scss file)
 */
 .x-menupanel-row {
    @include display-box;
@@ -194,8 +194,10 @@ img.x-menupanel-icon-mask.check1
       background-color: white;
    }
 
-   /* Pinstripe background. */
-   .x-form .x-panel-body {
+   /* Pinstripe background for form panels.
+   * Only do this with panels directly under a form.
+   */
+   .x-form > .x-panel-body {
       -webkit-background-size: 0.438em 100%;
       background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
    }
