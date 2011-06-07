@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>IFrame Page</title>
+    <link rel="stylesheet" href="../deps/sencha_touch/resources/css/sencha-touch.css" type="text/css"/>
+    <!-- <script type="text/javascript" src="deps/sencha_touch/sencha-touch-debug-w-comments.js"></script> -->
+    <script type="text/javascript" src="../deps/sencha_touch/sencha-touch.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+Ext.setup({
+   onReady: function() {
+   
+IframePanel = Ext.extend(Ext.Panel, {
+   id: 'virtual_binder_url_entry_panel',
+
+   controller: null,
+   fullscreen: true,
+
+   layout: {
+      type: 'vbox',
+      align: 'stretch'
+   },
+
+   initComponent: function() {
+      var me   = this,
+          ctrl = this.controller;
+
+      this.topToolbar = new Ext.Toolbar({
+         dock: 'top',
+         title: this.title,
+         ui: 'dark',
+         items: [
+            {
+               text: 'Back',
+               ui: 'back',
+               //handler: ctrl.onBackButtonTap,
+               //scope: ctrl
+            },
+            { xtype: 'spacer' },
+            { 
+               xtype: 'segmentedbutton',
+               allowMultiple: false,
+               items: [
+                  {
+                     text: 'cnn',
+                     handler: function() { me.setEmbeddedUrl('http://m.cnn.com'); }
+                  },                  
+                  {
+                     text: 'google',
+                     handler: function() { me.setEmbeddedUrl('http://www.google.com'); }
+                  },
+                  {
+                     text: 'pdf',
+                     handler: function() { me.setEmbeddedUrl('http://downloads.sencha.com/extras/css3-cheat-sheet.pdf'); }
+                  },
+                  {
+                     text: 'doc',
+                     handler: function() { me.setEmbeddedUrl('http://www.python.org/files/psf/records/PSF1023.doc'); }
+                  },
+                  /*
+                  {
+                     text: 'gdoc',
+                     handler: function() { me.setEmbeddedUrl('http://goo.gl/D3NWU'); }
+                  }
+                  */
+               ]
+            }               
+         ]
+      });
+
+      this.dockedItems = [
+         this.topToolbar         
+      ];
+
+      this.embeddedPanel = new Ext.Panel({
+         fullscreen: true,
+         scroll: 'vertical',
+         html: ''
+      });
+      this.items = [this.embeddedPanel];
+      
+      IframePanel.superclass.initComponent.call(this);
+   },
+
+   //* Set the embedded viewer to view the given url.
+   setEmbeddedUrl: function(url) {
+      var iframe_html = Ext.util.Format.format('<iframe width="100%" height="100%" scrolling="yes" src="{0}"></iframe>',
+                                   url);
+      this.embeddedPanel.update(iframe_html);
+   }
+
+});
+
+panel = new IframePanel({});
+panel.setEmbeddedUrl('http://m.cnn.com');
+
+console.log('done loading');
+
+}
+});
+</script>
+</body>
+</html>
