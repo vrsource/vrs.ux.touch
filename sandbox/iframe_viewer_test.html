@@ -84,6 +84,7 @@ IframePanel = Ext.extend(Ext.Panel, {
 
    //* Set the embedded viewer to view the given url.
    setEmbeddedUrl: function(url) {
+      console.log('Changing url: ', url);
       var iframe_html = Ext.util.Format.format('<iframe width="100%" height="100%" scrolling="yes" src="{0}"></iframe>',
                                    url);
       this.embeddedPanel.update(iframe_html);
