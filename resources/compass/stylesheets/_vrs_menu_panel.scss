@@ -5,7 +5,8 @@
 /** If true, use styling for forms that will make them
 * look more like ios.
 */
-$use-ios-style-forms: false !default;
+$use-ios-style-forms:                 false !default;
+$vrs-menupanel-include-default-icons: false !default;
 
 /**
  * @param {string} $name The name of the icon to be included. This is to match the name of the icon file (located at resources/themes/images/default/pictos) without its extention (.png).
@@ -98,6 +99,10 @@ img.x-menupanel-icon-mask
 /** Example of customizing color and size of an icon mask
 * Change the background-gradient to change the color
 * and change the width, height, mask-size to change the size.
+*
+* note: must include:
+*   @include pictos-menupanel-iconmask('arrow_right');
+*
 */
 img.x-menupanel-icon-mask.arrow_right
 {
@@ -172,14 +177,16 @@ img.x-menupanel-icon-mask.check1
 
 /** Icons to include embedded. */
 /* Include the icons you may want to use on the menupanel */
-@include pictos-menupanel-iconmask('action');
-@include pictos-menupanel-iconmask('add');
-@include pictos-menupanel-iconmask('arrow_down');
-@include pictos-menupanel-iconmask('arrow_left');
-@include pictos-menupanel-iconmask('arrow_right');
-@include pictos-menupanel-iconmask('arrow_up');
-@include pictos-menupanel-iconmask('star');
-@include pictos-menupanel-iconmask('check1');
+@if $vrs-menupanel-include-default-icons {
+   @include pictos-menupanel-iconmask('action');
+   @include pictos-menupanel-iconmask('add');
+   @include pictos-menupanel-iconmask('arrow_down');
+   @include pictos-menupanel-iconmask('arrow_left');
+   @include pictos-menupanel-iconmask('arrow_right');
+   @include pictos-menupanel-iconmask('arrow_up');
+   @include pictos-menupanel-iconmask('star');
+   @include pictos-menupanel-iconmask('check1');
+}
 
 
 /** IOS Form Settings.
