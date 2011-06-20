@@ -316,7 +316,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
    // @private
    onTap: function(e) {
-      console.log('onTap called');
+      //console.log('onTap called');
       var index, menu_item,
           itemNode = this.findItemByEvent(e);
       if (itemNode) {
@@ -356,7 +356,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
    // @private
    onTapStart: function(e, t) {
-      console.log('onTapStart called');
+      //console.log('onTapStart called');
       var me = this,
           item = this.findItemByEvent(e);
 
@@ -378,7 +378,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
    // @private
    onTapCancel: function(e, t) {
-      console.log('onTapCancel called');
+      //console.log('onTapCancel called');
       var me = this,
           item = this.findItemByEvent(e);
 
@@ -401,7 +401,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
    // @private
    onDoubleTap: function(e) {
-      console.log('onDoubleTap called');
+      //console.log('onDoubleTap called');
       var index, menu_item,
           item = this.findItemByEvent(e);
       if (item) {
@@ -415,7 +415,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
    // @private
    onSwipe: function(e) {
-      console.log('onSwipe called');
+      //console.log('onSwipe called');
       var index, menu_item,
           item = this.findItemByEvent(e);
       if (item) {
