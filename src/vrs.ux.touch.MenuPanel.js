@@ -319,7 +319,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       //console.log('onTap called');
       var index, menu_item,
           itemNode = this.findItemByEvent(e);
-      if (itemNode) {
+      if (!this.disabled && itemNode) {
          Ext.fly(itemNode).removeCls(this.pressedCls);
          index = this.indexOf(itemNode);
          menu_item = this.getItemValues(index);
@@ -360,7 +360,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       var me = this,
           item = this.findItemByEvent(e);
 
-      if (item) {
+      if (!this.disabled && item) {
          // If we should delay press, create the delay and manage it here.
          if (me.pressedDelay) {
             if (me.pressedTimeout) {
@@ -404,7 +404,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       //console.log('onDoubleTap called');
       var index, menu_item,
           item = this.findItemByEvent(e);
-      if (item) {
+      if (!this.disabled && item) {
          index = this.indexOf(item);
          menu_item = this.getItemValues(index);
          if(!Ext.isEmpty(menu_item.itemdoubletap))
@@ -418,7 +418,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       //console.log('onSwipe called');
       var index, menu_item,
           item = this.findItemByEvent(e);
-      if (item) {
+      if (!this.disabled && item) {
          index = this.indexOf(item);
          menu_item = this.getItemValues(index);
          if(!Ext.isEmpty(menu_item.itemswipe))
