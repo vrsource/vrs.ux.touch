@@ -175,6 +175,16 @@ img.x-menupanel-icon-mask.check1
    }
 }
 
+.x-menu-panel.x-item-disabled {
+
+  .x-menupanel-row {
+    img, .x-menupanel-content {
+      //color: lighten($form-dark, 50%);
+      opacity: .5;
+    }
+  }
+}
+
 
 
 /** Custom settings for the case that we are in a form panel that
