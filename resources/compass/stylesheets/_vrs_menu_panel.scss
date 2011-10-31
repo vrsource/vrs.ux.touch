@@ -82,7 +82,7 @@ $menupanel-iconmask-size: 1em !default;
       @include box-pack(center);
       min-width: $menupanel-iconmask-size;
       min-height: $menupanel-iconmask-size;
-      
+
       // Set fixed size for manually set icon images
       img {
          width: $menupanel-iconmask-size;
@@ -146,7 +146,7 @@ img.x-menupanel-icon-mask.check1
    border-bottom: 0;
 }
 
-/** Override the default x-field rouding to cover the case
+/** Override the default x-field rounding to cover the case
 * were we may not be the first or last item in a fieldset.
 */
 .x-form-fieldset .x-menu-panel .x-menupanel-row.x-field {
