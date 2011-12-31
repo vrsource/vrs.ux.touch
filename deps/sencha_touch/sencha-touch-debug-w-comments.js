@@ -707,9 +707,7 @@ Ext.pluck(Ext.query("p"), "className"); // [el1.className, el2.className, ..., e
      * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}, but any subclass of
      * {@link Ext.util.Observable} can be passed in.  Any number of elements and/or components can be
      * passed into this function in a single call as separate arguments.
-     * @param {Mixed} arg1 An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy
-     * @param {Mixed} arg2 (optional)
-     * @param {Mixed} etc... (optional)
+     * @param {Object...} args An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy
      */
     destroy : function() {
         var ln = arguments.length,
@@ -1585,7 +1583,9 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
      * @param {Mixed} value The value to set
      */
     set: function(fieldName, value) {
-        var fields = this.fields,
+        var me = this,
+            fields = me.fields,
+            modified = me.modified,
             convertFields = [],
             field, key, i;
         
@@ -1607,12 +1607,12 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
                     continue;
                 }
                 
-                this.set(key, fieldName[key]);
+                me.set(key, fieldName[key]);
             }
             
             for (i = 0; i < convertFields.length; i++) {
                 field = convertFields[i];
-                this.set(field, fieldName[field]);
+                me.set(field, fieldName[field]);
             }
             
         } else {
@@ -1620,16 +1620,36 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
                 field = fields.get(fieldName);
                 
                 if (field && field.convert) {
-                    value = field.convert(value, this);
+                    value = field.convert(value, me);
                 }
             }
             
-            this[this.persistanceProperty][fieldName] = value;
+            me[me.persistanceProperty][fieldName] = value;
 
-            this.dirty = true;
+            if (field && field.persist && !me.isEqual(currentValue, value)) {
+                if (me.isModified(fieldName)) {
+                    if (me.isEqual(modified[fieldName], value)) {
+                        // the original value in me.modified equals the new value, so the
+                        // field is no longer modified
+                        delete modified[fieldName];
+                        // we might have removed the last modified field, so check to see if
+                        // there are any modified fields remaining and correct me.dirty:
+                        me.dirty = false;
+                        for (key in modified) {
+                            if (modified.hasOwnProperty(key)){
+                                me.dirty = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    me.dirty = true;
+                    modified[fieldName] = currentValue;
+                }
+            }
 
-            if (!this.editing) {
-                this.afterEdit();
+            if (!me.editing) {
+                me.afterEdit();
             }
         }
     },
@@ -2879,7 +2899,7 @@ var middleAged = people.filter('age', 24);
         return r;
     }
 });
-/**
+/*
  * This method calls {@link #item item()}.
  * Returns the item associated with the passed key OR index. Key has priority
  * over index.  This is the equivalent of calling {@link #key} first, then if
@@ -3049,7 +3069,7 @@ Ext.get('myInputField').on('keypress', function(){
  * also setup a delayed task for you to buffer events.</p>
  * @constructor The parameters to this constructor serve as defaults and are not required.
  * @param {Function} fn (optional) The default function to call.
- * @param {Object} scope The default scope (The <code><b>this</b></code> reference) in which the
+ * @param {Object} scope (optional) The default scope (The <code><b>this</b></code> reference) in which the
  * function is called. If not specified, <code>this</code> will refer to the browser window.
  * @param {Array} args (optional) The default Array of arguments.
  */
@@ -5318,7 +5338,6 @@ Ext.util.Format = {
      * Escapes the passed string for ' and \
      * @param {String} string The string to escape
      * @return {String} The escaped string
-     * @static
      */
     escape : function(string) {
         return string.replace(Ext.util.Format.escapeRe, "\\$1");
@@ -5371,7 +5390,6 @@ var s = Ext.util.Format.leftPad('123', 5, '0');
      * @param {Number} size The total length of the output string
      * @param {String} char (optional) The character with which to pad the original string (defaults to empty string " ")
      * @return {String} The padded string
-     * @static
      */
     leftPad : function (val, size, ch) {
         var result = String(val);
@@ -5394,7 +5412,6 @@ var s = Ext.util.Format.format('&lt;div class="{0}">{1}&lt;/div>', cls, text);
      * @param {String} value1 The value to replace token {0}
      * @param {String} value2 Etc...
      * @return {String} The formatted string
-     * @static
      */
     format : function (format) {
         var args = Ext.toArray(arguments, 1);
@@ -5935,7 +5952,7 @@ Ext.ComponentQuery = new function() {
 
             // no root, use all Components in the document
             if (!root) {
-                workingItems = Ext.ComponentMgr.all.items.slice();
+		workingItems = Ext.ComponentMgr.all.getArray();
             }
 
             // We are going to loop over our operations and take care of them
@@ -6155,6 +6172,7 @@ Ext.ComponentQuery = new function() {
         }
     });
 };
+
 /**
  * @class Ext.PluginMgr
  * @extends Ext.AbstractManager
@@ -6825,8 +6843,10 @@ Ext.EventObject = new Ext.EventObjectImpl();
  * @singleton
  */
 Ext.is = {
-    init : function(navigator) {
-        var platforms = this.platforms,
+
+    init: function(navigator) {
+        var me = this,
+            platforms = me.platforms,
             ln = platforms.length,
             i, platform;
 
@@ -6834,36 +6854,53 @@ Ext.is = {
 
         for (i = 0; i < ln; i++) {
             platform = platforms[i];
-            this[platform.identity] = platform.regex.test(navigator[platform.property]);
+            me[platform.identity] = platform.regex.test(navigator[platform.property]);
         }
 
         /**
          * @property Desktop True if the browser is running on a desktop machine
          * @type {Boolean}
          */
-        this.Desktop = this.Mac || this.Windows || (this.Linux && !this.Android);
-        /**
-         * @property Tablet True if the browser is running on a tablet (iPad)
-         */
-        this.Tablet = this.iPad;
-        /**
-         * @property Phone True if the browser is running on a phone.
-         * @type {Boolean}
-         */
-        this.Phone = !this.Desktop && !this.Tablet;
+        me.Desktop = me.Mac || me.Windows || (me.Linux && !me.Android);
         /**
          * @property iOS True if the browser is running on iOS
          * @type {Boolean}
          */
-        this.iOS = this.iPhone || this.iPad || this.iPod;
-        
+        me.iOS = me.iPhone || me.iPad || me.iPod;
+
         /**
          * @property Standalone Detects when application has been saved to homescreen.
          * @type {Boolean}
          */
-        this.Standalone = !!window.navigator.standalone;
+        me.Standalone = !!navigator.standalone;
+
+        /**
+         * @property androidVersion Returns Android OS version information.
+         * @type {Boolean}
+         */
+        i = me.Android && (/Android\s(\d+\.\d+)/.exec(navigator.userAgent));
+        if (i) {
+            me.AndroidVersion = i[1];
+            me.AndroidMajorVersion = parseInt(i[1], 10);
+        }
+        /**
+         * @property Tablet True if the browser is running on a tablet (iPad)
+         */
+        me.Tablet = me.iPad || (me.Android && me.AndroidMajorVersion === 3);
+
+        /**
+         * @property Phone True if the browser is running on a phone.
+         * @type {Boolean}
+         */
+        me.Phone = !me.Desktop && !me.Tablet;
+
+        /**
+         * @property MultiTouch Returns multitouch availability.
+         * @type {Boolean}
+         */
+        me.MultiTouch = !me.Blackberry && !me.Desktop && !(me.Android && me.AndroidVersion < 3);
     },
-    
+
     /**
      * @property iPhone True when the browser is running on a iPhone
      * @type {Boolean}
@@ -6873,7 +6910,7 @@ Ext.is = {
         regex: /iPhone/i,
         identity: 'iPhone'
     },
-    
+
     /**
      * @property iPod True when the browser is running on a iPod
      * @type {Boolean}
@@ -6883,7 +6920,7 @@ Ext.is = {
         regex: /iPod/i,
         identity: 'iPod'
     },
-    
+
     /**
      * @property iPad True when the browser is running on a iPad
      * @type {Boolean}
@@ -6893,7 +6930,7 @@ Ext.is = {
         regex: /iPad/i,
         identity: 'iPad'
     },
-    
+
     /**
      * @property Blackberry True when the browser is running on a Blackberry
      * @type {Boolean}
@@ -6903,7 +6940,7 @@ Ext.is = {
         regex: /Blackberry/i,
         identity: 'Blackberry'
     },
-    
+
     /**
      * @property Android True when the browser is running on an Android device
      * @type {Boolean}
@@ -6913,7 +6950,7 @@ Ext.is = {
         regex: /Android/i,
         identity: 'Android'
     },
-    
+
     /**
      * @property Mac True when the browser is running on a Mac
      * @type {Boolean}
@@ -6923,7 +6960,7 @@ Ext.is = {
         regex: /Mac/i,
         identity: 'Mac'
     },
-    
+
     /**
      * @property Windows True when the browser is running on Windows
      * @type {Boolean}
@@ -6933,7 +6970,7 @@ Ext.is = {
         regex: /Win/i,
         identity: 'Windows'
     },
-    
+
     /**
      * @property Linux True when the browser is running on Linux
      * @type {Boolean}
@@ -6955,19 +6992,14 @@ Ext.is.init();
  * @singleton
  */
 Ext.supports = {
-    init : function() {
+    init: function() {
         var doc = document,
             div = doc.createElement('div'),
             tests = this.tests,
             ln = tests.length,
             i, test;
 
-        div.innerHTML = [
-            '<div style="height:30px;width:50px;">',
-                '<div style="height:20px;width:20px;"></div>',
-            '</div>',
-            '<div style="float:left; background-color:transparent;"></div>'
-        ].join('');
+        div.innerHTML = ['<div style="height:30px;width:50px;">', '<div style="height:20px;width:20px;"></div>', '</div>', '<div style="float:left; background-color:transparent;"></div>'].join('');
 
         doc.body.appendChild(div);
 
@@ -6984,13 +7016,13 @@ Ext.supports = {
      * @type {Boolean}
      */
     OrientationChange: ((typeof window.orientation != 'undefined') && ('onorientationchange' in window)),
-    
+
     /**
      * @property DeviceMotion True if the device supports device motion (acceleration and rotation rate)
      * @type {Boolean}
      */
     DeviceMotion: ('ondevicemotion' in window),
-    
+
     /**
      * @property Touch True if the device supports touch
      * @type {Boolean}
@@ -7000,198 +7032,187 @@ Ext.supports = {
     Touch: ('ontouchstart' in window) && (!Ext.is.Desktop),
 
     tests: [
-        /**
-         * @property Transitions True if the device supports CSS3 Transitions
-         * @type {Boolean}
-         */
-        {
-            identity: 'Transitions',
-            fn: function(doc, div) {
-                var prefix = [
-                        'webkit',
-                        'Moz',
-                        'o',
-                        'ms',
-                        'khtml'
-                    ],
-                    TE = 'TransitionEnd',
-                    transitionEndName = [
-                        prefix[0] + TE,
-                        'transitionend', //Moz bucks the prefixing convention
-                        prefix[2] + TE,
-                        prefix[3] + TE,
-                        prefix[4] + TE
-                    ],
-                    ln = prefix.length,
-                    i = 0,
-                    out = false;
-                div = Ext.get(div);
-                for (; i < ln; i++) {
-                    if (div.getStyle(prefix[i] + "TransitionProperty")) {
-                        Ext.supports.CSS3Prefix = prefix[i];
-                        Ext.supports.CSS3TransitionEnd = transitionEndName[i];
-                        out = true;
-                        break;
-                    }
+    /**
+     * @property Transitions True if the device supports CSS3 Transitions
+     * @type {Boolean}
+     */
+    {
+        identity: 'Transitions',
+        fn: function(doc, div) {
+            var prefix = ['webkit', 'Moz', 'o', 'ms', 'khtml'],
+                TE = 'TransitionEnd',
+                transitionEndName = [
+            prefix[0] + TE, 'transitionend', //Moz bucks the prefixing convention
+            prefix[2] + TE, prefix[3] + TE, prefix[4] + TE],
+                ln = prefix.length,
+                i = 0,
+                out = false;
+            div = Ext.get(div);
+            for (; i < ln; i++) {
+                if (div.getStyle(prefix[i] + "TransitionProperty")) {
+                    Ext.supports.CSS3Prefix = prefix[i];
+                    Ext.supports.CSS3TransitionEnd = transitionEndName[i];
+                    out = true;
+                    break;
                 }
-                return out;
             }
-        },
-        
-        /**
-         * @property RightMargin True if the device supports right margin
-         * @type {Boolean}
-         */
-        {
-            identity: 'RightMargin',
-            fn: function(doc, div, view) {
-                view = doc.defaultView;
-                return !(view && view.getComputedStyle(div.firstChild.firstChild, null).marginRight != '0px');
-            }
-        },
-        
-        /**
-         * @property TransparentColor True if the device supports transparent color
-         * @type {Boolean}
-         */
-        {
-            identity: 'TransparentColor',
-            fn: function(doc, div, view) {
-                view = doc.defaultView;
-                return !(view && view.getComputedStyle(div.lastChild, null).backgroundColor != 'transparent');
-            }
-        },
-        
-        /**
-         * @property SVG True if the device supports SVG
-         * @type {Boolean}
-         */
-        {
-            identity: 'SVG',
-            fn: function(doc) {
-                return !!doc.createElementNS && !!doc.createElementNS( "http:/" + "/www.w3.org/2000/svg", "svg").createSVGRect;
-            }
-        },
-    
-        /**
-         * @property Canvas True if the device supports Canvas
-         * @type {Boolean}
-         */
-        {
-            identity: 'Canvas',
-            fn: function(doc) {
-                return !!doc.createElement('canvas').getContext;
-            }
-        },
-        
-        /**
-         * @property VML True if the device supports VML
-         * @type {Boolean}
-         */
-        {
-            identity: 'VML',
-            fn: function(doc) {
-                var d = doc.createElement("div");
-                d.innerHTML = "<!--[if vml]><br><br><![endif]-->";
-                return (d.childNodes.length == 2);
-            }
-        },
-        
-        /**
-         * @property Float True if the device supports CSS float
-         * @type {Boolean}
-         */
-        {
-            identity: 'Float',
-            fn: function(doc, div) {
-                return !!div.lastChild.style.cssFloat;
-            }
-        },
-        
-        /**
-         * @property AudioTag True if the device supports the HTML5 audio tag
-         * @type {Boolean}
-         */
-        {
-            identity: 'AudioTag',
-            fn: function(doc) {
-                return !!doc.createElement('audio').canPlayType;
-            }
-        },
-        
-        /**
-         * @property History True if the device supports HTML5 history
-         * @type {Boolean}
-         */
-        {
-            identity: 'History',
-            fn: function() {
-                return !!(window.history && history.pushState);
-            }
-        },
-        
-        /**
-         * @property CSS3DTransform True if the device supports CSS3DTransform
-         * @type {Boolean}
-         */
-        {
-            identity: 'CSS3DTransform',
-            fn: function() {
-                return (typeof WebKitCSSMatrix != 'undefined' && new WebKitCSSMatrix().hasOwnProperty('m41'));
-            }
-        },
-
-		/**
-         * @property CSS3LinearGradient True if the device supports CSS3 linear gradients
-         * @type {Boolean}
-         */
-        {
-            identity: 'CSS3LinearGradient',
-            fn: function(doc, div) {
-                var property = 'background-image:',
-                    webkit   = '-webkit-gradient(linear, left top, right bottom, from(black), to(white))',
-                    w3c      = 'linear-gradient(left top, black, white)',
-                    moz      = '-moz-' + w3c,
-                    options  = [property + webkit, property + w3c, property + moz];
-                
-                div.style.cssText = options.join(';');
-                
-                return ("" + div.style.backgroundImage).indexOf('gradient') !== -1;
-            }
-        },
-        
-        /**
-         * @property CSS3BorderRadius True if the device supports CSS3 border radius
-         * @type {Boolean}
-         */
-        {
-            identity: 'CSS3BorderRadius',
-            fn: function(doc, div) {
-                var domPrefixes = ['borderRadius', 'BorderRadius', 'MozBorderRadius', 'WebkitBorderRadius', 'OBorderRadius', 'KhtmlBorderRadius'],
-                    pass = false,
-                    i;
-                
-                for (i = 0; i < domPrefixes.length; i++) {
-                    if (document.body.style[domPrefixes[i]] !== undefined) {
-                        return pass = true;
-                    }
-                }
-                
-                return pass;
-            }
-        },
-        
-        /**
-         * @property GeoLocation True if the device supports GeoLocation
-         * @type {Boolean}
-         */
-        {
-            identity: 'GeoLocation',
-            fn: function() {
-                return (typeof navigator != 'undefined' && typeof navigator.geolocation != 'undefined') || (typeof google != 'undefined' && typeof google.gears != 'undefined');
-            }
+            return out;
         }
-    ]
+    },
+
+    /**
+     * @property RightMargin True if the device supports right margin
+     * @type {Boolean}
+     */
+    {
+        identity: 'RightMargin',
+        fn: function(doc, div, view) {
+            view = doc.defaultView;
+            return ! (view && view.getComputedStyle(div.firstChild.firstChild, null).marginRight != '0px');
+        }
+    },
+
+    /**
+     * @property TransparentColor True if the device supports transparent color
+     * @type {Boolean}
+     */
+    {
+        identity: 'TransparentColor',
+        fn: function(doc, div, view) {
+            view = doc.defaultView;
+            return ! (view && view.getComputedStyle(div.lastChild, null).backgroundColor != 'transparent');
+        }
+    },
+
+    /**
+     * @property SVG True if the device supports SVG
+     * @type {Boolean}
+     */
+    {
+        identity: 'SVG',
+        fn: function(doc) {
+            return !!doc.createElementNS && !!doc.createElementNS("http:/" + "/www.w3.org/2000/svg", "svg").createSVGRect;
+        }
+    },
+
+    /**
+     * @property Canvas True if the device supports Canvas
+     * @type {Boolean}
+     */
+    {
+        identity: 'Canvas',
+        fn: function(doc) {
+            return !!doc.createElement('canvas').getContext;
+        }
+    },
+
+    /**
+     * @property VML True if the device supports VML
+     * @type {Boolean}
+     */
+    {
+        identity: 'VML',
+        fn: function(doc) {
+            var d = doc.createElement("div");
+            d.innerHTML = "<!--[if vml]><br><br><![endif]-->";
+            return (d.childNodes.length == 2);
+        }
+    },
+
+    /**
+     * @property Float True if the device supports CSS float
+     * @type {Boolean}
+     */
+    {
+        identity: 'Float',
+        fn: function(doc, div) {
+            return !!div.lastChild.style.cssFloat;
+        }
+    },
+
+    /**
+     * @property AudioTag True if the device supports the HTML5 audio tag
+     * @type {Boolean}
+     */
+    {
+        identity: 'AudioTag',
+        fn: function(doc) {
+            return !!doc.createElement('audio').canPlayType;
+        }
+    },
+
+    /**
+     * @property History True if the device supports HTML5 history
+     * @type {Boolean}
+     */
+    {
+        identity: 'History',
+        fn: function() {
+            return !! (window.history && history.pushState);
+        }
+    },
+
+    /**
+     * @property CSS3DTransform True if the device supports CSS3DTransform
+     * @type {Boolean}
+     */
+    {
+        identity: 'CSS3DTransform',
+        fn: function() {
+            return (typeof WebKitCSSMatrix != 'undefined' && new WebKitCSSMatrix().hasOwnProperty('m41'));
+        }
+    },
+
+    /**
+     * @property CSS3LinearGradient True if the device supports CSS3 linear gradients
+     * @type {Boolean}
+     */
+    {
+        identity: 'CSS3LinearGradient',
+        fn: function(doc, div) {
+            var property = 'background-image:',
+                webkit = '-webkit-gradient(linear, left top, right bottom, from(black), to(white))',
+                w3c = 'linear-gradient(left top, black, white)',
+                moz = '-moz-' + w3c,
+                options = [property + webkit, property + w3c, property + moz];
+
+            div.style.cssText = options.join(';');
+
+            return ("" + div.style.backgroundImage).indexOf('gradient') !== -1;
+        }
+    },
+
+    /**
+     * @property CSS3BorderRadius True if the device supports CSS3 border radius
+     * @type {Boolean}
+     */
+    {
+        identity: 'CSS3BorderRadius',
+        fn: function(doc, div) {
+            var domPrefixes = ['borderRadius', 'BorderRadius', 'MozBorderRadius', 'WebkitBorderRadius', 'OBorderRadius', 'KhtmlBorderRadius'],
+                pass = false,
+                i;
+
+            for (i = 0; i < domPrefixes.length; i++) {
+                if (document.body.style[domPrefixes[i]] !== undefined) {
+                    return pass = true;
+                }
+            }
+
+            return pass;
+        }
+    },
+
+    /**
+     * @property GeoLocation True if the device supports GeoLocation
+     * @type {Boolean}
+     */
+    {
+        identity: 'GeoLocation',
+        fn: function() {
+            return (typeof navigator != 'undefined' && typeof navigator.geolocation != 'undefined') || (typeof google != 'undefined' && typeof google.gears != 'undefined');
+        }
+    }]
 };
 
 
@@ -11633,7 +11654,7 @@ store.sort('myField', 'DESC');
      * @param {Number} startIndex (optional) The index to start searching at
      * @param {Boolean} anyMatch (optional) True to match any part of the string, not just the beginning
      * @param {Boolean} caseSensitive (optional) True for case sensitive comparison
-     * @param {Boolean} exactMatch True to force exact match (^ and $ characters added to the regex). Defaults to false. 
+     * @param {Boolean} exactMatch (optional) True to force exact match (^ and $ characters added to the regex). Defaults to false. 
      * @return {Number} The matched index or -1
      */
     find : function(property, value, start, anyMatch, caseSensitive, exactMatch) {
@@ -11649,7 +11670,7 @@ store.sort('myField', 'DESC');
      * @param {Number} startIndex (optional) The index to start searching at
      * @param {Boolean} anyMatch (optional) True to match any part of the string, not just the beginning
      * @param {Boolean} caseSensitive (optional) True for case sensitive comparison
-     * @param {Boolean} exactMatch True to force exact match (^ and $ characters added to the regex). Defaults to false.
+     * @param {Boolean} exactMatch (optional) True to force exact match (^ and $ characters added to the regex). Defaults to false.
      * @return {Ext.data.Record} The matched record or null
      */
     findRecord : function() {
@@ -12029,9 +12050,7 @@ Ext.StoreMgr = Ext.apply(new Ext.util.MixedCollection(), {
     /**
      * Registers one or more Stores with the StoreMgr. You do not normally need to register stores
      * manually.  Any store initialized with a {@link Ext.data.Store#storeId} will be auto-registered. 
-     * @param {Ext.data.Store} store1 A Store instance
-     * @param {Ext.data.Store} store2 (optional)
-     * @param {Ext.data.Store} etc... (optional)
+     * @param {Ext.data.Store...} stores Variable number of Store instances
      */
     register : function() {
         for (var i = 0, s; (s = arguments[i]); i++) {
@@ -12041,9 +12060,7 @@ Ext.StoreMgr = Ext.apply(new Ext.util.MixedCollection(), {
 
     /**
      * Unregisters one or more Stores with the StoreMgr
-     * @param {String/Object} id1 The id of the Store, or a Store instance
-     * @param {String/Object} id2 (optional)
-     * @param {String/Object} etc... (optional)
+     * @param {String/Object...} ids Variable number of Store ID-s or instances
      */
     unregister : function() {
         for (var i = 0, s; (s = arguments[i]); i++) {
@@ -14202,7 +14219,7 @@ Ext.apply(Ext, {
     /**
      * Returns the current document body as an {@link Ext.Element}.
      * @ignore
-     * @memberOf Ext
+     * @member Ext
      * @return Ext.Element The document body
      */
     getHead : function() {
@@ -16682,7 +16699,7 @@ reader: {
  * work correctly otherwise.</p>
  */
 Ext.data.XmlReader = Ext.extend(Ext.data.Reader, {
-    /**
+    /*
      * @private
      * Creates a function to return some particular key of data from a response. The totalProperty and
      * successProperty are treated as special cases for type casting, everything else is just a simple selector.
@@ -17748,8 +17765,7 @@ Ext.util.Router = Ext.extend(Ext.util.Observable, {
     },
     
     /**
-     * Recognizes a url string connected to the Router, return the controller/action pair plus any additional
-     * config associated with it
+     * Recognizes a url string connected to the Router, return the controller/action pair associated with it
      * @param {String} url The url to recognize
      * @return {Object/undefined} If the url was recognized, the controller and action to call, else undefined
      */
@@ -17811,6 +17827,7 @@ Ext.Router.draw(function(map) {
  * @singleton
  */
 Ext.Router = new Ext.util.Router();
+
 /**
  * @author Ed Spencer
  * @class Ext.util.Route
@@ -19112,6 +19129,9 @@ Ext.fly = El.fly;
 
 })();
 
+/**
+ * @class Ext.Element
+ */
 Ext.applyIf(Ext.Element, {
     unitRe: /\d+(px|em|%|en|ex|pt|in|cm|mm|pc)$/i,
     camelRe: /(-[a-z])/gi,
@@ -19255,10 +19275,11 @@ Ext.applyIf(Ext.Element, {
         return (window.innerHeight > window.innerWidth) ? 'portrait' : 'landscape';
     },
 
-    /** Returns the top Element that is located at the passed coordinates
+    /**
+     * Returns the top Element that is located at the passed coordinates
      * Function description
      * @param {Number} x The x coordinate
-     * @param {Number} x The y coordinate
+     * @param {Number} y The y coordinate
      * @return {String} The found Element
      */
     fromPoint: function(x, y) {
@@ -19266,6 +19287,9 @@ Ext.applyIf(Ext.Element, {
     }
 });
 
+/**
+ * @class Ext.Element
+ */
 Ext.applyIf(Ext.Element, {
     
     /**
@@ -20729,7 +20753,7 @@ Ext.Element.addMethods({
         return [x, y];
     }
 
-    /**
+    /*
      * Anchors an element to another element and realigns it when the window is resized.
      * @param {Mixed} element The element to align to.
      * @param {String} position The position to align to.
@@ -20766,7 +20790,7 @@ Ext.Element.addMethods({
     //     action.call(me); // align immediately
     //     return me;
     // },
-    /**
+    /*
      * Remove any anchor to this element. See {@link #anchorTo}.
      * @return {Ext.Element} this
      */
@@ -20798,7 +20822,7 @@ Ext.Element.addMethods({
     //     }
     //     return anchor;
     // },
-    /**
+    /*
      * Aligns this element with another element relative to the specified anchor points. If the other element is the
      * document it aligns it to the viewport.
      * The position parameter is optional, and can be specified in any one of the following formats:
@@ -21908,7 +21932,7 @@ Ext.Anim = Ext.extend(Object, {
 
         Ext.Anim.superclass.constructor.call(this);
 
-        this.running = [];
+        this.running = {};
     },
 
     initConfig : function(el, runConfig) {
@@ -21997,7 +22021,6 @@ Ext.Anim = Ext.extend(Object, {
 
             // Bind our listener that fires after the animation ends
             el.on('webkitTransitionEnd', me.onTransitionEnd, me, {
-                single: true,
                 config: config,
                 after: after
             });
@@ -22025,6 +22048,8 @@ Ext.Anim = Ext.extend(Object, {
             config = o.config,
             property,
             me = this;
+            
+        el.un('webkitTransitionEnd', me.onTransitionEnd, me);
 
         if (config.autoClear) {
             for (property in config.to) {
@@ -22420,11 +22445,11 @@ Ext.apply(Ext, {
      * The version of the framework
      * @type String
      */
-    version : '1.1.0',
+    version : '1.1.1',
     versionDetail : {
         major : 1,
         minor : 1,
-        patch : 0
+        patch : 1
     },
     
     /**
@@ -22653,7 +22678,7 @@ function(el){
             cls.push('x-ios');
         }
         if (Is.Android) {
-            cls.push('x-android');
+            cls.push('x-android', 'x-android-' + Is.AndroidMajorVersion);
         }
         if (Is.Blackberry) {
             cls.push('x-bb');
@@ -22851,7 +22876,7 @@ Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
         if (!Ext.is.Desktop) {
             size.height = (this.orientation == this.initialOrientation) ?
                             Math.max(this.initialHeight, size.height) :
-                            size.height
+                            size.height;
         }
 
         return size;
@@ -22865,16 +22890,26 @@ Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
     },
 
     getOrientation: function() {
-        var size = this.getSize();
+        var me = this,
+            size = me.getSize(),
+            androidTablet, orientation;
 
         if (window.hasOwnProperty('orientation')) {
-            return (window.orientation == 0 || window.orientation == 180) ? 'portrait' : 'landscape';
+            orientation = window.orientation;
+            // Android 3 oientation is off 90 degrees from every other device on the planet...
+            androidTablet = Ext.is.Android && Ext.is.AndroidMajorVersion === 3;
+            if (orientation % 180 === 0) {
+                return androidTablet ? 'landscape' : 'portrait';
+            }
+            else {
+                return androidTablet ? 'portrait' : 'landscape';
+            }
         }
         else {
             if (!Ext.is.iOS && !Ext.is.Desktop) {
-                if ((size.width == this.lastSize.width && size.height < this.lastSize.height) ||
-                    (size.height == this.lastSize.height && size.width < this.lastSize.width)) {
-                    return this.orientation;
+                if ((size.width == me.lastSize.width && size.height < me.lastSize.height) ||
+                    (size.height == me.lastSize.height && size.width < me.lastSize.width)) {
+                    return me.orientation;
                 }
             }
 
@@ -27631,15 +27666,15 @@ failure: function(response, opts) {
      * Aborts any outstanding request.
      * @param {Object} request (Optional) defaults to the last request
      */
-    abort : function(r) {
-        if (r && this.isLoading(r)) {
+    abort : function(request) {
+        if (request && this.isLoading(request)) {
             if (!request.timedout) {
                 request.aborted = true;
             }
             // Will fire an onreadystatechange event
-            r.xhr.abort();
+            request.xhr.abort();
         }
-        else if (!r) {
+        else if (!request) {
             var id;
             for(id in this.requests) {
                 if (!this.requests.hasOwnProperty(id)) {
@@ -28405,7 +28440,7 @@ Ext.gesture.Manager = new Ext.AbstractManager({
     },
 
     onTouchMove: function(e) {
-        if (!Ext.is.Android) {
+        if (Ext.is.MultiTouch) {
             e.preventDefault();
         }
 
@@ -28444,10 +28479,7 @@ Ext.gesture.Manager = new Ext.AbstractManager({
         }
     },
 
-    /**
-     * This listener is here to always ensure we stop all current gestures
-     * @private
-     */
+    // This listener is here to always ensure we stop all current gestures
     onTouchEnd: function(e) {
         if (Ext.is.Blackberry) {
             e.preventDefault();
@@ -28664,7 +28696,6 @@ Ext.gesture.Manager = new Ext.AbstractManager({
 Ext.regGesture = function() {
     return Ext.gesture.Manager.registerType.apply(Ext.gesture.Manager, arguments);
 };
-
 Ext.TouchEventObjectImpl = Ext.extend(Object, {
     constructor : function(e, args) {
         if (e) {
@@ -29083,73 +29114,72 @@ Ext.gesture.Drag = Ext.extend(Ext.gesture.Touch, {
     vertical: false,
 
     constructor: function() {
-        Ext.gesture.Drag.superclass.constructor.apply(this, arguments);
+        var me = this;
+        Ext.gesture.Drag.superclass.constructor.apply(me, arguments);
 
-        if (this.direction == 'both') {
-            this.horizontal = true;
-            this.vertical = true;
-        }
-        else if (this.direction == 'horizontal') {
-            this.horizontal = true;
-        }
-        else {
-            this.vertical = true;
+        if (me.direction == 'both') {
+            me.horizontal = true;
+            me.vertical = true;
+        } else if (me.direction == 'horizontal') {
+            me.horizontal = true;
+        } else {
+            me.vertical = true;
         }
 
-        return this;
+        return me;
     },
-    
+
     onTouchStart: function(e, touch) {
-        this.startX = this.previousX = touch.pageX;
-        this.startY = this.previousY = touch.pageY;
-        this.startTime = this.previousTime = e.timeStamp;
- 
-        this.dragging = false;
-    },    
-    
+        var me = this;
+        me.startX = me.previousX = touch.pageX;
+        me.startY = me.previousY = touch.pageY;
+        me.startTime = me.previousTime = e.timeStamp;
+
+        me.dragging = false;
+    },
+
     onTouchMove: function(e, touch) {
-        if (this.isLocked('drag')) {
+        var me = this;
+        if (me.isLocked('drag')) {
             return;
         }
-        
-        var info = this.getInfo(touch);
-        
-        if (!this.dragging) {
-            if (this.isDragging(info) && this.fire('dragstart', e, info)) {
-                this.dragging = true;
-                this.lock('drag', 'dragstart', 'dragend');
-                this.fire('drag', e, info);
+
+        var info = me.getInfo(touch);
+
+        if (!me.dragging) {
+            if ((!e.touches || e.touches.length < 2) && me.isDragging(info) && me.fire('dragstart', e, info)) {
+                me.dragging = true;
+                me.lock('drag', 'dragstart', 'dragend');
+                me.fire('drag', e, info);
             }
+        } else {
+            me.fire('drag', e, info);
         }
-        else {
-            this.fire('drag', e, info);
-       }
     },
 
     onTouchEnd: function(e) {
-        if (this.dragging) {
-            this.fire('dragend', e, this.lastInfo);
+        var me = this;
+        if (me.dragging) {
+            me.fire('dragend', e, me.lastInfo);
         }
-        
-        this.dragging = false;
+
+        me.dragging = false;
     },
-    
+
     isDragging: function(info) {
-        return (
-            (this.horizontal && info.absDeltaX >= this.dragThreshold) ||
-            (this.vertical && info.absDeltaY >= this.dragThreshold)
-        );
+        var me = this;
+        return ((me.horizontal && info.absDeltaX >= me.dragThreshold) || (me.vertical && info.absDeltaY >= me.dragThreshold));
     },
-    
-    /**
+
+    /*
      * Method to determine whether this Sortable is currently disabled.
      * @return {Boolean} the disabled state of this Sortable.
      */
     isVertical: function() {
         return this.vertical;
     },
-    
-    /**
+
+    /*
      * Method to determine whether this Sortable is currently sorting.
      * @return {Boolean} the sorting state of this Sortable.
      */
@@ -29160,94 +29190,98 @@ Ext.gesture.Drag = Ext.extend(Ext.gesture.Touch, {
 
 Ext.regGesture('drag', Ext.gesture.Drag);
 Ext.gesture.Pinch = Ext.extend(Ext.gesture.Gesture, {
-    handles: [
-        'pinchstart',
-        'pinch',
-        'pinchend'
-    ],
-    
+    handles: ['pinchstart', 'pinch', 'pinchend'],
+
     touches: 2,
-    
-    onTouchStart : function(e) {
+
+    onTouchStart: function(e) {
         var me = this;
-        
-        if (Ext.supports.Touch && e.targetTouches.length >= 2) {
+
+        if (this.isMultiTouch(e)) {
             me.lock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
             me.pinching = true;
-            
-            var targetTouches = e.targetTouches,
-                firstTouch = me.firstTouch = targetTouches[0],
-                secondTouch = me.secondTouch = targetTouches[1];
-            
-            me.previousDistance = me.startDistance = me.getDistance();
+
+            var targetTouches = e.targetTouches;
+
+            me.startFirstTouch = targetTouches[0];
+            me.startSecondTouch = targetTouches[1];
+
+            me.previousDistance = me.startDistance = me.getDistance(me.startFirstTouch, me.startSecondTouch);
             me.previousScale = 1;
-            
+
             me.fire('pinchstart', e, {
                 distance: me.startDistance,
                 scale: me.previousScale
             });
-        }
-        else if (me.pinching) {
+        } else if (me.pinching) {
             me.unlock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
             me.pinching = false;
         }
     },
-    
-    onTouchMove : function(e) {
+
+    isMultiTouch: function(e) {
+        return e && Ext.supports.Touch && e.targetTouches && e.targetTouches.length > 1;
+    },
+
+    onTouchMove: function(e) {
+        if (!this.isMultiTouch(e)) {
+            this.onTouchEnd(e);
+            return;
+        }
+
         if (this.pinching) {
-            this.fire('pinch', e, this.getPinchInfo());
+            this.fire('pinch', e, this.getPinchInfo(e));
         }
     },
-    
-    onTouchEnd : function(e) {
+
+    onTouchEnd: function(e) {
         if (this.pinching) {
-            this.fire('pinchend', e, this.getPinchInfo());
+            this.fire('pinchend', e);
         }
     },
-    
-    getPinchInfo : function() {
+
+    getPinchInfo: function(e) {
         var me = this,
-            distance = me.getDistance(),
+            targetTouches = e.targetTouches,
+            firstTouch = targetTouches[0],
+            secondTouch = targetTouches[1],
+            distance = me.getDistance(firstTouch, secondTouch),
             scale = distance / me.startDistance,
-            firstTouch = me.firstTouch,
-            secondTouch = me.secondTouch,
             info = {
-                scale: scale,
-                deltaScale: scale - 1,
-                previousScale: me.previousScale,
-                previousDeltaScale: scale - me.previousScale,
-                distance: distance,
-                deltaDistance: distance - me.startDistance,
-                startDistance: me.startDistance,
-                previousDistance: me.previousDistance,
-                previousDeltaDistance: distance - me.previousDistance,
-                firstTouch: firstTouch,
-                secondTouch: secondTouch,
-                firstPageX: firstTouch.pageX,
-                firstPageY: firstTouch.pageY,
-                secondPageX: secondTouch.pageX,
-                secondPageY: secondTouch.pageY,
-                // The midpoint between the touches is (x1 + x2) / 2, (y1 + y2) / 2
-                midPointX: (firstTouch.pageX + secondTouch.pageX) / 2,
-                midPointY: (firstTouch.pageY + secondTouch.pageY) / 2
-            };
-        
+            scale: scale,
+            deltaScale: scale - 1,
+            previousScale: me.previousScale,
+            previousDeltaScale: scale - me.previousScale,
+            distance: distance,
+            deltaDistance: distance - me.startDistance,
+            startDistance: me.startDistance,
+            previousDistance: me.previousDistance,
+            previousDeltaDistance: distance - me.previousDistance,
+            firstTouch: firstTouch,
+            secondTouch: secondTouch,
+            firstPageX: firstTouch.pageX,
+            firstPageY: firstTouch.pageY,
+            secondPageX: secondTouch.pageX,
+            secondPageY: secondTouch.pageY,
+            // The midpoint between the touches is (x1 + x2) / 2, (y1 + y2) / 2
+            midPointX: (firstTouch.pageX + secondTouch.pageX) / 2,
+            midPointY: (firstTouch.pageY + secondTouch.pageY) / 2
+        };
+
         me.previousScale = scale;
         me.previousDistance = distance;
-        
-        return info;  
+
+        return info;
     },
-    
-    getDistance : function() {
-        var me = this;
+
+    getDistance: function(firstTouch, secondTouch) {
         return Math.sqrt(
-            Math.pow(Math.abs(me.firstTouch.pageX - me.secondTouch.pageX), 2) +
-            Math.pow(Math.abs(me.firstTouch.pageY - me.secondTouch.pageY), 2)
-        );        
+        Math.pow(Math.abs(firstTouch.pageX - secondTouch.pageX), 2) + Math.pow(Math.abs(firstTouch.pageY - secondTouch.pageY), 2));
     }
 });
 
 Ext.regGesture('pinch', Ext.gesture.Pinch);
+
 
 /**
  * @class Ext.lib.Component
@@ -29273,22 +29307,25 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
     renderTpl: null,
 
     /**
-     * @cfg {Object} renderSelectors.
-     * <p>An object containing properties specifying {@link Ext.DomQuery DomQuery} selectors which identify child elements
-     * created by the render process.</p>
-     * <p>After the Component's internal structure is rendered according to the {@link renderTpl}, this object is iterated through,
-     * and the found Elements are added as properties to the Component using the <code>renderSelector</code> property name.</p>
-     * <p>For example, a Component which rendered an image, and description into its element might use the following properties
-     * coded into its prototype:<pre><code>
-renderTpl: '<img src="{imageUrl}" class="x-image-component-img"><div class="x-image-component-desc">{description}</div>',
-
-renderSelectors: {
-    image: 'img.x-image-component-img',
-    descEl: 'div.x-image-component-desc'
-}
-</code></pre>
-     * <p>After rendering, the Component would have a property <code>image</code> referencing its child <code>img</code> Element,
-     * and a property <code>descEl</code> referencing the <code>div</code> Element which contains the description.</p>
+     * @cfg {Object} renderSelectors
+     * An object containing properties specifying {@link Ext.DomQuery DomQuery} selectors which identify child elements
+     * created by the render process.
+     *
+     * After the Component's internal structure is rendered according to the {@link renderTpl}, this object is iterated through,
+     * and the found Elements are added as properties to the Component using the <code>renderSelector</code> property name.
+     *
+     * For example, a Component which rendered an image, and description into its element might use the following properties
+     * coded into its prototype:
+     *
+     *     renderTpl: '<img src="{imageUrl}" class="x-image-component-img"><div class="x-image-component-desc">{description}</div>',
+     *
+     *     renderSelectors: {
+     *         image: 'img.x-image-component-img',
+     *         descEl: 'div.x-image-component-desc'
+     *     }
+     *
+     * After rendering, the Component would have a property <code>image</code> referencing its child `img` Element,
+     * and a property `descEl` referencing the `div` Element which contains the description.
      */
 
     /**
@@ -29409,29 +29446,29 @@ renderSelectors: {
         });
      </code></pre>
      */
-    
+
     /**
      * @cfg {Number} width
      * The width of this component in pixels.
      */
-    
+
     /**
      * @cfg {Number} height
      * The height of this component in pixels.
      */
-    
+
     /**
      * @cfg {Number/String} border
      * Specifies the border for this component. The border can be a single numeric value to apply to all sides or
      * it can be a CSS style specification for each style, for example: '10 5 3 10'.
      */
-    
+
     /**
      * @cfg {Number/String} padding
      * Specifies the padding for this component. The padding can be a single numeric value to apply to all sides or
      * it can be a CSS style specification for each style, for example: '10 5 3 10'.
      */
-    
+
     /**
      * @cfg {Number/String} margin
      * Specifies the margin for this component. The margin can be a single numeric value to apply to all sides or
@@ -29533,7 +29570,7 @@ renderSelectors: {
      // @private
      allowDomMove: true,
      autoShow: false,
-     
+
      autoRender: false,
 
      needsLayout: false,
@@ -29733,7 +29770,7 @@ renderSelectors: {
             this.render(this.renderTo);
             delete this.renderTo;
         }
-        
+
         if (Ext.isDefined(this.disabledClass)) {
             throw "Component: disabledClass has been deprecated. Please use disabledCls.";
         }
@@ -29741,7 +29778,7 @@ renderSelectors: {
 
     initComponent: Ext.emptyFn,
     applyToMarkup: Ext.emptyFn,
-    
+
     show: Ext.emptyFn,
 
     onShow : function() {
@@ -29751,7 +29788,7 @@ renderSelectors: {
             this.doComponentLayout(needsLayout.width, needsLayout.height, needsLayout.isSetSize);
         }
     },
-    
+
     // @private
     initPlugin : function(plugin) {
         if (plugin.ptype && typeof plugin.init != 'function') {
@@ -30115,7 +30152,7 @@ var owningTabContainer = grid.up('tabcontainer');
      * @returns The next sibling (or the next sibling which matches the selector). Returns null if there is no matching sibling.
      */
     nextSibling: function(selector) {
-        var o = this.ownerCt, it, last, idx, c; 
+        var o = this.ownerCt, it, last, idx, c;
         if (o) {
             it = o.items;
             idx = it.indexOf(this) + 1;
@@ -30144,7 +30181,7 @@ var owningTabContainer = grid.up('tabcontainer');
      * @returns The previous sibling (or the previous sibling which matches the selector). Returns null if there is no matching sibling.
      */
     previousSibling: function(selector) {
-        var o = this.ownerCt, it, idx, c; 
+        var o = this.ownerCt, it, idx, c;
         if (o) {
             it = o.items;
             idx = it.indexOf(this);
@@ -30376,7 +30413,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
     isDisabled : function() {
         return this.disabled;
     },
-    
+
     /**
      * Enable or disable the component.
      * @param {Boolean} disabled
@@ -30392,7 +30429,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
     isHidden : function() {
         return this.hidden;
     },
-    
+
     /**
      * Adds a CSS class to the top level element representing this component.
      * @returns {Ext.Component} Returns the Component to allow method chaining.
@@ -30412,7 +30449,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
     addClass : function() {
         throw "Component: addClass has been deprecated. Please use addCls.";
     },
-    
+
     /**
      * Removes a CSS class from the top level element representing this component.
      * @returns {Ext.Component} Returns the Component to allow method chaining.
@@ -30430,7 +30467,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
         }
         return me;
     },
-    
+
     removeClass : function() {
         throw "Component: removeClass has been deprecated. Please use removeCls.";
     },
@@ -30493,11 +30530,11 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
     /**
      * Method to determine whether this Component is draggable.
      * @return {Boolean} the draggable state of this component.
-     */    
+     */
     isDraggable : function() {
         return !!this.draggable;
     },
-    
+
     /**
      * Method to determine whether this Component is droppable.
      * @return {Boolean} the droppable state of this component.
@@ -30642,7 +30679,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
         this.componentLayout = layout;
         layout.setOwner(this);
     },
-    
+
     getComponentLayout : function() {
         if (!this.componentLayout || !this.componentLayout.isLayout) {
             this.setComponentLayout(Ext.layout.LayoutManager.create(this.componentLayout, 'autocomponent'));
@@ -30742,7 +30779,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
      * @param {Boolean} targetEl True to mask the targetEl of this Component instead of the this.el.
      * For example, setting this to true on a Panel will cause only the body to be masked. (defaults to false)
      * @return {Ext.LoadMask} The LoadMask instance that has just been shown.
-     */    
+     */
     setLoading : function(load, targetEl) {
         if (this.rendered) {
             if (load) {
@@ -30753,7 +30790,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
                 this.loadMask = null;
             }
         }
-        
+
         return this.loadMask;
     },
 
@@ -32672,7 +32709,7 @@ var panel = new Ext.Panel({
 
     /**
      * Attempts a default component lookup (see {@link Ext.Container#getComponent}). If the component is not found in the normal
-     * items, the dockedItems are searched and the matched component (if any) returned (see {@loink #getDockedComponent}).
+     * items, the dockedItems are searched and the matched component (if any) returned (see {@link #getDockedComponent}).
      * @param {String/Number} comp The docked component id or itemId to find
      * @return {Ext.Component} The docked component, if found
      */
@@ -32881,7 +32918,8 @@ Ext.reg('panel', Ext.Panel);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Panel/screenshot.png" /></p>
+ *
+ * {@img Ext.Panel/screenshot.png Ext.Panel screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -32930,15 +32968,16 @@ Ext.reg('panel', Ext.Panel);
  * <ul class="list">
  *   <li>{@link #ui} (defines the style of the button)</li>
  * </ul>
- * 
+ *
  * <h2>Useful Methods</h2>
  * <ul class="list">
  *   <li>{@link #handler} (method to be called when the button is tapped)</li>
  * </ul>
- * 
+ *
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Button/screenshot.png" /></p>
- * 
+ *
+ * {@img Ext.Button/screenshot.png Ext.Button screenshot}
+ *
  * <h2>Example code:</h2>
 <pre><code>
 // an array of buttons (using xtypes) to be included in the panel below
@@ -33035,7 +33074,7 @@ Ext.Button = Ext.extend(Ext.Component, {
              * @param {Ext.EventObject} e
              */
             'tap',
-            
+
             /**
              * @event beforetap
              * Fires when the button is tapped but before we call the handler or fire the tap event.
@@ -33063,13 +33102,13 @@ Ext.Button = Ext.extend(Ext.Component, {
      * @cfg {String} icon The path to an image to display in the button (the image will be set as the background-image
      * CSS property of the button by default, so if you want a mixed icon/text button, set cls:'x-btn-text-icon')
      */
-     
+
     /**
-     * @cfg {String} iconAlign The alignment of the buttons icon if one has been defined. Valid options 
+     * @cfg {String} iconAlign The alignment of the buttons icon if one has been defined. Valid options
      * are 'top', 'right', 'bottom', 'left' (defaults to 'left').
      */
     iconAlign: 'left',
-    
+
     /**
      * @cfg {Function} handler A function called when the button is clicked (can be used instead of click event).
      * The handler is passed the following parameters:<div class="mdetail-params"><ul>
@@ -33122,7 +33161,9 @@ Ext.Button = Ext.extend(Ext.Component, {
 
     /**
      * @cfg {String} ui
-     * Determines the UI look and feel of the button. Valid options are 'normal', 'back', 'round', 'action', 'forward'.
+     * Determines the UI look and feel of the button. Valid options are 'normal', 'back', 'round', 'action', 'forward',
+     * 'decline', 'confirm' and 'small'. The 'round' and 'small' UIs can also be appended to the other options - for
+     * example 'confirm-small', 'action-round', 'forward-small' etc
      * Defaults to 'normal'.
      */
     ui: 'normal',
@@ -33140,14 +33181,14 @@ Ext.Button = Ext.extend(Ext.Component, {
      * Settings this to true defaults to 100ms
      */
     pressedDelay: 0,
-    
+
     /**
      * @cfg {String} iconMaskCls
      * CSS class to be added to the iconEl when the iconMask config is set to true.
      * Defaults to 'x-icon-mask'
      */
     iconMaskCls: 'x-icon-mask',
-    
+
     /**
      * @cfg {Boolean} iconMask
      * Whether or not to mask the icon with the iconMaskCls configuration. Defaults to false.
@@ -33157,7 +33198,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     // @private
     afterRender : function(ct, position) {
         var me = this;
-        
+
         Ext.Button.superclass.afterRender.call(me, ct, position);
 
         var text = me.text,
@@ -33170,7 +33211,7 @@ Ext.Button = Ext.extend(Ext.Component, {
         me.setText(text);
         me.setIcon(icon);
         me.setIconClass(iconCls);
-        
+
         if (me.iconMask && me.iconEl) {
             me.iconEl.addCls(me.iconMaskCls);
         }
@@ -33180,12 +33221,12 @@ Ext.Button = Ext.extend(Ext.Component, {
     // @private
     initEvents : function() {
         var me = this;
-        
+
         Ext.Button.superclass.initEvents.call(me);
 
         me.mon(me.el, {
             scope: me,
-            
+
             tap      : me.onPress,
             tapstart : me.onTapStart,
             tapcancel: me.onTapCancel
@@ -33237,7 +33278,7 @@ Ext.Button = Ext.extend(Ext.Component, {
      */
     setText: function(text) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.textEl && text) {
                 me.textEl = me.el.createChild({
@@ -33268,7 +33309,7 @@ Ext.Button = Ext.extend(Ext.Component, {
      */
     setIcon: function(icon) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.iconEl && icon) {
                 me.iconEl = me.el.createChild({
@@ -33276,7 +33317,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     src: Ext.BLANK_IMAGE_URL,
                     style: 'background-image: ' + (icon ? 'url(' + icon + ')' : '')
                 });
-                
+
                 me.setIconAlign(me.iconAlign);
             }
             else if (me.iconEl && icon != me.icon) {
@@ -33303,7 +33344,7 @@ Ext.Button = Ext.extend(Ext.Component, {
      */
     setIconClass: function(cls) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.iconEl && cls) {
                 me.iconEl = me.el.createChild({
@@ -33311,7 +33352,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     src: Ext.BLANK_IMAGE_URL,
                     cls: cls
                 });
-                
+
                 me.setIconAlign(me.iconAlign);
             }
             else if (me.iconEl && cls != me.iconCls) {
@@ -33332,12 +33373,12 @@ Ext.Button = Ext.extend(Ext.Component, {
         me.iconCls = cls;
         return me;
     },
-    
+
     /**
      * Adds a CSS class to the button that changes the align of the button's icon (if one has been defined).  If no icon or iconClass has
      * been defined, it will only set the value of the {@link iconAlign} internal config.
      * @param {String} alignment The alignment you would like to align the button. Valid options are 'top', 'bottom', 'left', 'right'.
-     *                           If you pass false, it will remove the current iconAlign. If you pass nothing or an invalid alignment, 
+     *                           If you pass false, it will remove the current iconAlign. If you pass nothing or an invalid alignment,
      *                           it will default to the last used/default iconAlign.
      * @return {Ext.Button} this
      */
@@ -33346,10 +33387,10 @@ Ext.Button = Ext.extend(Ext.Component, {
             alignments = ['top', 'right', 'bottom', 'left'],
             alignment  = ((alignments.indexOf(alignment) == -1 || !alignment) && alignment !== false) ? me.iconAlign : alignment,
             i;
-        
+
         if (me.rendered && me.iconEl) {
             me.el.removeCls('x-iconalign-' + me.iconAlign);
-            
+
             if (alignment) me.el.addCls('x-iconalign-' + alignment);
         }
         me.iconAlign = (alignment === false) ? me.iconAlign : alignment;
@@ -33363,7 +33404,7 @@ Ext.Button = Ext.extend(Ext.Component, {
      */
     setBadge : function(text) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.badgeEl && text) {
                 me.badgeEl = me.el.createChild({
@@ -33434,7 +33475,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     me.onTapCancel();
                 }
                 me.callHandler(e);
-                me.fireEvent('tap', me, e);                
+                me.fireEvent('tap', me, e);
             }, 10);
         }
     },
@@ -33487,7 +33528,8 @@ Ext.reg('button', Ext.Button);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.SegmentedButton/screenshot.png" /></p>
+ *
+ * {@img Ext.SegmentedButton/screenshot.png Ext.SegmentedButton screenshot}
  * 
  * <h2>Example usage:</h2>
  * <pre><code>
@@ -35290,7 +35332,8 @@ Ext.DataView.override({
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.List/screenshot.png" /></p>
+ *
+ * {@img Ext.List/screenshot.png Ext.List screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -35861,7 +35904,8 @@ Ext.reg('list', Ext.List);
  * the <tt>{@link #index}</tt> event.</p>
  *
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.IndexBar/screenshot.png" /></p>
+ *
+ * {@img Ext.IndexBar/screenshot.png Ext.IndexBar screenshot}
  * 
  * <h2>Example code:</h2>
  * <p>Here is an example of the usage in a {@link Ext.List}:</p>
@@ -36192,7 +36236,8 @@ Ext.regModel('IndexBarModel', {
  * <p>The {@link #defaultType} of Toolbar's is '{@link Ext.Button button}'.</p>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Toolbar/screenshot.png" /></p>
+ *
+ * {@img Ext.Toolbar/screenshot.png Ext.Toolbar screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -36369,7 +36414,8 @@ Ext.reg('spacer', Ext.Spacer);
  * transitions for popup or side-anchored sliding Panels.</p>
  *
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Sheet/screenshot.png" /></p>
+ *
+ * {@img Ext.Sheet/screenshot.png Ext.Sheet screenshot}
  * 
  * <h2>Example usage:</h2>
  * <pre><code>
@@ -36581,7 +36627,8 @@ Ext.reg('sheet', Ext.Sheet);
  * <p>A Button Sheet class designed to popup or slide/anchor a series of buttons.</p>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.ActionSheet/screenshot.png" /></p>
+ *
+ * {@img Ext.ActionSheet/screenshot.png Ext.ActionSheet screenshot}
  *
  * <h2>Example code:</h2>
  * <pre><code>
@@ -36629,7 +36676,8 @@ Ext.reg('actionsheet', Ext.ActionSheet);
  * <p>Used in the {@link Ext.TabPanel} component to display {@link Ext.Tab} components.</p>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.TabBar/screenshot.png" /></p>
+ *
+ * {@img Ext.TabBar/screenshot.png Ext.TabBar screenshot}
  * 
  * <h2>Example code:</h2>
 <pre><code>
@@ -36903,7 +36951,8 @@ Ext.reg('tab', Ext.Tab);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.TabPanel/screenshot.png" /></p>
+ *
+ * {@img Ext.TabPanel/screenshot.png Ext.TabPanel screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -37049,7 +37098,8 @@ Ext.reg('tabpanel', Ext.TabPanel);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Carousel/screenshot.png" /></p>
+ *
+ * {@img Ext.Carousel/screenshot.png Ext.Carousel screenshot}
  * 
  * <h2>Example code:</h2>
 <pre><code>
@@ -37596,7 +37646,8 @@ Ext.reg('carouselindicator', Ext.Carousel.Indicator);
  * <pre><code>&lt;script type="text/javascript" src="http:&#47;&#47;maps.google.com/maps/api/js?sensor=true"&gt;&lt/script&gt;</code></pre>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Map/screenshot.png" /></p>
+ *
+ * {@img Ext.Map/screenshot.png Ext.Map screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -37978,6 +38029,27 @@ var nestedList = new Ext.NestedList({
     store: store
 });</code></pre>
  *
+ * <u>Using a Detail Card</u>
+ * 
+ * Often it is useful to show a "details" card for each node - this is a card generated at runtime which is displayed
+ * when the user taps on a leaf node. Here's how we can do this (using the same store as above):
+ * 
+<pre><code>
+new Ext.NestedList({
+    fullscreen: true,
+    title: 'Groceries',
+    displayField: 'text',
+    store: store,
+
+    getDetailCard: function(recordNode, parentNode) {
+        return new Ext.Panel({
+            title: 'Details about ' + recordNode.text,
+            html: recordNode.text + ' is great'
+        });
+    }
+});
+</code></pre>
+ * 
  * @xtype nestedlist
  */
 Ext.NestedList = Ext.extend(Ext.Panel, {
@@ -38134,9 +38206,10 @@ Ext.NestedList = Ext.extend(Ext.Panel, {
      */
 
     /**
-     * Implement getDetailCard to provide a final card for leaf nodes when useDetailCard
-     * is enabled. getDetailCard will be passed the currentRecord and the parentRecord.
-     * The default implementation will return false
+     * Implement getDetailCard to provide a final card for leaf nodes. This is useful when you want to display details
+     * about each node, instead of simply reaching the listing all of the nodes at the bottom level of the tree. See
+     * the intro docs for sample usage.
+     * The default implementation will return false, which means no detail card will be inserted
      * @param {Ext.data.Record} record
      * @param {Ext.data.Record} parentRecord
      */
@@ -39107,7 +39180,8 @@ Ext.reg('pickerslot', Ext.Picker.Slot);
  * </ul>
  *
  * <h2>Screenshot:</h2>
-  * <p><img src="doc_resources/Ext.DatePicker/screenshot.png" /></p>
+ *
+ * {@img Ext.DatePicker/screenshot.png Ext.DatePicker screenshot}
  *
  * <h2>Example code:</h2>
  *
@@ -39475,7 +39549,8 @@ Ext.reg('media', Ext.Media);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Video/screenshot.png" /></p>
+ *
+ * {@img Ext.Video/screenshot.png Ext.Video screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -39568,7 +39643,8 @@ Ext.reg('video', Ext.Video);
  * </ul>
  * 
  * <h2>Screenshot:</h2>
- * <p><img src="doc_resources/Ext.Audio/screenshot.png" /></p>
+ *
+ * {@img Ext.Audio/screenshot.png Ext.Audio screenshot}
  * 
  * <h2>Example code:</h2>
  * <pre><code>
@@ -39645,7 +39721,8 @@ Ext.reg('audio', Ext.Audio);
  * (see the <code>fn</code> configuration option parameter for the {@link #show show} method for more details).</p>
  * 
  * <h2>Screenshot</h2>
- * <p><img src="doc_resources/Ext.MessageBox/screenshot.png" /></p>
+ *
+ * {@img Ext.MessageBox/screenshot.png Ext.MessageBox screenshot}
  * 
  * <h2>Example usage:</h2>
  * <pre><code>
@@ -40022,7 +40099,7 @@ Ext.Msg.show({
      * @param {Boolean/Number} multiLine (optional) True to create a multiline textbox using the defaultTextHeight
      * property, or the height in pixels to create the textbox (defaults to false / single-line)
      * @param {String} value (optional) Default value of the text input element (defaults to '')
-     * @param {Object} promptConfig <div class="sub-desc">(optional) A hash collection of input attribute values.<div class="sub-desc">Specified values may include:<ul>
+     * @param {Object} promptConfig (optional) <div class="sub-desc">(optional) A hash collection of input attribute values.<div class="sub-desc">Specified values may include:<ul>
      * <li><tt>focus</tt> : Boolean <div class="sub-desc"><tt>true</tt> to assert initial input focus (defaults to false)</div></li>
      * <li><tt>placeholder</tt> : String <div class="sub-desc">String value rendered when the input field is empty (defaults to empty string)</div></li>
      * <li><tt>autocapitalize</tt> : String/Boolean <div class="sub-desc"><tt>true/on</tt> to capitalize the first letter of each word in the input value (defaults to 'off')</div></li>
@@ -40199,6 +40276,7 @@ var user = Ext.ModelMgr.create({
 
 form.load(user);
 </code></pre>
+ * @xtype formpanel
  * @xtype form
  */
 Ext.form.FormPanel = Ext.extend(Ext.Panel, {
@@ -41268,6 +41346,7 @@ slider.setValue(8); //will update the value and move the thumb;
 slider.getValue(); //returns 8
    </code></pre>
  * @xtype sliderfield
+ * @xtype slider
  */
 Ext.form.Slider = Ext.extend(Ext.form.Field, {
     ui: 'slider',
@@ -41698,6 +41777,7 @@ Ext.reg('sliderfield', Ext.form.Slider);
 /**
  * @class Ext.form.Slider.Thumb
  * @extends Ext.form.Field
+ * @xtype sliderthumb
  * @xtype thumb
  * @ignore
  * Utility class used by Ext.form.Slider - should never need to be used directly.
@@ -41751,6 +41831,7 @@ Ext.reg('sliderthumb', Ext.form.Slider.Thumb);
  * <p>Specialized Slider with a single thumb and only two values. By default the toggle component can
  * be switched between the values of 0 and 1.</p>
  * @xtype togglefield
+ * @xtype toggle
  */
 Ext.form.Toggle = Ext.extend(Ext.form.Slider, {
     minValue: 0,
@@ -41847,6 +41928,7 @@ Ext.form.Toggle.Thumb = Ext.extend(Ext.form.Slider.Thumb, {
  * @extends Ext.form.Field
  * <p>Simple text input field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype textfield
+ * @alternateClassName Ext.form.TextField
  */
 Ext.form.Text = Ext.extend(Ext.form.Field, {
     ui: 'text',
@@ -42205,13 +42287,7 @@ Ext.form.Text = Ext.extend(Ext.form.Field, {
 
 Ext.reg('textfield', Ext.form.Text);
 
-/**
- * @class Ext.form.TextField
- * @extends Ext.form.Text
- * @private
- * @hidden
- * DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
- */
+// DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
 Ext.form.TextField = Ext.extend(Ext.form.Text, {
     constructor: function() {
         console.warn("Ext.form.TextField has been deprecated and will be removed in Sencha Touch 1.0. Please use Ext.form.Text instead");
@@ -42224,6 +42300,7 @@ Ext.form.TextField = Ext.extend(Ext.form.Text, {
  * @extends Ext.form.Text
  * <p>Wraps an HTML5 password field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype passwordfield
+ * @alternateClassName Ext.form.PasswordField
  */
 Ext.form.Password = Ext.extend(Ext.form.Text, {
     inputType: 'password',
@@ -42237,6 +42314,7 @@ Ext.reg('passwordfield', Ext.form.Password);
  * @extends Ext.form.Text
  * <p>Wraps an HTML5 email field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype emailfield
+ * @alternateClassName Ext.form.EmailField
  */
 Ext.form.Email = Ext.extend(Ext.form.Text, {
     inputType: 'email',
@@ -42251,6 +42329,7 @@ Ext.reg('emailfield', Ext.form.Email);
  * @extends Ext.form.Text
  * Wraps an HTML5 url field. See {@link Ext.form.FormPanel FormPanel} for example usage.
  * @xtype urlfield
+ * @alternateClassName Ext.form.UrlField
  */
 Ext.form.Url = Ext.extend(Ext.form.Text, {
     inputType: 'url',
@@ -42265,6 +42344,7 @@ Ext.reg('urlfield', Ext.form.Url);
  * @extends Ext.form.Text
  * Wraps an HTML5 search field. See {@link Ext.form.FormPanel FormPanel} for example usage.
  * @xtype searchfield
+ * @alternateClassName Ext.form.SearchField
  */
 Ext.form.Search = Ext.extend(Ext.form.Text, {
     inputType: 'search'
@@ -42280,16 +42360,27 @@ Ext.reg('searchfield', Ext.form.Search);
  * @extends Ext.form.Text
  * <p>Wraps an HTML5 number field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype numberfield
+ * @alternateClassName Ext.form.NumberField
  */
 Ext.form.Number = Ext.extend(Ext.form.Text, {
     ui: 'number',
 
     inputType: 'number',
     
+    /**
+     * @cfg {Number} minValue The minimum value that this Number field can accept (defaults to undefined, e.g. no minimium)
+     */
     minValue : undefined,
     
+    /**
+     * @cfg {Number} minValue The maximum value that this Number field can accept (defaults to undefined, e.g. no maximum)
+     */
     maxValue : undefined,
     
+    /**
+     * @cfg {Number} stepValue The amount by which the field is incremented or decremented each time the spinner is tapped.
+     * Defaults to undefined, which means that the field goes up or down by 1 each time the spinner is tapped
+     */
     stepValue : undefined,
 
     renderTpl: [
@@ -42339,6 +42430,7 @@ new Ext.form.Spinner({
 });
 </code></pre>
  * @xtype spinnerfield
+ * @alternateClassName Ext.form.SpinnerField
  */
 Ext.form.Spinner = Ext.extend(Ext.form.Number, {
 
@@ -42583,6 +42675,8 @@ Ext.reg('spinnerfield', Ext.form.Spinner);
  * @extends Ext.form.Field
  * <p>Wraps a hidden field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype hiddenfield
+ * @xtype hidden
+ * @alternateClassName Ext.form.HiddenField
  */
 Ext.form.Hidden = Ext.extend(Ext.form.Field, {
     ui: 'hidden',
@@ -42595,13 +42689,7 @@ Ext.form.Hidden = Ext.extend(Ext.form.Field, {
 Ext.reg('hiddenfield', Ext.form.Hidden);
 
 
-/**
- * @class Ext.form.HiddenField
- * @extends Ext.form.Hidden
- * @private
- * @hidden
- * DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
- */
+// DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
 Ext.form.HiddenField = Ext.extend(Ext.form.Hidden, {
 
     constructor: function() {
@@ -42617,6 +42705,7 @@ Ext.form.HiddenField = Ext.extend(Ext.form.Hidden, {
  * @constructor
  * @param {Object} config Optional config object
  * @xtype checkboxfield
+ * @xtype checkbox
  */
 Ext.form.Checkbox = Ext.extend(Ext.form.Field, {
     ui: 'checkbox',
@@ -42835,6 +42924,7 @@ Ext.reg('checkboxfield', Ext.form.Checkbox);
  * Creates a new Radio
  * @param {Object} config Configuration options
  * @xtype radiofield
+ * @xtype radio
  */
 Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
     inputType: 'radio',
@@ -42902,6 +42992,7 @@ new Ext.form.Select({
 });
 </code></pre>
  * @xtype selectfield
+ * @xtype select
  */
 Ext.form.Select = Ext.extend(Ext.form.Text, {
     ui: 'select',
@@ -43066,7 +43157,13 @@ Ext.form.Select = Ext.extend(Ext.form.Text, {
     // @private
     showComponent: function() {
         if (Ext.is.Phone) {
-            this.getPicker().show();
+            var picker = this.getPicker(),
+                name   = this.name,
+                value  = {};
+                
+            value[name] = this.getValue();
+            picker.show();
+            picker.setValue(value);
         }
         else {
             var listPanel = this.getListPanel(),
@@ -43179,6 +43276,7 @@ Ext.reg('selectfield', Ext.form.Select);
  * @extends Ext.form.Text
  * <p>Wraps a textarea. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
  * @xtype textareafield
+ * @xtype textarea
  */
 Ext.form.TextArea = Ext.extend(Ext.form.Text, {
     ui: 'textarea',
@@ -43227,6 +43325,7 @@ Ext.reg('textareafield', Ext.form.TextArea);
  * @extends Ext.form.Field
  * <p>Specialized field which has a button which when pressed, shows a {@link Ext.DatePicker}.</p>
  * @xtype datepickerfield
+ * @alternateClassName Ext.form.DatePickerField
  */
 Ext.form.DatePicker = Ext.extend(Ext.form.Field, {
     ui: 'select',
@@ -44368,8 +44467,9 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // @private
     setItemBox : function(item, box) {
         if (item && box.height > 0) {
+            // copy the target box because it gets used again in the card layout
+            box = Ext.apply({}, box);
             box.width -= item.el.getMargin('lr');
-            //box.width = null;
             box.height -= item.el.getMargin('tb');
             item.setCalculatedSize(box);
             item.setPosition(box);
@@ -45260,6 +45360,7 @@ Ext.plugins.PullRefreshPlugin = Ext.extend(Ext.util.Observable, {
 
         if (this.isLoading) {
             this.isLoading = false;
+            this.lastUpdated = new Date();
 
             this.setViewState('pull');
             this.updatedEl.setHTML(Ext.util.Format.date(this.lastUpdated, "m/d/Y h:iA"));

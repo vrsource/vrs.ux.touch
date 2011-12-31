@@ -1,5 +1,5 @@
 /*
-    Copyright(c) 2010 Sencha Inc.
+    Copyright(c) 2011 Sencha Inc.
     licensing@sencha.com
     http://www.sencha.com/touchlicense
 */
@@ -1019,7 +1019,9 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
     
     
     set: function(fieldName, value) {
-        var fields = this.fields,
+        var me = this,
+            fields = me.fields,
+            modified = me.modified,
             convertFields = [],
             field, key, i;
         
@@ -1038,12 +1040,12 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
                     continue;
                 }
                 
-                this.set(key, fieldName[key]);
+                me.set(key, fieldName[key]);
             }
             
             for (i = 0; i < convertFields.length; i++) {
                 field = convertFields[i];
-                this.set(field, fieldName[field]);
+                me.set(field, fieldName[field]);
             }
             
         } else {
@@ -1051,16 +1053,36 @@ Ext.util.Stateful = Ext.extend(Ext.util.Observable, {
                 field = fields.get(fieldName);
                 
                 if (field && field.convert) {
-                    value = field.convert(value, this);
+                    value = field.convert(value, me);
                 }
             }
             
-            this[this.persistanceProperty][fieldName] = value;
+            me[me.persistanceProperty][fieldName] = value;
 
-            this.dirty = true;
+            if (field && field.persist && !me.isEqual(currentValue, value)) {
+                if (me.isModified(fieldName)) {
+                    if (me.isEqual(modified[fieldName], value)) {
+                        
+                        
+                        delete modified[fieldName];
+                        
+                        
+                        me.dirty = false;
+                        for (key in modified) {
+                            if (modified.hasOwnProperty(key)){
+                                me.dirty = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    me.dirty = true;
+                    modified[fieldName] = currentValue;
+                }
+            }
 
-            if (!this.editing) {
-                this.afterEdit();
+            if (!me.editing) {
+                me.afterEdit();
             }
         }
     },
@@ -3543,7 +3565,6 @@ Ext.util.Format = {
      * Escapes the passed string for ' and \
      * @param {String} string The string to escape
      * @return {String} The escaped string
-     * @static
      */
     escape : function(string) {
         return string.replace(Ext.util.Format.escapeRe, "\\$1");
@@ -3932,7 +3953,7 @@ Ext.ComponentQuery = new function() {
 
             
             if (!root) {
-                workingItems = Ext.ComponentMgr.all.items.slice();
+		workingItems = Ext.ComponentMgr.all.getArray();
             }
 
             
@@ -4138,6 +4159,7 @@ Ext.ComponentQuery = new function() {
         }
     });
 };
+
 
 Ext.PluginMgr = new Ext.AbstractManager({
     typeName: 'ptype',
@@ -4641,8 +4663,10 @@ Ext.EventObjectImpl = Ext.extend(Object, {
 Ext.EventObject = new Ext.EventObjectImpl();
 
 Ext.is = {
-    init : function(navigator) {
-        var platforms = this.platforms,
+
+    init: function(navigator) {
+        var me = this,
+            platforms = me.platforms,
             ln = platforms.length,
             i, platform;
 
@@ -4650,71 +4674,82 @@ Ext.is = {
 
         for (i = 0; i < ln; i++) {
             platform = platforms[i];
-            this[platform.identity] = platform.regex.test(navigator[platform.property]);
+            me[platform.identity] = platform.regex.test(navigator[platform.property]);
         }
 
         
-        this.Desktop = this.Mac || this.Windows || (this.Linux && !this.Android);
+        me.Desktop = me.Mac || me.Windows || (me.Linux && !me.Android);
         
-        this.Tablet = this.iPad;
+        me.iOS = me.iPhone || me.iPad || me.iPod;
+
         
-        this.Phone = !this.Desktop && !this.Tablet;
+        me.Standalone = !!navigator.standalone;
+
         
-        this.iOS = this.iPhone || this.iPad || this.iPod;
+        i = me.Android && (/Android\s(\d+\.\d+)/.exec(navigator.userAgent));
+        if (i) {
+            me.AndroidVersion = i[1];
+            me.AndroidMajorVersion = parseInt(i[1], 10);
+        }
         
+        me.Tablet = me.iPad || (me.Android && me.AndroidMajorVersion === 3);
+
         
-        this.Standalone = !!window.navigator.standalone;
+        me.Phone = !me.Desktop && !me.Tablet;
+
+        
+        me.MultiTouch = !me.Blackberry && !me.Desktop && !(me.Android && me.AndroidVersion < 3);
     },
-    
+
     
     platforms: [{
         property: 'platform',
         regex: /iPhone/i,
         identity: 'iPhone'
     },
-    
+
     
     {
         property: 'platform',
         regex: /iPod/i,
         identity: 'iPod'
     },
-    
+
     
     {
         property: 'userAgent',
         regex: /iPad/i,
         identity: 'iPad'
     },
-    
+
     
     {
         property: 'userAgent',
         regex: /Blackberry/i,
         identity: 'Blackberry'
     },
-    
+
     
     {
         property: 'userAgent',
         regex: /Android/i,
         identity: 'Android'
     },
-    
+
     
     {
         property: 'platform',
         regex: /Mac/i,
         identity: 'Mac'
     },
-    
+
     
     {
         property: 'platform',
         regex: /Win/i,
         identity: 'Windows'
     },
-    
+
     
     {
         property: 'platform',
@@ -4727,19 +4762,14 @@ Ext.is.init();
 
 
 Ext.supports = {
-    init : function() {
+    init: function() {
         var doc = document,
             div = doc.createElement('div'),
             tests = this.tests,
             ln = tests.length,
             i, test;
 
-        div.innerHTML = [
-            '<div style="height:30px;width:50px;">',
-                '<div style="height:20px;width:20px;"></div>',
-            '</div>',
-            '<div style="float:left; background-color:transparent;"></div>'
-        ].join('');
+        div.innerHTML = ['<div style="height:30px;width:50px;">', '<div style="height:20px;width:20px;"></div>', '</div>', '<div style="float:left; background-color:transparent;"></div>'].join('');
 
         doc.body.appendChild(div);
 
@@ -4753,169 +4783,158 @@ Ext.supports = {
 
     
     OrientationChange: ((typeof window.orientation != 'undefined') && ('onorientationchange' in window)),
-    
+
     
     DeviceMotion: ('ondevicemotion' in window),
-    
+
     
     
     
     Touch: ('ontouchstart' in window) && (!Ext.is.Desktop),
 
     tests: [
-        
-        {
-            identity: 'Transitions',
-            fn: function(doc, div) {
-                var prefix = [
-                        'webkit',
-                        'Moz',
-                        'o',
-                        'ms',
-                        'khtml'
-                    ],
-                    TE = 'TransitionEnd',
-                    transitionEndName = [
-                        prefix[0] + TE,
-                        'transitionend', 
-                        prefix[2] + TE,
-                        prefix[3] + TE,
-                        prefix[4] + TE
-                    ],
-                    ln = prefix.length,
-                    i = 0,
-                    out = false;
-                div = Ext.get(div);
-                for (; i < ln; i++) {
-                    if (div.getStyle(prefix[i] + "TransitionProperty")) {
-                        Ext.supports.CSS3Prefix = prefix[i];
-                        Ext.supports.CSS3TransitionEnd = transitionEndName[i];
-                        out = true;
-                        break;
-                    }
-                }
-                return out;
-            }
-        },
-        
-        
-        {
-            identity: 'RightMargin',
-            fn: function(doc, div, view) {
-                view = doc.defaultView;
-                return !(view && view.getComputedStyle(div.firstChild.firstChild, null).marginRight != '0px');
-            }
-        },
-        
-        
-        {
-            identity: 'TransparentColor',
-            fn: function(doc, div, view) {
-                view = doc.defaultView;
-                return !(view && view.getComputedStyle(div.lastChild, null).backgroundColor != 'transparent');
-            }
-        },
-        
-        
-        {
-            identity: 'SVG',
-            fn: function(doc) {
-                return !!doc.createElementNS && !!doc.createElementNS( "http:/" + "/www.w3.org/2000/svg", "svg").createSVGRect;
-            }
-        },
     
-        
-        {
-            identity: 'Canvas',
-            fn: function(doc) {
-                return !!doc.createElement('canvas').getContext;
-            }
-        },
-        
-        
-        {
-            identity: 'VML',
-            fn: function(doc) {
-                var d = doc.createElement("div");
-                d.innerHTML = "<!--[if vml]><br><br><![endif]-->";
-                return (d.childNodes.length == 2);
-            }
-        },
-        
-        
-        {
-            identity: 'Float',
-            fn: function(doc, div) {
-                return !!div.lastChild.style.cssFloat;
-            }
-        },
-        
-        
-        {
-            identity: 'AudioTag',
-            fn: function(doc) {
-                return !!doc.createElement('audio').canPlayType;
-            }
-        },
-        
-        
-        {
-            identity: 'History',
-            fn: function() {
-                return !!(window.history && history.pushState);
-            }
-        },
-        
-        
-        {
-            identity: 'CSS3DTransform',
-            fn: function() {
-                return (typeof WebKitCSSMatrix != 'undefined' && new WebKitCSSMatrix().hasOwnProperty('m41'));
-            }
-        },
-
-		
-        {
-            identity: 'CSS3LinearGradient',
-            fn: function(doc, div) {
-                var property = 'background-image:',
-                    webkit   = '-webkit-gradient(linear, left top, right bottom, from(black), to(white))',
-                    w3c      = 'linear-gradient(left top, black, white)',
-                    moz      = '-moz-' + w3c,
-                    options  = [property + webkit, property + w3c, property + moz];
-                
-                div.style.cssText = options.join(';');
-                
-                return ("" + div.style.backgroundImage).indexOf('gradient') !== -1;
-            }
-        },
-        
-        
-        {
-            identity: 'CSS3BorderRadius',
-            fn: function(doc, div) {
-                var domPrefixes = ['borderRadius', 'BorderRadius', 'MozBorderRadius', 'WebkitBorderRadius', 'OBorderRadius', 'KhtmlBorderRadius'],
-                    pass = false,
-                    i;
-                
-                for (i = 0; i < domPrefixes.length; i++) {
-                    if (document.body.style[domPrefixes[i]] !== undefined) {
-                        return pass = true;
-                    }
+    {
+        identity: 'Transitions',
+        fn: function(doc, div) {
+            var prefix = ['webkit', 'Moz', 'o', 'ms', 'khtml'],
+                TE = 'TransitionEnd',
+                transitionEndName = [
+            prefix[0] + TE, 'transitionend', 
+            prefix[2] + TE, prefix[3] + TE, prefix[4] + TE],
+                ln = prefix.length,
+                i = 0,
+                out = false;
+            div = Ext.get(div);
+            for (; i < ln; i++) {
+                if (div.getStyle(prefix[i] + "TransitionProperty")) {
+                    Ext.supports.CSS3Prefix = prefix[i];
+                    Ext.supports.CSS3TransitionEnd = transitionEndName[i];
+                    out = true;
+                    break;
                 }
-                
-                return pass;
             }
-        },
-        
-        
-        {
-            identity: 'GeoLocation',
-            fn: function() {
-                return (typeof navigator != 'undefined' && typeof navigator.geolocation != 'undefined') || (typeof google != 'undefined' && typeof google.gears != 'undefined');
-            }
+            return out;
         }
-    ]
+    },
+
+    
+    {
+        identity: 'RightMargin',
+        fn: function(doc, div, view) {
+            view = doc.defaultView;
+            return ! (view && view.getComputedStyle(div.firstChild.firstChild, null).marginRight != '0px');
+        }
+    },
+
+    
+    {
+        identity: 'TransparentColor',
+        fn: function(doc, div, view) {
+            view = doc.defaultView;
+            return ! (view && view.getComputedStyle(div.lastChild, null).backgroundColor != 'transparent');
+        }
+    },
+
+    
+    {
+        identity: 'SVG',
+        fn: function(doc) {
+            return !!doc.createElementNS && !!doc.createElementNS("http:/" + "/www.w3.org/2000/svg", "svg").createSVGRect;
+        }
+    },
+
+    
+    {
+        identity: 'Canvas',
+        fn: function(doc) {
+            return !!doc.createElement('canvas').getContext;
+        }
+    },
+
+    
+    {
+        identity: 'VML',
+        fn: function(doc) {
+            var d = doc.createElement("div");
+            d.innerHTML = "<!--[if vml]><br><br><![endif]-->";
+            return (d.childNodes.length == 2);
+        }
+    },
+
+    
+    {
+        identity: 'Float',
+        fn: function(doc, div) {
+            return !!div.lastChild.style.cssFloat;
+        }
+    },
+
+    
+    {
+        identity: 'AudioTag',
+        fn: function(doc) {
+            return !!doc.createElement('audio').canPlayType;
+        }
+    },
+
+    
+    {
+        identity: 'History',
+        fn: function() {
+            return !! (window.history && history.pushState);
+        }
+    },
+
+    
+    {
+        identity: 'CSS3DTransform',
+        fn: function() {
+            return (typeof WebKitCSSMatrix != 'undefined' && new WebKitCSSMatrix().hasOwnProperty('m41'));
+        }
+    },
+
+    
+    {
+        identity: 'CSS3LinearGradient',
+        fn: function(doc, div) {
+            var property = 'background-image:',
+                webkit = '-webkit-gradient(linear, left top, right bottom, from(black), to(white))',
+                w3c = 'linear-gradient(left top, black, white)',
+                moz = '-moz-' + w3c,
+                options = [property + webkit, property + w3c, property + moz];
+
+            div.style.cssText = options.join(';');
+
+            return ("" + div.style.backgroundImage).indexOf('gradient') !== -1;
+        }
+    },
+
+    
+    {
+        identity: 'CSS3BorderRadius',
+        fn: function(doc, div) {
+            var domPrefixes = ['borderRadius', 'BorderRadius', 'MozBorderRadius', 'WebkitBorderRadius', 'OBorderRadius', 'KhtmlBorderRadius'],
+                pass = false,
+                i;
+
+            for (i = 0; i < domPrefixes.length; i++) {
+                if (document.body.style[domPrefixes[i]] !== undefined) {
+                    return pass = true;
+                }
+            }
+
+            return pass;
+        }
+    },
+
+    
+    {
+        identity: 'GeoLocation',
+        fn: function() {
+            return (typeof navigator != 'undefined' && typeof navigator.geolocation != 'undefined') || (typeof google != 'undefined' && typeof google.gears != 'undefined');
+        }
+    }]
 };
 
 
@@ -10706,6 +10725,7 @@ Ext.util.Router = Ext.extend(Ext.util.Observable, {
 
 Ext.Router = new Ext.util.Router();
 
+
 Ext.util.Route = Ext.extend(Object, {
     
     
@@ -11423,6 +11443,7 @@ Ext.fly = El.fly;
 
 })();
 
+
 Ext.applyIf(Ext.Element, {
     unitRe: /\d+(px|em|%|en|ex|pt|in|cm|mm|pc)$/i,
     camelRe: /(-[a-z])/gi,
@@ -11534,6 +11555,7 @@ Ext.applyIf(Ext.Element, {
         return Ext.get(document.elementFromPoint(x, y));
     }
 });
+
 
 Ext.applyIf(Ext.Element, {
     
@@ -13280,7 +13302,7 @@ Ext.Anim = Ext.extend(Object, {
 
         Ext.Anim.superclass.constructor.call(this);
 
-        this.running = [];
+        this.running = {};
     },
 
     initConfig : function(el, runConfig) {
@@ -13369,7 +13391,6 @@ Ext.Anim = Ext.extend(Object, {
 
             
             el.on('webkitTransitionEnd', me.onTransitionEnd, me, {
-                single: true,
                 config: config,
                 after: after
             });
@@ -13397,6 +13418,8 @@ Ext.Anim = Ext.extend(Object, {
             config = o.config,
             property,
             me = this;
+            
+        el.un('webkitTransitionEnd', me.onTransitionEnd, me);
 
         if (config.autoClear) {
             for (property in config.to) {
@@ -13760,11 +13783,11 @@ Ext.apply(Ext.anims, {
 
 Ext.apply(Ext, {
     
-    version : '1.1.0',
+    version : '1.1.1',
     versionDetail : {
         major : 1,
         minor : 1,
-        patch : 0
+        patch : 1
     },
     
     
@@ -13922,7 +13945,7 @@ Ext.apply(Ext, {
             cls.push('x-ios');
         }
         if (Is.Android) {
-            cls.push('x-android');
+            cls.push('x-android', 'x-android-' + Is.AndroidMajorVersion);
         }
         if (Is.Blackberry) {
             cls.push('x-bb');
@@ -14113,7 +14136,7 @@ Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
         if (!Ext.is.Desktop) {
             size.height = (this.orientation == this.initialOrientation) ?
                             Math.max(this.initialHeight, size.height) :
-                            size.height
+                            size.height;
         }
 
         return size;
@@ -14127,16 +14150,26 @@ Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
     },
 
     getOrientation: function() {
-        var size = this.getSize();
+        var me = this,
+            size = me.getSize(),
+            androidTablet, orientation;
 
         if (window.hasOwnProperty('orientation')) {
-            return (window.orientation == 0 || window.orientation == 180) ? 'portrait' : 'landscape';
+            orientation = window.orientation;
+            
+            androidTablet = Ext.is.Android && Ext.is.AndroidMajorVersion === 3;
+            if (orientation % 180 === 0) {
+                return androidTablet ? 'landscape' : 'portrait';
+            }
+            else {
+                return androidTablet ? 'portrait' : 'landscape';
+            }
         }
         else {
             if (!Ext.is.iOS && !Ext.is.Desktop) {
-                if ((size.width == this.lastSize.width && size.height < this.lastSize.height) ||
-                    (size.height == this.lastSize.height && size.width < this.lastSize.width)) {
-                    return this.orientation;
+                if ((size.width == me.lastSize.width && size.height < me.lastSize.height) ||
+                    (size.height == me.lastSize.height && size.width < me.lastSize.width)) {
+                    return me.orientation;
                 }
             }
 
@@ -17486,15 +17519,15 @@ Ext.data.Connection = Ext.extend(Ext.util.Observable, {
     },
 
     
-    abort : function(r) {
-        if (r && this.isLoading(r)) {
+    abort : function(request) {
+        if (request && this.isLoading(request)) {
             if (!request.timedout) {
                 request.aborted = true;
             }
             
-            r.xhr.abort();
+            request.xhr.abort();
         }
-        else if (!r) {
+        else if (!request) {
             var id;
             for(id in this.requests) {
                 if (!this.requests.hasOwnProperty(id)) {
@@ -18206,7 +18239,7 @@ Ext.gesture.Manager = new Ext.AbstractManager({
     },
 
     onTouchMove: function(e) {
-        if (!Ext.is.Android) {
+        if (Ext.is.MultiTouch) {
             e.preventDefault();
         }
 
@@ -18462,7 +18495,6 @@ Ext.gesture.Manager = new Ext.AbstractManager({
 Ext.regGesture = function() {
     return Ext.gesture.Manager.registerType.apply(Ext.gesture.Manager, arguments);
 };
-
 Ext.TouchEventObjectImpl = Ext.extend(Object, {
     constructor : function(e, args) {
         if (e) {
@@ -18881,69 +18913,68 @@ Ext.gesture.Drag = Ext.extend(Ext.gesture.Touch, {
     vertical: false,
 
     constructor: function() {
-        Ext.gesture.Drag.superclass.constructor.apply(this, arguments);
+        var me = this;
+        Ext.gesture.Drag.superclass.constructor.apply(me, arguments);
 
-        if (this.direction == 'both') {
-            this.horizontal = true;
-            this.vertical = true;
-        }
-        else if (this.direction == 'horizontal') {
-            this.horizontal = true;
-        }
-        else {
-            this.vertical = true;
+        if (me.direction == 'both') {
+            me.horizontal = true;
+            me.vertical = true;
+        } else if (me.direction == 'horizontal') {
+            me.horizontal = true;
+        } else {
+            me.vertical = true;
         }
 
-        return this;
+        return me;
     },
-    
+
     onTouchStart: function(e, touch) {
-        this.startX = this.previousX = touch.pageX;
-        this.startY = this.previousY = touch.pageY;
-        this.startTime = this.previousTime = e.timeStamp;
- 
-        this.dragging = false;
-    },    
-    
+        var me = this;
+        me.startX = me.previousX = touch.pageX;
+        me.startY = me.previousY = touch.pageY;
+        me.startTime = me.previousTime = e.timeStamp;
+
+        me.dragging = false;
+    },
+
     onTouchMove: function(e, touch) {
-        if (this.isLocked('drag')) {
+        var me = this;
+        if (me.isLocked('drag')) {
             return;
         }
-        
-        var info = this.getInfo(touch);
-        
-        if (!this.dragging) {
-            if (this.isDragging(info) && this.fire('dragstart', e, info)) {
-                this.dragging = true;
-                this.lock('drag', 'dragstart', 'dragend');
-                this.fire('drag', e, info);
+
+        var info = me.getInfo(touch);
+
+        if (!me.dragging) {
+            if ((!e.touches || e.touches.length < 2) && me.isDragging(info) && me.fire('dragstart', e, info)) {
+                me.dragging = true;
+                me.lock('drag', 'dragstart', 'dragend');
+                me.fire('drag', e, info);
             }
+        } else {
+            me.fire('drag', e, info);
         }
-        else {
-            this.fire('drag', e, info);
-       }
     },
 
     onTouchEnd: function(e) {
-        if (this.dragging) {
-            this.fire('dragend', e, this.lastInfo);
+        var me = this;
+        if (me.dragging) {
+            me.fire('dragend', e, me.lastInfo);
         }
-        
-        this.dragging = false;
+
+        me.dragging = false;
     },
-    
+
     isDragging: function(info) {
-        return (
-            (this.horizontal && info.absDeltaX >= this.dragThreshold) ||
-            (this.vertical && info.absDeltaY >= this.dragThreshold)
-        );
+        var me = this;
+        return ((me.horizontal && info.absDeltaX >= me.dragThreshold) || (me.vertical && info.absDeltaY >= me.dragThreshold));
     },
-    
+
     
     isVertical: function() {
         return this.vertical;
     },
-    
+
     
     isHorizontal: function() {
         return this.horizontal;
@@ -18952,94 +18983,98 @@ Ext.gesture.Drag = Ext.extend(Ext.gesture.Touch, {
 
 Ext.regGesture('drag', Ext.gesture.Drag);
 Ext.gesture.Pinch = Ext.extend(Ext.gesture.Gesture, {
-    handles: [
-        'pinchstart',
-        'pinch',
-        'pinchend'
-    ],
-    
+    handles: ['pinchstart', 'pinch', 'pinchend'],
+
     touches: 2,
-    
-    onTouchStart : function(e) {
+
+    onTouchStart: function(e) {
         var me = this;
-        
-        if (Ext.supports.Touch && e.targetTouches.length >= 2) {
+
+        if (this.isMultiTouch(e)) {
             me.lock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
             me.pinching = true;
-            
-            var targetTouches = e.targetTouches,
-                firstTouch = me.firstTouch = targetTouches[0],
-                secondTouch = me.secondTouch = targetTouches[1];
-            
-            me.previousDistance = me.startDistance = me.getDistance();
+
+            var targetTouches = e.targetTouches;
+
+            me.startFirstTouch = targetTouches[0];
+            me.startSecondTouch = targetTouches[1];
+
+            me.previousDistance = me.startDistance = me.getDistance(me.startFirstTouch, me.startSecondTouch);
             me.previousScale = 1;
-            
+
             me.fire('pinchstart', e, {
                 distance: me.startDistance,
                 scale: me.previousScale
             });
-        }
-        else if (me.pinching) {
+        } else if (me.pinching) {
             me.unlock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
             me.pinching = false;
         }
     },
-    
-    onTouchMove : function(e) {
+
+    isMultiTouch: function(e) {
+        return e && Ext.supports.Touch && e.targetTouches && e.targetTouches.length > 1;
+    },
+
+    onTouchMove: function(e) {
+        if (!this.isMultiTouch(e)) {
+            this.onTouchEnd(e);
+            return;
+        }
+
         if (this.pinching) {
-            this.fire('pinch', e, this.getPinchInfo());
+            this.fire('pinch', e, this.getPinchInfo(e));
         }
     },
-    
-    onTouchEnd : function(e) {
+
+    onTouchEnd: function(e) {
         if (this.pinching) {
-            this.fire('pinchend', e, this.getPinchInfo());
+            this.fire('pinchend', e);
         }
     },
-    
-    getPinchInfo : function() {
+
+    getPinchInfo: function(e) {
         var me = this,
-            distance = me.getDistance(),
+            targetTouches = e.targetTouches,
+            firstTouch = targetTouches[0],
+            secondTouch = targetTouches[1],
+            distance = me.getDistance(firstTouch, secondTouch),
             scale = distance / me.startDistance,
-            firstTouch = me.firstTouch,
-            secondTouch = me.secondTouch,
             info = {
-                scale: scale,
-                deltaScale: scale - 1,
-                previousScale: me.previousScale,
-                previousDeltaScale: scale - me.previousScale,
-                distance: distance,
-                deltaDistance: distance - me.startDistance,
-                startDistance: me.startDistance,
-                previousDistance: me.previousDistance,
-                previousDeltaDistance: distance - me.previousDistance,
-                firstTouch: firstTouch,
-                secondTouch: secondTouch,
-                firstPageX: firstTouch.pageX,
-                firstPageY: firstTouch.pageY,
-                secondPageX: secondTouch.pageX,
-                secondPageY: secondTouch.pageY,
-                
-                midPointX: (firstTouch.pageX + secondTouch.pageX) / 2,
-                midPointY: (firstTouch.pageY + secondTouch.pageY) / 2
-            };
-        
+            scale: scale,
+            deltaScale: scale - 1,
+            previousScale: me.previousScale,
+            previousDeltaScale: scale - me.previousScale,
+            distance: distance,
+            deltaDistance: distance - me.startDistance,
+            startDistance: me.startDistance,
+            previousDistance: me.previousDistance,
+            previousDeltaDistance: distance - me.previousDistance,
+            firstTouch: firstTouch,
+            secondTouch: secondTouch,
+            firstPageX: firstTouch.pageX,
+            firstPageY: firstTouch.pageY,
+            secondPageX: secondTouch.pageX,
+            secondPageY: secondTouch.pageY,
+            
+            midPointX: (firstTouch.pageX + secondTouch.pageX) / 2,
+            midPointY: (firstTouch.pageY + secondTouch.pageY) / 2
+        };
+
         me.previousScale = scale;
         me.previousDistance = distance;
-        
-        return info;  
+
+        return info;
     },
-    
-    getDistance : function() {
-        var me = this;
+
+    getDistance: function(firstTouch, secondTouch) {
         return Math.sqrt(
-            Math.pow(Math.abs(me.firstTouch.pageX - me.secondTouch.pageX), 2) +
-            Math.pow(Math.abs(me.firstTouch.pageY - me.secondTouch.pageY), 2)
-        );        
+        Math.pow(Math.abs(firstTouch.pageX - secondTouch.pageX), 2) + Math.pow(Math.abs(firstTouch.pageY - secondTouch.pageY), 2));
     }
 });
 
 Ext.regGesture('pinch', Ext.gesture.Pinch);
+
 
 
 Ext.lib.Component = Ext.extend(Ext.util.Observable, {
@@ -19074,15 +19109,15 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
     
 
    
+
     
+
     
+
     
+
     
-    
-    
-    
-    
-    
+
     
 
     
@@ -19117,7 +19152,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
      
      allowDomMove: true,
      autoShow: false,
-     
+
      autoRender: false,
 
      needsLayout: false,
@@ -19210,7 +19245,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
             this.render(this.renderTo);
             delete this.renderTo;
         }
-        
+
         if (Ext.isDefined(this.disabledClass)) {
             throw "Component: disabledClass has been deprecated. Please use disabledCls.";
         }
@@ -19218,7 +19253,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
 
     initComponent: Ext.emptyFn,
     applyToMarkup: Ext.emptyFn,
-    
+
     show: Ext.emptyFn,
 
     onShow : function() {
@@ -19228,7 +19263,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
             this.doComponentLayout(needsLayout.width, needsLayout.height, needsLayout.isSetSize);
         }
     },
-    
+
     
     initPlugin : function(plugin) {
         if (plugin.ptype && typeof plugin.init != 'function') {
@@ -19544,7 +19579,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
 
     
     nextSibling: function(selector) {
-        var o = this.ownerCt, it, last, idx, c; 
+        var o = this.ownerCt, it, last, idx, c;
         if (o) {
             it = o.items;
             idx = it.indexOf(this) + 1;
@@ -19567,7 +19602,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
 
     
     previousSibling: function(selector) {
-        var o = this.ownerCt, it, idx, c; 
+        var o = this.ownerCt, it, idx, c;
         if (o) {
             it = o.items;
             idx = it.indexOf(this);
@@ -19734,7 +19769,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
     isDisabled : function() {
         return this.disabled;
     },
-    
+
     
     setDisabled : function(disabled) {
         return this[disabled ? 'disable': 'enable']();
@@ -19744,7 +19779,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
     isHidden : function() {
         return this.hidden;
     },
-    
+
     
     addCls : function() {
         var me = this,
@@ -19761,7 +19796,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
     addClass : function() {
         throw "Component: addClass has been deprecated. Please use addCls.";
     },
-    
+
     
     removeCls : function() {
         var me = this,
@@ -19776,7 +19811,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
         }
         return me;
     },
-    
+
     removeClass : function() {
         throw "Component: removeClass has been deprecated. Please use removeCls.";
     },
@@ -19830,11 +19865,11 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
         return this.floating;
     },
 
-        
+    
     isDraggable : function() {
         return !!this.draggable;
     },
-    
+
     
     isDroppable : function() {
         return !!this.droppable;
@@ -19942,7 +19977,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
         this.componentLayout = layout;
         layout.setOwner(this);
     },
-    
+
     getComponentLayout : function() {
         if (!this.componentLayout || !this.componentLayout.isLayout) {
             this.setComponentLayout(Ext.layout.LayoutManager.create(this.componentLayout, 'autocomponent'));
@@ -20000,7 +20035,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
         return this.el.getHeight();
     },
 
-        
+    
     setLoading : function(load, targetEl) {
         if (this.rendered) {
             if (load) {
@@ -20011,7 +20046,7 @@ Ext.lib.Component = Ext.extend(Ext.util.Observable, {
                 this.loadMask = null;
             }
         }
-        
+
         return this.loadMask;
     },
 
@@ -21509,7 +21544,7 @@ Ext.Button = Ext.extend(Ext.Component, {
         this.addEvents(
             
             'tap',
-            
+
             
             'beforetap'
         );
@@ -21523,10 +21558,10 @@ Ext.Button = Ext.extend(Ext.Component, {
     
 
     
-     
+
     
     iconAlign: 'left',
-    
+
     
 
     
@@ -21560,17 +21595,17 @@ Ext.Button = Ext.extend(Ext.Component, {
 
     
     pressedDelay: 0,
-    
+
     
     iconMaskCls: 'x-icon-mask',
-    
+
     
     iconMask: false,
 
     
     afterRender : function(ct, position) {
         var me = this;
-        
+
         Ext.Button.superclass.afterRender.call(me, ct, position);
 
         var text = me.text,
@@ -21583,7 +21618,7 @@ Ext.Button = Ext.extend(Ext.Component, {
         me.setText(text);
         me.setIcon(icon);
         me.setIconClass(iconCls);
-        
+
         if (me.iconMask && me.iconEl) {
             me.iconEl.addCls(me.iconMaskCls);
         }
@@ -21593,12 +21628,12 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     initEvents : function() {
         var me = this;
-        
+
         Ext.Button.superclass.initEvents.call(me);
 
         me.mon(me.el, {
             scope: me,
-            
+
             tap      : me.onPress,
             tapstart : me.onTapStart,
             tapcancel: me.onTapCancel
@@ -21640,7 +21675,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     setText: function(text) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.textEl && text) {
                 me.textEl = me.el.createChild({
@@ -21666,7 +21701,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     setIcon: function(icon) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.iconEl && icon) {
                 me.iconEl = me.el.createChild({
@@ -21674,7 +21709,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     src: Ext.BLANK_IMAGE_URL,
                     style: 'background-image: ' + (icon ? 'url(' + icon + ')' : '')
                 });
-                
+
                 me.setIconAlign(me.iconAlign);
             }
             else if (me.iconEl && icon != me.icon) {
@@ -21696,7 +21731,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     setIconClass: function(cls) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.iconEl && cls) {
                 me.iconEl = me.el.createChild({
@@ -21704,7 +21739,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     src: Ext.BLANK_IMAGE_URL,
                     cls: cls
                 });
-                
+
                 me.setIconAlign(me.iconAlign);
             }
             else if (me.iconEl && cls != me.iconCls) {
@@ -21725,17 +21760,17 @@ Ext.Button = Ext.extend(Ext.Component, {
         me.iconCls = cls;
         return me;
     },
-    
+
     
     setIconAlign: function(alignment) {
         var me         = this,
             alignments = ['top', 'right', 'bottom', 'left'],
             alignment  = ((alignments.indexOf(alignment) == -1 || !alignment) && alignment !== false) ? me.iconAlign : alignment,
             i;
-        
+
         if (me.rendered && me.iconEl) {
             me.el.removeCls('x-iconalign-' + me.iconAlign);
-            
+
             if (alignment) me.el.addCls('x-iconalign-' + alignment);
         }
         me.iconAlign = (alignment === false) ? me.iconAlign : alignment;
@@ -21745,7 +21780,7 @@ Ext.Button = Ext.extend(Ext.Component, {
     
     setBadge : function(text) {
         var me = this;
-        
+
         if (me.rendered) {
             if (!me.badgeEl && text) {
                 me.badgeEl = me.el.createChild({
@@ -21810,7 +21845,7 @@ Ext.Button = Ext.extend(Ext.Component, {
                     me.onTapCancel();
                 }
                 me.callHandler(e);
-                me.fireEvent('tap', me, e);                
+                me.fireEvent('tap', me, e);
             }, 10);
         }
     },
@@ -27905,9 +27940,12 @@ Ext.form.Number = Ext.extend(Ext.form.Text, {
 
     inputType: 'number',
     
+    
     minValue : undefined,
     
+    
     maxValue : undefined,
+    
     
     stepValue : undefined,
 
@@ -28522,7 +28560,13 @@ Ext.form.Select = Ext.extend(Ext.form.Text, {
     
     showComponent: function() {
         if (Ext.is.Phone) {
-            this.getPicker().show();
+            var picker = this.getPicker(),
+                name   = this.name,
+                value  = {};
+                
+            value[name] = this.getValue();
+            picker.show();
+            picker.setValue(value);
         }
         else {
             var listPanel = this.getListPanel(),
@@ -29571,8 +29615,9 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     
     setItemBox : function(item, box) {
         if (item && box.height > 0) {
-            box.width -= item.el.getMargin('lr');
             
+            box = Ext.apply({}, box);
+            box.width -= item.el.getMargin('lr');
             box.height -= item.el.getMargin('tb');
             item.setCalculatedSize(box);
             item.setPosition(box);
@@ -30205,6 +30250,7 @@ Ext.plugins.PullRefreshPlugin = Ext.extend(Ext.util.Observable, {
 
         if (this.isLoading) {
             this.isLoading = false;
+            this.lastUpdated = new Date();
 
             this.setViewState('pull');
             this.updatedEl.setHTML(Ext.util.Format.date(this.lastUpdated, "m/d/Y h:iA"));
