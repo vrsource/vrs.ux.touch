@@ -5,11 +5,10 @@ import os, sys
 pj = os.path.join
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# full path
-
+os.chdir(base_dir)
 
 # Find all the source files to check
-source_dirs = [pj(base_dir, d) for d in ['src', 'spec', 'examples']]
+source_dirs = ['src', 'spec', 'examples']
 js_files    = []
 for d in source_dirs:
    for root, dirs, files in os.walk(d):
