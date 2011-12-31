@@ -66,13 +66,29 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          html: 'Put stuff here'
       });
 
+      this.map = new Ext.Map({
+         mapOptions: {
+            center : new google.maps.LatLng(37.381592, -122.135672),  //nearby San Fran
+            zoom : 12,
+            mapTypeId : google.maps.MapTypeId.ROADMAP,
+            navigationControl: true,
+            navigationControlOptions: {
+               style: google.maps.NavigationControlStyle.DEFAULT
+            }
+         },
+
+         listeners: {
+            maprender: function() { ctrl.onMapRender() }
+         }
+      });
+
       // finalize the setup
       this.dockedItems = [
          this.topToolbar
       ];
 
       this.items = [
-         this.mainPanel
+         this.map
       ];
 
       // Finish setup
