@@ -1,6 +1,9 @@
-#! watchr
+#! env watchr
+# Run from the base directory of the project
+base_dir = File.join(File.dirname(__FILE__), '..')
+Dir.chdir(base_dir)
 
-watch(/.*app\/static\/[src|spec].*\.js/) do |md|
+watch(/^(src|spec|examples).*\.js/) do |md|
    Dir.chdir(File.dirname(__FILE__)) do
       ret = `python run_jslint.py` # run linter
       if $?.exitstatus != 0
