@@ -7,8 +7,9 @@
 #
 *.[oa]
 *~
-*.wpr
+*.wpu
 .sass-cache
+*.pyc
 
 # Compiled source #
 ###################
