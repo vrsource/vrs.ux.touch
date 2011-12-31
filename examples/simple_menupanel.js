@@ -1,23 +1,25 @@
 Ext.setup({
 onReady: function() {
+   var menu_items,
+       menu, selection_menu, panel;
 
    menu_items = [
       {content: 'Photo Gallery', leftIcon: 'img/flower.png', rightIcon: 'img/chevron.png'},
       {content: 'Messaging', leftIcon: 'img/sms.png', rightIcon: 'img/chevron.png'},
       {content: 'Allow Tracking', leftIcon: 'img/checked.png' }
-   ]
+   ];
 
-   var menu = new vrs.ux.touch.MenuPanel({
+   menu = new vrs.ux.touch.MenuPanel({
       menuItems: menu_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
          leftTap:       function(fl, index) { console.log('Left item selected: ', index); },
-         rightTap:      function(fl, index) { console.log('Right item selected: ', index); },
+         rightTap:      function(fl, index) { console.log('Right item selected: ', index); }
       }
    });
 
    // Selection menu
-   var selection_menu = new vrs.ux.touch.MenuPanel({
+   selection_menu = new vrs.ux.touch.MenuPanel({
       listeners: {
          itemTap: function(formList, index, el, ev) {
             // Change the check to be on the one that was just selected
@@ -32,18 +34,18 @@ onReady: function() {
          {content: 'Item 2'},
          {content: 'Item 3'},
          {content: 'Item 4'},
-         {content: 'Add Item...', itemtap: function() {alert('Add item');} },
+         {content: 'Add Item...', itemtap: function() {alert('Add item');} }
       ]
    });
 
-   var panel = new Ext.form.FormPanel({
+   panel = new Ext.form.FormPanel({
       fullscreen: true,
       scroll: 'vertical',
       dockedItems: [
          {
             dock : 'top',
             xtype: 'toolbar',
-            title: 'Menu Panel',
+            title: 'Menu Panel'
          }
       ],
       items: [

@@ -46,9 +46,10 @@ component('MenuPanel', function() {
          var menu, left_src, right_src,
              icon1 = 'resources/img/checked.png',
              icon2 = 'resources/img/chevron.png';
+
          menu = new vrs.ux.touch.MenuPanel({
             menuItems: [
-               {leftIcon: icon1, content: 'item1', rightIcon: icon2},
+               {leftIcon: icon1, content: 'item1', rightIcon: icon2}
             ]
          });
          panel = wrapPanel(menu);

@@ -1,9 +1,12 @@
 Ext.setup({
 onReady: function() {
+   var checkClicked, menu_items, form_list,
+       menuItemSelected, menu_list, fastMenuItemSelected,
+       menu_list2, menu_part1, menu_part2, panel;
 
    checkClicked = function(list, itemNum) {
       console.log("Clicked");
-   }
+   };
 
    menu_items = [
       {content: 'Item 1', leftIcon: 'img/checked.png', rightIcon: 'img/chevron.png'},
@@ -23,9 +26,9 @@ onReady: function() {
          lefttap: function() {console.log('custom lefttap', arguments);},
          righttap: function() {console.log('custom righttap', arguments);}
       }
-   ]
+   ];
 
-   var form_list = new vrs.ux.touch.MenuPanel({
+   form_list = new vrs.ux.touch.MenuPanel({
       menuItems: menu_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
@@ -49,7 +52,7 @@ onReady: function() {
       formList.refresh();
    };
 
-   var menu_list = new vrs.ux.touch.MenuPanel({
+   menu_list = new vrs.ux.touch.MenuPanel({
       menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
@@ -75,7 +78,7 @@ onReady: function() {
       });
    };
 
-   var menu_list2 = new vrs.ux.touch.MenuPanel({
+   menu_list2 = new vrs.ux.touch.MenuPanel({
       menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
@@ -92,7 +95,7 @@ onReady: function() {
 
 
    // -- TEST WITH FORM FIELDS -- //
-   var menu_part1 = new vrs.ux.touch.MenuPanel({
+   menu_part1 = new vrs.ux.touch.MenuPanel({
       menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
@@ -101,7 +104,7 @@ onReady: function() {
          {content: 'Item 2'}
       ]
    });
-   var menu_part2 = new vrs.ux.touch.MenuPanel({
+   menu_part2 = new vrs.ux.touch.MenuPanel({
       menuItemDefaults: {
          rightIcon: 'img/chevron.png'
       },
@@ -112,7 +115,7 @@ onReady: function() {
    });
 
 
-   var panel = new Ext.form.FormPanel({
+   panel = new Ext.form.FormPanel({
       fullscreen: true,
       scroll: 'vertical',
       cls: 'x-form-settings-panel',
@@ -121,7 +124,7 @@ onReady: function() {
          {
             dock : 'top',
             xtype: 'toolbar',
-            title: 'Menu Panel Test',
+            title: 'Menu Panel Test'
          }
       ],
       items: [

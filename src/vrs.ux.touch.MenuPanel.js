@@ -1,3 +1,4 @@
+/*global clearTimeout: false */
 Ext.ns('vrs.ux.touch');
 /**
 * Class for creating menu of items that can be used in forms
