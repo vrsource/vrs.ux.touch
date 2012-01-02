@@ -66,7 +66,7 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          html: 'Put stuff here'
       });
 
-      this.map = new Ext.Map({
+      this.mapCmp = new Ext.Map({
          mapOptions: {
             center : new google.maps.LatLng(37.381592, -122.135672),  //nearby San Fran
             zoom : 12,
@@ -88,7 +88,7 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
       ];
 
       this.items = [
-         this.map
+         this.mapCmp
       ];
 
       // Finish setup
