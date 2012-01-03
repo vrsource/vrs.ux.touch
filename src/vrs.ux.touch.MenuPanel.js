@@ -6,6 +6,11 @@ Ext.ns('vrs.ux.touch');
 *
 * It supports updating in place or en-mass and provides
 * flexibility in how to specify the decorations (masks, icons, etc).
+*
+* TODO:
+*  - Add support for usage with stores.  This would allow
+*    something similar to lists but styled and formatted
+*    as menu panels.
 */
 vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    componentCls: 'x-menu-panel',
