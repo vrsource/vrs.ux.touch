@@ -1,3 +1,4 @@
+/*global OpenLayers: false */
 Ext.ns('vrs.ux.touch');
 
 /**
