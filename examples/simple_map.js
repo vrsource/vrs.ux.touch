@@ -1,3 +1,4 @@
+/*global google: false */
 Ext.ns('vrs');
 
 Ext.setup({
@@ -16,14 +17,77 @@ Ext.setup({
 vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
    panel: null,
 
+   /** List of markers on the map. */
+   markers: null,
+
+   /** The google map for easy access. */
+   map: null,
+
    constructor: function(config) {
       vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = new vrs.MapPanel({ controller: this});
+      this.map = this.panel.mapCmp.map;
+
       this.panel.on('activate', this.onActivate, this);
+      this.initMap();
    },
 
    onActivate: function() {
+   },
+
+   initMap: function() {
+      var me = this,
+          i,
+          marker;
+
+      this.markers = [];
+
+      // Add some random markers to the scene.
+      for(i=0; i<10; i++) {
+         marker = new google.maps.Marker({
+            position: this.randomPosition(),
+            title: 'Random: ' + i,
+            icon: '../resources/img/flag.png',
+            featureData: {
+               name: 'My Random Feature: ' + i
+            }
+         });
+         marker.setMap(this.map);
+         this.markers.push(marker);
+
+         google.maps.event.addListener(marker, 'click', function(event) {
+            console.log('clicked marker: ' + marker.getTitle(), marker);
+
+            var info_window = new google.maps.InfoWindow({
+               content: "Name: " + marker.featureData.name
+            });
+            info_window.open(me.map, marker);
+         });
+      }
+
+
+      var flightPlanCoordinates = [
+         new google.maps.LatLng(37.772323, -122.214897),
+         new google.maps.LatLng(21.291982, -157.821856),
+         new google.maps.LatLng(-18.142599, 178.431),
+         new google.maps.LatLng(-27.46758, 153.027892)
+      ];
+      var flightPath = new google.maps.Polyline({
+         path: flightPlanCoordinates,
+         strokeColor: "#FF0000",
+         strokeOpacity: 1.0,
+         strokeWeight: 2,
+         editable: true
+      });
+
+      flightPath.setMap(this.map);
+
+   },
+
+   randomPosition: function() {
+      return new google.maps.LatLng(20.0 + Math.random()*40.0,
+                                    -130 + Math.random()*70.0);
    }
 });
 
@@ -50,7 +114,13 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
       this.addBtn = new Ext.Button({
          text: 'Add',
          ui: 'action',
-         handler: function() { console.log('do something'); }
+         handler: function() {
+            var ctrl = me.controller,
+                map_cmp = me.mapCmp,
+                mtypes = map_cmp.map.mapTypes;
+
+            console.log('do something');
+         }
       });
 
       this.topToolbar = new Ext.Toolbar({
@@ -68,17 +138,13 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
 
       this.mapCmp = new Ext.Map({
          mapOptions: {
-            center : new google.maps.LatLng(37.381592, -122.135672),  //nearby San Fran
-            zoom : 12,
-            mapTypeId : google.maps.MapTypeId.ROADMAP,
-            navigationControl: true,
-            navigationControlOptions: {
-               style: google.maps.NavigationControlStyle.DEFAULT
+            center : new google.maps.LatLng(30, -100),
+            zoom : 3,
+            mapTypeId : google.maps.MapTypeId.HYBRID,
+            scaleControl: true,
+            mapTypeControlOptions: {
+               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
             }
-         },
-
-         listeners: {
-            maprender: function() { ctrl.onMapRender() }
          }
       });
 
