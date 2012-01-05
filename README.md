@@ -7,8 +7,14 @@ This project contains a set of extensions for sencha touch.  They are licensed u
 Extensions
 ==========
 
- * Extension one
- * Extension two
+ * Menu Panel
+
+Class and helpers for creating menu of items that can be used in forms or menus as selectable items with decorations.
+
+ * OpenLayers
+
+Map component for OpenLayers.  Includes custom popup window that allows display of sencha touch panels on the map
+
 
 Future Work
 ===========
