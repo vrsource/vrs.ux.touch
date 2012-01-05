@@ -43,12 +43,46 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 
       this.markers = [];
 
+      function make_handler(marker) {
+         return function(event) {
+            var popup_window, sub_panel;
+
+            console.log('clicked marker: ' + marker.getTitle(), marker);
+
+            /*
+            var info_window = new google.maps.InfoWindow({
+               content: "Name: " + marker.featureData.name
+            });
+            info_window.open(me.map, marker);
+            */
+
+            popup_window = new vrs.ux.touch.GmapPopupPanel({
+               location : marker.position,
+               map      : me.map
+            });
+            sub_panel = new Ext.Panel({
+               id: 'mypanel',
+               dockItems: [{
+                  xtype: 'toolbar',
+                  title: 'Stuff'
+               }],
+               items: [{
+                  html: "<b>Name:</b> " + marker.featureData.name
+               }]
+            });
+
+            popup_window.add(sub_panel);                 // populate it
+            //popup_window.setPanelSize({size: 'small'});  // set the final size
+            //popup_window.show();                         // Show on the screen
+         };
+      }
+
       // Add some random markers to the scene.
       for(i=0; i<10; i++) {
          marker = new google.maps.Marker({
             position: this.randomPosition(),
             title: 'Random: ' + i,
-            icon: '../resources/img/flag.png',
+            //icon: '../resources/img/flag.png',
             featureData: {
                name: 'My Random Feature: ' + i
             }
@@ -56,24 +90,18 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          marker.setMap(this.map);
          this.markers.push(marker);
 
-         google.maps.event.addListener(marker, 'click', function(event) {
-            console.log('clicked marker: ' + marker.getTitle(), marker);
-
-            var info_window = new google.maps.InfoWindow({
-               content: "Name: " + marker.featureData.name
-            });
-            info_window.open(me.map, marker);
-         });
+         google.maps.event.addListener(marker, 'click', make_handler(marker));
       }
 
 
-      var flightPlanCoordinates = [
+      /*
+      flightPlanCoordinates = [
          new google.maps.LatLng(37.772323, -122.214897),
          new google.maps.LatLng(21.291982, -157.821856),
          new google.maps.LatLng(-18.142599, 178.431),
          new google.maps.LatLng(-27.46758, 153.027892)
       ];
-      var flightPath = new google.maps.Polyline({
+      flightPath = new google.maps.Polyline({
          path: flightPlanCoordinates,
          strokeColor: "#FF0000",
          strokeOpacity: 1.0,
@@ -82,6 +110,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       });
 
       flightPath.setMap(this.map);
+      */
 
    },
 
