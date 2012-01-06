@@ -76,7 +76,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
             popup_window = new vrs.ux.touch.GmapPopupPanel({
                location : marker.position,
                map      : me.map,
-               hideOnMaskTap    : true,
+               hideOnMaskTap    : false,
                autoRemoveOnHide : true,
                sizeConfig: {
                   size: 'small-wide'
@@ -99,6 +99,57 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
             });
          };
       }
+
+      /** Make a popup that is not anchored. */
+      function make_nonanchored_handler(marker, idx) {
+         return function(event) {
+            var popup_window, sub_panel;
+
+            console.log('clicked marker: ' + marker.getTitle(), marker);
+
+            popup_window = new vrs.ux.touch.GmapPopupPanel({
+               location : marker.position,
+               map      : me.map,
+               anchored : false,
+
+               hideOnMaskTap    : false,
+               autoRemoveOnHide : true,
+               sizeConfig: {
+                  size: 'small-wide'
+               },
+
+               id: 'close_panel' + idx,
+               dockedItems: [{
+                  xtype: 'toolbar',
+                  title: 'Anchor Test',
+                  dock: 'top',
+                  items: [
+                     {
+                        xtype: 'button',
+                        text: 'close',
+                        handler: function() { popup_window.remove(); }
+                     },
+                     {xtype: 'spacer'},
+                     {
+                        xtype: 'button',
+                        text: 'toggle',
+                        handler: function() {
+                           if(popup_window.anchored) {
+                              popup_window.setPanelSize({ fullscreen: true });
+                           } else {
+                              popup_window.setPanelSize({ size: 'small-wide' });
+                           }
+                        }
+                     }
+                  ]
+               }],
+               items: [{
+                  html: "<b>Name:</b> " + marker.featureData.name
+               }]
+            });
+         };
+      }
+
 
       // Add some random markers to the scene.
       for(i=0; i<5; i++) {
@@ -128,24 +179,21 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          google.maps.event.addListener(marker, 'click', make_close_handler(marker, i));
       }
 
+      // Add some non_anchored markers
+      for(i=0; i<5; i++) {
+         marker = new google.maps.Marker({
+            position: this.randomPosition(),
+            icon: '../resources/img/anchor.png',
+            featureData: {
+               name: 'Anchored Feature: ' + i
+            }
+         });
+         marker.setMap(this.map);
+         this.markers.push(marker);
+         google.maps.event.addListener(marker, 'click', make_nonanchored_handler(marker, i));
+      }
 
-      /*
-      flightPlanCoordinates = [
-         new google.maps.LatLng(37.772323, -122.214897),
-         new google.maps.LatLng(21.291982, -157.821856),
-         new google.maps.LatLng(-18.142599, 178.431),
-         new google.maps.LatLng(-27.46758, 153.027892)
-      ];
-      flightPath = new google.maps.Polyline({
-         path: flightPlanCoordinates,
-         strokeColor: "#FF0000",
-         strokeOpacity: 1.0,
-         strokeWeight: 2,
-         editable: true
-      });
 
-      flightPath.setMap(this.map);
-      */
 
    },
 

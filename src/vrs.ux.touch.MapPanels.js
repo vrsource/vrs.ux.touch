@@ -3,10 +3,8 @@ Ext.ns('vrs.ux.touch');
 
 /**
 * TODO:
-*  - Allow anchoring settings
+*  - Fullscreen toggling needs to move the DOM element when we go fullscreen.
 *  - Add support for pan into view
-*  - Verify that mouse input works on the panels
-*     - Stop event bubbling up to map
 *  - Add specs for the functionality.
 *
 *  - track location of a moving feature
@@ -109,6 +107,12 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
 
    /** google.maps.LatLng location of the panel anchor. */
    location: null,
+
+   /** {bool} True if the popup should be anchored to it's location. */
+   anchored: true,
+
+   /** {bool} True if we should pan the map so the popup is in view. */
+   panIn: true,
 
    /** A config object to pass to setPanelSize after panel
    * is constructed.
@@ -265,14 +269,12 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
 
       // If we should be anchoring and it doesn't match previous setting,
       // then change and possible update the rendering to remove/add anchor.
-      /* XXX
       if(should_anchor !== this.anchored) {
          this.anchored = should_anchor;
-         if(this.rendered) {
+         if(this.rendered && this.isVisible()) {
             this.show();        // reshow to get anchor laid out correctly.
          }
       }
-      */
 
       // If we are rendered and we should update position, then do so now.
       if(this.rendered && this.isVisible() && auto_position) {
@@ -282,7 +284,7 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       if(setting_fullscreen) {
          this.setCentered(true, true);  // set to centered and update it
       } else if(was_fullscreen && this.centered) {
-         this.setCentered(false);   // reset to not be centered
+         this.setCentered(false);      // reset to not be centered
       }
 
       // update fullscreen flag.
@@ -298,8 +300,7 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       }
 
       // If we are anchored, position ourselves and potentially pan into view.
-      //if(this.anchored) {
-      if(true) {
+      if(this.anchored) {
          // Setup the anchor.
          // - hacked together from showBy and alignTo in Component.js
          //   todo: see if we can use more of alignTo logic.
@@ -338,6 +339,11 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
           arrow_size,
           panel_dx, panel_dy,
           arrow_dx, arrow_dy;
+
+      // If we are not anchored, then nothing to update.
+      if(!this.anchored) {
+         return;
+      }
 
       // Coordinate frames of interest:  (all 0,0 upper left)
       //   - pane: The overlay is added to a google map pane.  (pane 0,0 at upper left of map div)
