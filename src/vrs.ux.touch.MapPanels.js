@@ -3,11 +3,6 @@ Ext.ns('vrs.ux.touch');
 
 /**
 * TODO:
-*  - Allow passing initial size to the constructor
-*  - Allow passing child panel to the constructor (or panel config?)
-*  - Decide what to do about show/hide methods.
-*  - Add option for tap mask closing of items or explicit closing
-*    - Make sure remove works correctly
 *  - Allow anchoring settings
 *  - Add support for pan into view
 *  - Verify that mouse input works on the panels
@@ -83,19 +78,21 @@ OverlayPanelHolder.prototype.draw = function() {
 */
 OverlayPanelHolder.prototype.onAdd = function() {
    console.log('panelholder.onAdd');
+   this.popupPanel.onAdd();
    // Add the div to the map pane
    var panes = this.getPanes();
    panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
 
-   // XXX: hack to show for now
-   this.popupPanel.show();
+   this.popupPanel.afterAdd();
 };
 
 OverlayPanelHolder.prototype.onRemove = function() {
    console.log('panelholder.onRemove');
    // Remove our div from the map.
    this.divElt.parentNode.removeChild(this.divElt);
-   this.divElt = null;
+   //this.divElt = null;   // keep the div around for the popup to look at and remove.
+
+   this.popupPanel.afterRemove();
 };
 
 
@@ -110,20 +107,26 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
    */
    map: null,
 
+   /** google.maps.LatLng location of the panel anchor. */
+   location: null,
+
+   /** A config object to pass to setPanelSize after panel
+   * is constructed.
+   */
+   sizeConfig: null,
+
    /** Set to allow custom styling. */
    componentCls: 'x-map-popup',
 
-   /** LatLon location of the panel anchor. */
-   location: null,
+   /**
+   * If set, then automatically removes the panel and
+   * associated objects when the popup is hidden.
+   */
+   autoRemoveOnHide : true,
 
    /** override the panel details. */
-   floating: true,
-   hideOnMaskTap: true,  // Don't auto-hide when tap outside the component.
-
-   /**
-   * If passed, this is the child panel to add to this component.
-   */
-   child: null,
+   floating      : true,
+   hideOnMaskTap : true,  // Don't auto-hide when tap outside the component.
 
    /**
    * Reference to the overlay holder that manages us.
@@ -132,8 +135,13 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
 
    /**
    * Construct the popup panel.
+   *
+   * Note: Since this is a panel, normal panel configuration settings can
+   *       be passed in.  (ex: items, dockedItems, layout, ...)
    */
    constructor: function(config) {
+      var me = this;
+
       // Allocate the holder so we can get the DIV to render into.
       this._overlayHolder = new OverlayPanelHolder({popup: this});
 
@@ -141,11 +149,30 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          renderTo: this._overlayHolder.divElt
       });
 
+      this.addEvents({
+         /** Fired after the panel has been added to the map DOM.
+         * called as: afterAdd(panel)
+         */
+         'afterAdd': true,
+
+         /** Fired after the panel has been removed from the map DOM.
+         * called as: afterRemove(panel)
+         */
+         'afterRemove': true
+      });
+
       vrs.ux.touch.GmapPopupPanel.superclass.constructor.apply(this, arguments);
 
       // Add flag we use to track if have toggled ourselves into fullscreen mode
       // used in setPanelSize to handle fullscreen settings.
       this._isFullscreen = false;
+
+      // If setup to auto remove, register to call remove at the end of hide
+      if(this.autoRemoveOnHide) {
+         this.on({
+            hide: function() { me.remove(); }
+         });
+      }
    },
 
 
@@ -229,9 +256,12 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          }
       }
 
-      // finalize the size
+      // finalize the size and layout if we are visible.
+      // - we don't layout if not visible because that would remove the sizing for first show
       this.setSize(width + extra_margin, height + extra_margin);
-      this.doLayout();
+      if(this.isVisible()) {
+         this.doLayout();
+      }
 
       // If we should be anchoring and it doesn't match previous setting,
       // then change and possible update the rendering to remove/add anchor.
@@ -245,7 +275,7 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       */
 
       // If we are rendered and we should update position, then do so now.
-      if(this.rendered && auto_position) {
+      if(this.rendered && this.isVisible() && auto_position) {
          this.updatePosition();
       }
 
@@ -289,12 +319,25 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          }
          */
       }
+
+   },
+
+   /**
+   * Remove the popup from the map and destroy all the associated objects.
+   */
+   remove: function() {
+      // set map to null to trigger removal.
+      // - we finish the removal in the afterRemove callback below.
+      this._overlayHolder.setMap(null);
    },
 
    // --- INTERNAL HELPERS ---- //
    updatePosition: function() {
       var overlay_projection,
-          posDiv_pane;
+          posDiv_pane,
+          arrow_size,
+          panel_dx, panel_dy,
+          arrow_dx, arrow_dy;
 
       // Coordinate frames of interest:  (all 0,0 upper left)
       //   - pane: The overlay is added to a google map pane.  (pane 0,0 at upper left of map div)
@@ -321,6 +364,35 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       // left, top relative to the panel
       this.anchorEl.setBox(panel_dx - arrow_dx,
                            this.getHeight());
+   },
+
+   /**
+   * Called after the overlay panel holder has added us to a pane.
+   *
+   * Should only be called once per map.
+   */
+   afterAdd: function() {
+      // Pass the size configuration
+      if(this.sizeConfig) {
+         this.setPanelSize(this.sizeConfig);
+      }
+
+      // Auto show the popup
+      this.show();
+
+      this.fireEvent('afterAdd', this);
+   },
+
+   /**
+   * Called after the overlay panel holder has removed us from the map.
+   */
+   afterRemove: function() {
+      this.fireEvent('afterRemove', this);
+
+      // finish removal by destroying and cleaning up everything here.
+      this.map            = null;
+      this._overlayHolder = null;
+      this.destroy();
    }
 
 

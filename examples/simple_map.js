@@ -43,45 +43,67 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 
       this.markers = [];
 
-      function make_handler(marker) {
+      function make_std_handler(marker, idx) {
          return function(event) {
             var popup_window, sub_panel;
 
             console.log('clicked marker: ' + marker.getTitle(), marker);
 
-            /*
-            var info_window = new google.maps.InfoWindow({
-               content: "Name: " + marker.featureData.name
+            popup_window = new vrs.ux.touch.GmapPopupPanel({
+               location : marker.position,
+               map      : me.map,
+               hideOnMaskTap    : true,
+               autoRemoveOnHide : true,
+               sizeConfig: {
+                  size: 'small-wide'
+               },
+
+               id: 'mypanel',
+               items: [{
+                  html: "<b>Name:</b> " + marker.featureData.name
+               }]
             });
-            info_window.open(me.map, marker);
-            */
+         };
+      }
+
+      /** Create popup windows that require clicking close to remove. */
+      function make_close_handler(marker, idx) {
+         return function(event) {
+            var popup_window, sub_panel;
+
+            console.log('clicked marker: ' + marker.getTitle(), marker);
 
             popup_window = new vrs.ux.touch.GmapPopupPanel({
                location : marker.position,
-               map      : me.map
-            });
-            sub_panel = new Ext.Panel({
-               id: 'mypanel',
-               dockItems: [{
+               map      : me.map,
+               hideOnMaskTap    : true,
+               autoRemoveOnHide : true,
+               sizeConfig: {
+                  size: 'small-wide'
+               },
+
+               id: 'close_panel' + idx,
+               dockedItems: [{
                   xtype: 'toolbar',
-                  title: 'Stuff'
+                  title: 'Stuff',
+                  dock: 'top',
+                  items: [{
+                     xtype: 'button',
+                     text: 'close',
+                     handler: function() { popup_window.remove(); }
+                  }]
                }],
                items: [{
                   html: "<b>Name:</b> " + marker.featureData.name
                }]
             });
-
-            popup_window.add(sub_panel);                 // populate it
-            //popup_window.setPanelSize({size: 'small'});  // set the final size
-            //popup_window.show();                         // Show on the screen
          };
       }
 
       // Add some random markers to the scene.
-      for(i=0; i<10; i++) {
+      for(i=0; i<5; i++) {
          marker = new google.maps.Marker({
             position: this.randomPosition(),
-            title: 'Random: ' + i,
             //icon: '../resources/img/flag.png',
             featureData: {
                name: 'My Random Feature: ' + i
@@ -89,8 +111,21 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          });
          marker.setMap(this.map);
          this.markers.push(marker);
+         google.maps.event.addListener(marker, 'click', make_std_handler(marker, i));
+      }
 
-         google.maps.event.addListener(marker, 'click', make_handler(marker));
+      // Add some closable markers
+      for(i=0; i<5; i++) {
+         marker = new google.maps.Marker({
+            position: this.randomPosition(),
+            icon: '../resources/img/flag.png',
+            featureData: {
+               name: 'Closing Feature: ' + i
+            }
+         });
+         marker.setMap(this.map);
+         this.markers.push(marker);
+         google.maps.event.addListener(marker, 'click', make_close_handler(marker, i));
       }
 
 
