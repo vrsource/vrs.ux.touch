@@ -166,7 +166,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          });
          marker.setMap(this.map);
          this.markers.push(marker);
-         google.maps.event.addListener(marker, 'click', make_std_handler(marker, i));
+         google.maps.event.addListener(marker, 'mousedown', make_std_handler(marker, i));
       }
 
       // Add some closable markers
@@ -180,7 +180,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          });
          marker.setMap(this.map);
          this.markers.push(marker);
-         google.maps.event.addListener(marker, 'click', make_close_handler(marker, i));
+         google.maps.event.addListener(marker, 'mousedown', make_close_handler(marker, i));
       }
 
       // Add some non_anchored markers
@@ -194,7 +194,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          });
          marker.setMap(this.map);
          this.markers.push(marker);
-         google.maps.event.addListener(marker, 'click', make_nonanchored_handler(marker, i));
+         google.maps.event.addListener(marker, 'mousedown', make_nonanchored_handler(marker, i));
       }
    },
 
