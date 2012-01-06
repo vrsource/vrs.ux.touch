@@ -27,7 +27,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = new vrs.MapPanel({ controller: this});
-      this.map = this.panel.mapCmp.map;
+      this.map   = this.panel.mapCmp.map;
 
       this.panel.on('activate', this.onActivate, this);
       this.initMap();
@@ -36,6 +36,9 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
    onActivate: function() {
    },
 
+   /**
+   * Initialize the map and setup some markers and windows for testing.
+   */
    initMap: function() {
       var me = this,
           i,
@@ -43,6 +46,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 
       this.markers = [];
 
+      /** Return a standard handler that will popup details about the marker. */
       function make_std_handler(marker, idx) {
          return function(event) {
             var popup_window, sub_panel;
@@ -192,10 +196,8 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
          this.markers.push(marker);
          google.maps.event.addListener(marker, 'click', make_nonanchored_handler(marker, i));
       }
-
-
-
    },
+
 
    randomPosition: function() {
       return new google.maps.LatLng(20.0 + Math.random()*40.0,

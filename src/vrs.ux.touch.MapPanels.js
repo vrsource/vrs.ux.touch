@@ -10,94 +10,23 @@ Ext.ns('vrs.ux.touch');
 *  - track location of a moving feature
 */
 
-/**
-* Class for managing panel window popups on a google map component.
-*
-* This class acts as a store for creating popup panels.  It handles
-* all the setup with the map and the glue code to connect the overlay
-* to a sencha touch panel.
-*
-* TODO:
-*  -
-*
-*/
-
-// Do we need the manager?
-
-// It adds ability to close them all
-// Adds ability to lookup by name/id
-//
-// - could probably do without it at the beginning.
-
-vrs.ux.touch.MapPanelMgr = Ext.extend(Ext.util.Observable, {
-   /**
-   * The google map we are connected to.
-   */
-   map: null,
-
-   /**
-   * The popup that we are managing.
-   */
-   popup: null,
-
-   constructor: function(config) {
-
-      this.addEvents({
-         /** Test event.
-         * called as: testevent(blah)
-         */
-         'testevent': true
-      });
-
-      vrs.ux.touch.MapPanelMgr.superclass.constructor.call(this, config);
-   }
-
-});
-
-/**
-* Overlay panel holder class.
-*
-* Acts as the glue to connect an overlay view to the
-* Sencha Touch popup panel below.
-*/
-function OverlayPanelHolder(opts) {
-   this.popupPanel = opts.popup;
-   this.divElt     = document.createElement('DIV');
-}
-OverlayPanelHolder.prototype = new google.maps.OverlayView();
-
-OverlayPanelHolder.prototype.draw = function() {
-   console.log('panelholder.draw');
-   this.popupPanel.updatePosition();
-};
-
-/**
-* Called when the map panes are available for attaching the popup to the map DOM.
-*/
-OverlayPanelHolder.prototype.onAdd = function() {
-   console.log('panelholder.onAdd');
-   this.popupPanel.onAdd();
-   // Add the div to the map pane
-   var panes = this.getPanes();
-   panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
-
-   this.popupPanel.afterAdd();
-};
-
-OverlayPanelHolder.prototype.onRemove = function() {
-   console.log('panelholder.onRemove');
-   // Remove our div from the map.
-   this.divElt.parentNode.removeChild(this.divElt);
-   //this.divElt = null;   // keep the div around for the popup to look at and remove.
-
-   this.popupPanel.afterRemove();
-};
-
 
 
 /**
 * A panel that can be used as popup window on a google maps map.
 * Handles the anchoring to a location and resizing as needed.
+*
+* Usage
+* =====
+*
+* window = new GmapPopupPanel({
+*    location: marker.position,
+*    map     : map,
+*    sizeConfig: {
+*       size: 'small-wide'
+*    },
+*    items: [{ html: 'my content' }]
+*  });
 */
 vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
    /**
@@ -400,6 +329,88 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       this._overlayHolder = null;
       this.destroy();
    }
+});
 
+
+/**
+* Overlay panel holder class.
+*
+* Acts as the glue to connect an overlay view to the
+* Sencha Touch popup panel below.
+*/
+function OverlayPanelHolder(opts) {
+   this.popupPanel = opts.popup;
+   this.divElt     = document.createElement('DIV');
+}
+OverlayPanelHolder.prototype = new google.maps.OverlayView();
+
+OverlayPanelHolder.prototype.draw = function() {
+   console.log('panelholder.draw');
+   this.popupPanel.updatePosition();
+};
+
+/**
+* Called when the map panes are available for attaching the popup to the map DOM.
+*/
+OverlayPanelHolder.prototype.onAdd = function() {
+   console.log('panelholder.onAdd');
+   this.popupPanel.onAdd();
+   // Add the div to the map pane
+   var panes = this.getPanes();
+   panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
+
+   this.popupPanel.afterAdd();
+};
+
+OverlayPanelHolder.prototype.onRemove = function() {
+   console.log('panelholder.onRemove');
+   // Remove our div from the map.
+   this.divElt.parentNode.removeChild(this.divElt);
+   //this.divElt = null;   // keep the div around for the popup to look at and remove.
+
+   this.popupPanel.afterRemove();
+};
+
+
+
+/**
+* Class for managing panel window popups on a google map component.
+*
+* This class acts as a store for creating popup panels.  It handles
+* all the setup with the map and the glue code to connect the overlay
+* to a sencha touch panel.
+*
+* TODO:
+*  -
+*
+* Do we really need manager?
+*
+*  - It adds ability to close them all
+*  - Adds ability to lookup by name/id.
+*
+* Note: DOES NOT FUNCTION YET.
+*/
+vrs.ux.touch.MapPanelMgr = Ext.extend(Ext.util.Observable, {
+   /**
+   * The google map we are connected to.
+   */
+   map: null,
+
+   /**
+   * The popup that we are managing.
+   */
+   popup: null,
+
+   constructor: function(config) {
+
+      this.addEvents({
+         /** Test event.
+         * called as: testevent(blah)
+         */
+         'testevent': true
+      });
+
+      vrs.ux.touch.MapPanelMgr.superclass.constructor.call(this, config);
+   }
 
 });
