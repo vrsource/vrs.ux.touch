@@ -5,6 +5,7 @@ Dir.chdir(base_dir)
 
 watch(/^(src|spec|examples).*\.js/) do |md|
    Dir.chdir(File.dirname(__FILE__)) do
+      puts "Running... "
       ret = `python run_jslint.py` # run linter
       if $?.exitstatus != 0
          puts ret # Print output since we failed
