@@ -210,19 +210,48 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
 
        Ext.applyIf(this.mapOptions, {
           center: new L.LatLng(0, 0),
-          zoom: 1
+          zoom: 1,
+          attributionControl: false
        });
     },
 
    renderMap: function() {
       this.map = new L.Map(this.getEl().dom, this.mapOptions);
 
-      // create a CloudMade tile layer
-      var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
-          cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 19});
-
       // add the CloudMade layer to the map
-      this.map.addLayer(cloudmade);
+      this.map.addLayer(new L.TileLayer(
+         'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+         {maxZoom: 19}
+      ));
+   },
+
+   // ---- Interface Functions ---- //
+   /**
+    * Convert a lat lon into the internal represtation for the mapping package
+    */
+   toLocation: function(lat, lon) {
+      return new L.LatLng(lat, lon);
+   },
+
+   /**
+    * Change the current zoom level to be zoomLevel
+    */
+   zoomTo: function(zoomLevel) {
+      this.map.setZoom(zoomLevel);
+   },
+
+   /**
+    * Returns the number of zoomLevels available for the map.
+    */
+   numZoomLevels: function() {
+      return this.map.getMaxZoom();
+   },
+
+   /**
+    * Moves the map center to the location which is the format returned by toLocation.
+    */
+   updateCenter : function(location) {
+      this.map.panTo(location);
    }
 });
 

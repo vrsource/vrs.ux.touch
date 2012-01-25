@@ -66,9 +66,7 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          html: 'Put stuff here'
       });
 
-      this.mapCmp = {
-         xtype: 'leaflet_map'
-      };
+      this.mapCmp = new vrs.ux.touch.LeafletMap();
 
       // finalize the setup
       this.dockedItems = [
