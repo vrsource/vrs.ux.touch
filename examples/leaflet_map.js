@@ -20,7 +20,6 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = new vrs.MapPanel();
-      //this.panel = new vrs.ux.touch.LeafletMap();
    }
 });
 
