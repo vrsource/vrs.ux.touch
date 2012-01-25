@@ -92,16 +92,23 @@ vrs.ux.touch.LeafletMap = Ext.extend(Ext.Component, {
        var me = this;
 
        vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
+
+       if(! window.L) {
+          this.html = 'Leaflet API is required.';
+       }
     },
 
    afterRender: function() {
       vrs.ux.touch.LeafletMap.superclass.afterRender.apply(this, arguments);
 
+      this.renderMap();
+   },
+
+   renderMap: function() {
       this.map = new L.Map(this.getEl().dom, {
          center: new L.LatLng(51.505, -0.09),
          zoom: 13
       });
-
 
       // create a CloudMade tile layer
       var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
@@ -111,3 +118,5 @@ vrs.ux.touch.LeafletMap = Ext.extend(Ext.Component, {
       this.map.addLayer(cloudmade);
    }
 });
+
+Ext.reg('leaflet_map', vrs.ux.touch.LeafletMap);
