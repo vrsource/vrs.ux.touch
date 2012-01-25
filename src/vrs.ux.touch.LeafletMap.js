@@ -2,31 +2,6 @@
 
 Ext.ns('vrs.ux.touch');
 
-/**
- * @class vrs.ux.touch.LeafletMap
- * @extends Ext.Component
- *
- * Wraps a Leaflet map. http://leaflet.cloudmade.com/
- * To use this component you must include leaflet.js script.
- *
- * <h2>Example code:</h2>
- * <pre><code>
-var pnl = new Ext.Panel({
-    fullscreen: true,
-    items     : [
-        {
-            xtype                 : 'leaflet_map',
-            enableLocationTracking: true
-        }
-    ]
-});</code></pre>
- * @xtype leaflet_map
- *
- * TODO:
- *  * ...
- */
-
-
 vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    /**
     * @cfg {String} baseCls
@@ -194,6 +169,29 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
 });
 
 
+/**
+ * @class vrs.ux.touch.LeafletMap
+ * @extends Ext.Component
+ *
+ * Wraps a Leaflet map. http://leaflet.cloudmade.com/
+ * To use this component you must include leaflet.js script.
+ *
+ * <h2>Example code:</h2>
+ * <pre><code>
+var pnl = new Ext.Panel({
+    fullscreen: true,
+    items     : [
+        {
+            xtype                 : 'leaflet_map',
+            enableLocationTracking: true
+        }
+    ]
+});</code></pre>
+ * @xtype leaflet_map
+ *
+ * TODO:
+ *  * ...
+ */
 vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
     /**
     * initialize the component as part
