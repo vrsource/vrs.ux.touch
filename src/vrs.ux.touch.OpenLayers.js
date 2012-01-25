@@ -58,7 +58,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
      * options as specified in OpenLayers documentation. Passed as options
      * to the Map constructor.
      */
-    mapOptions: null,
+    mapOptions: {},
 
     /**
      * @type {OpenLayers.Map}
