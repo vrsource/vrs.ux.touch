@@ -2,6 +2,7 @@
 
 Ext.ns('vrs.ux.touch');
 
+
 vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    /**
     * @cfg {String} baseCls
@@ -279,12 +280,7 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
 Ext.reg('leaflet_map', vrs.ux.touch.LeafletMap);
 
 
-/**
-* A panel that can be used as popup window on Leaflet
-* maps.  Support anchoring to a location so it moves
-* accordingly when the map is panned and zoomed
-*/
-vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
+vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    /**
    * The map that we are attached onto.
    */
@@ -317,19 +313,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
    floating      : true,
    hideOnMaskTap : false,  // Don't auto-hide when tap outside the component.
 
-   /**
-   * Construct the popup panel.
-   *
-   * Note: Since this is a panel, normal panel configuration settings can
-   *       be passed in.  (ex: items, dockedItems, layout, ...)
-   */
-   constructor: function(config) {
-      var me = this;
-
-      Ext.apply(config, {
-         renderTo: config.map._panes.popupPane
-      });
-
+   constructor: function() {
       this.addEvents({
          /** Fired after the panel has been added to the map DOM.
          * called as: afterAdd(panel)
@@ -342,13 +326,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
          'afterRemove': true
       });
 
-      vrs.ux.touch.LeafletPopupPanel.superclass.constructor.apply(this, arguments);
-
-      this.map.on('viewreset', this._updatePosition, this);
-
-      // Add flag we use to track if have toggled ourselves into fullscreen mode
-      // used in setPanelSize to handle fullscreen settings.
-      this._isFullscreen = false;
+      vrs.ux.touch.IMapPopupPanel.superclass.constructor.apply(this, arguments);
 
       // If setup to auto remove, register to call remove at the end of hide
       if(this.autoRemoveOnHide) {
@@ -358,26 +336,9 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
       }
    },
 
-   /**
-   * Set the size of the panel to use.
-   *
-   * @param config
-   *      fullscreen: If true, then set to a fullscreen panel centered on screen.
-   *                 (still respects width and height settings as computed)
-   *      width: if set, sets to this width in pixels.
-   *      height: if set, sets to this height in pixels.
-   *      size: if set to one of 'small', 'medium', 'large', 'fullscreen'
-   *           or variation ending in '-tall' or '-wide'. (ex: 'small-wide')
-   *           automatically picks window of good size for the current device.
-   *      autoPosition: If true, automatically call the position setting. (default: true)
-   *      anchor: If true, we set anchored (if not already set) and update.
-   *               (true by default except for fullscreen which is false by default)
-   *
-   * note: fullscreen is a special variation that will override some other settings.
-   */
-   setPanelSize: function(config) {
+   calculatePanelSize: function(config) {
       var vp_size = Ext.Viewport.getSize(),
-          tall_wide_factor = 1.5,  // Factor used to increase size of tall/wide panels.
+         tall_wide_factor = 1.5,  // Factor used to increase size of tall/wide panels.
           set_sizes = {},          // map from size name to size values to use.
           size_name, var_name,
           width, height,
@@ -431,9 +392,37 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
          }
       }
 
+      return {w: width, h: height, margin: extra_margin};
+   },
+
+   /**
+   * Set the size of the panel to use.
+   *
+   * @param config
+   *      fullscreen: If true, then set to a fullscreen panel centered on screen.
+   *                 (still respects width and height settings as computed)
+   *      width: if set, sets to this width in pixels.
+   *      height: if set, sets to this height in pixels.
+   *      size: if set to one of 'small', 'medium', 'large', 'fullscreen'
+   *           or variation ending in '-tall' or '-wide'. (ex: 'small-wide')
+   *           automatically picks window of good size for the current device.
+   *      autoPosition: If true, automatically call the position setting. (default: true)
+   *      anchor: If true, we set anchored (if not already set) and update.
+   *               (true by default except for fullscreen which is false by default)
+   *
+   * note: fullscreen is a special variation that will override some other settings.
+   */
+   setPopupSizeAndPosition: function() {
+      var dims = this.calculatePanelSize(this.config),
+          auto_position      = config.autoPosition || true, // if we should update position.
+          should_anchor      = config.anchor || true,       // if we should be anchored
+          setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen;
+
+      console.log(dims)
+
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
-      this.setSize(width + extra_margin, height + extra_margin);
+      this.setSize(dims.w + dims.margin, dims.h + dims.margin);
       if(this.isVisible()) {
          this.doLayout();
       }
@@ -449,7 +438,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
 
       // If we are rendered and we should update position, then do so now.
       if(this.rendered && this.isVisible() && auto_position) {
-         this._updatePosition();
+         this.updatePosition();
       }
 
       if(setting_fullscreen) {
@@ -460,10 +449,39 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
 
       // update fullscreen flag.
       this._isFullscreen = setting_fullscreen;
+   }
+
+});
+
+
+/**
+* A panel that can be used as popup window on Leaflet
+* maps.  Support anchoring to a location so it moves
+* accordingly when the map is panned and zoomed
+*/
+vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
+   /**
+   * Construct the popup panel.
+   *
+   * Note: Since this is a panel, normal panel configuration settings can
+   *       be passed in.  (ex: items, dockedItems, layout, ...)
+   */
+   constructor: function(config) {
+      Ext.apply(config, {
+         renderTo: config.map._panes.popupPane
+      });
+
+      vrs.ux.touch.LeafletPopupPanel.superclass.constructor.apply(this, arguments);
+
+      this.map.on('viewreset', this.updatePosition, this);
+
+      // Add flag we use to track if have toggled ourselves into fullscreen mode
+      // used in setPanelSize to handle fullscreen settings.
+      this._isFullscreen = false;
    },
 
    // --- INTERNAL HELPERS ---- //
-   _updatePosition: function() {
+   updatePosition: function() {
       var pos    = this.map.latLngToLayerPoint(this.location);
 
       this.el.setTop(pos.y);
@@ -491,7 +509,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
    * Called after the overlay panel holder has removed us from the map.
    */
    afterRemove: function() {
-      this.map.off('viewreset', this._updatePosition, this);
+      this.map.off('viewreset', this.updatePosition, this);
 
       this.fireEvent('afterRemove', this);
 
