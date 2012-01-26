@@ -298,7 +298,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    /** A config object to pass to setPanelSize after panel
    * is constructed.
    */
-   sizeConfig: null,
+   sizeConfig: {},
 
    /** Set to allow custom styling. */
    componentCls: 'x-map-popup',
@@ -314,18 +314,6 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    hideOnMaskTap : false,  // Don't auto-hide when tap outside the component.
 
    constructor: function() {
-      this.addEvents({
-         /** Fired after the panel has been added to the map DOM.
-         * called as: afterAdd(panel)
-         */
-         'afterAdd': true,
-
-         /** Fired after the panel has been removed from the map DOM.
-         * called as: afterRemove(panel)
-         */
-         'afterRemove': true
-      });
-
       vrs.ux.touch.IMapPopupPanel.superclass.constructor.apply(this, arguments);
 
       // If setup to auto remove, register to call remove at the end of hide
@@ -345,8 +333,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
           extra_margin = 12,  // extra margin to fix layout issues
           auto_position      = config.autoPosition || true, // if we should update position.
           should_anchor      = config.anchor || true,       // if we should be anchored
-          setting_fullscreen = config.fullscreen || false,  // if we are setting to fullscreen
-          was_fullscreen     = this._isFullscreen;          // if we were previously fullscreen.
+          setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen
 
       // Lookup table of named size values
       set_sizes = {
@@ -413,12 +400,12 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    * note: fullscreen is a special variation that will override some other settings.
    */
    setPopupSizeAndPosition: function() {
-      var dims = this.calculatePanelSize(this.config),
+      var config = this.sizeConfig,
+          dims = this.calculatePanelSize(config),
           auto_position      = config.autoPosition || true, // if we should update position.
           should_anchor      = config.anchor || true,       // if we should be anchored
-          setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen;
-
-      console.log(dims)
+          setting_fullscreen = config.fullscreen || false,  // if we are setting to fullscreen;
+          was_fullscreen     = this._isFullscreen;          // if we were previously fullscreen.
 
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
@@ -480,42 +467,17 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
       this._isFullscreen = false;
    },
 
+   afterRender: function() {
+      vrs.ux.touch.LeafletPopupPanel.superclass.afterRender.apply(this, arguments);
+
+      this.updatePosition();
+   },
+
    // --- INTERNAL HELPERS ---- //
    updatePosition: function() {
       var pos    = this.map.latLngToLayerPoint(this.location);
 
       this.el.setTop(pos.y);
       this.el.setLeft(pos.x);
-   },
-
-   /**
-   * Called after the overlay panel holder has added us to a pane.
-   *
-   * Should only be called once per map.
-   */
-   afterAdd: function() {
-      // Pass the size configuration
-      if(this.sizeConfig) {
-         this.setPanelSize(this.sizeConfig);
-      }
-
-      // Auto show the popup
-      this.show();
-
-      this.fireEvent('afterAdd', this);
-   },
-
-   /**
-   * Called after the overlay panel holder has removed us from the map.
-   */
-   afterRemove: function() {
-      this.map.off('viewreset', this.updatePosition, this);
-
-      this.fireEvent('afterRemove', this);
-
-      // finish removal by destroying and cleaning up everything here.
-      this.map            = null;
-      this._overlayHolder = null;
-      this.destroy();
    }
 });
