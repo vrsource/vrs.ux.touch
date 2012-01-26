@@ -20,9 +20,29 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = new vrs.MapPanel();
-   }
-});
 
+      this.panel.mapCmp.on('repPicked', this.onRepPicked, this);
+
+      this.addThings();
+   },
+
+   addThings: function() {
+      var map = this.panel.mapCmp;
+
+      map.addMarker(0, 0);
+   },
+
+   onRepPicked: function(target) {
+      var popup = new vrs.ux.touch.LeafletPopupPanel({
+         map:      this.panel.mapCmp.map,
+         location: target.getLatLng(),
+         items:    [{'html': target.dude}]
+      });
+
+      popup.show();
+   }
+
+});
 
 
 /*
@@ -78,11 +98,5 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
 
       // Finish setup
       vrs.MapPanel.superclass.initComponent.call(this);
-   },
-
-   // -- TEST HELPERS --- //
-   tapAddBtn: function() {
-      this.addBtn.callHandler(null);
    }
 });
-

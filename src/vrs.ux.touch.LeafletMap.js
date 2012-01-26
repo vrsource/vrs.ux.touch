@@ -59,13 +59,20 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
     */
    maskMapCls: 'x-mask-map',
 
+   constructor: function() {
+      vrs.ux.touch.IMapComponent.superclass.constructor.call(this, arguments);
+
+      this.addEvents({
+         'repPicked': true
+      });
+   },
+
    /**
     * Add a helper function to the afterRender chain for rendering the map
     * once the DOM is ready.
     */
    afterRender: function() {
       vrs.ux.touch.IMapComponent.superclass.afterRender.apply(this, arguments);
-
       this.renderMap();
    },
 
@@ -89,6 +96,10 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
     */
    numZoomLevels: function() {
       console.error('numZoomLevels must be overriden');
+   },
+
+   addMarker: function(lat, lon) {
+      console.error('addMarker must be overriden');
    },
 
    /**
@@ -193,25 +204,25 @@ var pnl = new Ext.Panel({
  *  * ...
  */
 vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
-    /**
+   /**
     * initialize the component as part
     * of component construction.
     */
-    initComponent : function() {
-       var me = this;
+   initComponent : function() {
+      var me = this;
 
-       if(! window.L) {
-          this.html = 'Leaflet API is required.';
-       }
+      if(! window.L) {
+         this.html = 'Leaflet API is required.';
+      }
 
-       vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
+      vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
 
-       Ext.applyIf(this.mapOptions, {
-          center: new L.LatLng(0, 0),
-          zoom: 1,
-          attributionControl: false
-       });
-    },
+      Ext.applyIf(this.mapOptions, {
+         center: new L.LatLng(0, 0),
+         zoom: 1,
+         attributionControl: false
+      });
+   },
 
    renderMap: function() {
       this.map = new L.Map(this.getEl().dom, this.mapOptions);
@@ -250,6 +261,18 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
     */
    updateCenter : function(location) {
       this.map.panTo(location);
+   },
+
+   addMarker: function(lat, lon) {
+      var marker = new L.Marker(this.toLocation(lat, lon));
+      marker.dude = "adfsasdf";
+      marker.on('click', this.onMarkerPicked, this);
+
+      this.map.addLayer(marker);
+   },
+
+   onMarkerPicked: function(event) {
+      this.fireEvent('repPicked', event.target);
    }
 });
 
