@@ -465,18 +465,9 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(Ext.Panel, {
    // --- INTERNAL HELPERS ---- //
    _updatePosition: function() {
       var pos    = this.map.latLngToLayerPoint(this.location);
-          //bottom = -pos.y - this.options.offset.y,
-		    //left   = pos.x - Math.round(this._containerWidth / 2) + this.options.offset.x;
-      console.log(pos);
 
-		//this._container.style.bottom = this._containerBottom + 'px';
-		//this._container.style.left = this._containerLeft + 'px';
-
-      // left, top relative to pane.
-      //this.setPosition(posDiv_pane.x - panel_dx, posDiv_pane.y - panel_dy);
-      // left, top relative to the panel
-      //this.anchorEl.setBox(bottom,
-      //                     this.getHeight());
+      this.el.setTop(pos.y);
+      this.el.setLeft(pos.x);
    },
 
    /**
