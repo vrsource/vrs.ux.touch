@@ -62,7 +62,8 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
       vrs.ux.touch.IMapComponent.superclass.constructor.call(this, arguments);
 
       this.addEvents({
-         'repPicked': true
+         'repPicked': true,
+         'maprender': true
       });
    },
 

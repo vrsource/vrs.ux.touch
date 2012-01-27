@@ -44,24 +44,12 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
          center: new L.LatLng(0, 0),
          zoom: 1,
          attributionControl: false
-         // Leaflet defaults to CRS 3857 used by Google, Bing, CloudMade.
-         // TACCS defaults uses 4326 so we should enforce that here also?
-         //crs: L.CRS.EPSG4326
       });
    },
 
    renderMap: function() {
       this.map = new L.Map(this.getEl().dom, this.mapOptions);
-      /*var nexrad = new L.TileLayer.WMS("http://es1:8080/service", {
-         layers: 'delorme_world',
-         format: 'image/png'
-      });
-      this.map.addLayer(nexrad);*/
-      // add the CloudMade layer to the map
-      this.map.addLayer(new L.TileLayer(
-         'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
-         {maxZoom: 19}
-      ));
+      this.fireEvent('maprender');
    },
 
    // ---- Interface Functions ---- //

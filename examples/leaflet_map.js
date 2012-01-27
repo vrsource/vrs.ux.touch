@@ -87,6 +87,13 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
 
       this.mapCmp = new vrs.ux.touch.LeafletMap();
 
+      this.mapCmp.on('maprender', function() {
+         var layer = new L.TileLayer(
+            'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+            {maxZoom: 17});
+         this.map.addLayer(layer);
+      });
+
       // finalize the setup
       this.dockedItems = [
          this.topToolbar
