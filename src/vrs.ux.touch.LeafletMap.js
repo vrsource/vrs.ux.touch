@@ -51,6 +51,14 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
       this.map = new L.Map(this.getEl().dom, this.mapOptions);
    },
 
+   /**
+    * Helper that is called at the last possible second in the components show cycle.
+    * Once sencha has the layout ready we tell the map to figure out its bounds again.
+    */
+   fixLayout: function() {
+      this.map.invalidateSize();
+   },
+
    // ---- Interface Functions ---- //
    /**
     * Convert a lat lon into the internal represtation for the mapping package
@@ -130,7 +138,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
 
    // --- INTERNAL HELPERS ---- //
    updatePosition: function() {
-      var pos    = this.map.latLngToLayerPoint(this.location);
+      var pos = this.map.latLngToLayerPoint(this.location);
 
       this.el.setTop(pos.y);
       this.el.setLeft(pos.x);

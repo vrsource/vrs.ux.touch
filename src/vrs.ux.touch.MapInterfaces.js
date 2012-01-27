@@ -188,7 +188,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    */
    map: null,
 
-   /** google.maps.LatLng location of the panel anchor. */
+   /** LatLng location of the panel anchor. */
    location: null,
 
    /** {bool} True if the popup should be anchored to it's location. */
