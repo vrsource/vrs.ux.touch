@@ -59,7 +59,7 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    maskMapCls: 'x-mask-map',
 
    constructor: function() {
-      vrs.ux.touch.IMapComponent.superclass.constructor.call(this, arguments);
+      vrs.ux.touch.IMapComponent.superclass.constructor.apply(this, arguments);
 
       this.addEvents({
          'repPicked': true,
@@ -74,6 +74,7 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    afterRender: function() {
       vrs.ux.touch.IMapComponent.superclass.afterRender.apply(this, arguments);
       this.renderMap();
+      this.fireEvent('maprender');
    },
 
    // ---- Interface Functions ---- //
@@ -87,8 +88,8 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    /**
     * Change the current zoom level to be zoomLevel
     */
-   zoomTo: function(zoomLevel) {
-      console.error('zoomTo must be overriden');
+   setZoom: function(zoomLevel) {
+      console.error('setZoom must be overriden');
    },
 
    /**
@@ -146,7 +147,7 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
       // If we just got enabled, force an update and zoom to a reasonable level
       if(this.trackingEnabled) {
          // XXX: Need better way to do this.  For now just go to one short of max
-         this.zoomTo(this.numZoomLevels() -1);
+         this.setZoom(this.numZoomLevels() -1);
 
          // Since we are just starting try to get an update quickly.
          this.geo.forceGeoLocationUpdate();

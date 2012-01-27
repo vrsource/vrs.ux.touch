@@ -38,18 +38,17 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
          this.html = 'Leaflet API is required.';
       }
 
-      vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
-
       Ext.applyIf(this.mapOptions, {
          center: new L.LatLng(0, 0),
          zoom: 1,
          attributionControl: false
       });
+
+      vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
    },
 
    renderMap: function() {
       this.map = new L.Map(this.getEl().dom, this.mapOptions);
-      this.fireEvent('maprender');
    },
 
    // ---- Interface Functions ---- //
@@ -63,7 +62,7 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
    /**
     * Change the current zoom level to be zoomLevel
     */
-   zoomTo: function(zoomLevel) {
+   setZoom: function(zoomLevel) {
       this.map.setZoom(zoomLevel);
    },
 
