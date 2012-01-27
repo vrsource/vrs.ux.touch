@@ -36,7 +36,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       var popup = new vrs.ux.touch.LeafletPopupPanel({
          map:      this.panel.mapCmp.map,
          location: target.getLatLng(),
-         items:    [{'html': target.dude}]
+         items:    [{'html': 'the body'}]
       });
 
       popup.show();

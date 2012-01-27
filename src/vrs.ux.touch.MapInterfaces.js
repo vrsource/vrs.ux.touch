@@ -200,30 +200,34 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    /** A config object to pass to setPanelSize after panel
    * is constructed.
    */
-   sizeConfig: {},
+   sizeConfig: null,
 
    /** Set to allow custom styling. */
    componentCls: 'x-map-popup',
 
-   /**
-   * If set, then automatically removes the panel and
-   * associated objects when the popup is hidden.
-   */
-   autoRemoveOnHide : true,
-
    /** override the panel details. */
    floating      : true,
-   hideOnMaskTap : false,  // Don't auto-hide when tap outside the component.
+   hideOnMaskTap : true,  // Don't auto-hide when tap outside the component.
 
    constructor: function() {
+      var me = this;
+
       vrs.ux.touch.IMapPopupPanel.superclass.constructor.apply(this, arguments);
 
-      // If setup to auto remove, register to call remove at the end of hide
-      if(this.autoRemoveOnHide) {
-         this.on({
-            hide: function() { me.remove(); }
-         });
+      // Once hidden the popup is nolonger important so seppuku
+      this.on({
+         hide: function() {
+            this.destroy();
+         }
+      });
+
+      // Set the starting size if possible
+      if(this.sizeConfig) {
+         this.setPopupSizeAndPosition(this.sizeConfig);
       }
+
+      // Popups are shown by default.
+      this.show();
    },
 
    calculatePanelSize: function(config) {

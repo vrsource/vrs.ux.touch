@@ -44,7 +44,7 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
          attributionControl: false
       });
 
-      vrs.ux.touch.LeafletMap.superclass.initComponent.call(this);
+      vrs.ux.touch.LeafletMap.superclass.initComponent.apply(this);
    },
 
    renderMap: function() {
@@ -109,7 +109,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
    *       be passed in.  (ex: items, dockedItems, layout, ...)
    */
    constructor: function(config) {
-      Ext.apply(config, {
+      Ext.applyIf(config, {
          renderTo: config.map._panes.popupPane
       });
 
