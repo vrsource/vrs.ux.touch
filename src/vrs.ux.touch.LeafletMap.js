@@ -48,7 +48,7 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
    },
 
    renderMap: function() {
-      this.map = new L.Map(this.getEl().dom, this.mapOptions);
+      this.map = new L.Map(this.el.dom, this.mapOptions);
    },
 
    /**
@@ -90,14 +90,9 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
 
    addMarker: function(lat, lon) {
       var marker = new L.Marker(this.toLocation(lat, lon));
-      marker.dude = "adfsasdf";
-      marker.on('click', this.onMarkerPicked, this);
 
       this.map.addLayer(marker);
-   },
-
-   onMarkerPicked: function(event) {
-      this.fireEvent('repPicked', event.target);
+      return marker;
    }
 });
 

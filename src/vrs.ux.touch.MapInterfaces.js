@@ -177,6 +177,19 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
 
       console.error("Error getting location: ", arguments);
       // XXX  dispatch event about this error so that owner can handle it.
+   },
+
+   // @private
+   onDestroy : function() {
+      Ext.destroy(this.geo);
+
+      if (this.maskMap && this.mask) {
+         this.el.unmask();
+      }
+
+      this.map = undefined;
+
+      vrs.ux.touch.IMapComponent.superclass.onDestroy.call(this);
    }
 });
 
