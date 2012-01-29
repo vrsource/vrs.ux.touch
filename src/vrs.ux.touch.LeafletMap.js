@@ -140,6 +140,10 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
    updatePosition: function() {
       var pos = this.map.latLngToLayerPoint(this.location);
 
+      // Avoid race condition where the tap mask has not removed the panel yet but
+      // the dom was cleaned up already.
+      if (! this.el.dom) { return; }
+
       this.el.setTop(pos.y);
       this.el.setLeft(pos.x);
    }
