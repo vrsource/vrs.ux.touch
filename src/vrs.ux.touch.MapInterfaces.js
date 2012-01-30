@@ -266,7 +266,6 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
          this.anchorEl.show();
          this.anchorEl.addCls('x-anchor-bottom');
          this.anchorEl.setBottom(-10);
-         console.log(this.el.getWidth() / 2.0);
          this.anchorEl.setLeft((this.el.getWidth() / 2.0) - (this.anchorEl.getWidth() / 2.0));
       }
    },
