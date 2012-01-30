@@ -207,6 +207,8 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    /** {bool} True if the popup should be anchored to it's location. */
    anchored: true,
 
+   scroll: true,
+
    /** {bool} True if we should pan the map so the popup is in view. */
    panIn: true,
 
@@ -220,7 +222,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
 
    /** override the panel details. */
    floating      : true,
-   hideOnMaskTap : true,  // Don't auto-hide when tap outside the component.
+   hideOnMaskTap : false,  // Don't auto-hide when tap outside the component.
 
    constructor: function() {
       var me = this;
@@ -241,6 +243,32 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
 
       // Popups are shown by default.
       this.show();
+   },
+
+   /** Override the show method to position the panel. */
+   show: function() {
+      vrs.ux.touch.IMapPopupPanel.superclass.show.apply(this, arguments);
+
+      if(this.anchorEl) {
+         this.anchorEl.hide();  // If we had anchor in past, hide for now.
+      }
+
+      // If we are anchored, position ourselves and potentially pan into view.
+      if(this.anchored) {
+         // Setup the anchor.
+         // - hacked together from showBy and alignTo in Component.js
+         //   todo: see if we can use more of alignTo logic.
+         if(!this.anchorEl) {
+            this.anchorEl = this.el.createChild({
+               cls: 'x-anchor'
+            });
+         }
+         this.anchorEl.show();
+         this.anchorEl.addCls('x-anchor-bottom');
+         this.anchorEl.setBottom(-10);
+         console.log(this.el.getWidth() / 2.0);
+         this.anchorEl.setLeft((this.el.getWidth() / 2.0) - (this.anchorEl.getWidth() / 2.0));
+      }
    },
 
    calculatePanelSize: function(config) {
@@ -329,6 +357,8 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
       this.setSize(dims.w + dims.margin, dims.h + dims.margin);
+      this.el.setTop(this.el.getTop() - dims.h - dims.margin - 10); // 10 is for the anchor
+      this.el.setLeft(this.el.getLeft() - dims.w/2.0);
       if(this.isVisible()) {
          this.doLayout();
       }
