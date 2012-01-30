@@ -353,6 +353,8 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
           setting_fullscreen = config.fullscreen || false,  // if we are setting to fullscreen;
           was_fullscreen     = this._isFullscreen;          // if we were previously fullscreen.
 
+      this.updatePosition();
+
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
       this.setSize(dims.w + dims.margin, dims.h + dims.margin);
@@ -369,11 +371,6 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
          if(this.rendered && this.isVisible()) {
             this.show();        // reshow to get anchor laid out correctly.
          }
-      }
-
-      // If we are rendered and we should update position, then do so now.
-      if(this.rendered && this.isVisible() && auto_position) {
-         this.updatePosition();
       }
 
       if(setting_fullscreen) {

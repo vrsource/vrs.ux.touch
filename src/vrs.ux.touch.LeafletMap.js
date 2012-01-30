@@ -118,7 +118,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
 
       vrs.ux.touch.LeafletPopupPanel.superclass.constructor.apply(this, arguments);
 
-      this.map.on('viewreset', this.updatePosition, this);
+      this.map.on('viewreset', this.setPopupSizeAndPosition, this);
 
       // Add flag we use to track if have toggled ourselves into fullscreen mode
       // used in setPanelSize to handle fullscreen settings.
@@ -128,7 +128,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
    afterRender: function() {
       vrs.ux.touch.LeafletPopupPanel.superclass.afterRender.apply(this, arguments);
 
-      this.updatePosition();
+      this.setPopupSizeAndPosition();
    },
 
    // --- INTERNAL HELPERS ---- //
@@ -139,6 +139,7 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
       // the dom was cleaned up already.
       if (! this.el.dom) { return; }
 
+      // These values will cascade into setPopSizeAndPosition
       this.el.setTop(pos.y);
       this.el.setLeft(pos.x);
    }
