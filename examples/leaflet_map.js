@@ -27,16 +27,24 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
    },
 
    addThings: function() {
-      var map = this.panel.mapCmp;
+      var map = this.panel.mapCmp,
+          marker = map.addMarker(0, 0);
 
-      map.addMarker(0, 0);
+      marker.on('click', this.onRepPicked, this);
    },
 
-   onRepPicked: function(target) {
+   onRepPicked: function(evt) {
       var popup = new vrs.ux.touch.LeafletPopupPanel({
          map:      this.panel.mapCmp.map,
-         location: target.getLatLng(),
-         items:    [{'html': 'the body'}]
+         location: evt.target.getLatLng(),
+         items:    [{'html': 'the body'}],
+         anchored : true,
+
+         //hideOnMaskTap    : true,
+         autoRemoveOnHide : true,
+         sizeConfig: {
+            size: 'small'
+         }
       });
 
       popup.show();

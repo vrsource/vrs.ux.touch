@@ -80,6 +80,8 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
    /** {bool} True if the popup should be anchored to it's location. */
    anchored: true,
 
+   scroll: true,
+
    /** {bool} True if we should pan the map so the popup is in view. */
    panIn: true,
 
@@ -148,12 +150,17 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       }
    },
 
-
    initComponent: function() {
       vrs.ux.touch.GmapPopupPanel.superclass.initComponent.apply(this, arguments);
 
       // Connect it up to the map now that it has been initialized.
       this._overlayHolder.setMap(this.map);
+   },
+
+   afterRender: function() {
+      vrs.ux.touch.GmapPopupPanel.superclass.afterRender.apply(this, arguments);
+
+      this.updatePosition();
    },
 
    /**

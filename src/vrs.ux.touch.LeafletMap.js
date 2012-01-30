@@ -41,7 +41,8 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
       Ext.applyIf(this.mapOptions, {
          center: new L.LatLng(0, 0),
          zoom: 1,
-         attributionControl: false
+         attributionControl: false,
+         closePopupOnClick:  false
       });
 
       vrs.ux.touch.LeafletMap.superclass.initComponent.apply(this);

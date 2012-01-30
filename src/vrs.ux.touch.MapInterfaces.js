@@ -277,6 +277,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
           size_name, var_name,
           width, height,
           extra_margin = 12,  // extra margin to fix layout issues
+          config = config || {},
           auto_position      = config.autoPosition || true, // if we should update position.
           should_anchor      = config.anchor || true,       // if we should be anchored
           setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen
@@ -346,7 +347,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
    * note: fullscreen is a special variation that will override some other settings.
    */
    setPopupSizeAndPosition: function() {
-      var config = this.sizeConfig,
+      var config = this.sizeConfig || {},
           dims = this.calculatePanelSize(config),
           auto_position      = config.autoPosition || true, // if we should update position.
           should_anchor      = config.anchor || true,       // if we should be anchored
