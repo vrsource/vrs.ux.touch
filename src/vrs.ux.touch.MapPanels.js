@@ -115,6 +115,13 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
    constructor: function(config) {
       var me = this;
 
+      // Due the way we add to the DOM the scroll would be added before the elements exist
+      // Store the scroll flag externally and manually reset it when the Panel is shown
+      if (config.scroll) {
+         this._config_scroll = config.scroll;
+         config.scroll = null;
+      }
+
       // Allocate the holder so we can get the DIV to render into.
       this._overlayHolder = new OverlayPanelHolder({popup: this});
 
@@ -147,7 +154,6 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          });
       }
    },
-
 
    initComponent: function() {
       vrs.ux.touch.GmapPopupPanel.superclass.initComponent.apply(this, arguments);
@@ -290,6 +296,11 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          */
       }
 
+      // Now that the divs are all added we can set the scroll flag if needed.
+      if (this._config_scroll) {
+         this.setScrollable(this._config_scroll);
+         this.doLayout();
+      }
    },
 
    /**

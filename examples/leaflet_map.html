@@ -1,15 +1,37 @@
 <html>
   <head>
     <link rel="stylesheet" href="../resources/css/app.css" type="text/css"/>
-    <link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
+    <link rel="stylesheet" href="../../Leaflet/dist/leaflet.css" />
 
-    <script src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
     <script type="text/javascript" src="../deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    <script type="text/javascript" src="../src/vrs.ux.touch.MapInterfaces.js"></script>
+    <script src="../../Leaflet/dist/leaflet-src.js"></script>
+
     <script src="../src/vrs.ux.touch.LeafletMap.js"></script>
     <script src="leaflet_map.js"></script>
 
   </head>
+  <!-- This section shows a map with a marker that opens a popup with a link
+       Using this I was able to determine why the Ext popups did not work.
   <body>
+    <div id="map" style="width: 100%; height: 100%" ></div>
   </body>
 
+  <script>
+    map = new L.Map('map', {
+       center: new L.LatLng(0, 0),
+       zoom: 1,
+       attributionControl: false,
+       closePopupOnClick:  false
+    });
+    var layer = new L.TileLayer(
+            'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+            {maxZoom: 17});
+    map.addLayer(layer);
+    var marker = new L.Marker(new L.LatLng(0, 0));
+    var text = '<a href="http://google.com">google</a>';
+    marker.bindPopup(text);
+    map.addLayer(marker);
+  </script>
+-->
 </html>

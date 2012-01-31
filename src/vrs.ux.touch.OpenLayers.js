@@ -58,7 +58,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
      * options as specified in OpenLayers documentation. Passed as options
      * to the Map constructor.
      */
-    mapOptions: null,
+    mapOptions: {},
 
     /**
      * @type {OpenLayers.Map}
@@ -113,7 +113,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
         // Setup our events
         this.addEvents.apply(this, ol_event_names);
 
-        if(!OpenLayers) {
+        if(! window.OpenLayers) {
             this.html = 'OpenLayers API is required.';
         }
         else
