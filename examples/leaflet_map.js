@@ -20,10 +20,37 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
       vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = new vrs.MapPanel();
-      //this.panel = new vrs.ux.touch.LeafletMap();
-   }
-});
 
+      this.panel.mapCmp.on('repPicked', this.onRepPicked, this);
+
+      this.addThings();
+   },
+
+   addThings: function() {
+      var map = this.panel.mapCmp,
+          marker = map.addMarker(0, 0);
+
+      marker.on('click', this.onRepPicked, this);
+   },
+
+   onRepPicked: function(evt) {
+      var popup = new vrs.ux.touch.LeafletPopupPanel({
+         map:      this.panel.mapCmp.map,
+         location: evt.target.getLatLng(),
+         items:    [{'html': 'the body'}],
+         anchored : true,
+
+         //hideOnMaskTap    : true,
+         autoRemoveOnHide : true,
+         sizeConfig: {
+            size: 'small'
+         }
+      });
+
+      popup.show();
+   }
+
+});
 
 
 /*
@@ -68,6 +95,13 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
 
       this.mapCmp = new vrs.ux.touch.LeafletMap();
 
+      this.mapCmp.on('maprender', function() {
+         var layer = new L.TileLayer(
+            'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+            {maxZoom: 17});
+         this.map.addLayer(layer);
+      });
+
       // finalize the setup
       this.dockedItems = [
          this.topToolbar
@@ -79,11 +113,5 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
 
       // Finish setup
       vrs.MapPanel.superclass.initComponent.call(this);
-   },
-
-   // -- TEST HELPERS --- //
-   tapAddBtn: function() {
-      this.addBtn.callHandler(null);
    }
 });
-

@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Test Suite</title>
 
     <!-- CSS Files -->
-<link rel="stylesheet" href="deps/jasmine/lib/jasmine-1.0.1/jasmine.css" type="text/css"/>
-<link rel="stylesheet" href="resources/css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="deps/jasmine/lib/jasmine-1.0.1/jasmine.css" type="text/css"/>
+    <link rel="stylesheet" href="../Leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="resources/css/app.css" type="text/css"/>
 
     <!-- TEST FRAMEWORK -->
-<script type="text/javascript" src="deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
-<script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine.js"></script>
-<script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine-html.js"></script>
-<script type="text/javascript" src="deps/jasmine-species/jasmine-grammar.js"></script>
-<script type="text/javascript" src="deps/jasmine-species/jasmine-reporting.js"></script>
+    <script type="text/javascript" src="deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    <script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine.js"></script>
+    <script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine-html.js"></script>
+    <script type="text/javascript" src="deps/jasmine-species/jasmine-grammar.js"></script>
+    <script type="text/javascript" src="deps/jasmine-species/jasmine-reporting.js"></script>
 
    <!-- LIBRARIES -->
-<script type="text/javascript" src="src/vrs.ux.touch.MenuPanel.js"></script>
-   
+   <script src="../Leaflet/dist/leaflet-src.js"></script>
+   <script type="text/javascript" src="src/vrs.ux.touch.MenuPanel.js"></script>
+   <script type="text/javascript" src="src/vrs.ux.touch.MapInterfaces.js"></script>
+   <script type="text/javascript" src="src/vrs.ux.touch.LeafletMap.js"></script>
+
 
    <!-- SPECS -->
-<script type="text/javascript" src="spec/bootstrap_spec.js"></script>
-<script type="text/javascript" src="spec/menu_panel_spec.js"></script>
+   <script type="text/javascript" src="spec/bootstrap_spec.js"></script>
+   <script type="text/javascript" src="spec/menu_panel_spec.js"></script>
+   <script type="text/javascript" src="spec/leaflet_spec.js"></script>
 
     <!-- JS Coverage Code -->
     <button type="button" onclick="window.open('jscoverage.html');">Cov</button>
@@ -36,7 +41,7 @@
 
         config.onReady = function() {
             var jasmineEnv = jasmine.getEnv(),
-                styledReporter = new jasmine.reporting.StyledHtmlReporter();            
+                styledReporter = new jasmine.reporting.StyledHtmlReporter();
             jasmineEnv.addReporter(styledReporter);
             jasmineEnv.specFilter = function(spec) {
                return styledReporter.specFilter(spec);
@@ -53,5 +58,8 @@
     </script>
 
 </head>
-<body></body>
+
+<body>
+</body>
+
 </html>
