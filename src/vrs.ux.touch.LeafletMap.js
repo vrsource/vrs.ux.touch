@@ -176,7 +176,13 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
 
       vrs.ux.touch.LeafletPopupPanel.superclass.constructor.apply(this, arguments);
 
+      // Connect to the maps reset for the duration of the popup
+      // Be sure to remove this connection when the popup is closed
+      // Otherwise, the next zoom will cause an error in setPopupSizeAndPosition
       this.map.on('viewreset', this.setPopupSizeAndPosition, this);
+      this.on('beforehide', function() {
+         this.map.off('viewreset', this.setPopupSizeAndPosition, this);
+      }, this);
 
       // Add flag we use to track if have toggled ourselves into fullscreen mode
       // used in setPanelSize to handle fullscreen settings.
