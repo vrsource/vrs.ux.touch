@@ -1,5 +1,6 @@
 /*global clearTimeout: false */
 Ext.ns('vrs.ux.touch');
+
 /**
 * Class for creating menu of items that can be used in forms
 * or menus as selectable items with decorations.
@@ -11,105 +12,127 @@ Ext.ns('vrs.ux.touch');
 *  - Add support for usage with stores.  This would allow
 *    something similar to lists but styled and formatted
 *    as menu panels.
+*  - Look into using data view with components instead.
+*
 */
-vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
-   componentCls: 'x-menu-panel',
 
-   /**
-   * CSS class to use for decorating all rows in the menu.
-   */
-   rowCls: 'x-menupanel-row',
+Ext.define('vrs.ux.touch.MenuPanel', {
+   extend: 'Ext.Component',
 
-   /**
-    * @cfg {String} iconMaskCls
-    * CSS class to be added to the items that need mask applied
-    * Defaults to 'x-icon-mask'
-    */
-   iconMaskCls: 'x-menupanel-icon-mask',
+   config: {
+      cls: 'x-menu-panel',
 
-   pressedCls: 'x-menupanel-row-selected',  // Dataview x-item-pressed
+      /**
+      * CSS class to use for decorating all rows in the menu.
+      */
+      rowCls: 'x-menupanel-row',
 
-   /**
-     * @cfg {Number} pressedDelay
-     * The amount of delay between the tapstart and the moment we add the pressedCls.
-     * Settings this to true defaults to 100ms
-    */
-   pressedDelay: 100,
+      /**
+       * @cfg {String} iconMaskCls
+       * CSS class to be added to the items that need mask applied
+       * Defaults to 'x-icon-mask'
+       */
+      iconMaskCls: 'x-menupanel-icon-mask',
 
-   contentCls: 'x-menupanel-content',
-   leftItemCls: 'x-menupanel-leftitem',
-   rightItemCls: 'x-menupanel-rightitem',
+      pressedCls: 'x-menupanel-row-selected',  // Dataview x-item-pressed
+
+      /**
+        * @cfg {Number} pressedDelay
+        * The amount of delay between the tapstart and the moment we add the pressedCls.
+        * Settings this to true defaults to 100ms
+       */
+      pressedDelay: 100,
+
+      contentCls: 'x-menupanel-content',
+      leftItemCls: 'x-menupanel-leftitem',
+      rightItemCls: 'x-menupanel-rightitem',
 
 
-   /**
-   * List of configurations for each row in the menu panel.
-   * Each row item supports the following properties:
-   *  - content: string - The text content to put on the row.
-   *  - leftIcon / rightIcon: URL of an icon to display.
-   *  - leftIconCls / rightIconCls: Icon mask class to use for the left/right icon.
-   *  - itemtap, itemdoubletap, itemswipe, lefttap, righttap: function to call when
-   *         the event happens for that specific row.
-   */
-   menuItems: null,
+      /**
+      * List of configurations for each row in the menu panel.
+      * Each row item supports the following properties:
+      *  - content: string - The text content to put on the row.
+      *  - leftIcon / rightIcon: URL of an icon to display.
+      *  - leftIconCls / rightIconCls: Icon mask class to use for the left/right icon.
+      *  - itemtap, itemdoubletap, itemswipe, lefttap, righttap: function to call when
+      *         the event happens for that specific row.
+      */
+      menuItems: [],
 
-   /** Default values for the form items.
-   * Can be used for example to set a common rightIcon.
-   *   object of default settings.
-   */
-   menuItemDefaults: null,
-
-   initComponent: function() {
-      vrs.ux.touch.MenuPanel.superclass.initComponent.call(this);
-
-      this.menuItems        = this.menuItems || [];
-      this.menuItemDefaults = this.menuItemDefaults || {};
-
-      this.addEvents(
-         /**
-          * @event itemtap
-          * Fires when a item is tapped on
-          * @param {MenuPanel} this The MenuPanel object.
-          * @param {Number} index The index of the row that was tapped
-          */
-         'itemtap',
-
-         /**
-          * @event itemdoubletap
-          * Fires when an item is double tapped on
-          * @param {MenuPanel} this The MenuPanel object.
-          * @param {Number} index The index of the item that was tapped
-          * @param {Ext.Element} item The item element
-          * @param {Ext.EventObject} e The event object
-          */
-         'itemdoubletap',
-
-         /**
-          * @event itemswipe
-          * Fires when a node is swipped
-          * @param {MenuPanel} this The MenuPanel object.
-          * @param {Number} index The index of the item that was tapped
-          * @param {Ext.Element} item The item element
-          * @param {Ext.EventObject} e The event object
-          */
-         'itemswipe',
-
-         /**
-          * @event lefttap
-          * Fires when a item's left icon is tapped on
-          * @param {MenuPanel} this The MenuPanel object.
-          * @param {Number} index The index of the row that was tapped
-          */
-         'lefttap',
-
-         /**
-          * @event righttap
-          * Fires when a item's right icon is tapped on
-          * @param {MenuPanel} this The MenuPanel object.
-          * @param {Number} index The index of the row that was tapped
-          */
-         'righttap'
-      );
+      /** Default values for the form items.
+      * Can be used for example to set a common rightIcon.
+      *   object of default settings.
+      */
+      menuItemDefaults: []
    },
+
+   // --- Events ---- //
+   /**
+   * @event itemtap
+   * Fires when a item is tapped on
+   * @param {MenuPanel} this The MenuPanel object.
+   * @param {Number} index The index of the row that was tapped
+   */
+
+   /**
+   * @event itemdoubletap
+   * Fires when an item is double tapped on
+   * @param {MenuPanel} this The MenuPanel object.
+   * @param {Number} index The index of the item that was tapped
+   * @param {Ext.Element} item The item element
+   * @param {Ext.EventObject} e The event object
+   */
+
+   /**
+   * @event itemswipe
+   * Fires when a node is swipped
+   * @param {MenuPanel} this The MenuPanel object.
+   * @param {Number} index The index of the item that was tapped
+   * @param {Ext.Element} item The item element
+   * @param {Ext.EventObject} e The event object
+   */
+
+   /**
+   * @event lefttap
+   * Fires when a item's left icon is tapped on
+   * @param {MenuPanel} this The MenuPanel object.
+   * @param {Number} index The index of the row that was tapped
+   */
+
+   /**
+   * @event righttap
+   * Fires when a item's right icon is tapped on
+   * @param {MenuPanel} this The MenuPanel object.
+   * @param {Number} index The index of the row that was tapped
+   */
+
+   /**
+   * Initialize the component.
+   */
+   initialize: function() {
+      var target_el;
+
+      this.callParent(arguments);
+
+      // Setup event handlers for the elements
+      // Setup all the event handlers we need to monitor.
+      target_el = this.element;
+
+      // XXX: probably needs changed.
+      target_el.on({
+         singletap: this.onTap,
+         tapstart : this.onTapStart,
+         tapcancel: this.onTapCancel,
+         touchend : this.onTapCancel,
+         doubletap: this.onDoubleTap,
+         swipe    : this.onSwipe,
+         scope    : this
+      });
+
+      // Setup the UI
+      this.refresh();
+   },
+
 
    /**
    * Update an item in the menu based upon the itemObj properties passed.
@@ -144,19 +167,20 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
          if('content' === key)
          {
-            Ext.fly(node).down('.' + me.contentCls).update(value);
+            Ext.fly(node).down('.' + me.getContentCls()).setHtml(value);
          }
          else if(('leftIconCls' === key) || ('rightIconCls' === key) ||
                  ('leftIcon' === key) || ('rightIcon' === key)) {
             // Try to find the img element we are using
-            icon_selector = (('leftIconCls' === key) ? me.leftItemCls : me.rightItemCls);
+            icon_selector = (('leftIconCls' === key) ? me.getLeftItemCls() : me.getRightItemCls());
             img_node = Ext.fly(node).down('.' + icon_selector + ' > img');
 
             // If we don't find an img node, resort to a full update because
             // the current DOM doesn't have the icons in it.
             if(!img_node)
             {
-               Ext.apply(me.menuItems[index], itemObj);
+               // XXX: Apply to copy returned?
+               Ext.apply(me.getMenuItems()[index], itemObj);
                me.refresh();
                return;
             }
@@ -165,11 +189,11 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
                cur_icon_cls = (('leftIconCls' === key) ?
                                  cur_values['leftIconCls'] : cur_values['rightIconCls']);
                if(Ext.isEmpty(value))  // Remove the mask classes
-               { img_node.removeCls([me.iconMaskCls, cur_icon_cls]); }
+               { img_node.removeCls([me.getIconMaskCls(), cur_icon_cls]); }
                else  // Replace (or set) the classes
                {
                   img_node.replaceCls(cur_icon_cls, value);
-                  img_node.addCls(me.iconMaskCls);
+                  img_node.addCls(me.getIconMaskCls());
                }
             }
             else { // assert: (('leftIcon' === key) || ('rightIcon' === key))
@@ -180,26 +204,10 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
          }  // if iconcls or icon
 
          // Assign the new value
-         me.menuItems[index][key] = value;
+         me.getMenuItems()[index][key] = value;
       });
    },
 
-   // @private
-   afterRender: function() {
-      var me = this;
-      vrs.ux.touch.MenuPanel.superclass.afterRender.call(me);
-
-      // Setup all the event handlers we need to monitor.
-      me.mon(me.getTargetEl(), {
-         singletap: me.onTap,
-         tapstart : me.onTapStart,
-         tapcancel: me.onTapCancel,
-         touchend : me.onTapCancel,
-         doubletap: me.onDoubleTap,
-         swipe    : me.onSwipe,
-         scope    : me
-      });
-   },
 
    /**
      * Return the selected items DOM node given an event.
@@ -207,21 +215,21 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
      */
    findItemByEvent: function(e) {
       // Search up parents for the row element and stop at the menupanel element
-      return e.getTarget('.' + this.rowCls, this.getTargetEl());
+      return e.getTarget('.' + this.getRowCls(), this.element);
    },
 
    /** Return the numeric index of the given node item from our list.
    * Returns -1 if not found.
    */
    indexOf: function(itemNode) {
-      var row_elts = this.getTargetEl().query('.' + this.rowCls);
+      var row_elts = this.element.query('.' + this.getRowCls());
       return row_elts.indexOf(itemNode);
    },
 
    /** Return the DOM node for the row at the given index.
    */
    getNodeByIndex: function(index) {
-      var row_elts = this.getTargetEl().query('.' + this.rowCls);
+      var row_elts = this.element.query('.' + this.getRowCls());
       return row_elts[index];
    },
 
@@ -230,18 +238,10 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    * This combines the configured values with the default values.
    */
    getItemValues: function(index) {
-      return Ext.apply({}, this.menuItems[index], this.menuItemDefaults);
+      return Ext.apply({}, this.getMenuItems()[index], this.getMenuItemDefaults());
    },
 
    // ---- RENDERING OF CONTENT --- //
-   /**
-   * Called after component structure is setup.
-   * We add our structure by calling refresh to reload everything.
-   */
-   onRender : function() {
-      vrs.ux.touch.MenuPanel.superclass.onRender.apply(this, arguments);
-      this.refresh();
-   },
 
    /**
    * Refresh the content to the most recent state of the menuItems.
@@ -266,19 +266,16 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
    refresh : function() {
       var x, item,
           me = this,
-          el = this.getTargetEl(),
+          el = this.element,
           hasLeftContent = false,
           hasRightContent = false,
           htmlFrags = [],
           htmlContent,
-          getSectionDivStr;
-
-      // Don't refresh if we haven't been rendered yet.
-      if(!this.rendered)
-      { return; }
+          getSectionDivStr,
+          numItems = this.getMenuItems().length;
 
       // Determine if we have content on left and right to include
-      for(x=0; x<this.menuItems.length; x++) {
+      for(x=0; x<numItems; x++) {
          item = this.getItemValues(x);
          if(!(Ext.isEmpty(item.leftIcon) && Ext.isEmpty(item.leftIconCls)))
          { hasLeftContent = true; }
@@ -293,29 +290,29 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
          if(Ext.isEmpty(itemIcon))
          { itemIcon = Ext.BLANK_IMAGE_URL; }
          icon_cls_str = (Ext.isEmpty(iconCls) ? ""
-                                 : 'class="' + (me.iconMaskCls + ' ' + iconCls) + '"');
+                                 : 'class="' + (me.getIconMaskCls() + ' ' + iconCls) + '"');
 
          img = '<img ' + icon_cls_str + ' src="' + itemIcon + '">';
          return '<div class="' + itemCls + '">' + img + '</div>';
       };
 
       // build up contents
-      for(x=0; x<this.menuItems.length; x++) {
+      for(x=0; x<numItems; x++) {
          item = this.getItemValues(x);
 
-         htmlFrags.push('<div class="' + me.rowCls + ' x-field">');
+         htmlFrags.push('<div class="' + me.getRowCls() + ' x-field">');
          if(hasLeftContent)
-         { htmlFrags.push(getSectionDivStr(me.leftItemCls, item.leftIconCls, item.leftIcon)); }
+         { htmlFrags.push(getSectionDivStr(me.getLeftItemCls(), item.leftIconCls, item.leftIcon)); }
          if(!Ext.isEmpty(item.content))
-         { htmlFrags.push('<div class="' + me.contentCls + '">' + item.content + '</div>'); }
+         { htmlFrags.push('<div class="' + me.getContentCls() + '">' + item.content + '</div>'); }
          if(hasRightContent)
-         { htmlFrags.push(getSectionDivStr(me.rightItemCls, item.rightIconCls, item.rightIcon)); }
+         { htmlFrags.push(getSectionDivStr(me.getRightItemCls(), item.rightIconCls, item.rightIcon)); }
          htmlFrags.push('</div>');
       }
 
       // Put it in place
       htmlContent = htmlFrags.join('\n');
-      el.update(htmlContent);
+      el.setHtml(htmlContent);
    },
 
    // ---- EVENT HANDLING ---- //
@@ -326,18 +323,18 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       var index, menu_item,
           itemNode = this.findItemByEvent(e);
       if (!this.disabled && itemNode) {
-         Ext.fly(itemNode).removeCls(this.pressedCls);
+         Ext.fly(itemNode).removeCls(this.getPressedCls());
          index = this.indexOf(itemNode);
          menu_item = this.getItemValues(index);
          if (this.onItemTap(index, e) !== false) {
             // Now determine if it was the left, right, or center that was clicked.
-            if(e.getTarget('.' + this.leftItemCls, this.getTargetEl()))
+            if(e.getTarget('.' + this.getLeftItemCls(), this.element))
             {
                if(!Ext.isEmpty(menu_item.lefttap))
                { menu_item.lefttap(this, index, itemNode, e); }
                this.fireEvent('lefttap', this, index, itemNode, e);
             }
-            else if(e.getTarget('.' + this.rightItemCls, this.getTargetEl()))
+            else if(e.getTarget('.' + this.getRightItemCls(), this.element))
             {
                if(!Ext.isEmpty(menu_item.righttap))
                { menu_item.righttap(this, index, itemNode, e); }
@@ -368,16 +365,16 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
 
       if (!this.disabled && item) {
          // If we should delay press, create the delay and manage it here.
-         if (me.pressedDelay) {
+         if (me.getPressedDelay()) {
             if (me.pressedTimeout) {
                clearTimeout(me.pressedTimeout);
             }
             me.pressedTimeout = setTimeout(function() {
-               Ext.fly(item).addCls(me.pressedCls);
-            }, Ext.isNumber(me.pressedDelay) ? me.pressedDelay : 100);
+               Ext.fly(item).addCls(me.getPressedCls());
+            }, Ext.isNumber(me.getPressedDelay()) ? me.pressedDelay : 100);
          }
          else {
-            Ext.fly(item).addCls(me.pressedCls);
+            Ext.fly(item).addCls(me.getPressedCls());
          }
       }
    },
@@ -394,7 +391,7 @@ vrs.ux.touch.MenuPanel = Ext.extend(Ext.Component, {
       }
 
       if (item) {
-         Ext.fly(item).removeCls(me.pressedCls);
+         Ext.fly(item).removeCls(me.getPressedCls());
       }
    },
 

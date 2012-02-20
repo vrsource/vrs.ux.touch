@@ -9,7 +9,7 @@ onReady: function() {
       {content: 'Allow Tracking', leftIcon: 'img/checked.png' }
    ];
 
-   menu = new vrs.ux.touch.MenuPanel({
+   menu = Ext.create('vrs.ux.touch.MenuPanel', {
       menuItems: menu_items,
       listeners: {
          itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
@@ -19,7 +19,7 @@ onReady: function() {
    });
 
    // Selection menu
-   selection_menu = new vrs.ux.touch.MenuPanel({
+   selection_menu = Ext.create('vrs.ux.touch.MenuPanel', {
       listeners: {
          itemTap: function(formList, index, el, ev) {
             // Change the check to be on the one that was just selected
@@ -40,15 +40,13 @@ onReady: function() {
 
    panel = new Ext.form.FormPanel({
       fullscreen: true,
-      scroll: 'vertical',
-      dockedItems: [
-         {
-            dock : 'top',
-            xtype: 'toolbar',
-            title: 'Menu Panel'
-         }
-      ],
+      scrollabe: 'vertical',
       items: [
+         {
+            docked: 'top',
+            xtype : 'toolbar',
+            title : 'Menu Panel'
+         },
          {
             xtype: 'fieldset',
             title: 'Mixed Menu and Form Fields',
@@ -62,7 +60,7 @@ onReady: function() {
                   placeHolder: 'Tom Roy',
                   autoCapitalize : true,
                   required: true,
-                  useClearIcon: true
+                  clearIcon: true
                }, {
                   xtype: 'togglefield',
                   name: 'enable',
@@ -72,7 +70,7 @@ onReady: function() {
                    name: 'password',
                    label: 'Password',
                    placeHolder: 'Select each time',
-                   useClearIcon: true
+                   clearIcon: true
                }
             ]
          },

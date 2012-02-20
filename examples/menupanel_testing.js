@@ -120,14 +120,12 @@ onReady: function() {
       scroll: 'vertical',
       cls: 'x-form-settings-panel',
       id: 'MyFormPanel',
-      dockedItems: [
+      items: [
          {
-            dock : 'top',
+            docked : 'top',
             xtype: 'toolbar',
             title: 'Menu Panel Test'
-         }
-      ],
-      items: [
+         },
          {
             xtype: 'fieldset',
             title: 'Section 1',
