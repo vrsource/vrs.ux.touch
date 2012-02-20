@@ -1,317 +1,234 @@
 /**
- * @class Ext.util.Sortable
- * @extends Ext.util.Observable
- * @constructor
- * @param {Mixed} el
- * @param {Object} config
+ * @docauthor Tommy Maintz <tommy@sencha.com>
+ *
+ * A mixin which allows a data component to be sorted. This is used by e.g. {@link Ext.data.Store} and {@link Ext.data.TreeStore}.
+ *
+ * **NOTE**: This mixin is mainly for internal library use and most users should not need to use it directly. It
+ * is more likely you will want to use one of the component classes that import this mixin, such as
+ * {@link Ext.data.Store} or {@link Ext.data.TreeStore}.
  */
-Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
-    baseCls: 'x-sortable',
-
+Ext.define("Ext.util.Sortable", {
     /**
-     * @cfg {String} direction
-     * Possible values: 'vertical', 'horizontal'
-     * Defaults to 'vertical'
+     * @property {Boolean} isSortable
+     * Flag denoting that this object is sortable. Always true.
      */
-    direction: 'vertical',
-
-    /**
-     * @cfg {String} cancelSelector
-     * A simple CSS selector that represents elements within the draggable
-     * that should NOT initiate a drag.
-     */
-    cancelSelector: null,
-
-    // not yet implemented
-    //indicator: true,
-    //proxy: true,
-    //tolerance: null,
-
-    /**
-     * @cfg {Element/Boolean} constrain
-     * An Element to constrain the Sortable dragging to. Defaults to <tt>window</tt>.
-     * If <tt>true</tt> is specified, the dragging will be constrained to the element
-     * of the sortable.
-     */
-    constrain: window,
-    /**
-     * @cfg {String} group
-     * Draggable and Droppable objects can participate in a group which are
-     * capable of interacting. Defaults to 'base'
-     */
-    group: 'base',
-
-    /**
-     * @cfg {Boolean} revert
-     * This should NOT be changed.
-     * @private
-     */
-    revert: true,
-
-    /**
-     * @cfg {String} itemSelector
-     * A simple CSS selector that represents individual items within the Sortable.
-     */
-    itemSelector: null,
-
-    /**
-     * @cfg {String} handleSelector
-     * A simple CSS selector to indicate what is the handle to drag the Sortable.
-     */
-    handleSelector: null,
-
-    /**
-     * @cfg {Boolean} disabled
-     * Passing in true will disable this Sortable.
-     */
-    disabled: false,
-
-    /**
-     * @cfg {Number} delay
-     * How many milliseconds a user must hold the draggable before starting a
-     * drag operation. Defaults to 0 or immediate.
-     * @private
-     */
-    delay: 0,
-
-    // Properties
-
-    /**
-     * Read-only property that indicates whether a Sortable is currently sorting.
-     * @type Boolean
-     * @private
-     */
-    sorting: false,
-
-    /**
-     * Read-only value representing whether the Draggable can be moved vertically.
-     * This is automatically calculated by Draggable by the direction configuration.
-     * @type Boolean
-     * @private
-     */
-    vertical: false,
-
-    /**
-     * Read-only value representing whether the Draggable can be moved horizontally.
-     * This is automatically calculated by Draggable by the direction configuration.
-     * @type Boolean
-     * @private
-     */
-    vertical: false,
+    isSortable: true,
     
-    constructor : function(el, config) {
-        config = config || {};
-        Ext.apply(this, config);
+    /**
+     * @property {String} defaultSortDirection
+     * The default sort direction to use if one is not specified (defaults to "ASC")
+     */
+    defaultSortDirection: "ASC",
+    
+    requires: [
+        'Ext.util.Sorter'
+    ],
 
-        this.addEvents(
-            /**
-             * @event sortstart
-             * @param {Ext.Sortable} this
-             * @param {Ext.EventObject} e
-             */
-            'sortstart',
-            /**
-             * @event sortend
-             * @param {Ext.Sortable} this
-             * @param {Ext.EventObject} e
-             */
-            'sortend',
-            /**
-             * @event sortchange
-             * @param {Ext.Sortable} this
-             * @param {Ext.Element} el The Element being dragged.
-             * @param {Number} index The index of the element after the sort change.
-             */
-            'sortchange'
-
-            // not yet implemented.
-            // 'sortupdate',
-            // 'sortreceive',
-            // 'sortremove',
-            // 'sortenter',
-            // 'sortleave',
-            // 'sortactivate',
-            // 'sortdeactivate'
-        );
-
-        this.el = Ext.get(el);
-        Ext.util.Sortable.superclass.constructor.call(this);
-
-        if (this.direction == 'horizontal') {
-            this.horizontal = true;
-        }
-        else if (this.direction == 'vertical') {
-            this.vertical = true;
-        }
-        else {
-            this.horizontal = this.vertical = true;
-        }
-
-        this.el.addCls(this.baseCls);
-        this.startEventName = (this.delay > 0) ? 'taphold' : 'tapstart';
-        if (!this.disabled) {
-            this.enable();
-        }
-    },
-
-    // @private
-    onStart : function(e, t) {
-        if (this.cancelSelector && e.getTarget(this.cancelSelector)) {
-            return;
-        }
-        if (this.handleSelector && !e.getTarget(this.handleSelector)) {
-            return;
-        }
+    /**
+     * @property {String} sortRoot
+     * The property in each item that contains the data to sort.
+     */    
+    
+    /**
+     * Performs initialization of this mixin. Component classes using this mixin should call this method during their
+     * own initialization.
+     */
+    initSortable: function() {
+        var me = this,
+            sorters = me.sorters;
         
-        if (!this.sorting) {
-            this.onSortStart(e, t);
-        }
-    },
-
-    // @private
-    onSortStart : function(e, t) {
-        this.sorting = true;
-        var draggable = new Ext.util.Draggable(t, {
-            threshold: 0,
-            revert: this.revert,
-            direction: this.direction,
-            constrain: this.constrain === true ? this.el : this.constrain,
-            animationDuration: 100
-        });
-        draggable.on({
-            drag: this.onDrag,
-            dragend: this.onDragEnd,
-            scope: this
+        /**
+         * @property {Ext.util.MixedCollection} sorters
+         * The collection of {@link Ext.util.Sorter Sorters} currently applied to this Store
+         */
+        me.sorters = Ext.create('Ext.util.AbstractMixedCollection', false, function(item) {
+            return item.id || item.property;
         });
         
-        this.dragEl = t;
-        this.calculateBoxes();
-
-        if (!draggable.dragging) {
-            draggable.onStart(e);
+        if (sorters) {
+            me.sorters.addAll(me.decodeSorters(sorters));
         }
-        
-        this.fireEvent('sortstart', this, e);
     },
 
-    // @private
-    calculateBoxes : function() {
-        this.items = [];
-        var els = this.el.select(this.itemSelector, false),
-            ln = els.length, i, item, el, box;
+    /**
+     * Sorts the data in the Store by one or more of its properties. Example usage:
+     *
+     *     //sort by a single field
+     *     myStore.sort('myField', 'DESC');
+     *
+     *     //sorting by multiple fields
+     *     myStore.sort([
+     *         {
+     *             property : 'age',
+     *             direction: 'ASC'
+     *         },
+     *         {
+     *             property : 'name',
+     *             direction: 'DESC'
+     *         }
+     *     ]);
+     *
+     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Sorter} instances, and delegates
+     * the actual sorting to its internal {@link Ext.util.MixedCollection}.
+     *
+     * When passing a single string argument to sort, Store maintains a ASC/DESC toggler per field, so this code:
+     *
+     *     store.sort('myField');
+     *     store.sort('myField');
+     *
+     * Is equivalent to this code, because Store handles the toggling automatically:
+     *
+     *     store.sort('myField', 'ASC');
+     *     store.sort('myField', 'DESC');
+     *
+     * @param {String/Ext.util.Sorter[]} sorters Either a string name of one of the fields in this Store's configured
+     * {@link Ext.data.Model Model}, or an array of sorter configurations.
+     * @param {String} direction The overall direction to sort the data by. Defaults to "ASC".
+     * @return {Ext.util.Sorter[]}
+     */
+    sort: function(sorters, direction, where, doSort) {
+        var me = this,
+            sorter, sorterFn,
+            newSorters;
+        
+        if (Ext.isArray(sorters)) {
+            doSort = where;
+            where = direction;
+            newSorters = sorters;
+        }
+        else if (Ext.isObject(sorters)) {
+            doSort = where;
+            where = direction;
+            newSorters = [sorters];
+        }
+        else if (Ext.isString(sorters)) {
+            sorter = me.sorters.get(sorters);
 
-        for (i = 0; i < ln; i++) {
-            el = els[i];
-            if (el != this.dragEl) {
-                item = Ext.fly(el).getPageBox(true);
-                item.el = el;
-                this.items.push(item);
+            if (!sorter) {
+                sorter = {
+                    property : sorters,
+                    direction: direction
+                };
+                newSorters = [sorter];
+            }
+            else if (direction === undefined) {
+                sorter.toggle();
+            }
+            else {
+                sorter.setDirection(direction);
             }
         }
-    },
-
-    // @private
-    onDrag : function(draggable, e) {
-        var items = this.items,
-            ln = items.length,
-            region = draggable.region,
-            sortChange = false,
-            i, intersect, overlap, item;
+        
+        if (newSorters && newSorters.length) {
+            newSorters = me.decodeSorters(newSorters);
+            if (Ext.isString(where)) {
+                if (where === 'prepend') {
+                    sorters = me.sorters.clone().items;
+                    
+                    me.sorters.clear();
+                    me.sorters.addAll(newSorters);
+                    me.sorters.addAll(sorters);
+                }
+                else {
+                    me.sorters.addAll(newSorters);
+                }
+            }
+            else {
+                me.sorters.clear();
+                me.sorters.addAll(newSorters);
+            }
             
-        for (i = 0; i < ln; i++) {
-            item = items[i];
-            intersect = region.intersect(item);
-            if (intersect) {
-                if (this.vertical && Math.abs(intersect.top - intersect.bottom) > (region.bottom - region.top) / 2) {
-                    if (region.bottom > item.top && item.top > region.top) {
-                        draggable.el.insertAfter(item.el);
-                    }
-                    else {
-                        draggable.el.insertBefore(item.el);
-                    }
-                    sortChange = true;
-                }
-                else if (this.horizontal && Math.abs(intersect.left - intersect.right) > (region.right - region.left) / 2) {
-                    if (region.right > item.left && item.left > region.left) {
-                        draggable.el.insertAfter(item.el);
-                    }
-                    else {
-                        draggable.el.insertBefore(item.el);
-                    }
-                    sortChange = true;
-                }
-
-                if (sortChange) {
-                    // We reset the draggable (initializes all the new start values)
-                    draggable.reset();
-
-                    // Move the draggable to its current location (since the transform is now
-                    // different)
-                    draggable.moveTo(region.left, region.top);
-
-                    // Finally lets recalculate all the items boxes
-                    this.calculateBoxes();
-                    this.fireEvent('sortchange', this, draggable.el, this.el.select(this.itemSelector, false).indexOf(draggable.el.dom));
-                    return;
-                }
+            if (doSort !== false) {
+                me.onBeforeSort(newSorters);
             }
         }
-    },
+        
+        if (doSort !== false) {
+            sorters = me.sorters.items;
+            if (sorters.length) {
+                //construct an amalgamated sorter function which combines all of the Sorters passed
+                sorterFn = function(r1, r2) {
+                    var result = sorters[0].sort(r1, r2),
+                        length = sorters.length,
+                        i;
 
-    // @private
-    onDragEnd : function(draggable, e) {
-        draggable.destroy();
-        this.sorting = false;
-        this.fireEvent('sortend', this, draggable, e);
-    },
+                        //if we have more than one sorter, OR any additional sorter functions together
+                        for (i = 1; i < length; i++) {
+                            result = result || sorters[i].sort.call(this, r1, r2);
+                        }
 
-    /**
-     * Enables sorting for this Sortable.
-     * This method is invoked immediately after construction of a Sortable unless
-     * the disabled configuration is set to true.
-     */
-    enable : function() {
-        this.el.on(this.startEventName, this.onStart, this, {delegate: this.itemSelector, holdThreshold: this.delay});
-        this.disabled = false;
-    },
+                    return result;
+                };
 
-    /**
-     * Disables sorting for this Sortable.
-     */
-    disable : function() {
-        this.el.un(this.startEventName, this.onStart, this);
-        this.disabled = true;
+                me.doSort(sorterFn);                
+            }
+        }
+        
+        return sorters;
     },
     
+    onBeforeSort: Ext.emptyFn,
+        
     /**
-     * Method to determine whether this Sortable is currently disabled.
-     * @return {Boolean} the disabled state of this Sortable.
+     * @private
+     * Normalizes an array of sorter objects, ensuring that they are all Ext.util.Sorter instances
+     * @param {Array} sorters The sorters array
+     * @return {Array} Array of Ext.util.Sorter objects
      */
-    isDisabled : function() {
-        return this.disabled;
+    decodeSorters: function(sorters) {
+        if (!Ext.isArray(sorters)) {
+            if (sorters === undefined) {
+                sorters = [];
+            } else {
+                sorters = [sorters];
+            }
+        }
+
+        var length = sorters.length,
+            Sorter = Ext.util.Sorter,
+            fields = this.model ? this.model.prototype.fields : null,
+            field,
+            config, i;
+
+        for (i = 0; i < length; i++) {
+            config = sorters[i];
+
+            if (!(config instanceof Sorter)) {
+                if (Ext.isString(config)) {
+                    config = {
+                        property: config
+                    };
+                }
+                
+                Ext.applyIf(config, {
+                    root     : this.sortRoot,
+                    direction: "ASC"
+                });
+
+                if (config.fn) {
+                    config.sorterFn = config.fn;
+                }
+
+                //support a function to be passed as a sorter definition
+                if (typeof config == 'function') {
+                    config = {
+                        sorterFn: config
+                    };
+                }
+
+                // ensure sortType gets pushed on if necessary
+                if (fields && !config.transform) {
+                    field = fields.get(config.property);
+                    config.transform = field ? field.sortType : undefined;
+                }
+                sorters[i] = Ext.create('Ext.util.Sorter', config);
+            }
+        }
+
+        return sorters;
     },
     
-    /**
-     * Method to determine whether this Sortable is currently sorting.
-     * @return {Boolean} the sorting state of this Sortable.
-     */
-    isSorting : function() {
-        return this.sorting;
-    },
-    
-    /**
-     * Method to determine whether this Sortable is currently disabled.
-     * @return {Boolean} the disabled state of this Sortable.
-     */
-    isVertical : function() {
-        return this.vertical;
-    },
-    
-    /**
-     * Method to determine whether this Sortable is currently sorting.
-     * @return {Boolean} the sorting state of this Sortable.
-     */
-    isHorizontal : function() {
-        return this.horizontal;
-    }    
+    getSorters: function() {
+        return this.sorters.items;
+    }
 });

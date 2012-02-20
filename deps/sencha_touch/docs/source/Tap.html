@@ -1,130 +1,88 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
-</head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js">Ext.gesture.Tap = Ext.extend(Ext.gesture.Gesture, {
-    handles: [
-        'tapstart',
-        'tapcancel',
-        'tap', 
-        'doubletap', 
-        'taphold',
-        'singletap'
-    ],
-    
-    cancelThreshold: 10,
-    
-    doubleTapThreshold: 800,
-
-    singleTapThreshold: 400,
-
-    holdThreshold: 1000,
-
-    fireClickEvent: false,
-    
-    onTouchStart : function(e, touch) {
-        var me = this;
-        
-        me.startX = touch.pageX;
-        me.startY = touch.pageY;
-        me.fire('tapstart', e, me.getInfo(touch));
-        
-        if (this.listeners.taphold) {    
-            me.timeout = setTimeout(function() {
-                me.fire('taphold', e, me.getInfo(touch));
-                delete me.timeout;
-            }, me.holdThreshold);            
-        }
-        
-        me.lastTouch = touch;
-    },
-    
-    onTouchMove : function(e, touch) {
-        var me = this;
-        if (me.isCancel(touch)) {
-            me.fire('tapcancel', e, me.getInfo(touch));
-            if (me.timeout) {
-                clearTimeout(me.timeout);
-                delete me.timeout;
-            }
-            me.stop();
-        }
-        
-        me.lastTouch = touch;
-    },
-    
-    onTouchEnd : function(e) {
-        var me = this,
-            info = me.getInfo(me.lastTouch);
-        
-        this.fireTapEvent(e, info);
-        
-        if (me.lastTapTime && e.timeStamp - me.lastTapTime <= me.doubleTapThreshold) {
-            me.lastTapTime = null;
-            e.preventDefault();
-            me.fire('doubletap', e, info);
-        }
-        else {
-            me.lastTapTime = e.timeStamp;
-        }
-
-        if (me.listeners && me.listeners.singletap && me.singleTapThreshold && !me.preventSingleTap) {
-            me.fire('singletap', e, info);
-            me.preventSingleTap = true;
-            setTimeout(function() {
-                me.preventSingleTap = false;
-            }, me.singleTapThreshold);
-        }
-        
-        if (me.timeout) {
-            clearTimeout(me.timeout);
-            delete me.timeout;
-        }
-    },
-
-    fireTapEvent: function(e, info) {
-        this.fire('tap', e, info);
-        
-        if (e.event)
-            e = e.event;
-
-        var target = (e.changedTouches ? e.changedTouches[0] : e).target;
-
-        if (!target.disabled && this.fireClickEvent) {
-            var clickEvent = document.createEvent("MouseEvent");
-                clickEvent.initMouseEvent('click', e.bubbles, e.cancelable, document.defaultView, e.detail, e.screenX, e.screenY, e.clientX,
-                                         e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.metaKey, e.button, e.relatedTarget);
-                clickEvent.isSimulated = true;
-
-
-            target.dispatchEvent(clickEvent);
-        }
-    },
-    
-    getInfo : function(touch) {
-        var x = touch.pageX,
-            y = touch.pageY;
-            
-        return {
-            pageX: x,
-            pageY: y,
-            startX: x,
-            startY: y
-        };
-    },
-    
-    isCancel : function(touch) {
-        var me = this;
-        return (
-            Math.abs(touch.pageX - me.startX) >= me.cancelThreshold ||
-            Math.abs(touch.pageY - me.startY) >= me.cancelThreshold
-        );
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
     }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-event-recognizer-Tap'>/**
+</span> * A simple event recogniser which knows when you tap.
+ *
+ * @private
+ */
+Ext.define('Ext.event.recognizer.Tap', {
+
+    handledEvents: ['tap'],
+
+<span id='Ext-dom-Element-event-tap'>    /**
+</span>     * @member Ext.dom.Element
+     * @event tap
+     * Fires when you tap
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
+
+<span id='Ext-dom-Element-event-tapstart'>    /**
+</span>     * @member Ext.dom.Element
+     * @event tapstart
+     * @deprecated 2.0.0 Please listener to 'touchstart' event instead
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
+
+<span id='Ext-dom-Element-event-tapcancel'>    /**
+</span>     * @member Ext.dom.Element
+     * @event tapcancel
+     * @deprecated 2.0.0 Please listener to 'touchmove' event instead
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
+    extend: 'Ext.event.recognizer.SingleTouch',
+
+    onTouchMove: function() {
+        return this.fail(this.self.TOUCH_MOVED);
+    },
+
+    onTouchEnd: function(e) {
+        var touch = e.changedTouches[0];
+
+        this.fire('tap', e, [touch]);
+    }
+
+}, function() {
+    //&lt;deprecated product=touch since=2.0&gt;
+    this.override({
+        handledEvents: ['tap', 'tapstart', 'tapcancel'],
+
+        onTouchStart: function(e) {
+            if (this.callOverridden(arguments) === false) {
+                return false;
+            }
+
+            this.fire('tapstart', e, [e.changedTouches[0]]);
+        },
+
+        onTouchMove: function(e) {
+            this.fire('tapcancel', e, [e.changedTouches[0]]);
+
+            return this.callOverridden(arguments);
+        }
+    });
+    //&lt;/deprecated&gt;
 });
-Ext.regGesture('tap', Ext.gesture.Tap);</pre>    
+</pre>
 </body>
 </html>

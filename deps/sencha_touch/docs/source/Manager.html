@@ -1,395 +1,272 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js">Ext.gesture.Manager = new Ext.AbstractManager({
-    eventNames: {
-        start: 'touchstart',
-        move: 'touchmove',
-        end: 'touchend'
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-direct-Manager'>/**
+</span> * Ext.Direct aims to streamline communication between the client and server by providing a single interface that
+ * reduces the amount of common code typically required to validate data and handle returned data packets (reading data,
+ * error conditions, etc).
+ *
+ * The Ext.direct namespace includes several classes for a closer integration with the server-side. The Ext.data
+ * namespace also includes classes for working with Ext.data.Stores which are backed by data from an Ext.Direct method.
+ *
+ * # Specification
+ *
+ * For additional information consult the [Ext.Direct Specification][1].
+ *
+ * # Providers
+ *
+ * Ext.Direct uses a provider architecture, where one or more providers are used to transport data to and from the
+ * server. There are several providers that exist in the core at the moment:
+ *
+ * - {@link Ext.direct.JsonProvider JsonProvider} for simple JSON operations
+ * - {@link Ext.direct.PollingProvider PollingProvider} for repeated requests
+ * - {@link Ext.direct.RemotingProvider RemotingProvider} exposes server side on the client.
+ *
+ * A provider does not need to be invoked directly, providers are added via {@link Ext.direct.Manager}.{@link #addProvider}.
+ *
+ * # Router
+ *
+ * Ext.Direct utilizes a &quot;router&quot; on the server to direct requests from the client to the appropriate server-side
+ * method. Because the Ext.Direct API is completely platform-agnostic, you could completely swap out a Java based server
+ * solution and replace it with one that uses C# without changing the client side JavaScript at all.
+ *
+ * # Server side events
+ *
+ * Custom events from the server may be handled by the client by adding listeners, for example:
+ *
+ *     {&quot;type&quot;:&quot;event&quot;,&quot;name&quot;:&quot;message&quot;,&quot;data&quot;:&quot;Successfully polled at: 11:19:30 am&quot;}
+ *
+ *     // add a handler for a 'message' event sent by the server
+ *     Ext.direct.Manager.on('message', function(e){
+ *         out.append(String.format('&lt;p&gt;&lt;i&gt;{0}&lt;/i&gt;&lt;/p&gt;', e.data));
+ *         out.el.scrollTo('t', 100000, true);
+ *     });
+ *
+ *    [1]: http://sencha.com/products/extjs/extdirect
+ *
+ * @singleton
+ * @alternateClassName Ext.Direct
+ */
+Ext.define('Ext.direct.Manager', {
+    singleton: true,
+
+    mixins: {
+        observable: 'Ext.util.Observable'
     },
 
-    defaultPreventedMouseEvents: ['click'],
+    requires: ['Ext.util.Collection'],
 
-    clickMoveThreshold: 5,
+    alternateClassName: 'Ext.Direct',
 
-    init: function() {
-        this.targets = [];
-
-        this.followTouches = [];
-        this.currentGestures = [];
-        this.currentTargets = [];
-
-        if (!Ext.supports.Touch) {
-            Ext.apply(this.eventNames, {
-                start: 'mousedown',
-                move: 'mousemove',
-                end: 'mouseup'
-            });
-        }
-
-        this.listenerWrappers = {
-            start: Ext.createDelegate(this.onTouchStart, this),
-            move: Ext.createDelegate(this.onTouchMove, this),
-            end: Ext.createDelegate(this.onTouchEnd, this),
-            mouse: Ext.createDelegate(this.onMouseEvent, this)
-        };
-
-        this.attachListeners();
-    },
-
-    freeze: function() {
-        this.isFrozen = true;
-    },
-
-    thaw: function() {
-        this.isFrozen = false;
-    },
-
-    getEventSimulator: function() {
-        if (!this.eventSimulator) {
-            this.eventSimulator = new Ext.util.EventSimulator();
-        }
-
-        return this.eventSimulator;
-    },
-
-    attachListeners: function() {
-        Ext.iterate(this.eventNames, function(key, name) {
-            document.addEventListener(name, this.listenerWrappers[key], false);
-        }, this);
-
-        if (Ext.supports.Touch) {
-            this.defaultPreventedMouseEvents.forEach(function(name) {
-                document.addEventListener(name, this.listenerWrappers['mouse'], true);
-            }, this);
-        }
-    },
-
-    detachListeners: function() {
-        Ext.iterate(this.eventNames, function(key, name) {
-            document.removeEventListener(name, this.listenerWrappers[key], false);
-        }, this);
-
-        if (Ext.supports.Touch) {
-            this.defaultPreventedMouseEvents.forEach(function(name) {
-                document.removeEventListener(name, this.listenerWrappers['mouse'], true);
-            }, this);
+    statics: {
+        exceptions: {
+            TRANSPORT: 'xhr',
+            PARSE: 'parse',
+            LOGIN: 'login',
+            SERVER: 'exception'
         }
     },
 
-    onMouseEvent: function(e) {
-        if (!e.isSimulated) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+<span id='Ext-direct-Manager-event-event'>    /**
+</span>     * @event event
+     * Fires after an event.
+     * @param {Ext.direct.Event} e The Ext.direct.Event type that occurred.
+     * @param {Ext.direct.Provider} provider The {@link Ext.direct.Provider Provider}.
+     */
+
+<span id='Ext-direct-Manager-event-exception'>    /**
+</span>     * @event exception
+     * Fires after an event exception.
+     * @param {Ext.direct.Event} e The event type that occurred.
+     */
+
+    constructor: function() {
+        var me = this;
+
+        me.transactions = Ext.create('Ext.util.Collection', this.getKey);
+        me.providers = Ext.create('Ext.util.Collection', this.getKey);
     },
 
-    onTouchStart: function(e) {
-        var targets = [],
-            target = e.target;
+    getKey: function(item) {
+        return item.getId();
+    },
 
-        if (e.stopped === true) {
+<span id='Ext-direct-Manager-method-addProvider'>    /**
+</span>     * Adds an Ext.Direct Provider and creates the proxy or stub methods to execute server-side methods. If the provider
+     * is not already connected, it will auto-connect.
+     *
+     *     Ext.direct.Manager.addProvider({
+     *         type: &quot;remoting&quot;,       // create a {@link Ext.direct.RemotingProvider}
+     *         url: &quot;php\/router.php&quot;, // url to connect to the Ext.Direct server-side router.
+     *         actions: {              // each property within the actions object represents a Class
+     *             TestAction: [       // array of methods within each server side Class
+     *             {
+     *                 name: &quot;doEcho&quot;, // name of method
+     *                 len: 1
+     *             },{
+     *                 name: &quot;multiply&quot;,
+     *                 len: 1
+     *             },{
+     *                 name: &quot;doForm&quot;,
+     *                 formHandler: true,  // handle form on server with Ext.Direct.Transaction
+     *                 len: 1
+     *             }]
+     *         },
+     *         namespace: &quot;myApplication&quot;, // namespace to create the Remoting Provider in
+     *     });
+     *
+     * @param {Ext.direct.Provider/Object...} provider
+     * Accepts any number of Provider descriptions (an instance or config object for
+     * a Provider). Each Provider description instructs Ext.Directhow to create
+     * client-side stub methods.
+     */
+    addProvider : function(provider) {
+        var me = this,
+            args = Ext.toArray(arguments),
+            i = 0, ln;
+
+        if (args.length &gt; 1) {
+            for (ln = args.length; i &lt; ln; ++i) {
+                me.addProvider(args[i]);
+            }
             return;
         }
 
-        if (Ext.is.Android) {
-            if (!(target.tagName && ['input', 'textarea', 'select'].indexOf(target.tagName.toLowerCase()) !== -1)) {
-                e.preventDefault();
-            }
+        // if provider has not already been instantiated
+        if (!provider.isProvider) {
+            provider = Ext.create('direct.' + provider.type + 'provider', provider);
+        }
+        me.providers.add(provider);
+        provider.on('data', me.onProviderData, me);
+
+        if (!provider.isConnected()) {
+            provider.connect();
         }
 
-        if (this.isFrozen) {
+        return provider;
+    },
+
+<span id='Ext-direct-Manager-method-getProvider'>    /**
+</span>     * Retrieves a {@link Ext.direct.Provider provider} by the **{@link Ext.direct.Provider#id id}** specified when the
+     * provider is {@link #addProvider added}.
+     * @param {String/Ext.direct.Provider} id The id of the provider, or the provider instance.
+     */
+    getProvider : function(id){
+        return id.isProvider ? id : this.providers.get(id);
+    },
+
+<span id='Ext-direct-Manager-method-removeProvider'>    /**
+</span>     * Removes the provider.
+     * @param {String/Ext.direct.Provider} provider The provider instance or the id of the provider.
+     * @return {Ext.direct.Provider} The provider, null if not found.
+     */
+    removeProvider : function(provider) {
+        var me = this,
+            providers = me.providers;
+
+        provider = provider.isProvider ? provider : providers.get(provider);
+
+        if (provider) {
+            provider.un('data', me.onProviderData, me);
+            providers.remove(provider);
+            return provider;
+        }
+        return null;
+    },
+
+<span id='Ext-direct-Manager-method-addTransaction'>    /**
+</span>     * Adds a transaction to the manager.
+     * @private
+     * @param {Ext.direct.Transaction} transaction The transaction to add
+     * @return {Ext.direct.Transaction} transaction
+     */
+    addTransaction: function(transaction) {
+        this.transactions.add(transaction);
+        return transaction;
+    },
+
+<span id='Ext-direct-Manager-method-removeTransaction'>    /**
+</span>     * Removes a transaction from the manager.
+     * @private
+     * @param {String/Ext.direct.Transaction} transaction The transaction/id of transaction to remove
+     * @return {Ext.direct.Transaction} transaction
+     */
+    removeTransaction: function(transaction) {
+        transaction = this.getTransaction(transaction);
+        this.transactions.remove(transaction);
+        return transaction;
+    },
+
+<span id='Ext-direct-Manager-method-getTransaction'>    /**
+</span>     * Gets a transaction
+     * @private
+     * @param {String/Ext.direct.Transaction} transaction The transaction/id of transaction to get
+     * @return {Ext.direct.Transaction}
+     */
+    getTransaction: function(transaction) {
+        return Ext.isObject(transaction) ? transaction : this.transactions.get(transaction);
+    },
+
+    onProviderData : function(provider, event) {
+        var me = this,
+            i = 0, ln,
+            name;
+
+        if (Ext.isArray(event)) {
+            for (ln = event.length; i &lt; ln; ++i) {
+                me.onProviderData(provider, event[i]);
+            }
             return;
         }
 
-        // There's already a touchstart without any touchend!
-        // This used to happen on HTC Desire and HTC Incredible
-        // We have to clean it up
-        if (this.startEvent) {
-            this.onTouchEnd(e);
+        name = event.getName();
+
+        if (name &amp;&amp; name != 'event' &amp;&amp; name != 'exception') {
+            me.fireEvent(name, event);
+        } else if (event.getStatus() === false) {
+            me.fireEvent('exception', event);
         }
 
-        this.locks = {};
-
-        this.currentTargets = [target];
-
-        while (target) {
-            if (this.targets.indexOf(target) !== -1) {
-                targets.unshift(target);
-            }
-
-            target = target.parentNode;
-            this.currentTargets.push(target);
-        }
-
-        this.startEvent = e;
-        this.startPoint = Ext.util.Point.fromEvent(e);
-        this.lastMovePoint = null;
-        this.isClick = true;
-        this.handleTargets(targets, e);
+        me.fireEvent('event', event, provider);
     },
 
-    onTouchMove: function(e) {
-        if (Ext.is.MultiTouch) {
-            e.preventDefault();
-        }
+<span id='Ext-direct-Manager-method-parseMethod'>    /**
+</span>     * Parses a direct function. It may be passed in a string format, for example:
+     * &quot;MyApp.Person.read&quot;.
+     * @protected
+     * @param {String/Function} fn The direct function
+     * @return {Function} The function to use in the direct call. Null if not found
+     */
+    parseMethod: function(fn) {
+        if (Ext.isString(fn)) {
+            var parts = fn.split('.'),
+                i = 0,
+                ln = parts.length,
+                current = window;
 
-        if (!this.startEvent) {
-            return;
-        }
-
-        if (Ext.is.Desktop) {
-            e.target = this.startEvent.target;
-        }
-
-        if (this.isFrozen) {
-            return;
-        }
-
-        var gestures = this.currentGestures,
-            gesture,
-            touch = e.changedTouches ? e.changedTouches[0] : e;
-
-        this.lastMovePoint = Ext.util.Point.fromEvent(e);
-
-        if (Ext.supports.Touch && this.isClick && !this.lastMovePoint.isWithin(this.startPoint, this.clickMoveThreshold)) {
-            this.isClick = false;
-        }
-
-        for (var i = 0; i < gestures.length; i++) {
-            if (e.stopped) {
-                break;
+            while (current &amp;&amp; i &lt; ln) {
+                current = current[parts[i]];
+                ++i;
             }
-
-            gesture = gestures[i];
-
-            if (gesture.listenForMove) {
-                gesture.onTouchMove(e, touch);
-            }
+            fn = Ext.isFunction(current) ? current : null;
         }
-    },
-
-    // This listener is here to always ensure we stop all current gestures
-    onTouchEnd: function(e) {
-        if (Ext.is.Blackberry) {
-            e.preventDefault();
-        }
-
-        if (this.isFrozen) {
-            return;
-        }
-
-        var gestures = this.currentGestures.slice(0),
-            ln = gestures.length,
-            i, gesture, endPoint,
-            needsAnotherMove = false,
-            touch = e.changedTouches ? e.changedTouches[0] : e;
-
-        if (this.startPoint) {
-            endPoint = Ext.util.Point.fromEvent(e);
-            if (!(this.lastMovePoint || this.startPoint)['equals'](endPoint)) {
-                needsAnotherMove = true;
-            }
-        }
-
-        for (i = 0; i < ln; i++) {
-            gesture = gestures[i];
-
-            if (!e.stopped && gesture.listenForEnd) {
-                // The point has changed, we should execute another onTouchMove before onTouchEnd
-                // to deal with the problem of missing events on Androids and alike
-                // This significantly improves scrolling experience on Androids!
-                if (needsAnotherMove) {
-                    gesture.onTouchMove(e, touch);
-                }
-
-                gesture.onTouchEnd(e, touch);
-            }
-
-            this.stopGesture(gesture);
-        }
-
-
-        if (Ext.supports.Touch && this.isClick) {
-            this.isClick = false;
-            this.getEventSimulator().fire('click', this.startEvent.target, touch);
-        }
-
-        this.lastMovePoint = null;
-        this.followTouches = [];
-        this.startedChangedTouch = false;
-        this.currentTargets = [];
-        this.startEvent = null;
-        this.startPoint = null;
-    },
-
-    handleTargets: function(targets, e) {
-        // In handle targets we have to first handle all the capture targets,
-        // then all the bubble targets.
-        var ln = targets.length,
-            i;
-
-        this.startedChangedTouch = false;
-        this.startedTouches = Ext.supports.Touch ? e.touches : [e];
-
-        for (i = 0; i < ln; i++) {
-            if (e.stopped) {
-                break;
-            }
-
-            this.handleTarget(targets[i], e, true);
-        }
-
-        for (i = ln - 1; i >= 0; i--) {
-            if (e.stopped) {
-                break;
-            }
-
-            this.handleTarget(targets[i], e, false);
-        }
-
-        if (this.startedChangedTouch) {
-            this.followTouches = this.followTouches.concat((Ext.supports.Touch && e.targetTouches) ? Ext.toArray(e.targetTouches) : [e]);
-        }
-    },
-
-    handleTarget: function(target, e, capture) {
-        var gestures = Ext.Element.data(target, 'x-gestures') || [],
-            ln = gestures.length,
-            i, gesture;
-
-        for (i = 0; i < ln; i++) {
-            gesture = gestures[i];
-            if (
-                (!!gesture.capture === !!capture) &&
-                (this.followTouches.length < gesture.touches) &&
-                ((Ext.supports.Touch && e.targetTouches) ? (e.targetTouches.length === gesture.touches) : true)
-            ) {
-                this.startedChangedTouch = true;
-                this.startGesture(gesture);
-
-                if (gesture.listenForStart) {
-                    gesture.onTouchStart(e, e.changedTouches ? e.changedTouches[0] : e);
-                }
-
-                if (e.stopped) {
-                    break;
-                }
-            }
-        }
-    },
-
-    startGesture: function(gesture) {
-        gesture.started = true;
-        this.currentGestures.push(gesture);
-    },
-
-    stopGesture: function(gesture) {
-        gesture.started = false;
-        this.currentGestures.remove(gesture);
-    },
-
-    addEventListener: function(target, eventName, listener, options) {
-        target = Ext.getDom(target);
-        options = options || {};
-
-        var targets = this.targets,
-            name = this.getGestureName(eventName),
-            gestures = Ext.Element.data(target, 'x-gestures'),
-            gesture;
-
-        if (!gestures) {
-            gestures = [];
-            Ext.Element.data(target, 'x-gestures', gestures);
-        }
-
-        // <debug>
-        if (!name) {
-            throw new Error('Trying to subscribe to unknown event ' + eventName);
-        }
-        // </debug>
-
-        if (targets.indexOf(target) === -1) {
-            this.targets.push(target);
-        }
-
-        gesture = this.get(target.id + '-' + name);
-
-        if (!gesture) {
-            gesture = this.create(Ext.apply({}, options, {
-                target: target,
-                type: name
-            }));
-
-            gestures.push(gesture);
-            // The line below is not needed, Ext.Element.data(target, 'x-gestures') still reference gestures
-            // Ext.Element.data(target, 'x-gestures', gestures);
-        }
-
-        gesture.addListener(eventName, listener);
-
-        // If there is already a finger down, then instantly start the gesture
-        if (this.startedChangedTouch && this.currentTargets.contains(target) && !gesture.started && !options.subsequent) {
-            this.startGesture(gesture);
-            if (gesture.listenForStart) {
-                gesture.onTouchStart(this.startEvent, this.startedTouches[0]);
-            }
-        }
-    },
-
-    removeEventListener: function(target, eventName, listener) {
-        target = Ext.getDom(target);
-
-        var name = this.getGestureName(eventName),
-            gestures = Ext.Element.data(target, 'x-gestures') || [],
-            gesture;
-
-        gesture = this.get(target.id + '-' + name);
-
-        if (gesture) {
-            gesture.removeListener(eventName, listener);
-
-            for (name in gesture.listeners) {
-                return;
-            }
-
-            gesture.destroy();
-            gestures.remove(gesture);
-            Ext.Element.data(target, 'x-gestures', gestures);
-        }
-    },
-
-    getGestureName: function(ename) {
-        return this.names && this.names[ename];
-    },
-
-    registerType: function(type, cls) {
-        var handles = cls.prototype.handles,
-            i, ln;
-
-        this.types[type] = cls;
-
-        cls[this.typeName] = type;
-
-        if (!handles) {
-            handles = cls.prototype.handles = [type];
-        }
-
-        this.names = this.names || {};
-
-        for (i = 0, ln = handles.length; i < ln; i++) {
-            this.names[handles[i]] = type;
-        }
+        return fn || null;
     }
 });
-
-Ext.regGesture = function() {
-    return Ext.gesture.Manager.registerType.apply(Ext.gesture.Manager, arguments);
-};</pre>    
+</pre>
 </body>
 </html>

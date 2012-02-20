@@ -1,23 +1,16 @@
+Ext.require(['Ext.Panel', 'Ext.Video']);
+
 Ext.setup({
     tabletStartupScreen: 'tablet_startup.png',
     phoneStartupScreen: 'phone_startup.png',
     icon: 'icon.png',
     glossOnIcon: false,
     onReady: function() {
-        var pnl = new Ext.Panel({
-            layout: {
-                type: 'vbox',
-                pack: 'center'
-            },
-            items: [{
-                xtype: 'video',
-                url: 'space.mp4',
-                loop: true,
-                width: 500,
-                height: 400,
-                posterUrl: 'Screenshot.png'
-            }],
-            fullscreen: true
-        })
+        Ext.Viewport.add({
+            xtype: 'video',
+            url: ['BigBuck.m4v', 'BigBuck.webm'],
+            loop: true,
+            posterUrl: 'cover.jpg'
+        });
     }
 });

@@ -1,263 +1,161 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js"><div id="cls-Ext.IndexBar"></div>/**
- * @class Ext.IndexBar
- * @extends Ext.DataPanel
- * <p>IndexBar is a component used to display a list of data (primarily an {@link #alphabet}) which can then be used to quickly
- * navigate through a list (see {@link Ext.List}) of data. When a user taps on an item in the {@link Ext.IndexBar}, it will fire
- * the <tt>{@link #index}</tt> event.</p>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-dataview-IndexBar'>/**
+</span> * IndexBar is a component used to display a list of data (primarily an alphabet) which can then be used to quickly
+ * navigate through a list (see {@link Ext.List}) of data. When a user taps on an item in the {@link Ext.IndexBar},
+ * it will fire the {@link #index} event.
  *
- * <h2>Screenshot:</h2>
+ * ## Example:
  *
- * {@img Ext.IndexBar/screenshot.png Ext.IndexBar screenshot}
- * 
- * <h2>Example code:</h2>
- * <p>Here is an example of the usage in a {@link Ext.List}:</p>
- * <pre><code>
-Ext.regModel('Contact', {
-    fields: ['firstName', 'lastName']
-});
-
-var store = new Ext.data.JsonStore({
-    model  : 'Contact',
-    sorters: 'lastName',
-
-    getGroupString : function(record) {
-        return record.get('lastName')[0];
-    },
-
-    data: [
-        {firstName: 'Tommy',   lastName: 'Maintz'},
-        {firstName: 'Rob',     lastName: 'Dougan'},
-        {firstName: 'Ed',      lastName: 'Spencer'},
-        {firstName: 'Jamie',   lastName: 'Avins'},
-        {firstName: 'Aaron',   lastName: 'Conran'},
-        {firstName: 'Dave',    lastName: 'Kaneda'},
-        {firstName: 'Michael', lastName: 'Mullany'},
-        {firstName: 'Abraham', lastName: 'Elias'},
-        {firstName: 'Jay',     lastName: 'Robinson'},
-        {firstName: 'Tommy',   lastName: 'Maintz'},
-        {firstName: 'Rob',     lastName: 'Dougan'},
-        {firstName: 'Ed',      lastName: 'Spencer'},
-        {firstName: 'Jamie',   lastName: 'Avins'},
-        {firstName: 'Aaron',   lastName: 'Conran'},
-        {firstName: 'Dave',    lastName: 'Kaneda'},
-        {firstName: 'Michael', lastName: 'Mullany'},
-        {firstName: 'Abraham', lastName: 'Elias'},
-        {firstName: 'Jay',     lastName: 'Robinson'}
-    ]
-});
-
-var list = new Ext.List({
-    tpl: '&lt;tpl for="."&gt;&lt;div class="contact"&gt;{firstName} &lt;strong&gt;{lastName}&lt;/strong&gt;&lt;/div&gt;&lt;/tpl&gt;',
-
-    itemSelector: 'div.contact',
-    singleSelect: true,
-    grouped     : true,
-    indexBar    : true,
-
-    store: store,
-
-    floating     : true,
-    width        : 350,
-    height       : 370,
-    centered     : true,
-    modal        : true,
-    hideOnMaskTap: false
-});
-list.show();
-   </code></pre>
+ * Here is an example of the usage in a {@link Ext.List}:
  *
- * <p>Alternatively you can initate the {@link Ext.IndexBar} component manually in a custom component by using something
- * similar to the following example:<p>
+ *     @example phone portrait preview
+ *     Ext.define('Contact', {
+ *         extend: 'Ext.data.Model',
+ *         config: {
+ *             fields: ['firstName', 'lastName']
+ *         }
+ *     });
  *
- * <code><pre>
-var indexBar = new Ext.IndexBar({
-    dock    : 'right',
-    overlay : true,
-    alphabet: true
-});
- * </code></pre>
- * @constructor
- * Create a new IndexBar
- * @param {Object} config The config object
- * @xtype indexbar
- */
-Ext.IndexBar = Ext.extend(Ext.DataView, {
-    <div id="cfg-Ext.IndexBar-componentCls"></div>/**
-     * @cfg {String} componentCls Base CSS class
-     * Defaults to <tt>'x-indexbar'</tt>
-     */
-    componentCls: 'x-indexbar',
+ *     var store = new Ext.data.JsonStore({
+ *        model: 'Contact',
+ *        sorters: 'lastName',
+ *
+ *        grouper: {
+ *            groupFn: function(record) {
+ *                return record.get('lastName')[0];
+ *            }
+ *        },
+ *
+ *        data: [
+ *            {firstName: 'Tommy',   lastName: 'Maintz'},
+ *            {firstName: 'Rob',     lastName: 'Dougan'},
+ *            {firstName: 'Ed',      lastName: 'Spencer'},
+ *            {firstName: 'Jamie',   lastName: 'Avins'},
+ *            {firstName: 'Aaron',   lastName: 'Conran'},
+ *            {firstName: 'Dave',    lastName: 'Kaneda'},
+ *            {firstName: 'Jacky',   lastName: 'Nguyen'},
+ *            {firstName: 'Abraham', lastName: 'Elias'},
+ *            {firstName: 'Jay',     lastName: 'Robinson'},
+ *            {firstName: 'Nigel',   lastName: 'White'},
+ *            {firstName: 'Don',     lastName: 'Griffin'},
+ *            {firstName: 'Nico',    lastName: 'Ferrero'},
+ *            {firstName: 'Nicolas', lastName: 'Belmonte'},
+ *            {firstName: 'Jason',   lastName: 'Johnston'}
+ *        ]
+ *     });
+ *
+ *     var list = new Ext.List({
+ *        fullscreen: true,
+ *        itemTpl: '&lt;div class=&quot;contact&quot;&gt;{firstName} &lt;strong&gt;{lastName}&lt;/strong&gt;&lt;/div&gt;',
+ *
+ *        grouped     : true,
+ *        indexBar    : true,
+ *        store: store,
+ *        hideOnMaskTap: false
+ *     });
+ *
+*/
+Ext.define('Ext.dataview.IndexBar', {
+    extend: 'Ext.Component',
+    alternateClassName: 'Ext.IndexBar',
 
-    <div id="cfg-Ext.IndexBar-direction"></div>/**
-     * @cfg {String} direction Layout direction, can be either 'vertical' or 'horizontal'
-     * Defaults to <tt>'vertical'</tt>
-     */
-    direction: 'vertical',
-
-    <div id="cfg-Ext.IndexBar-tpl"></div>/**
-     * @cfg {String} tpl Template for items
-     */
-    tpl: '<tpl for="."><div class="x-indexbar-item">{value}</div></tpl>',
-
-    <div id="cfg-Ext.IndexBar-itemSelector"></div>/**
-     * @cfg {String} itemSelector <b>Required</b>. A simple CSS selector (e.g. <tt>div.x-indexbar-item</tt> for items
-     */
-    itemSelector: 'div.x-indexbar-item',
-
-    <div id="cfg-Ext.IndexBar-letters"></div>/**
-     * @cfg {Array} letters
-     * The letters to show on the index bar. Defaults to the English alphabet, A-Z.
-     */
-    letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-
-    <div id="cfg-Ext.IndexBar-listPrefix"></div>/**
-     * @cfg {String} listPrefix
-     * The prefix string to be appended at the beginning of the list. E.g: useful to add a "#" prefix before numbers
-     */
-    listPrefix: '',
-
-    <div id="cfg-Ext.IndexBar-alphabet"></div>/**
-     * @cfg {Boolean} alphabet true to use the {@link #letters} property to show a list of the alphabet. Should <b>not</b> be used
-     * in conjunction with {@link #store}.
-     */
-
-    <div id="cfg-Ext.IndexBar-store"></div>/**
-     * @cfg {Ext.data.Store} store
-     * The store to be used for displaying data on the index bar. The store model must have a <tt>value</tt> field when using the
-     * default {@link #tpl}. If no {@link #store} is defined, it will create a store using the <tt>IndexBarModel</tt> model.
+<span id='Ext-dataview-IndexBar-event-index'>    /**
+</span>     * @event index
+     * Fires when an item in the index bar display has been tapped.
+     * @param {Ext.dataview.IndexBar} this The IndexBar instance
+     * @param {String} html The HTML inside the tapped node.
+     * @param {Ext.dom.Element} target The node on the indexbar that has been tapped.
      */
 
-    // We dont want the body of this component to be sized by a DockLayout, thus we set the layout to be an autocomponent layout.
-    componentLayout: 'autocomponent',
+    config: {
+        baseCls: Ext.baseCSSPrefix + 'indexbar',
 
-    scroll: false,
-    
-    // @private
-    initComponent : function() {
-        // No docking and no sizing of body!
-        this.componentLayout = this.getComponentLayout();
+<span id='Ext-dataview-IndexBar-cfg-direction'>        /**
+</span>         * @cfg {String} direction
+         * Layout direction, can be either 'vertical' or 'horizontal'
+         * @accessor
+         */
+        direction: 'vertical',
 
-        if (!this.store) {
-            this.store = new Ext.data.Store({
-                model: 'IndexBarModel'
-            });
-        }
+<span id='Ext-dataview-IndexBar-cfg-letters'>        /**
+</span>         * @cfg {Array} letters
+         * The letters to show on the index bar.
+         * @accessor
+         */
+        letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 
-        if (this.alphabet == true) {
-            this.ui = this.ui || 'alphabet';
-        }
+        ui: 'alphabet',
 
-        if (this.direction == 'horizontal') {
-            this.horizontal = true;
-        }
-        else {
-            this.vertical = true;
-        }
-
-        this.addEvents(
-          <div id="event-Ext.IndexBar-index"></div>/**
-           * @event index
-           * Fires when an item in the index bar display has been tapped
-           * @param {Ext.data.Model} record The record tapped on the indexbar
-           * @param {HTMLElement} target The node on the indexbar that has been tapped
-           * @param {Number} index The index of the record tapped on the indexbar
-           */
-          'index'
-        );
-
-        Ext.apply(this.renderData, {
-            componentCls: this.componentCls
-        });
-        
-        Ext.apply(this.renderSelectors, {
-            body: '.' + this.componentCls + '-body'
-        });
-        
-        Ext.IndexBar.superclass.initComponent.call(this);
-    },
-
-    renderTpl : ['<div class="{componentCls}-body"></div>'],
-    
-    getTargetEl : function() {
-        return this.body;
-    },
-    
-    // @private
-    afterRender : function() {
-        Ext.IndexBar.superclass.afterRender.call(this);
-
-        if (this.alphabet === true) {
-            this.loadAlphabet();
-        }
-        if (this.vertical) {
-            this.el.addCls(this.componentCls + '-vertical');
-        }
-        else if (this.horizontal) {
-            this.el.addCls(this.componentCls + '-horizontal');
-        }
+<span id='Ext-dataview-IndexBar-cfg-listPrefix'>        /**
+</span>         * @cfg {String} listPrefix
+         * The prefix string to be appended at the beginning of the list.
+         * E.g: useful to add a &quot;#&quot; prefix before numbers.
+         * @accessor
+         */
+        listPrefix: null
     },
 
     // @private
-    loadAlphabet : function() {
-        var letters = this.letters,
-            len = letters.length,
-            data = [],
-            i, letter;
+    itemCls: Ext.baseCSSPrefix + '',
 
-        for (i = 0; i < len; i++) {
-            letter = letters[i];
-            data.push({key: letter.toLowerCase(), value: letter});
-        }
+    updateDirection: function(newDirection, oldDirection) {
+        var baseCls = this.getBaseCls();
 
-        this.store.loadData(data);
+        this.element.replaceCls(baseCls + '-' + oldDirection, baseCls + '-' + newDirection);
     },
 
-    <div id="method-Ext.IndexBar-refresh"></div>/**
-     * Refreshes the view by reloading the data from the store and re-rendering the template.
-     */
-    refresh: function() {
-        var el = this.getTargetEl(),
-            records = this.store.getRange();
+    getElementConfig: function() {
+        return {
+            reference: 'wrapper',
+            classList: ['x-centered', 'x-indexbar-wrapper'],
+            children: [this.callParent()]
+        };
+    },
 
-        el.update('');
-        if (records.length < 1) {
-            if (!this.deferEmptyText || this.hasSkippedEmptyText) {
-                el.update(this.emptyText);
+    updateLetters: function(letters) {
+        this.innerElement.setHtml('');
+
+        if (letters) {
+            var ln = letters.length,
+                i;
+
+            for (i = 0; i &lt; ln; i++) {
+                this.innerElement.createChild({
+                    html: letters[i]
+                });
             }
-            this.all.clear();
-        } else {
-            this.tpl.overwrite(el, this.collectData(records, 0));
-            this.all.fill(Ext.query(this.itemSelector, el.dom));
-            this.updateIndexes(0);
         }
-        this.hasSkippedEmptyText = true;
-        this.fireEvent('refresh');
     },
-    
-    collectData : function() {
-        var data = Ext.IndexBar.superclass.collectData.apply(this, arguments);
-        if (this.listPrefix.length > 0) {
-            data.unshift({
-                key: '',
-                value: this.listPrefix
-            });
+
+    updateListPrefix: function(listPrefix) {
+        if (listPrefix &amp;&amp; listPrefix.length) {
+            this.innerElement.createChild({
+                html: listPrefix
+            }, 0);
         }
-        return data;
     },
 
     // @private
-    initEvents : function() {
-        Ext.IndexBar.superclass.initEvents.call(this);
+    initialize: function() {
+        this.callParent();
 
-        this.mon(this.el, {
+        this.innerElement.on({
             touchstart: this.onTouchStart,
             touchend: this.onTouchEnd,
             touchmove: this.onTouchMove,
@@ -266,75 +164,105 @@ Ext.IndexBar = Ext.extend(Ext.DataView, {
     },
 
     // @private
-    onTouchStart : function(e, t) {
-        e.stopEvent();
-        this.el.addCls(this.componentCls + '-pressed');
-        this.pageBox = this.el.getPageBox();
+    onTouchStart: function(e, t) {
+        e.stopPropagation();
+        this.innerElement.addCls(this.getBaseCls() + '-pressed');
+        this.pageBox = this.innerElement.getPageBox();
         this.onTouchMove(e);
     },
 
     // @private
-    onTouchEnd : function(e, t) {
-        e.stopEvent();
-        this.el.removeCls(this.componentCls + '-pressed');
+    onTouchEnd: function(e, t) {
+        this.innerElement.removeCls(this.getBaseCls() + '-pressed');
     },
 
     // @private
-    onTouchMove : function(e) {
-        e.stopPropagation();
-
+    onTouchMove: function(e) {
         var point = Ext.util.Point.fromEvent(e),
             target,
-            record,
             pageBox = this.pageBox;
 
         if (!pageBox) {
             pageBox = this.pageBox = this.el.getPageBox();
         }
 
-        if (this.vertical) {
-            if (point.y > pageBox.bottom || point.y < pageBox.top) {
+        if (this.getDirection() === 'vertical') {
+            if (point.y &gt; pageBox.bottom || point.y &lt; pageBox.top) {
                 return;
             }
             target = Ext.Element.fromPoint(pageBox.left + (pageBox.width / 2), point.y);
         }
-        else if (this.horizontal) {
-            if (point.x > pageBox.right || point.x < pageBox.left) {
+        else {
+            if (point.x &gt; pageBox.right || point.x &lt; pageBox.left) {
                 return;
             }
             target = Ext.Element.fromPoint(point.x, pageBox.top + (pageBox.height / 2));
         }
 
         if (target) {
-            record = this.getRecord(target.dom);
-            if (record) {
-                this.fireEvent('index', record, target, this.indexOf(target));
-            }
+            this.fireEvent('index', this, target.dom.innerHTML, target);
         }
     },
-    
-    <div id="method-Ext.IndexBar-isVertical"></div>/**
-     * Method to determine whether this Sortable is currently disabled.
-     * @return {Boolean} the disabled state of this Sortable.
-     */
-    isVertical : function() {
-        return this.vertical;
-    },
-    
-    <div id="method-Ext.IndexBar-isHorizontal"></div>/**
-     * Method to determine whether this Sortable is currently sorting.
-     * @return {Boolean} the sorting state of this Sortable.
-     */
-    isHorizontal : function() {
-        return this.horizontal;
+
+    destroy: function() {
+        var me = this,
+            elements = Array.prototype.slice.call(me.innerElement.dom.childNodes),
+            ln = elements.length,
+            i = 0;
+
+        for (; i &lt; ln; i++) {
+            Ext.removeNode(elements[i]);
+        }
+        this.callParent();
     }
-});
 
-Ext.reg('indexbar', Ext.IndexBar);
+}, function() {
+    //&lt;deprecated product=touch since=2.0&gt;
 
-Ext.regModel('IndexBarModel', {
-    fields: ['key', 'value']
+<span id='Ext-dataview-IndexBar-method-isHorizontal'>    /**
+</span>     * @member Ext.dataview.IndexBar
+     * @method isHorizontal
+     * @removed 2.0.0
+     */
+    Ext.deprecateMethod(this, 'isHorizontal', null, &quot;Ext.dataview.IndexBar.isHorizontal() has been removed&quot;);
+
+<span id='Ext-dataview-IndexBar-method-isVertical'>    /**
+</span>     * @member Ext.dataview.IndexBar
+     * @method isVertical
+     * @removed 2.0.0
+     */
+    Ext.deprecateMethod(this, 'isVertical', null, &quot;Ext.dataview.IndexBar.isVertical() has been removed&quot;);
+
+<span id='Ext-dataview-IndexBar-method-refresh'>    /**
+</span>     * @member Ext.dataview.IndexBar
+     * @method refresh
+     * @removed 2.0.0
+     */
+    Ext.deprecateMethod(this, 'refresh', null, &quot;Ext.dataview.IndexBar.refresh() has been removed&quot;);
+
+<span id='Ext-dataview-IndexBar-cfg-alphabet'>    /**
+</span>     * @Member Ext.dataview.IndexBar
+     * @cfg {Boolean} alphabet
+     * @removed 2.0.0
+     */
+    Ext.deprecateProperty(this, 'alphabet', null, &quot;Ext.dataview.IndexBar.alphabet has been removed&quot;);
+
+<span id='Ext-dataview-IndexBar-cfg-itemSelector'>    /**
+</span>     * @member Ext.dataview.IndexBar
+     * @cfg {Boolean} itemSelector
+     * @removed 2.0.0
+     */
+    Ext.deprecateProperty(this, 'itemSelector', null, &quot;Ext.dataview.IndexBar.itemSelector has been removed&quot;);
+
+<span id='Ext-dataview-IndexBar-cfg-store'>    /**
+</span>     * @member Ext.dataview.IndexBar
+     * @cfg {Boolean} store
+     * @removed 2.0.0
+     */
+    Ext.deprecateProperty(this, 'store', null, &quot;Ext.dataview.IndexBar.store has been removed&quot;);
+
+    //&lt;/deprecated&gt;
 });
-</pre>    
+</pre>
 </body>
 </html>

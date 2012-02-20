@@ -1,79 +1,127 @@
+Ext.require([
+    'Ext.Button',
+    'Ext.Panel',
+    'Ext.Toolbar'
+]);
+
 Ext.setup({
     icon: 'icon.png',
     glossOnIcon: false,
     tabletStartupScreen: 'tablet_startup.png',
     phoneStartupScreen: 'phone_startup.png',
-    onReady: function() {
-        var overlayTb = new Ext.Toolbar({
-            dock: 'top'
+    onReady: function () {
+        var overlay;
+
+        Ext.Viewport.add({
+            layout: {
+                type: 'vbox',
+                pack: 'center',
+                align: 'stretch'
+            },
+            items: [
+                {
+                    xtype: 'toolbar',
+                    docked: 'top',
+                    items: [
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    items: [
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        }
+                    ]
+                },
+                {
+                    xtype: 'toolbar',
+                    docked: 'bottom',
+                    items: [
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        },
+                        {flex: 1, xtype: 'component'},
+                        {
+                            text: 'Show'
+                        }
+                    ]
+                }
+            ]
         });
-        
-        var overlay = new Ext.Panel({
-            floating: true,
+
+        overlay = Ext.Viewport.add({
+            xtype: 'panel',
+            left: 0,
+            top: 0,
             modal: true,
-            centered: false,
-            width: Ext.is.Phone ? 260 : 400,
-            height: Ext.is.Phone ? 220 : 400,
+            hideOnMaskTap: true,
+            hidden: true,
+            height: 300,
+            width: '50%',
+            contentEl: 'content',
             styleHtmlContent: true,
-            dockedItems: overlayTb,
-            scroll: 'vertical',
-            contentEl: 'lipsum',
-            cls: 'htmlcontent'
+            scrollable: true,
+            items: [
+                {
+                    docked: 'top',
+                    xtype: 'toolbar',
+                    title: 'Overlay Title'
+                }
+            ]
         });
 
-        var showOverlay = function(btn, event) {
-            overlay.setCentered(false);
-            overlayTb.setTitle('Attached Overlay');
-            overlay.showBy(btn);
-        };
-        
-        var showCenteredOverlay = function(btn, event) {
-            overlay.setCentered(true);
-            overlayTb.setTitle('Centered Overlay');
-            overlay.show();
-        };
-
-        if (Ext.is.Phone) {
-            var dockedItems = [{
-                dock: 'top',
-                xtype: 'toolbar',
-                items: [{
-                    text: 'showBy',
-                    handler: showOverlay                    
-                }]
-            }, {
-                dock: 'bottom',
-                xtype: 'toolbar',
-                items: [{
-                    text: 'show (centered)',
-                    handler: showCenteredOverlay             
-                }, {xtype: 'spacer'}, {
-                    text: 'showBy',
-                    handler: showOverlay
-                }]
-            }];
-        }
-        else {
-            var dockedItems = [{
-                dock: 'bottom',
-                xtype: 'toolbar',
-                items: [{
-                    text: 'showBy',
-                    handler: showOverlay
-                }, {xtype: 'spacer'}, {
-                    text: 'show (centered)',
-                    handler: showCenteredOverlay
-                }, {xtype: 'spacer'}, {
-                    text: 'showBy',
-                    handler: showOverlay
-                }]
-            }];
-        }
-        
-        new Ext.Panel({
-            fullscreen: true,
-            dockedItems: dockedItems,
-            html: "Test the overlay by using the buttons below."
+        Ext.Viewport.on({
+            delegate: 'button',
+            tap: function (button) {
+                overlay.showBy(button);
+            }
         });
     }
 });

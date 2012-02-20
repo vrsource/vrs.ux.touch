@@ -1,261 +1,210 @@
-/*
+/**
+ * This is a custom SCSS stylesheet for the Twitter application. First we include the Sencha Touch SCSS, without including
+ * the parts we don't need (e.g. tabs, pickers, carousel etc). After that we simply define our application's CSS using
+ * normal CSS or SCSS syntax.
+ *
+ * To compile this stylesheet, we just open up a terminal window, cd to twitter/resources/scss (the location of this file)
+ * and run this command:
+ *
+ *     compass compile
+ *
+ * This builds an optimized application.css file, placing it in the twitter/resources/css directory.
+ *
+ * Note - to run the compass command you must have the Ruby language installed (if you're on OS X you already have it,
+ * if you're on windows it's easy to install - see http://rubyforge.org/frs/?group_id=167). Once you have ruby, open
+ * up a terminal window and type in:
+ *
+ *     gem install haml compass compass-colors
+ *
+ * After this you can run 'compass compile' as above to compile the stylesheet.
+ */
 
-This is a custom SCSS stylesheet for the Twitter application. First we include the Sencha Touch SCSS, commenting out
-the parts we don't need (e.g. tabs, pickers, carousel etc). After that we simply define our application's CSS using
-normal CSS or SCSS syntax.
+//custom colors used in this file.
+$twitter-blue: #54738d;
+$gray: #d4d6e1;
 
-To compile this stylesheet, we just open up a terminal window, cd to twitter/resources/scss (the location of this file)
-and run this command:
+//sencha touch variables we need to override
+$list-pressed-color: lighten($gray, 5%);
+$list-active-color: $gray;
+$list-active-gradient: matte;
 
-    compass compile
-
-This builds an optimized application.css file, placing it in the twitter/resources/css directory.
-
-Note - to run the compass command you must have the Ruby language installed (if you're on OS X you already have it,
-if you're on windows it's easy to install - see http://rubyforge.org/frs/?group_id=167). Once you have ruby, open
-up a terminal window and type in:
-
-    gem install haml compass compass-colors
-
-After this you can run 'compass compile' as above to compile the stylesheet.
-
-*/
-
-
-$include-default-icons: false;
-$include-default-uis: false;
-$base-color: #3E7AAD;
-$list_active_color: lighten($base-color, 10%);
-
+//import the sencha touch theme
 @import 'sencha-touch/default/all';
 
+//include all the components we need styling for
 @include sencha-panel;
 @include sencha-buttons;
-//@include sencha-sheet;
-//@include sencha-picker;
-//@include sencha-tabs;
 @include sencha-toolbar;
-@include sencha-toolbar-forms;
-//@include sencha-carousel;
-//@include sencha-indexbar;
 @include sencha-list;
 @include sencha-list-paging;
 @include sencha-list-pullrefresh;
 @include sencha-layout;
-//@include sencha-form;
-//@include sencha-msgbox;
+@include sencha-form;
+@include sencha-toolbar-forms;
 @include sencha-loading-spinner;
 
-@include sencha-toolbar-ui('dark', darken($base-color, 15%));
+//create a custom toolbar ui using the twitter blue color we defined above
+@include sencha-toolbar-ui('searchbar', $twitter-blue);
 
-.x-item-selected {
-    color: #fff !important;
+//search container
+.searchcontainer {
+    border-right: 1px solid darken($twitter-blue, 20);
 }
 
-body {
-    background-color: #ccc;
-}
+//searchbar
+.x-toolbar-searchbar {
+    padding: .5em;
+    border-color: darken($twitter-blue, 20) !important;
 
-.navigation {
-    width: 250px;
-    border-right: 1px solid #444;
-}
-
-.search-item {
-  width: 100%;
-  
-  .action {
-      opacity: 0;
-  }
-
-  .delete {
-      float: right;
-      color: #fff;
-      font-size: 0.7em;
-      padding: 5px 8px;
-      border-color: #555;
-      @include background-gradient($alert-color, 'glossy');
-  }
-  
-}
-
-
-.search-item-active .search-item .action {
-    opacity: 1;
-    -webkit-transition: opacity 0.3s linear;
-}
-
-.navigation .x-panel-body {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.35);
-    background: #eee;
-
-    .x-button {
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      @include border-radius(0);
-      padding: 0 8px;
-      background: #eee;
-      height: 48px;
-
-      span {
-        line-height: 45px;
-        color: #444;
-        text-shadow: #fff 0 1px 0;
-      }
-
-      &.x-button-pressed {
-        color: #000;
-        background-color: #fff;
-      }
-    }
-}
-
-.navigation .x-panel-body .x-button-active {
-    color: #2A5BC2;
-}
-
-.navigation.x-floating .x-panel-body {
-    border-bottom: 0px;
-}
-
-.navigation .x-panel-body .x-button img,
-.navigation .x-button.x-docked img {
-    width: 28px;
-    margin-right: 8px;
-    height: 40px;
-}
-
-.searches {
-    border-right: 1px solid #000;
-}
-
-.timeline .tweet {
-    border: none;
-
-    .x-list-item-body {
-        @include display-box;
-        @include box-orient(horizontal);
-        overflow: hidden;
+    &.big {
+        height: 4.7em !important;
     }
 
-    img {
-        padding: 2px;
-        width: 60px;
-        height: 60px;
-        background-color: #fff;
+    .x-field {
+        width: auto;
+        min-height: 0;
+        padding: 0 .1em 0 .2em;
+        @include border-radius(.5em);
+
+        input {
+            margin: .2em;
+        }
     }
 
-    .tweet-bubble {
-        position: relative;
-        min-height: 100px;
-        margin-left: 15px;
-        overflow: hidden;
-        @include border-radius(6px);
-        background: #eee;
-        @include box-flex(1);
+    .x-clear-icon {
+        margin: .4em .3em .3em .3em;
     }
 
-    .x-tweetanchor {
-        width: 14px;
-        height: 14px;
-        background-color: #eee;
-        top: 20px;
-        left: 82px;
-        position: absolute;
-        -webkit-transform: rotate(45deg);
-    }
-
-    &.tweet-active .x-tweetanchor {
-        background-color: #111;
-    }
-
-    .tweet-content {
-        padding: 15px;
-        color: #444;
-    }
-
-    .tweet-content a {
-        color: #2578C1;
-    }
-
-    .tweet-content h2 {
+    .x-title {
+        line-height: 1em;
+        font-size: .7em;
+        color: #eeeff0;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+        text-align: center;
         font-weight: bold;
-        color: #111;
+        margin: 0 0 .5em 0;
     }
 }
 
-.no-searches {
-    padding: 20px;
-    text-align: center;
-    color: #555;
-}
+//search list
+.x-list-searchlist {
+    .x-data-item {
+        text-shadow: 0 1px 0 rgba(255,255,255,.9);
+        color: darken($twitter-blue, 30);
+        padding: 0.5em 0.8em;
+        height: 2.8em;
+        border-top: 1px solid darken(#F2F3F6, 10) !important;
 
+        &.x-item-selected {
+            text-shadow: 0 1px 0 rgba(255,255,255,.6);
+            color: darken($twitter-blue, 30);
+            border-top: 1px solid darken($gray, 30);
+            border-bottom: 1px solid darken($gray, 10);
+            @include background-gradient($list-active-color, $list-active-gradient);
+        }
 
-.timeline .x-toolbar-actions {
-    background-color: #111;
-    z-index: 0;
-    border: 1px solid #444;
-}
+        .search {
+            overflow: visible;
+        }
 
-.timeline .x-toolbar-actions .x-button {
-    height: 100px;
-    width: 100px;
-    border-right: 1px solid #fff;
-}
-
-.timeline .x-toolbar-actions .x-button img {
-    width: 100px;
-    height: 100px;
-}
-
-.nextPage p {
-    padding: 15px 20px;
-    margin-bottom: 25px;
-    text-align: center;
-    color: #555;
-}
-
-.nextPage p.loading {
-    display: none;
-}
-
-.nextPage.x-loading {
-    p.load {
-        display: none;
-    }
-
-    p.loading {
-        display: block;
+        .search {
+            line-height: 1em;
+        }
     }
 }
 
-.x-example {
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-.x-example-list {
-    background-image: url(favorites/list.png);
+.searchcontainer .x-list-inner,
+.searchcontainer .x-list-inner .x-inner {
+    width: 100%
 }
 
-.posted {
-    display: none;
+.searchcontainer .x-data-item .x-innerhtml {
+    padding: 3px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.twitter-search-bar .x-button.x-view-selected {
-    background-color: #eee;
-}
+//tweetlist
+.x-dataview-timeline {
+    .x-dataview-emptytext {
+        padding: 3em;
+        font-weight: bold;
+        text-align: center;
+    }
 
-.x-toolbar {
-    padding: 1px;
-    height: 1.8em;
-}
-.x-toolbar .x-input-search {
-    width: 100%;
-    font-size: 1.2em;
-}
+    .x-data-item {
+        padding: 1em;
+        background: #fff;
+        border-bottom: 1px solid $gray;
 
-/* Manually disable background as we're not doing anything on tap */
+        .avatar {
+            width: 48px;
+            height: 48px;
+            margin-right: .5em;
+            border: 1px solid $gray;
+            @include border-radius(.4em);
+             -webkit-box-shadow: inset 0 2px 2px rgba(0,0,0,.3);
+        }
 
-.x-list .x-list-item.x-item-pressed {
-  background: none transparent;
+        .username {
+            font-weight: bold;
+            margin-bottom: .2em;
+        }
+
+        .text {
+            color: #444;
+            line-height: 1.5em;
+            overflow: visible;
+
+            .link {
+                color: $twitter-blue;
+                text-decoration: underline;
+            }
+
+            .username {
+                color: #000;
+            }
+
+            .hashtag {
+                cursor: pointer;
+                padding: 0.07em 0.3em;
+                @include border-radius(0.4em);
+                background: rgba(200,200,200,.3);
+            }
+        }
+
+        .username,
+        .text {
+            font-size: .9em;
+        }
+
+        &.popular {
+            position: relative;
+            @include background-gradient(lighten($twitter-blue, 45), recessed);
+
+            .hashtag {
+                background: rgba(255,255,255,.4);
+            }
+
+            .retweets {
+                color: rgba(0,0,0,0.4);
+                font-size: .7em;
+                margin-top: .5em;
+            }
+
+            &:after {
+                position: absolute;
+                top: .5em;
+                right: .5em;
+                width: 1.5em;
+                height: 1.5em;
+                -webkit-mask-image: theme_image($theme-name, "pictos/favorites_circle.png");
+                -webkit-mask-size: 100% 100%;
+                background: rgba(255,255,255,.7);
+                z-index: 10;
+                content: "";
+            }
+        }
+    }
 }

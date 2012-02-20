@@ -1,96 +1,170 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js">Ext.gesture.Drag = Ext.extend(Ext.gesture.Touch, {
-    handles: ['dragstart', 'drag', 'dragend'],
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-event-recognizer-Drag'>/**
+</span> * A simple event recogniser which knows when you drag.
+ * 
+ * @private
+ */
+Ext.define('Ext.event.recognizer.Drag', {
+    extend: 'Ext.event.recognizer.SingleTouch',
 
-    dragThreshold: 5,
+    isStarted: false,
 
-    direction: 'both',
+    startPoint: null,
 
-    horizontal: false,
-    vertical: false,
+    previousPoint: null,
 
-    constructor: function() {
-        var me = this;
-        Ext.gesture.Drag.superclass.constructor.apply(me, arguments);
+    lastPoint: null,
 
-        if (me.direction == 'both') {
-            me.horizontal = true;
-            me.vertical = true;
-        } else if (me.direction == 'horizontal') {
-            me.horizontal = true;
-        } else {
-            me.vertical = true;
-        }
+    handledEvents: ['dragstart', 'drag', 'dragend'],
 
-        return me;
-    },
+<span id='Ext-dom-Element-event-dragstart'>    /**
+</span>     * @member Ext.dom.Element
+     * @event dragstart
+     * Fired once when a drag has started.
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
 
-    onTouchStart: function(e, touch) {
-        var me = this;
-        me.startX = me.previousX = touch.pageX;
-        me.startY = me.previousY = touch.pageY;
-        me.startTime = me.previousTime = e.timeStamp;
+<span id='Ext-dom-Element-event-drag'>    /**
+</span>     * @member Ext.dom.Element
+     * @event drag
+     * Fires continuously when there is dragging (the touch must move for this to be fired).
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
+    
+<span id='Ext-dom-Element-event-dragend'>    /**
+</span>     * @member Ext.dom.Element
+     * @event dragend
+     * Fires when a drag has ended.
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.util.Observable.addListener.
+     */
 
-        me.dragging = false;
-    },
+    onTouchStart: function(e) {
+        var startTouches,
+            startTouch;
 
-    onTouchMove: function(e, touch) {
-        var me = this;
-        if (me.isLocked('drag')) {
-            return;
-        }
-
-        var info = me.getInfo(touch);
-
-        if (!me.dragging) {
-            if ((!e.touches || e.touches.length < 2) && me.isDragging(info) && me.fire('dragstart', e, info)) {
-                me.dragging = true;
-                me.lock('drag', 'dragstart', 'dragend');
-                me.fire('drag', e, info);
+        if (this.callParent(arguments) === false) {
+            if (this.isStarted &amp;&amp; this.lastMoveEvent !== null) {
+                this.onTouchEnd(this.lastMoveEvent);
             }
-        } else {
-            me.fire('drag', e, info);
+            return false;
+        }
+
+        this.startTouches = startTouches = e.changedTouches;
+        this.startTouch = startTouch = startTouches[0];
+        this.startPoint = startTouch.point;
+    },
+
+    onTouchMove: function(e) {
+        var touches = e.changedTouches,
+            touch = touches[0],
+            point = touch.point,
+            time = e.time;
+
+        if (this.lastPoint) {
+            this.previousPoint = this.lastPoint;
+        }
+
+        if (this.lastTime) {
+            this.previousTime = this.lastTime;
+        }
+
+        this.lastTime = time;
+        this.lastPoint = point;
+        this.lastMoveEvent = e;
+
+        if (!this.isStarted) {
+            this.isStarted = true;
+
+            this.startTime = time;
+            this.previousTime = time;
+
+            this.previousPoint = this.startPoint;
+
+            this.fire('dragstart', e, this.startTouches, this.getInfo(e, this.startTouch));
+        }
+        else {
+            this.fire('drag', e, touches, this.getInfo(e, touch));
         }
     },
 
     onTouchEnd: function(e) {
-        var me = this;
-        if (me.dragging) {
-            me.fire('dragend', e, me.lastInfo);
+        if (this.isStarted) {
+            var touches = e.changedTouches,
+                touch = touches[0],
+                point = touch.point;
+
+            this.isStarted = false;
+
+            this.lastPoint = point;
+
+            this.fire('dragend', e, touches, this.getInfo(e, touch));
+
+            this.startTime = 0;
+            this.previousTime = 0;
+            this.lastTime = 0;
+
+            this.startPoint = null;
+            this.previousPoint = null;
+            this.lastPoint = null;
+            this.lastMoveEvent = null;
         }
-
-        me.dragging = false;
     },
 
-    isDragging: function(info) {
-        var me = this;
-        return ((me.horizontal && info.absDeltaX >= me.dragThreshold) || (me.vertical && info.absDeltaY >= me.dragThreshold));
-    },
+    getInfo: function(e, touch) {
+        var time = e.time,
+            startPoint = this.startPoint,
+            previousPoint = this.previousPoint,
+            startTime = this.startTime,
+            previousTime = this.previousTime,
+            point = this.lastPoint,
+            deltaX = point.x - startPoint.x,
+            deltaY = point.y - startPoint.y,
+            info = {
+                touch: touch,
+                startX: startPoint.x,
+                startY: startPoint.y,
+                previousX: previousPoint.x,
+                previousY: previousPoint.y,
+                pageX: point.x,
+                pageY: point.y,
+                deltaX: deltaX,
+                deltaY: deltaY,
+                absDeltaX: Math.abs(deltaX),
+                absDeltaY: Math.abs(deltaY),
+                previousDeltaX: point.x - previousPoint.x,
+                previousDeltaY: point.y - previousPoint.y,
+                time: time,
+                startTime: startTime,
+                previousTime: previousTime,
+                deltaTime: time - startTime,
+                previousDeltaTime: time - previousTime
+            };
 
-    /*
-     * Method to determine whether this Sortable is currently disabled.
-     * @return {Boolean} the disabled state of this Sortable.
-     */
-    isVertical: function() {
-        return this.vertical;
-    },
-
-    /*
-     * Method to determine whether this Sortable is currently sorting.
-     * @return {Boolean} the sorting state of this Sortable.
-     */
-    isHorizontal: function() {
-        return this.horizontal;
+        return info;
     }
 });
-
-Ext.regGesture('drag', Ext.gesture.Drag);</pre>    
+</pre>
 </body>
 </html>

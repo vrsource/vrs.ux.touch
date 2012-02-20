@@ -1,35 +1,76 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js"><div id="cls-Ext.form.Email"></div>/**
- * @class Ext.form.Email
- * @extends Ext.form.Text
- * <p>Wraps an HTML5 email field. See {@link Ext.form.FormPanel FormPanel} for example usage.</p>
- * @xtype emailfield
- * @alternateClassName Ext.form.EmailField
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-field-Email'>/**
+</span> * The Email field creates an HTML5 email input and is usually created inside a form. Because it creates an HTML email
+ * input field, most browsers will show a specialized virtual keyboard for email address input. Aside from that, the
+ * email field is just a normal text field. Here's an example of how to use it in a form:
+ *
+ *     Ext.create('Ext.form.Panel', {
+ *         tbar: {
+ *             text: 'Register'
+ *         },
+ *
+ *         items: [
+ *             {
+ *                 xtype: 'emailfield',
+ *                 label: 'Email',
+ *                 name: 'email'
+ *             },
+ *             {
+ *                 xtype: 'passwordfield',
+ *                 label: 'Password',
+ *                 name: 'password'
+ *             }
+ *         ]
+ *     });
+ *
+ * Or on its own, outside of a form:
+ *
+ *     Ext.create('Ext.field.Email', {
+ *         label: 'Email address',
+ *         value: 'prefilled@email.com'
+ *     });
+ *
+ * Because email field inherits from {@link Ext.field.Text textfield} it gains all of the functionality that text fields
+ * provide, including getting and setting the value at runtime, validations and various events that are fired as the
+ * user interacts with the component. Check out the {@link Ext.field.Text} docs to see the additional functionality
+ * available.
  */
-Ext.form.Email = Ext.extend(Ext.form.Text, {
-    inputType: 'email',
-    
-    autoCapitalize: false
-});
+Ext.define('Ext.field.Email', {
+    extend: 'Ext.field.Text',
+    alternateClassName: 'Ext.form.Email',
+    xtype: 'emailfield',
 
-Ext.reg('emailfield', Ext.form.Email);
+    config: {
+        // @inherit
+        component: {
+	        type: 'email'
+	    },
 
-//<deprecated since=0.99>
-// DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
-Ext.form.EmailField = Ext.extend(Ext.form.Email, {
-
-    constructor: function() {
-        console.warn("Ext.form.EmailField has been deprecated and will be removed in Sencha Touch 1.0. Please use Ext.form.Email instead");
-        Ext.form.EmailField.superclass.constructor.apply(this, arguments);
+        // @inherit
+        autoCapitalize: false
     }
 });
-//</deprecated></pre>    
+
+
+
+
+
+</pre>
 </body>
 </html>

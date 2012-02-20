@@ -1,28 +1,35 @@
 /**
- * @class Ext.util.Droppable
- * @extends Ext.util.Observable
- * 
- * @constructor
+ *
  */
-Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
-    baseCls: 'x-droppable',
+Ext.define('Ext.util.Droppable', {
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
+
+    config: {
+        // @inherit
+        baseCls: Ext.baseCSSPrefix + 'droppable'
+    },
+
     /**
      * @cfg {String} activeCls
      * The CSS added to a Droppable when a Draggable in the same group is being
-     * dragged. Defaults to 'x-drop-active'.
+     * dragged.
      */
-    activeCls: 'x-drop-active',
+    activeCls: Ext.baseCSSPrefix + 'drop-active',
+
     /**
      * @cfg {String} invalidCls
      * The CSS class to add to the droppable when dragging a draggable that is
-     * not in the same group. Defaults to 'x-drop-invalid'.
+     * not in the same group.
      */
-    invalidCls: 'x-drop-invalid',
+    invalidCls: Ext.baseCSSPrefix + 'drop-invalid',
+
     /**
      * @cfg {String} hoverCls
-     * The CSS class to add to the droppable when hovering over a valid drop. (Defaults to 'x-drop-hover')
+     * The CSS class to add to the droppable when hovering over a valid drop.
      */
-    hoverCls: 'x-drop-hover',
+    hoverCls: Ext.baseCSSPrefix + 'drop-hover',
 
     /**
      * @cfg {String} validDropMode
@@ -40,81 +47,77 @@ Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
     /**
      * @cfg {String} group
      * Draggable and Droppable objects can participate in a group which are
-     * capable of interacting. Defaults to 'base'
+     * capable of interacting.
      */
     group: 'base',
 
     // not yet implemented
     tolerance: null,
 
-
     // @private
     monitoring: false,
-    
+
     /**
-     * @constructor
-     * @param el {Mixed} String, HtmlElement or Ext.Element representing an
+     * Creates new Droppable.
+     * @param {Mixed} el String, HtmlElement or Ext.Element representing an
      * element on the page.
-     * @param config {Object} Configuration options for this class.
+     * @param {Object} config Configuration options for this class.
      */
-    constructor : function(el, config) {
+    constructor: function(el, config) {
+        var me = this;
+
         config = config || {};
-        Ext.apply(this, config);
+        Ext.apply(me, config);
 
-        this.addEvents(
-            /**
-             * @event dropactivate
-             * @param {Ext.Droppable} this
-             * @param {Ext.Draggable} draggable
-             * @param {Ext.EventObject} e
-             */
-            'dropactivate',
+        /**
+         * @event dropactivate
+         * @param {Ext.util.Droppable} this
+         * @param {Ext.util.Draggable} draggable
+         * @param {Ext.event.Event} e
+         */
 
-            /**
-             * @event dropdeactivate
-             * @param {Ext.Droppable} this
-             * @param {Ext.Draggable} draggable
-             * @param {Ext.EventObject} e
-             */
-            'dropdeactivate',
+        /**
+         * @event dropdeactivate
+         * @param {Ext.util.Droppable} this
+         * @param {Ext.util.Draggable} draggable
+         * @param {Ext.event.Event} e
+         */
 
-            /**
-             * @event dropenter
-             * @param {Ext.Droppable} this
-             * @param {Ext.Draggable} draggable
-             * @param {Ext.EventObject} e
-             */
-            'dropenter',
+        /**
+         * @event dropenter
+         * @param {Ext.util.Droppable} this
+         * @param {Ext.util.Draggable} draggable
+         * @param {Ext.event.Event} e
+         */
 
-            /**
-             * @event dropleave
-             * @param {Ext.Droppable} this
-             * @param {Ext.Draggable} draggable
-             * @param {Ext.EventObject} e
-             */
-            'dropleave',
+        /**
+         * @event dropleave
+         * @param {Ext.util.Droppable} this
+         * @param {Ext.util.Draggable} draggable
+         * @param {Ext.event.Event} e
+         */
 
-            /**
-             * @event drop
-             * @param {Ext.Droppable} this
-             * @param {Ext.Draggable} draggable
-             * @param {Ext.EventObject} e
-             */
-            'drop'
-        );
+        /**
+         * @event drop
+         * @param {Ext.util.Droppable} this
+         * @param {Ext.util.Draggable} draggable
+         * @param {Ext.event.Event} e
+         */
 
-        this.el = Ext.get(el);
-        Ext.util.Droppable.superclass.constructor.call(this);
+        me.el = Ext.get(el);
+        me.callParent();
 
-        if (!this.disabled) {
-            this.enable();
+        me.mixins.observable.constructor.call(me);
+
+        if (!me.disabled) {
+            me.enable();
         }
 
-        this.el.addCls(this.baseCls);
+        me.el.addCls(me.baseCls);
     },
 
     // @private
-    onDragStart : function(draggable, e) {
+    onDragStart: function(draggable, e) {
         if (draggable.group === this.group) {
             this.monitoring = true;
             this.el.addCls(this.activeCls);
@@ -146,17 +149,17 @@ Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
     },
 
     // @private
-    isDragOver : function(draggable, region) {
+    isDragOver: function(draggable, region) {
         return this.region[this.validDropMode](draggable.region);
     },
 
     // @private
-    onDrag : function(draggable, e) {
+    onDrag: function(draggable, e) {
         this.setCanDrop(this.isDragOver(draggable), draggable, e);
     },
 
     // @private
-    setCanDrop : function(canDrop, draggable, e) {
+    setCanDrop: function(canDrop, draggable, e) {
         if (canDrop && !this.canDrop) {
             this.canDrop = true;
             this.el.addCls(this.hoverCls);
@@ -175,7 +178,7 @@ Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
     },
 
     // @private
-    onDragEnd : function(draggable, e) {
+    onDragEnd: function(draggable, e) {
         this.monitoring = false;
         this.el.removeCls(this.activeCls);
 
@@ -201,7 +204,7 @@ Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
      * This is invoked immediately after constructing a Droppable if the
      * disabled parameter is NOT set to true.
      */
-    enable : function() {
+    enable: function() {
         if (!this.mgr) {
             this.mgr = Ext.util.Observable.observe(Ext.util.Draggable);
         }
@@ -215,27 +218,27 @@ Ext.util.Droppable = Ext.extend(Ext.util.Observable, {
     /**
      * Disable the Droppable target.
      */
-    disable : function() {
+    disable: function() {
         this.mgr.un({
             dragstart: this.onDragStart,
             scope: this
         });
         this.disabled = true;
     },
-    
+
     /**
      * Method to determine whether this Component is currently disabled.
      * @return {Boolean} the disabled state of this Component.
      */
-    isDisabled : function() {
+    isDisabled: function() {
         return this.disabled;
     },
-    
+
     /**
      * Method to determine whether this Droppable is currently monitoring drag operations of Draggables.
      * @return {Boolean} the monitoring state of this Droppable
      */
-    isMonitoring : function() {
+    isMonitoring: function() {
         return this.monitoring;
     }
 });

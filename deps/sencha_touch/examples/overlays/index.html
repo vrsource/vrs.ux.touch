@@ -3,13 +3,13 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
   <title>Overlay</title>
-  <link rel="stylesheet" href="../../resources/css/sencha-touch.css" type="text/css" />
-  <script type="text/javascript" src="../../sencha-touch.js"></script>
+  <link rel="stylesheet" href="../../resources/css/sencha-touch.css"></script>
+  <script type="text/javascript" src="../../builds/sencha-touch-all.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </head>
 
 <body>
-  <div style="display: none;">
+  <div style="display: none;" id="content">
     <div id="lipsum">
       <p><em>This content is in a scrollable panel. It also makes use of the <code>htmlcontent</code> class, which will automatically apply some basic typography to the content. Some filler text:</em></p>
       <h2>This is a title</h2>
@@ -152,7 +152,7 @@
             $text = str_replace("%::%","",$text);
 
             </code>
-            
+
 </pre>
 
               <p>This isn&rsquo;t code.</p>

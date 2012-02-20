@@ -1,66 +1,48 @@
 @import '../global';
 
+/**
+ * @class Ext.dataview.List
+ */
 
 /**
  * @var {color} $list-color
  * Text color for list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-color: #000 !default;
 
 /**
  * @var {color} $list-bg-color
  * Background-color for list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-bg-color: #f7f7f7 !default;
 
 /**
- * @var {color} $list-pressed-color
+ * @var {color} $include-list-highlights
  * Background-color for pressed list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $include-list-highlights: $include-highlights !default;
 
 /**
  * @var {color} $list-pressed-color
  * Background-color for pressed list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-pressed-color: lighten($active-color, 50%) !default;
 
 /**
  * @var {color} $list-active-color
  * Background-color for selected list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-active-color: $active-color !default;
 
 /**
  * @var {string} $list-active-gradient
  * Gradient style for selected list rows.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-active-gradient: $base-gradient !default;
 
 /**
  * @var {color} $list-header-bg-color
  * Background-color for list header rows (in grouped lists).
- *
- * @member Ext.List
- * @xtype list
  */
 $list-header-bg-color: lighten(saturate($base-color, 10%), 20%) !default;
 
@@ -68,31 +50,33 @@ $list-header-bg-color: lighten(saturate($base-color, 10%), 20%) !default;
  * @var {string} $list-header-gradient
  * Gradient style for list header rows (in grouped lists).
  *
- * @member Ext.List
- * @xtype list
- * @see background-gradient
+ * See {@link Global_CSS#background-gradient background-gradient}.
  */
 $list-header-gradient: $base-gradient !default;
 
 /**
  * @var {measurement} $list-disclosure-size
  * Default size (width/height) for disclosure icons.
- *
- * @member Ext.List
- * @xtype list
  */
 $list-disclosure-size: 1.7em;
 
 /**
  * Includes default list styles.
- *
- * @member Ext.List
- * @xtype list
  */
 @mixin sencha-list {
   .x-list {
-    background-color: $list-bg-color;
     position: relative;
+    background-color: $list-bg-color;
+
+    .x-list-inner {
+      width: 100%;
+    }
+
+    .x-list-disclosure {
+      position: absolute;
+      bottom: 0.5em;
+      right: 0.8em;
+    }
 
     .x-list-disclosure {
       overflow: visible;
@@ -104,7 +88,7 @@ $list-disclosure-size: 1.7em;
     }
 
     &.x-list-indexed .x-list-disclosure {
-      margin-right: 1.3em;
+      margin-right: 1em;
     }
 
     .x-item-selected .x-list-disclosure {
@@ -112,14 +96,15 @@ $list-disclosure-size: 1.7em;
     }
 
     .x-list-item {
+//      overflow: hidden;
       position: relative;
       color: $list-color;
-      padding: 0.5em 0.8em;
-
-      min-height: $global-row-height;
-      @include display-box;
-
       border-top: 1px solid darken($list-bg-color, 15%);
+
+      .x-list-item-label {
+        min-height: $global-row-height;
+        padding: 0.7em 0.8em;
+      }
 
       &:first-child {
         border-top: none;
@@ -127,17 +112,6 @@ $list-disclosure-size: 1.7em;
 
       &:last-child {
         border-bottom: 1px solid darken($list-bg-color, 15%);
-      }
-
-      .x-list-item-body {
-        @include box-flex(1);
-        /*@include display-box;*/
-        @include box-align(center);
-        @include box-orient(horizontal);
-
-        span {
-          font-size: .95em;
-        }
       }
 
       &.x-item-pressed {
@@ -171,17 +145,25 @@ $list-disclosure-size: 1.7em;
     font-size: 0.8em;
     padding: 0.2em 1.02em;
     @include bevel-by-background($list-header-bg-color);
+
+    //to put it above the border on list items
+    position: relative;
+    margin-top: -1px;
+
     @if $include-list-highlights {
       -webkit-box-shadow: 0px .1em .3em rgba(0, 0, 0, 0.3);
     }
   }
 
   .x-list-header-swap {
-    z-index: 1;
     position: absolute;
-    top: 0;
+    margin-top: -1px;
     left: 0;
     width: 100%;
+  }
+
+  .x-ios .x-list-header-swap {
+    -webkit-transform: translate3d(0, 0, 0);
   }
 
   .x-list-round {
@@ -254,12 +236,11 @@ $list-disclosure-size: 1.7em;
     width: 2.5em;
     height: 4.5em;
 
-    -webkit-mask: center center theme_image($theme-name, "pullarrow.png") no-repeat;
-    -webkit-mask-size: 2em 3em;
+    background: center center theme_image($theme-name, "pullarrow.png") no-repeat;
+    background-size: 2em 3em;
     /*-webkit-transition-property: -webkit-transform;*/
     /*-webkit-transition-duration: 200ms;*/
     -webkit-transform: rotate(0deg);
-    background-color: #111;
   }
 
   .x-list-pullrefresh-release .x-list-pullrefresh-arrow {
@@ -286,12 +267,12 @@ $list-disclosure-size: 1.7em;
     /*position: relative;*/
     /*top: 0;*/
 
-    .x-loading-spinner {
+    /*.x-loading-spinner {
       display: block;
     }
 
     .x-list-pullrefresh-arrow {
       display: none;
-    }
+    }*/
   }
 }

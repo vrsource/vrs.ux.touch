@@ -1,35 +1,66 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js"><div id="cls-Ext.form.Url"></div>/**
- * @class Ext.form.Url
- * @extends Ext.form.Text
- * Wraps an HTML5 url field. See {@link Ext.form.FormPanel FormPanel} for example usage.
- * @xtype urlfield
- * @alternateClassName Ext.form.UrlField
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-field-Url'>/**
+</span> * The Url field creates an HTML5 url input and is usually created inside a form. Because it creates an HTML url input
+ * field, most browsers will show a specialized virtual keyboard for web address input. Aside from that, the url field
+ * is just a normal text field. Here's an example of how to use it in a form:
+ *
+ *     Ext.create('Ext.form.Panel', {
+ *         tbar: {
+ *             text: 'Add Bookmark'
+ *         },
+ *
+ *         items: [
+ *             {
+ *                 xtype: 'urlfield',
+ *                 label: 'Url',
+ *                 name: 'url'
+ *             }
+ *         ]
+ *     });
+ *
+ * Or on its own, outside of a form:
+ *
+ *     Ext.create('Ext.field.Url', {
+ *         label: 'Web address',
+ *         value: 'http://sencha.com'
+ *     });
+ *
+ * Because url field inherits from {@link Ext.field.Text textfield} it gains all of the functionality that text fields
+ * provide, including getting and setting the value at runtime, validations and various events that are fired as the
+ * user interacts with the component. Check out the {@link Ext.field.Text} docs to see the additional functionality
+ * available.
  */
-Ext.form.Url = Ext.extend(Ext.form.Text, {
-    inputType: 'url',
-    
-    autoCapitalize: false
-});
+Ext.define('Ext.field.Url', {
+    extend: 'Ext.field.Text',
+    xtype: 'urlfield',
+    alternateClassName: 'Ext.form.Url',
 
-Ext.reg('urlfield', Ext.form.Url);
+    config: {
+        // @inherit
+        autoCapitalize: false,
 
-//<deprecated since=0.99>
-// DEPRECATED - remove this in 1.0. See RC1 Release Notes for details
-Ext.form.UrlField = Ext.extend(Ext.form.Url, {
-
-    constructor: function() {
-        console.warn("Ext.form.UrlField has been deprecated and will be removed in Sencha Touch 1.0. Please use Ext.form.Url instead");
-        Ext.form.UrlField.superclass.constructor.apply(this, arguments);
+        // @inherit
+        component: {
+	        type: 'url'
+	    }
     }
 });
-//</deprecated></pre>    
+</pre>
 </body>
 </html>
