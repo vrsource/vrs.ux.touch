@@ -1,6 +1,9 @@
 /*global clearTimeout: false */
 Ext.ns('vrs.ux.touch');
 
+vrs.ux.touch.BLANK_IMAGE_URL =
+   'data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
 /**
 * Class for creating menu of items that can be used in forms
 * or menus as selectable items with decorations.
@@ -198,7 +201,7 @@ Ext.define('vrs.ux.touch.MenuPanel', {
             }
             else { // assert: (('leftIcon' === key) || ('rightIcon' === key))
                // Replace the icon
-               new_icon = (Ext.isEmpty(value) ? (Ext.BLANK_IMAGE_URL) : value);
+               new_icon = (Ext.isEmpty(value) ? (vrs.ux.touch.BLANK_IMAGE_URL) : value);
                img_node.set({src: new_icon});
             }
          }  // if iconcls or icon
@@ -288,7 +291,7 @@ Ext.define('vrs.ux.touch.MenuPanel', {
       getSectionDivStr = function(itemCls, iconCls, itemIcon) {
          var img, icon_cls_str;
          if(Ext.isEmpty(itemIcon))
-         { itemIcon = Ext.BLANK_IMAGE_URL; }
+         { itemIcon = vrs.ux.touch.BLANK_IMAGE_URL; }
          icon_cls_str = (Ext.isEmpty(iconCls) ? ""
                                  : 'class="' + (me.getIconMaskCls() + ' ' + iconCls) + '"');
 
