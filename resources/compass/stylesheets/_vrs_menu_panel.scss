@@ -214,7 +214,7 @@ img.x-menupanel-icon-mask.check1
    $form-field-bg-color: white;
 
    .x-form-label, .x-menupanel-row {
-      background-color: white;
+      background-color: white !important;
    }
 
    /* Pinstripe background for form panels.
