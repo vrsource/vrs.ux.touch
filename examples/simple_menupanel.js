@@ -12,20 +12,21 @@ onReady: function() {
    menu = Ext.create('vrs.ux.touch.MenuPanel', {
       menuItems: menu_items,
       listeners: {
-         itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
-         leftTap:       function(fl, index) { console.log('Left item selected: ', index); },
-         rightTap:      function(fl, index) { console.log('Right item selected: ', index); }
+         itemtap:       function(fl, index) { console.log('Tapped index: ', index); },
+         lefttap:       function(fl, index) { console.log('Left item selected: ', index); },
+         righttap:      function(fl, index) { console.log('Right item selected: ', index); }
       }
    });
 
    // Selection menu
    selection_menu = Ext.create('vrs.ux.touch.MenuPanel', {
       listeners: {
-         itemTap: function(formList, index, el, ev) {
+         itemtap: function(menuPanel, index, el, ev) {
+            var menu_items = menuPanel.getMenuItems();
             // Change the check to be on the one that was just selected
-            Ext.each(formList.menuItems, function(item, i) {
+            Ext.each(menu_items, function(item, i) {
                var left_icon_cls = ((i === index) ? 'check1' : null);
-               formList.updateItem(i, {leftIconCls: left_icon_cls});
+               menuPanel.updateItem(i, {leftIconCls: left_icon_cls});
             });
          }
       },

@@ -123,13 +123,12 @@ Ext.define('vrs.ux.touch.MenuPanel', {
 
       // XXX: probably needs changed.
       target_el.on({
-         singletap: this.onTap,
-         tapstart : this.onTapStart,
-         tapcancel: this.onTapCancel,
-         touchend : this.onTapCancel,
-         doubletap: this.onDoubleTap,
-         swipe    : this.onSwipe,
-         scope    : this
+         tap        : this.onTap,
+         touchstart : this.onTapStart,
+         touchend   : this.onTapCancel,
+         doubletap  : this.onDoubleTap,
+         swipe      : this.onSwipe,
+         scope      : this
       });
 
       // Setup the UI
@@ -322,7 +321,7 @@ Ext.define('vrs.ux.touch.MenuPanel', {
 
    // @private
    onTap: function(e) {
-      //console.log('onTap called');
+      console.log('onTap called');
       var index, menu_item,
           itemNode = this.findItemByEvent(e);
       if (!this.disabled && itemNode) {
@@ -347,22 +346,18 @@ Ext.define('vrs.ux.touch.MenuPanel', {
             {
                if(!Ext.isEmpty(menu_item.itemtap))
                { menu_item.itemtap(this, index, itemNode, e); }
-               this.fireEvent("itemtap", this, index, itemNode, e);
+               this.fireEvent('itemtap', this, index, itemNode, e);
             }
          }
       }
-      /* No container taps for now.
-      else {
-         if(this.fireEvent("containertap", this, e) !== false) {
-                this.onContainerTap(e);
-            }
-        }
-      */
    },
 
-   // @private
+   /**
+   * Handle highlighting on tap start.
+   * @private
+   */
    onTapStart: function(e, t) {
-      //console.log('onTapStart called');
+      console.log('onTapStart called');
       var me = this,
           item = this.findItemByEvent(e);
 
@@ -382,9 +377,12 @@ Ext.define('vrs.ux.touch.MenuPanel', {
       }
    },
 
-   // @private
+   /**
+   * Hide the highlighting.
+   * @private
+   */
    onTapCancel: function(e, t) {
-      //console.log('onTapCancel called');
+      console.log('onTapCancel called');
       var me = this,
           item = this.findItemByEvent(e);
 
@@ -399,15 +397,8 @@ Ext.define('vrs.ux.touch.MenuPanel', {
    },
 
    // @private
-   onContainerTap: function(e) {
-      //if (this.allowDeselect) {
-      //    this.clearSelections();
-      //}
-   },
-
-   // @private
    onDoubleTap: function(e) {
-      //console.log('onDoubleTap called');
+      console.log('onDoubleTap called');
       var index, menu_item,
           item = this.findItemByEvent(e);
       if (!this.disabled && item) {
@@ -421,7 +412,7 @@ Ext.define('vrs.ux.touch.MenuPanel', {
 
    // @private
    onSwipe: function(e) {
-      //console.log('onSwipe called');
+      console.log('onSwipe called');
       var index, menu_item,
           item = this.findItemByEvent(e);
       if (!this.disabled && item) {
