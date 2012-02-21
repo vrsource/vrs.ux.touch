@@ -220,7 +220,7 @@ img.x-menupanel-icon-mask.check1
    /* Pinstripe background for form panels.
    * Only do this with panels directly under a form.
    */
-   .x-form > .x-panel-body {
+   .x-form-inner {
       -webkit-background-size: 0.438em 100%;
       background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
    }

@@ -6711,7 +6711,7 @@ img.x-menupanel-icon-mask.check1 {
 * Only do this with panels directly under a form.
 */
 /* line 223, ../compass/stylesheets/_vrs_menu_panel.scss */
-.x-form > .x-panel-body {
+.x-form-inner {
   -webkit-background-size: 0.438em 100%;
   background: -webkit-gradient(linear, left top, right top, from(#c5ccd4), color-stop(71%, #c5ccd4), color-stop(72%, #cbd2d8), to(#cbd2d8));
 }
