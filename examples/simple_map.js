@@ -232,6 +232,8 @@ Ext.define('vrs.MapPanel', {
    },
 
    initialize: function() {
+      this.callParent(arguments);
+
       var me   = this,
           ctrl = this.getController(),
           toolbar;
@@ -274,18 +276,17 @@ Ext.define('vrs.MapPanel', {
       });
 
       // finalize the setup
-      this.items = [
+      me.add([
          this.topToolbar,
          this.mapCmp
-      ];
-
-      // Finish setup
-      this.callParent(arguments);
+      ]);
    },
 
    // -- TEST HELPERS --- //
    tapAddBtn: function() {
-      this.addBtn.callHandler(null);
+      //this.addBtn.doTap(this.addBtn, callHandler(null);
+      this.addBtn.getHandler().apply(this.addBtn.getScope(), null);
+      //this.addBtn.getHandler().call(null);
    }
 });
 
