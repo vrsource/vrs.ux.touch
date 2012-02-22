@@ -1,5 +1,28 @@
 /** Tests for MenuPanel. */
-var wrapPanel;
+
+/**
+* Wrap the given menu in a panel
+* and return the panel.
+*/
+var wrapPanel = function(menu) {
+   var panel = new Ext.form.FormPanel({
+      fullscreen: true,
+      layout: 'fit',
+      items: [
+         {
+            xtype: 'fieldset',
+            items: [menu]
+         }
+      ]
+   });
+   return panel;
+};
+
+component('Stuff me', function() {
+   it('should do good stuff', function() {
+      expect(true).toBeTruthy();
+   });
+});
 
 component('MenuPanel', function() {
    var panel;
@@ -102,24 +125,6 @@ component('MenuPanel', function() {
 
 
 });
-
-/**
-* Wrap the given menu in a panel
-* and return the panel.
-*/
-wrapPanel = function(menu) {
-   var panel = new Ext.form.FormPanel({
-      fullscreen: true,
-      layout: 'fit',
-      items: [
-         {
-            xtype: 'fieldset',
-            items: [menu]
-         }
-      ]
-   });
-   return panel;
-};
 
 
 /**
