@@ -33,7 +33,7 @@ Ext.define('vrs.AppCtrl', {
       //vrs.AppCtrl.superclass.constructor.call(this, config);
 
       this.panel = vrs.MapPanel.create({ controller: this});
-      this.map   = this.panel.mapCmp.map;
+      this.map   = this.panel.mapCmp.getMap();
 
       this.panel.on('activate', this.onActivate, this);
       this.initMap();
@@ -219,16 +219,12 @@ Ext.define('vrs.MapPanel', {
    extend: 'Ext.Panel',
 
    config: {
-      controller: null,
+      controller : null,
 
-      cls: 'map_panel',
+      cls        : 'map_panel',
 
-      fullscreen: true,
-
-      layout: {
-         type: 'vbox',
-         align: 'stretch'
-      }
+      fullscreen : true,
+      layout     : 'fit'
    },
 
    initialize: function() {
@@ -236,7 +232,7 @@ Ext.define('vrs.MapPanel', {
 
       var me   = this,
           ctrl = this.getController(),
-          toolbar;
+          toolbar, map_options;
 
       this.addBtn = Ext.Button.create({
          text    : 'Add',
@@ -244,8 +240,7 @@ Ext.define('vrs.MapPanel', {
          handler : function() {
             var ctrl = me.controller,
                 map_cmp = me.mapCmp,
-                mtypes = map_cmp.map.mapTypes;
-
+                mtypes = map_cmp.getMap().mapTypes;
             console.log('do something');
          }
       });
@@ -263,17 +258,21 @@ Ext.define('vrs.MapPanel', {
          html: 'Put stuff here'
       });
 
-      this.mapCmp = Ext.Map.create({
-         mapOptions: {
-            center : new google.maps.LatLng(30, -100),
-            zoom : 3,
-            mapTypeId : google.maps.MapTypeId.HYBRID,
-            scaleControl: true,
-            mapTypeControlOptions: {
-               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-            }
+      map_options = {
+         center : new google.maps.LatLng(30, -100),
+         zoom : 3,
+         mapTypeId : google.maps.MapTypeId.HYBRID,
+         scaleControl: true,
+         mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
          }
+      };
+
+      this.mapCmp = Ext.Map.create({
+         mapOptions: map_options
       });
+
+      this.mapCmp.setMapOptions(map_options);
 
       // finalize the setup
       me.add([
