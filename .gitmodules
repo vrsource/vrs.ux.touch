@@ -1,0 +1,3 @@
+[submodule "deps/Leaflet"]
+	path = deps/Leaflet
+	url = git@github.com:vrsource/Leaflet.git
