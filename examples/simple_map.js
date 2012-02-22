@@ -6,7 +6,6 @@ Ext.setup({
       vrs.ctrl = new vrs.AppCtrl();
    },
 
-   fullscreen     : true,
    statusBarStyle : 'black'
 });
 
@@ -14,7 +13,11 @@ Ext.setup({
 /**
 * Controller for the application.
 */
-vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
+Ext.define('vrs.AppCtrl', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
    panel: null,
 
    /** List of markers on the map. */
@@ -24,9 +27,12 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
    map: null,
 
    constructor: function(config) {
-      vrs.AppCtrl.superclass.constructor.call(this, config);
+      this.initConfig(config);
+      this.mixins.observable.constructor.call(this, config);
 
-      this.panel = new vrs.MapPanel({ controller: this});
+      //vrs.AppCtrl.superclass.constructor.call(this, config);
+
+      this.panel = vrs.MapPanel.create({ controller: this});
       this.map   = this.panel.mapCmp.map;
 
       this.panel.on('activate', this.onActivate, this);
@@ -209,26 +215,31 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 /*
 * Main view for the application.
 */
-vrs.MapPanel = Ext.extend(Ext.Panel, {
-   cls: 'map_panel',
+Ext.define('vrs.MapPanel', {
+   extend: 'Ext.Panel',
 
-   controller: null,
-   fullscreen: true,
+   config: {
+      controller: null,
 
-   layout: {
-      type: 'vbox',
-      align: 'stretch'
+      cls: 'map_panel',
+
+      fullscreen: true,
+
+      layout: {
+         type: 'vbox',
+         align: 'stretch'
+      }
    },
 
-   initComponent: function() {
-      var me = this,
-          ctrl = this.controller,
+   initialize: function() {
+      var me   = this,
+          ctrl = this.getController(),
           toolbar;
 
-      this.addBtn = new Ext.Button({
-         text: 'Add',
-         ui: 'action',
-         handler: function() {
+      this.addBtn = Ext.Button.create({
+         text    : 'Add',
+         ui      : 'action',
+         handler : function() {
             var ctrl = me.controller,
                 map_cmp = me.mapCmp,
                 mtypes = map_cmp.map.mapTypes;
@@ -237,20 +248,20 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          }
       });
 
-      this.topToolbar = new Ext.Toolbar({
-         title: 'Map',
-         dock: 'top',
-         items: [
+      this.topToolbar = Ext.Toolbar.create({
+         title  : 'Map',
+         docked : 'top',
+         items  : [
             this.addBtn,
             {xtype: 'spacer'}
          ]
       });
 
-      this.mainPanel = new Ext.Panel({
+      this.mainPanel = Ext.Panel.create({
          html: 'Put stuff here'
       });
 
-      this.mapCmp = new Ext.Map({
+      this.mapCmp = Ext.Map.create({
          mapOptions: {
             center : new google.maps.LatLng(30, -100),
             zoom : 3,
@@ -263,16 +274,13 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
       });
 
       // finalize the setup
-      this.dockedItems = [
-         this.topToolbar
-      ];
-
       this.items = [
+         this.topToolbar,
          this.mapCmp
       ];
 
       // Finish setup
-      vrs.MapPanel.superclass.initComponent.call(this);
+      this.callParent(arguments);
    },
 
    // -- TEST HELPERS --- //
