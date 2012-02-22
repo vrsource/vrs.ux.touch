@@ -158,6 +158,7 @@ code, pre {
   left: 110px;
   width: 30px;
   height: 43px;
+  pointer-events: none;
   background-image: url(../img/sencha_small.png);
 }
 

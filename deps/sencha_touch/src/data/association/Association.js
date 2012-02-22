@@ -190,19 +190,8 @@ Ext.define('Ext.data.association.Association', {
                         type: association
                     };
                 }
-
-                switch (association.type) {
-                    case 'belongsTo':
-                        return Ext.create('Ext.data.association.BelongsTo', association);
-                    case 'hasMany':
-                        return Ext.create('Ext.data.association.HasMany', association);
-                    case 'hasOne':
-                        return Ext.create('Ext.data.association.HasOne', association);
-                    default:
-                        //<debug>
-                        Ext.Logger.error('Unknown Association type: "' + association.type + '"');
-                        //</debug>
-                }
+                association.type = association.type.toLowerCase();
+                return Ext.factory(association, Ext.data.association.Association, null, 'association');
             }
 
             return association;

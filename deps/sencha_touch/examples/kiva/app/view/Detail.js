@@ -99,6 +99,8 @@ Ext.define('Kiva.view.Detail', {
             position: new google.maps.LatLng(coords[0], coords[1])
         });
 
+        carousel.setActiveItem(0);
+
         map.setMapCenter(this.mapMarker.position);
     },
 

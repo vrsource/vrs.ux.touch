@@ -67,6 +67,8 @@
  * ## Further Reading
  *
  * For more information about Carousels see the [Carousel guide](#!/guide/carousel).
+ * 
+ * @aside guide carousel
  */
 Ext.define('Ext.carousel.Carousel', {
     extend: 'Ext.Container',
@@ -103,7 +105,7 @@ Ext.define('Ext.carousel.Carousel', {
         animation: {
             duration: 250,
             easing: {
-                type: 'ease-out',
+                type: 'ease-out'
             }
         },
 

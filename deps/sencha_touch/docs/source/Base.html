@@ -1058,22 +1058,22 @@ var noArgs = [],
                 defaultConfig = this.defaultConfig,
                 initialConfig = this.initialConfig,
                 configList = [],
-                name, value, i, ln, nameMap;
+                name, i, ln, nameMap;
 
             applyIfNotSet = Boolean(applyIfNotSet);
 
             for (name in config) {
-                if ((applyIfNotSet &amp;&amp; (name in initialConfig)) || !(name in defaultConfig)) {
+                if ((applyIfNotSet &amp;&amp; (name in initialConfig))) {
                     continue;
                 }
 
-                value = config[name];
-                currentConfig[name] = value;
+                currentConfig[name] = config[name];
 
-                configList.push(name);
-
-                nameMap = configNameCache[name];
-                this[nameMap.get] = this[nameMap.initGet];
+                if (name in defaultConfig) {
+                    configList.push(name);
+                    nameMap = configNameCache[name];
+                    this[nameMap.get] = this[nameMap.initGet];
+                }
             }
 
             for (i = 0,ln = configList.length; i &lt; ln; i++) {

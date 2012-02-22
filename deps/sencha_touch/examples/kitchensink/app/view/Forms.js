@@ -1,3 +1,9 @@
+/**
+ * Demonstrates a tabbed form panel. This uses a tab panel with 3 tabs - Basic, Sliders and Toolbars - each of which is
+ * defined below.
+ * 
+ * See this in action at http://dev.sencha.com/deploy/sencha-touch-2-b3/examples/kitchensink/index.html#demo/forms
+ */
 Ext.define('Kitchensink.view.Forms', {
     extend: 'Ext.tab.Panel',
 

@@ -7,7 +7,7 @@ Ext.define('JWF.model.Run', {
     config: {
         fields: [
             { name: 'location',  type: 'string' },
-            { name: 'date',      type: 'string' },
+            { name: 'date',      type: 'date' },
             { name: 'distance',  type: 'number' },
             { name: 'profileId', type: 'string' },
             { name: 'name',      type: 'string' }

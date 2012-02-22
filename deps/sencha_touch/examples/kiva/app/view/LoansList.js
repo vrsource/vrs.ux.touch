@@ -29,7 +29,7 @@ Ext.define('Kiva.view.LoansList', {
 
         me.callParent(arguments);
 
-        if (store.getCount() === 0) {
+        if (store.getCount() === 0 && store.isLoaded()) {
             me.setMasked({
                 xtype: 'loadmask',
                 indicator: false,

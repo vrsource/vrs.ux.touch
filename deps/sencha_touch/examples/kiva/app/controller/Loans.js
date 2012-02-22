@@ -48,11 +48,9 @@ Ext.define('Kiva.controller.Loans', {
     },
 
     onListTap: function(list, loan) {
-        if (this.view) {
-            this.view.destroy();
+        if (!this.view) {
+            this.view = Ext.create('Kiva.view.Detail');
         }
-
-        this.view = Ext.create('Kiva.view.Detail');
 
         var view = this.view;
         view.setLoan(loan);
@@ -78,6 +76,10 @@ Ext.define('Kiva.controller.Loans', {
     },
 
     onSelectChange: function(field) {
+        if (!field.initialized) {
+            return;
+        }
+
         var config = {};
         config[field.getName()] = field.getValue();
         this.doFilter(config);

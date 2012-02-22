@@ -178,15 +178,6 @@
                 type: 'flip'
             },
             leaf: true
-//        }, {
-//            text: 'Cube',
-//            id: 'Cube',
-//            card: false,
-//            animation: {
-//                duration: 30000,
-//                type: 'cube'
-//            },
-//            leaf: true
         });
     }
 

@@ -62,7 +62,10 @@ Ext.define('Ext.viewport.Ios', {
                 //<debug error>
                 Ext.Logger.error("Timeout waiting for window.innerHeight to change", this);
                 //</debug>
-            });
+                height = stretchHeights[orientation] = this.getWindowHeight();
+                this.setHeight(height);
+                this.fireMaximizeEvent();
+            }, 50, 1000);
         }
     },
 

@@ -123,10 +123,10 @@ Ext.define('Ext.layout.Card', {
 <span id='Ext-layout-Card-method-doItemRemove'>    /**
 </span>     * @private
      */
-    doItemRemove: function(item) {
+    doItemRemove: function(item, index, destroy) {
         this.callParent(arguments);
 
-        if (item.isInnerItem()) {
+        if (!destroy &amp;&amp; item.isInnerItem()) {
             item.show();
         }
     },

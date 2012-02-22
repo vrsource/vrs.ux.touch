@@ -1,3 +1,8 @@
+/**
+ * Demonstrates how to create a simple List based on inline data.
+ * First we create a simple Contact model with first and last name fields, then we create a Store to contain
+ * the data, finally we create the List itself, which gets its data out of the Store
+ */
 Ext.define('Contact', {
     extend: 'Ext.data.Model',
     config: {
@@ -128,6 +133,9 @@ Ext.define('Kitchensink.view.List', {
                 width: Ext.os.deviceType == 'Phone' ? null : 300,
                 height: Ext.os.deviceType == 'Phone' ? null : 500,
                 xtype: 'list',
+                ui: 'round',
+                grouped: true,
+                pinHeaders: false,
                 onItemDisclosure: function(record, btn, index) {
                     Ext.Msg.alert('Tap', 'Disclose more info for ' + record.get('firstName'), Ext.emptyFn);
                 },

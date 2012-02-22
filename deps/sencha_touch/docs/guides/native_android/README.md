@@ -2,7 +2,7 @@
 
 ## Requirements
 
- - [Android SDK Tools][9] (Revisions 13+)
+ - [Android SDK Tools][9] (Revisions 16+)
  - Optional. [Eclipse][6]
 
 ## Steps to package your Android application
@@ -14,12 +14,14 @@
 
 ### Step 1: Android certification generation
 
-The Android Keytool included in the Android SDK tools is one way of creating certificate for signing Android applications. Below is an example of a Keytool command that generates a private key:
+The Android Keytool included in the Android SDK tools is one way of creating certificate for signing Android
+applications. Below is an example of a Keytool command that generates a private key:
 
     $ keytool -genkey -v -keystore my-release-key.keystore -alias alias_name
         -keyalg RSA -keysize 2048 -validity 10000
 
-Follow the steps on the Android developers guide “[Signing Your Applications][2]” for more information about creating certificates and signing applications.
+Follow the steps on the Android developers guide “[Signing Your Applications][2]” for more information about creating
+certificates and signing applications.
 
 ### Step 2: Install the Sencha SDK Tools.
 
@@ -37,7 +39,7 @@ The configuration file has the following format:
         "outputPath": "<AppPackageOutputPath>",
         "iconName": "<AppIconName>",
         "versionString": "<AppVersion>",
-        "webAppPath": "<PathToWebApp>",
+        "inputPath": "<PathToWebApp>",
         "configuration": "<Release | Debug>",
         "platform": "<Android | AndroidEmulator>",
         "certificatePath": "<certificatePath>",
@@ -65,7 +67,7 @@ The following parameters are applicable to Android packages:
     "applicationName":"<AppName>"
 
 Specifies the name of your application (`AppName`). The output file will have the name `<AppName>.apk`.
-	
+
     "applicationId":"<AppID>"
 
 Specifies an ID given to your application. It's suggested that you use a nameSpace for your app, such as `com.sencha.Touch2Package`.
@@ -173,8 +175,10 @@ To package a debug application to run on the Android Emulator, do the following:
 
        sencha package run <configFile.json>
 
-The application will start in the already running Android Emulator after successful execution of this command. If Android Emulator is not started before issuing the command,  Android Emulator will not start automatically. If package is successful, an <AppName>.apk is available in the application output
-location for you to manually test it on an Android Emulator or a device.
+The application will start in the already running Android Emulator after successful execution of this command. If
+Android Emulator is not started before issuing the command,  Android Emulator will not start automatically. If package
+is successful, an <AppName>.apk is available in the application output location for you to manually test it on an
+Android Emulator or a device.
 
 More info about Android Emulator can be found on the Android Developer Guide: [Using the Android Emulator][4].
 

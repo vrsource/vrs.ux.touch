@@ -1,3 +1,6 @@
+/**
+ * Demonstrates usage of the Ext.Audio component
+ */
 Ext.define('Kitchensink.view.Audio', {
     extend: 'Ext.Container',
     requires: [

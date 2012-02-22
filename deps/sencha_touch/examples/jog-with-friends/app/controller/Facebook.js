@@ -116,6 +116,7 @@ Ext.define('JWF.controller.Facebook', {
     },
 
     logout: function() {
+        Ext.Viewport.setMasked({xtype: 'loadmask', message: 'Logging out...'});
         FB.logout();
     },
 
@@ -128,6 +129,7 @@ Ext.define('JWF.controller.Facebook', {
 
         this.login();
 
+        Ext.Viewport.setMasked(false);
         Ext.Viewport.setActiveItem(Ext.getCmp('login'));
         Ext.getStore('Runs').removeAll();
 
@@ -143,7 +145,9 @@ Ext.define('JWF.controller.Facebook', {
         if (!this.logoutCmp) {
             this.logoutCmp = Ext.create('Ext.Panel', {
                 width: 120,
-                height: 45,
+                top: 0,
+                left: 0,
+                padding: 5,
                 modal: true,
                 hideOnMaskTap: true,
                 items: [

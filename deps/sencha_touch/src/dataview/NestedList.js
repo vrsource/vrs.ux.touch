@@ -77,6 +77,7 @@
  *          store: store
  *      });
  *
+ * @aside guide nested_list
  */
 Ext.define('Ext.dataview.NestedList', {
     alternateClassName: 'Ext.NestedList',
@@ -341,20 +342,10 @@ Ext.define('Ext.dataview.NestedList', {
         this.callParent(arguments);
     },
 
-        //@private
-    initialize: function() {
-        var me = this;
-        me.callParent();
-
-        me.on({
-            delegate: '> list',
-            itemdoubletap: 'onItemDoubleTap',
-            itemtap: 'onItemTap',
-            beforeselect: 'onBeforeSelect',
-            containertap: 'onContainerTap',
-            selectionchange: 'onSelectionChange',
-            scope: me
-        });
+    onItemInteraction: function() {
+        if (this.isGoingTo) {
+            return false;
+        }
     },
 
     applyDetailContainer: function(config) {
@@ -363,6 +354,19 @@ Ext.define('Ext.dataview.NestedList', {
         }
 
         return config;
+    },
+
+    updateDetailContainer: function(newContainer, oldContainer) {
+        newContainer.onBefore('activeitemchange', 'onBeforeDetailContainerChange', this);
+        newContainer.onAfter('activeitemchange', 'onDetailContainerChange', this);
+    },
+
+    onBeforeDetailContainerChange: function() {
+        this.isGoingTo = true;
+    },
+
+    onDetailContainerChange: function() {
+        this.isGoingTo = false;
     },
 
     /**
@@ -425,7 +429,6 @@ Ext.define('Ext.dataview.NestedList', {
 
     onStoreLoad: function() {
         this.setMasked(false);
-
         this.fireEvent('load', [this, Array.prototype.slice.call(arguments)]);
     },
 
@@ -612,7 +615,6 @@ Ext.define('Ext.dataview.NestedList', {
         }
 
         var me = this,
-
             activeItem = me.getActiveItem(),
             detailCard = me.getDetailCard(),
             detailCardActive = detailCard && me.getActiveItem() == detailCard,
@@ -674,6 +676,8 @@ Ext.define('Ext.dataview.NestedList', {
 
         me.syncToolbar();
     },
+
+
 
     /**
      * The leaf you want to navigate to. You should pass a node instance.
@@ -772,11 +776,20 @@ Ext.define('Ext.dataview.NestedList', {
 
         return Ext.Object.merge({
             xtype: 'list',
-            pressedDelay: 0,
+            pressedDelay: 250,
             autoDestroy: true,
             store: nodeStore,
             onItemDisclosure: me.getOnItemDisclosure(),
             allowDeselect : me.getAllowDeselect(),
+            listeners: [
+                { event: 'itemdoubletap', fn: 'onItemDoubleTap', scope: me },
+                { event: 'itemtap', fn: 'onItemInteraction', scope: me, order: 'before'},
+                { event: 'itemtouchstart', fn: 'onItemInteraction', scope: me, order: 'before'},
+                { event: 'itemtap', fn: 'onItemTap', scope: me },
+                { event: 'beforeselect', fn: 'onBeforeSelect', scope: me },
+                { event: 'containertap', fn: 'onContainerTap', scope: me },
+                { event: 'selectionchange', fn: 'onSelectionChange', scope: me }
+            ],
             itemTpl: '<span<tpl if="leaf == true"> class="x-list-item-leaf"</tpl>>' + me.getItemTextTpl(node) + '</span>'
         }, this.getListConfig());
     }

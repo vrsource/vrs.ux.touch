@@ -269,7 +269,7 @@ Ext.define('Ext.dom.Helper', {
     },
 
     /**
-     * @ignore
+     * @private
      * Fix for browsers which no longer support createContextualFragment
      */
     createContextualFragment: function(html){

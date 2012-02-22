@@ -19,7 +19,15 @@ Ext.define('AddressBook.view.Main', {
                     id: 'editButton',
                     text: 'Edit',
                     align: 'right',
-                    hidden: true
+                    hidden: true,
+                    hideAnimation: Ext.os.is.Android ? false : {
+                        type: 'fadeOut',
+                        duration: 200
+                    },
+                    showAnimation: Ext.os.is.Android ? false : {
+                        type: 'fadeIn',
+                        duration: 200
+                    }
                 },
                 {
                     xtype: 'button',
@@ -27,7 +35,15 @@ Ext.define('AddressBook.view.Main', {
                     text: 'Save',
                     ui: 'sencha',
                     align: 'right',
-                    hidden: true
+                    hidden: true,
+                    hideAnimation: Ext.os.is.Android ? false : {
+                        type: 'fadeOut',
+                        duration: 200
+                    },
+                    showAnimation: Ext.os.is.Android ? false : {
+                        type: 'fadeIn',
+                        duration: 200
+                    }
                 }
             ]
         },
@@ -35,15 +51,5 @@ Ext.define('AddressBook.view.Main', {
         items: [
             { xtype: 'contacts' }
         ]
-    },
-
-    applyLayout: function(config) {
-        config = config || {};
-
-        if (Ext.os.is.Android) {
-            config.animation = false;
-        }
-
-        return config;
     }
 });

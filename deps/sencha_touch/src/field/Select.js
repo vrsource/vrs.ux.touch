@@ -1,14 +1,28 @@
 /**
  * Simple Select field wrapper. Example usage:
-<pre><code>
-new Ext.field.Select({
-    options: [
-        {text: 'First Option',  value: 'first'},
-        {text: 'Second Option', value: 'second'},
-        {text: 'Third Option',  value: 'third'}
-    ]
-});
-</code></pre>
+ *
+ *     @example
+ *     Ext.create('Ext.form.Panel', {
+ *         fullscreen: true,
+ *         items: [
+ *             {
+ *                 xtype: 'fieldset',
+ *                 title: 'Select',
+ *                 items: [
+ *                     {
+ *                         xtype: 'selectfield',
+ *                         label: 'Choose one',
+ *                         options: [
+ *                             {text: 'First Option',  value: 'first'},
+ *                             {text: 'Second Option', value: 'second'},
+ *                             {text: 'Third Option',  value: 'third'}
+ *                         ]
+ *                     }
+ *                 ]
+ *             }
+ *         ]
+ *     });
+ *
  */
 Ext.define('Ext.field.Select', {
     extend: 'Ext.field.Text',
@@ -83,7 +97,8 @@ Ext.define('Ext.field.Select', {
         hiddenName: null,
 
         /**
-         * @cfg {Object} input
+         * @cfg {Object} component
+         * @accessor
          * @hide
          */
         component: {
@@ -209,7 +224,9 @@ Ext.define('Ext.field.Select', {
 
         this.callParent([newValue ? newValue.get(this.getDisplayField()) : '']);
 
-        this.fireEvent('change', this, newValue, oldValue);
+        if (oldValue !== newValue) {
+            this.fireEvent('change', this, newValue, oldValue);
+        }
     },
 
     getValue: function() {

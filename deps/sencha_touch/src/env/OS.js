@@ -184,13 +184,21 @@ Ext.define('Ext.env.OS', {
 
     osName = osEnv.name;
 
-    var search = window.location.search.match(/deviceType=(Tablet|Phone)/);
+    var search = window.location.search.match(/deviceType=(Tablet|Phone)/),
+        nativeDeviceType = window.deviceType;
 
     // Override deviceType by adding a get variable of deviceType. NEEDED FOR DOCS APP.
     // E.g: example/kitchen-sink.html?deviceType=Phone
     if (search && search[1]) {
         deviceType = search[1];
-    } else {
+    }
+    else if (nativeDeviceType === 'iPhone') {
+        deviceType = 'Phone';
+    }
+    else if (nativeDeviceType === 'iPad') {
+        deviceType = 'Tablet';
+    }
+    else {
         if (!osEnv.is.Android && !osEnv.is.iOS && /Windows|Linux|MacOS/.test(osName)) {
             deviceType = 'Desktop';
         }

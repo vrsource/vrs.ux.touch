@@ -87,6 +87,7 @@ Ext.define('Ext.Map', {
 
     constructor: function() {
         this.callParent(arguments);
+        this.options= {};
         this.element.setVisibilityMode(Ext.Element.OFFSETS);
 
         if (!(window.google || {}).maps) {
@@ -105,6 +106,23 @@ Ext.define('Ext.Map', {
 
     onTouchStart: function(e) {
         e.makeUnpreventable();
+    },
+
+    applyMapOptions: function(options) {
+        return Ext.merge({}, this.options, options);
+    },
+
+    updateMapOptions: function(newOptions) {
+        var gm = (window.google || {}).maps,
+            map = this.getMap();
+
+        if (gm && map) {
+            map.setOptions(newOptions);
+        }
+    },
+
+    getMapOptions: function() {
+        return Ext.merge({}, this.options);
     },
 
     updateUseCurrentLocation: function(useCurrentLocation) {
@@ -240,9 +258,9 @@ Ext.define('Ext.Map', {
                 map.panTo(coordinates);
             }
             else {
-                this.setMapOptions(Ext.apply(this.getMapOptions(), {
+                this.options = Ext.apply(this.getMapOptions(), {
                     center: coordinates
-                }));
+                });
             }
         }
     },
@@ -255,9 +273,9 @@ Ext.define('Ext.Map', {
 
         zoom = (map && map.getZoom) ? map.getZoom() : mapOptions.zoom || 10;
 
-        this.setMapOptions(Ext.apply(mapOptions, {
+        this.options = Ext.apply(mapOptions, {
             zoom: zoom
-        }));
+        });
 
         this.fireEvent('zoomchange', this, map, zoom);
     },
@@ -270,9 +288,9 @@ Ext.define('Ext.Map', {
 
         mapTypeId = (map && map.getMapTypeId) ? map.getMapTypeId() : mapOptions.mapTypeId;
 
-        this.setMapOptions(Ext.apply(mapOptions, {
+        this.options = Ext.apply(mapOptions, {
             mapTypeId: mapTypeId
-        }));
+        });
 
         this.fireEvent('typechange', this, map, mapTypeId);
     },
@@ -285,9 +303,9 @@ Ext.define('Ext.Map', {
 
         center = (map && map.getCenter) ? map.getCenter() : mapOptions.center;
 
-        this.setMapOptions(Ext.apply(mapOptions, {
+        this.options = Ext.apply(mapOptions, {
             center: center
-        }));
+        });
 
         this.fireEvent('centerchange', this, map, center);
 

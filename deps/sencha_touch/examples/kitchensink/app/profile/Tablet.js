@@ -3,7 +3,7 @@ Ext.define('Kitchensink.profile.Tablet', {
 
     config: {
         controllers: ['Main'],
-        views: ['Main']
+        views: ['Main', 'TouchEvents']
     },
 
     isActive: function() {

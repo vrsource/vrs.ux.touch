@@ -106,10 +106,10 @@ Ext.define('Ext.layout.Card', {
     /**
      * @private
      */
-    doItemRemove: function(item) {
+    doItemRemove: function(item, index, destroy) {
         this.callParent(arguments);
 
-        if (item.isInnerItem()) {
+        if (!destroy && item.isInnerItem()) {
             item.show();
         }
     },

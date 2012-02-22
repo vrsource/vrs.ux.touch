@@ -11,17 +11,19 @@
                 "status": "updated"
             },
             {
-                "text": "Twitter",
-                "url": "twitter/index.html",
-                "icon": "twitter/resources/images/icon.png",
+                "text": "Touch Tweets",
+                "url": "touchtweets/index.html",
+                "icon": "touchtweets/resources/images/icon-72.png",
+                "icon2x": "touchtweets/resources/images/icon-114.png",
                 "device": "tablet",
-                "desc": "A simple Twitter client which allows you to search Twitter.",
+                "desc": "A Sencha Touch client which allows you to search Twitter.",
                 "status": "updated"
             },
             {
                 "text": "Jog With Friends",
                 "url": "http://ju.mp/senchajwf",
-                "icon": "jog-with-friends/resources/images/icon.png",
+                "icon": "jog-with-friends/resources/images/icon-72.png",
+                "icon2x": "jog-with-friends/resources/images/icon-114.png",
                 "device": "phone",
                 "desc": "A Facebook example which allows you to share when you jog.",
                 "status": "new"
@@ -41,6 +43,24 @@
                 "device": "phone",
                 "desc": "Find information on your local Legislators",
                 "status": "updated"
+            },
+            {
+                "text": "O'Reilly",
+                "url": "oreilly/index.html",
+                "icon": "oreilly/resources/img/icon-72.png",
+                "icon2x": "oreilly/resources/img/icon-114.png",
+                "device": "phone",
+                "desc": "Sample conference application with a connection to remote backend data.",
+                "status": "updated"
+            },
+            {
+                "text": "TouchStyle",
+                "url": "touchstyle/index.html",
+                "icon": "touchstyle/resources/images/icon-72.png",
+                "icon2x": "touchstyle/resources/images/icon-114.png",
+                "device": "phone",
+                "desc": "Example of dynamic carousel and device profiles",
+                "status": "new"
             }
         ]
     },

@@ -22,6 +22,7 @@ Ext.define('GeoCon.controller.SplashScreen', {
             autoUpdate: false,
             listeners: {
                 locationupdate: 'onLocationUpdate',
+                locationerror: 'onLocationError',
                 scope: this
             }
         });
@@ -29,6 +30,10 @@ Ext.define('GeoCon.controller.SplashScreen', {
     },
 
     onSettingsTap: function() {
+        if (!this.hasLocation) {
+            this.onLocationError();
+            return;
+        }
         var splashScreen = Ext.getCmp('splashScreen');
 
         if (splashScreen.getActiveItem() == Ext.getCmp('settingsForm')) {
@@ -39,6 +44,7 @@ Ext.define('GeoCon.controller.SplashScreen', {
     },
 
     onLocationUpdate: function() {
+        this.hasLocation = true;
         Ext.getStore('Districts').load({
             params: {
                 latitude: this.location.getLatitude(),
@@ -48,7 +54,6 @@ Ext.define('GeoCon.controller.SplashScreen', {
                 var district = records && records[0];
 
                 if (district) {
-
                     var store = Ext.getStore('States'),
                         idx = store.find('abbr', district.data.state),
                         state = store.getAt(idx);
@@ -61,6 +66,37 @@ Ext.define('GeoCon.controller.SplashScreen', {
                         this.updateSettings();
                     }
                 }
+            },
+            scope: this
+        });
+    },
+
+    onLocationError: function() {
+        this.hasLocation = true;
+        Ext.getStore('Districts').load({
+            params: {
+                latitude: 37.381592,
+                longitude: -122.135672
+            },
+            callback: function(records) {
+                var district = records && records[0];
+
+                this.onSettingsTap();
+
+                if (district) {
+                    var store = Ext.getStore('States'),
+                        idx = store.find('abbr', district.data.state),
+                        state = store.getAt(idx);
+
+                    this.currentDistrict = district.data.number;
+
+                    if (state) {
+                        this.currentState = state;
+                        this.loadLegislators();
+                        this.updateSettings();
+                    }
+                }
+                Ext.Msg.alert('Geolocation Unavailable', 'Setting your default location to Sencha HQ');
             },
             scope: this
         });
@@ -96,7 +132,6 @@ Ext.define('GeoCon.controller.SplashScreen', {
      * the Legislators for the state and district, then then Senators for the whole state.
      */
     loadLegislators: function() {
-
         var title = this.currentState.data.abbr + ' District ' + this.currentDistrict,
             store = Ext.getStore('Legislators'),
             splashToolbar = Ext.getCmp('splashToolbar');

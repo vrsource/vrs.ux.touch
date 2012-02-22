@@ -7,7 +7,7 @@ Ext.require([
 Ext.setup({
     icon: 'icon.png',
     glossOnIcon: false,
-    onReady: function() { 
+    onReady: function() {
         var audioBase = {
             xtype: 'audio',
             url  : 'crash.mp3',
@@ -66,14 +66,8 @@ Ext.setup({
                         type: 'vbox',
                         pack: 'center'
                     },
-                    title: 'Hidden',
-                    items: [
-                        {
-                            html: 'Android devices do not support the HTML5 &lt;audio&gt; tag controls, so you must use JavaScript to control the audio.'  ,
-                            styleHtmlContent: true
-                        },
-                        hiddenAudio
-                    ]
+                    title: 'Audio Sample',
+                    items: hiddenAudio
                 }
             ];
         } else {

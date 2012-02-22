@@ -113,6 +113,8 @@
  * The last thing we did is update our template to render the image, twitter username and message. All we need to do
  * now is add a little CSS to style the list the way we want it and we end up with a very basic twitter viewer. Click
  * the preview button on the example above to see it in action.
+ *
+ * @aside guide dataview
  */
 Ext.define('Ext.dataview.DataView', {
     extend: 'Ext.Container',
@@ -330,6 +332,16 @@ Ext.define('Ext.dataview.DataView', {
         scrollable: true,
 
         /**
+         * @cfg {Boolean/Object} inline
+         * When set to true the items within the DataView will have their display set to inline-block
+         * and be arranged horizontally. By default the items will wrap to the width of the DataView.
+         * Passing an object with { wrap: false } will turn off this wrapping behavior and overflowed
+         * items will need to be scrolled to horizontally.
+         * @accessor
+         */
+        inline: null,
+
+        /**
          * @cfg {Number} pressedDelay
          * The amount of delay between the tapstart and the moment we add the pressedCls.
          * Settings this to true defaults to 100ms.
@@ -428,16 +440,19 @@ Ext.define('Ext.dataview.DataView', {
         updaterecord: 'onStoreUpdate'
     },
 
-    doInitialize: function() {
+    initialize: function() {
+        this.callParent();
         var me = this,
             container;
 
         me.on(me.getTriggerCtEvent(), me.onContainerTrigger, me);
 
-        container = me.container = this.add(new Ext.dataview[me.getUseComponents() ? 'component' : 'element'].Container());
+        container = me.container = this.add(new Ext.dataview[me.getUseComponents() ? 'component' : 'element'].Container({
+            baseCls: this.getBaseCls()
+        }));
         container.dataview = me;
 
-        container.on(me.getTriggerEvent(), me.onItemTrigger, me);
+        me.on(me.getTriggerEvent(), me.onItemTrigger, me);
 
         container.on({
             itemtouchstart: 'onItemTouchStart',
@@ -455,10 +470,27 @@ Ext.define('Ext.dataview.DataView', {
         }
     },
 
-    //@private
-    initialize: function() {
-        this.callParent();
-        this.doInitialize();
+    applyInline: function(config) {
+        if (Ext.isObject(config)) {
+            config = Ext.apply({}, config);
+        }
+        return config;
+    },
+
+    updateInline: function(newInline, oldInline) {
+        var baseCls = this.getBaseCls();
+        if (oldInline) {
+            this.removeCls([baseCls + '-inlineblock', baseCls + '-nowrap']);
+        }
+        if (newInline) {
+            this.addCls(baseCls + '-inlineblock');
+            if (Ext.isObject(newInline) && newInline.wrap === false) {
+                this.addCls(baseCls + '-nowrap');
+            }
+            else {
+                this.removeCls(baseCls + '-nowrap');
+            }
+        }
     },
 
     /**
@@ -486,7 +518,7 @@ Ext.define('Ext.dataview.DataView', {
     },
 
     // apply to the selection model to maintain visual UI cues
-    onItemTrigger: function(container, target, index, e) {
+    onItemTrigger: function(me, index) {
         this.selectWithEvent(this.getStore().getAt(index));
     },
 
@@ -504,8 +536,13 @@ Ext.define('Ext.dataview.DataView', {
     onItemTouchStart: function(container, target, index, e) {
         var me = this,
             store = me.getStore(),
-            record = store && store.getAt(index),
-            pressedDelay = me.getPressedDelay();
+            record = store && store.getAt(index);
+
+        me.fireAction('itemtouchstart', [me, index, target, record, e], 'doItemTouchStart');
+    },
+
+    doItemTouchStart: function(me, index, target, record) {
+        var pressedDelay = me.getPressedDelay();
 
         if (record) {
             if (pressedDelay > 0) {
@@ -515,8 +552,6 @@ Ext.define('Ext.dataview.DataView', {
                 me.doAddPressedCls(record);
             }
         }
-
-        me.fireEvent('itemtouchstart', me, index, target, record, e);
     },
 
     onItemTouchEnd: function(container, target, index, e) {
@@ -646,12 +681,20 @@ Ext.define('Ext.dataview.DataView', {
 
     applyStore: function(store) {
         var me = this,
-            bindEvents = Ext.apply({}, me.storeEventHooks, { scope: me });
+            bindEvents = Ext.apply({}, me.storeEventHooks, { scope: me }),
+            proxy, reader;
 
         if (store) {
             store = Ext.data.StoreManager.lookup(store);
             if (store && Ext.isObject(store) && store.isStore) {
                 store.on(bindEvents);
+                proxy = store.getProxy();
+                if (proxy) {
+                    reader = proxy.getReader();
+                    if (reader) {
+                        reader.on('exception', 'handleException', this);
+                    }
+                }
             }
             //<debug warn>
             else {
@@ -663,9 +706,18 @@ Ext.define('Ext.dataview.DataView', {
         return store;
     },
 
+    /**
+     * Method called when the Store's Reader throws an exception
+     * @method handleException
+     */
+    handleException: function() {
+        this.setMasked(false);
+    },
+
     updateStore: function(newStore, oldStore) {
         var me = this,
-            bindEvents = Ext.apply({}, me.storeEventHooks, { scope: me });
+            bindEvents = Ext.apply({}, me.storeEventHooks, { scope: me }),
+            proxy, reader;
 
         if (oldStore && Ext.isObject(oldStore) && oldStore.isStore) {
             if (oldStore.autoDestroy) {
@@ -673,16 +725,22 @@ Ext.define('Ext.dataview.DataView', {
             }
             else {
                 oldStore.un(bindEvents);
+                proxy = oldStore.getProxy();
+                if (proxy) {
+                    reader = proxy.getReader();
+                    if (reader) {
+                        reader.un('exception', 'handleException', this);
+                    }
+                }
             }
         }
 
         if (newStore) {
-            if (newStore.isAutoLoading()) {
+            if (newStore.isLoaded()) {
                 this.hasLoadedStore = true;
             }
 
             if (newStore.isLoading()) {
-                this.hasLoadedStore = true;
                 me.onBeforeLoad();
             }
             if (me.container) {
@@ -860,6 +918,7 @@ Ext.define('Ext.dataview.DataView', {
         var me = this,
             container = me.container;
         oldIndex = (typeof oldIndex === 'undefined') ? newIndex : oldIndex;
+
 
         if (oldIndex !== newIndex) {
             container.moveItemsToCache(oldIndex, oldIndex);

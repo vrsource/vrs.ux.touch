@@ -159,14 +159,14 @@ Ext.define('Ext.mixin.Selectable', {
 <span id='Ext-mixin-Selectable-method-deselectAll'>    /**
 </span>     * Deselects all records.
      */
-    deselectAll: function() {
+    deselectAll: function(supress) {
         var me = this,
             selections = me.getStore().getRange(),
             ln = selections.length,
             i = 0;
 
         for (; i &lt; ln; i++) {
-            me.deselect(selections[i]);
+            me.deselect(selections, supress);
         }
 
         me.selected.clear();
@@ -443,36 +443,12 @@ Ext.define('Ext.mixin.Selectable', {
      */
     refreshSelection: function() {
         var me = this,
-            newSelection = [],
-            oldSelections = me.getSelection(),
-            ln = oldSelections.length,
-            i = 0,
-            selection, change;
+            selections = me.getSelection();
 
-        // check to make sure that there are no records
-        // missing after the refresh was triggered, prune
-        // them from what is to be selected if so
-        for (; i &lt; ln; i++) {
-            selection = oldSelections[i];
-            if (me.getStore().indexOf(selection) != -1) {
-                newSelection.push(selection);
-            }
+        me.deselectAll(true);
+        if (selections.length) {
+            me.select(selections, false, true);
         }
-
-        // there was a change from the old selected and
-        // the new selection
-        if (me.selected.getCount() != newSelection.length) {
-            change = true;
-        }
-
-        me.deselect(oldSelections, true);
-
-        if (newSelection.length) {
-            // perform the selection again
-            me.select(newSelection, false, true);
-        }
-
-        me.fireSelectionChange(change);
     },
 
     // when a store is cleared remove all selections

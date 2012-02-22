@@ -16,7 +16,6 @@ By tapping on a Legislator, you will be able to view information on:
 Data is retrieved from the following sources:
 
  - http://services.sunlightlabs.com
- - http://developer.nytimes.com/docs/congress_api
 
 ### Legislators by Location
 
@@ -253,100 +252,4 @@ Examples response:
             }
         ]
     }
-
-
-## Bills by Legislator
-
-Docs for this API are at http://developer.nytimes.com/docs/congress_api#h3-member-positions
-
-Examples request:
-
-    http://api.nytimes.com/svc/politics/v3/us/legislative/congress/members/B000711/votes.json?api-key=77bdea6a517106ffaef3a3520ba116b7:2:65539052
-
-http://api.realtimecongress.org/api/v1/votes.json?apikey=sunlight9&sections=basic,voter_ids.F000062&voter_ids.F000062__exists=true
-
-Examples response:
-
-    {
-        "votes": [
-            {
-                "bill_id": "hr2055-112",
-                "chamber": "senate",
-                "how": "roll",
-                "number": 235,
-                "passage_type": "conference",
-                "question": "On the Conference Report (Conference Report to Accompany H.R. 2055)",
-                "required": "3/5",
-                "result": "Conference Report Agreed to",
-                "roll_id": "s235-2011",
-                "roll_type": "On the Conference Report",
-                "session": 112,
-                "vote_breakdown": {
-                    "total": {
-                        "Not Voting": 1,
-                        "Nay": 32,
-                        "Present": 0,
-                        "Yea": 67
-                    },
-                    "party": {
-                        "D": {
-                            "Not Voting": 0,
-                            "Nay": 1,
-                            "Present": 0,
-                            "Yea": 50
-                        },
-                        "R": {
-                            "Not Voting": 1,
-                            "Nay": 30,
-                            "Present": 0,
-                            "Yea": 16
-                        },
-                        "I": {
-                            "Not Voting": 0,
-                            "Nay": 1,
-                            "Present": 0,
-                            "Yea": 1
-                        }
-                    }
-                },
-                "vote_type": "passage",
-                "voted_at": "2011-12-17T15:44:00Z",
-                "voter_ids": {
-                    "F000062": "Yea"
-                },
-                "year": 2011
-            }
-        ],
-        "page": {
-            "per_page": 20,
-            "page": 1,
-            "count": 20
-        },
-        "count": 982
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

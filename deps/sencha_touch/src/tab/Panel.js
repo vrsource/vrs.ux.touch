@@ -153,14 +153,6 @@ Ext.define('Ext.tab.Panel', {
     },
 
     /**
-     * Updates the {@link #tabBar} instance with the new {@link Ext.tab.Bar#activeTab}.
-     */
-    doActiveItemChange: function(newCard) {
-        this.callParent(arguments);
-        this.getTabBar().setActiveTab(this.getInnerItems().indexOf(newCard));
-    },
-
-    /**
      * @private
      */
     doSetActiveItem: function(newActiveItem, oldActiveItem) {
@@ -197,16 +189,8 @@ Ext.define('Ext.tab.Panel', {
     /**
      * Updates this container with the new active item.
      */
-    doTabChange: function(tabBar, newTab, oldTab) {
-        var index = tabBar.indexOf(newTab),
-            activeItem = this.getActiveItem();
-
-        this.setActiveItem(index);
-
-        //check if the item has changed, if not, then return false so the active tab doesn't get changed
-        if (activeItem == this.getActiveItem()) {
-            return false;
-        }
+    doTabChange: function(tabBar, newTab) {
+        this.setActiveItem(tabBar.indexOf(newTab));
     },
 
     /**

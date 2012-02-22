@@ -128,6 +128,12 @@ Ext.define('Ext.data.Operation', {
         response: null,
 
         /**
+         * @cfg {Boolean} withCredentials
+         * This field is necessary when using cross-origin resource sharing.
+         */
+        withCredentials: null,
+
+        /**
          * @cfg {Object} params
          * The params send along with this operation. These usually apply to a Server proxy if you are
          * creating your own custom proxy,
@@ -215,7 +221,7 @@ Ext.define('Ext.data.Operation', {
 
         // <debug>
         if (!model) {
-            Ext.Logger.error('An Operation needs to have a model defined.');
+            Ext.Logger.warn('Unless you define your model using metadata, an Operation needs to have a model defined.');
         }
         // </debug>
 

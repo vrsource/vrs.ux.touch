@@ -172,6 +172,7 @@ Ext.define('Ext.picker.Picker', {
         },
 
         /**
+         * @cfg
          * @hide
          */
         centered: false,
@@ -470,11 +471,15 @@ Ext.define('Ext.picker.Picker', {
     setValue: function(values, animated) {
         var me = this,
             slots = me.getInnerItems(),
-            key, slot, loopSlot;
+            ln = slots.length,
+            key, slot, loopSlot, i;
 
-        // Value is an object with keys mapping to slot names
         if (!values) {
-            return this;
+            values = {};
+            for (i = 0; i < ln; i++) {
+                //set the value to false so the slot will return null when getValue is set
+                values[slots[i].config.name] = false;
+            }
         }
 
         for (key in values) {

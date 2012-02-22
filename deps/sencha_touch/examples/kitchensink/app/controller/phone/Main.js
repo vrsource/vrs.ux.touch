@@ -77,18 +77,22 @@ Ext.define('Kitchensink.controller.phone.Main', {
             view   = this.createView(this.getViewName(item)),
             layout = nav.getLayout(),
             anim   = item.get('animation'),
-            initialAnim = layout.getAnimation();
+            initialAnim = layout.getAnimation(),
+            newAnim;
 
         if (anim) {
             layout.setAnimation(anim);
+            newAnim = layout.getAnimation();
         }
 
         nav.setDetailCard(view);
         nav.goToNode(item.parentNode);
         nav.goToLeaf(item);
 
-        if (anim) {
-            layout.setAnimation(initialAnim);
+        if (newAnim) {
+            newAnim.on('animationend', function() {
+                layout.setAnimation(initialAnim);
+            }, this, { single: true });
         }
 
         this.getToolbar().setTitle(title);

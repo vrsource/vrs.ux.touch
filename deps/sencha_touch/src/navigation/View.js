@@ -8,6 +8,7 @@
  *
  * Using the NavigationView is very simple. Here is a basic example of it in action:
  *
+ *     @example
  *     var view = Ext.create('Ext.NavigationView', {
  *         fullscreen: true,
  *
@@ -45,6 +46,7 @@
  *
  *     view.pop();
  *
+ * @aside guide navigation_view
  */
 Ext.define('Ext.navigation.View', {
     extend: 'Ext.Container',
@@ -121,6 +123,7 @@ Ext.define('Ext.navigation.View', {
          */
 
         /**
+         * @cfg
          * @hide
          */
         layout: {

@@ -36,14 +36,6 @@ Ext.define('Ext.viewport.Default', {
      * @param {Number} height The height of the Viewport
      */
 
-    /**
-     * @event resize
-     * Fires when the Viewport is resized
-     * @param {Ext.Viewport} this
-     * @param {Number} width The width of the Viewport
-     * @param {Number} height The height of the Viewport
-     */
-
     config: {
         /**
          * @cfg {Boolean} autoMaximize
@@ -73,12 +65,14 @@ Ext.define('Ext.viewport.Default', {
         preventPanning: true,
 
         /**
-         * @hide
+         * @cfg
+         * @private
          */
         preventZooming: true,
 
         /**
-         * @hide
+         * @cfg
+         * @private
          */
         autoRender: true,
 
@@ -380,26 +374,6 @@ Ext.define('Ext.viewport.Default', {
         this.mixins.observable.doAddListener.apply(this, arguments);
     },
 
-    addDispatcherListener: function(selector, name, fn, scope, options, order) {
-        var dispatcher = this.getEventDispatcher();
-
-        if (name === 'resize' && selector === this.getObservableId()) {
-            return dispatcher.doAddListener(this.observableType, selector, name, fn, scope, options, order);
-        }
-
-        return this.callParent(arguments);
-    },
-
-    removeDispatcherListener: function(selector, name, fn, scope, order) {
-        var dispatcher = this.getEventDispatcher();
-
-        if (name === 'resize' && selector === this.getObservableId()) {
-            return dispatcher.doRemoveListener(this.observableType, selector, name, fn, scope, order);
-        }
-
-        return this.callParent(arguments);
-    },
-
     supportsOrientation: function() {
         return Ext.feature.has.Orientation;
     },
@@ -412,18 +386,9 @@ Ext.define('Ext.viewport.Default', {
             currentOrientation = this.getOrientation(),
             newOrientation = this.determineOrientation();
 
-        if (oldWidth !== width || oldHeight !== height) {
-            this.fireResizeEvent(width, height);
-
-            if (currentOrientation !== newOrientation) {
-                this.fireOrientationChangeEvent(newOrientation, currentOrientation);
-            }
+        if ((oldWidth !== width || oldHeight !== height) && currentOrientation !== newOrientation) {
+            this.fireOrientationChangeEvent(newOrientation, currentOrientation);
         }
-    },
-
-    fireResizeEvent: function(width, height) {
-        this.updateSize(width, height);
-        this.fireEvent('resize', this, width, height);
     },
 
     onOrientationChange: function() {
@@ -432,7 +397,6 @@ Ext.define('Ext.viewport.Default', {
 
         if (newOrientation !== currentOrientation) {
             this.fireOrientationChangeEvent(newOrientation, currentOrientation);
-            this.fireResizeEvent(this.windowWidth, this.windowHeight);
         }
     },
 

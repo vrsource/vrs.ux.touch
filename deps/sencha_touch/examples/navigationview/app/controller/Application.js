@@ -97,20 +97,7 @@ Ext.define('AddressBook.controller.Application', {
 
         this.hideSaveButton();
 
-        //show the edit button and then fade it in
         editButton.show();
-
-        if (!Ext.os.is.Android) {
-            Ext.Animator.run({
-                element: editButton.element,
-                from: {
-                    opacity: 0
-                },
-                to: {
-                    opacity: 1
-                }
-            });
-        }
     },
 
     hideEditButton: function() {
@@ -120,23 +107,7 @@ Ext.define('AddressBook.controller.Application', {
             return;
         }
 
-        //fade the edit button out then hdie it
-        if (Ext.os.is.Android) {
-            editButton.hide();
-        } else {
-            Ext.Animator.run({
-                element: editButton.element,
-                from: {
-                    opacity: 1
-                },
-                to: {
-                    opacity: 0
-                },
-                onEnd: function() {
-                    editButton.hide();
-                }
-            });
-        }
+        editButton.hide();
     },
 
     showSaveButton: function() {
@@ -146,20 +117,7 @@ Ext.define('AddressBook.controller.Application', {
             return;
         }
 
-        //show the edit button and then fade it in
         saveButton.show();
-
-        if (!Ext.os.is.Android) {
-            Ext.Animator.run({
-                element: saveButton.element,
-                from: {
-                    opacity: 0
-                },
-                to: {
-                    opacity: 1
-                }
-            });
-        }
     },
 
     hideSaveButton: function() {
@@ -169,22 +127,6 @@ Ext.define('AddressBook.controller.Application', {
             return;
         }
 
-        //fade the edit button out then hdie it
-        if (Ext.os.is.Android) {
-            saveButton.hide();
-        } else {
-            Ext.Animator.run({
-                element: saveButton.element,
-                from: {
-                    opacity: 1
-                },
-                to: {
-                    opacity: 0
-                },
-                onEnd: function() {
-                    saveButton.hide();
-                }
-            });
-        }
+        saveButton.hide();
     }
 });

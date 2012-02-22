@@ -1,3 +1,6 @@
+/**
+ * Demonstrates a range of overlays ranging from alerts to action sheets
+ */
 Ext.define('Kitchensink.view.Overlays', {
     extend: 'Ext.Container',
     requires: ['Ext.MessageBox', 'Ext.ActionSheet', 'Ext.picker.Picker'],
@@ -69,8 +72,8 @@ Ext.define('Kitchensink.view.Overlays', {
                                 easing: 'ease-out'
                             },
                             centered: true,
-                            width: 300,
-                            height: 200,
+                            width: Ext.os.deviceType == 'Phone' ? 260 : 400,
+                            height: Ext.os.deviceType == 'Phone' ? 220 : 400,
                             styleHtmlContent: true,
                             html: '<p>This is a modal, centered and floating panel. hideOnMaskTap is true by default so ' +
                                 'we can tap anywhere outside the overlay to hide it.</p>',

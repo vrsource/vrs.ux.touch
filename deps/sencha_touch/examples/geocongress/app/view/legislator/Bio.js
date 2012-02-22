@@ -15,14 +15,14 @@ Ext.define('GeoCon.view.legislator.Bio', {
                 '<div class="district">{state} {district: this.ordinal}</div>',
             '</div>',
 
-            '<div class="x-list-header">Contact Info</div>',
+            '<div class="x-list-normal"><div class="x-list-header">Contact Info</div></div>',
             '<div class="legislator-info">',
                 'Phone: {[this.notAvailable(values.phone)]}<br />',
                 'Email: {[this.notAvailable(values.email)]}<br />',
                 'Website: {[this.notAvailable(values.website)]}',
             '</div>',
 
-            '<div class="x-list-header">Committee Assignments</div>',
+            '<div class="x-list-normal"><div class="x-list-header">Committee Assignments</div></div>',
             {
                 notAvailable: function(value) {
                     return value ? value : 'Not Available';

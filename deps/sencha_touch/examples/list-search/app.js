@@ -72,6 +72,10 @@ Ext.application({
             //give it an xtype of list
             xtype: 'list',
 
+            ui: 'round',
+
+            pinHeaders: false,
+
             //itemTpl defines the template for each item in the list
             itemTpl: '<div class="contact">{firstName} <strong>{lastName}</strong></div>',
 

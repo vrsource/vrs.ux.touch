@@ -12,7 +12,10 @@
  *                 { name: 'id', type: 'int' },
  *                 { name: 'name', type: 'string' },
  *                 { name: 'address_id', type: 'int'}
- *             ]
+ *             ],
+ *
+ *             // we can use the hasOne shortcut on the model to create a hasOne association
+ *             associations: { type: 'hasOne', model: 'Address' }
  *         }
  *     });
  *
@@ -25,9 +28,7 @@
  *                 { name: 'street', type: 'string' },
  *                 { name: 'city', type: 'string' },
  *                 { name: 'zip', type: 'string' },
- *             ],
- *             // we can use the hasOne shortcut on the model to create a hasOne association
- *             associations: { type: 'hasOne', model: 'Person' }
+ *             ]
  *         }
  *     });
  *
@@ -39,7 +40,7 @@
  *
  * The first function that is added to the owner model is a getter function:
  *
- *     var person = new Person({
+ *     var person = Ext.create('Person', {
  *         id: 100,
  *         address_id: 20,
  *         name: 'John Smith'
@@ -110,7 +111,8 @@
  *     Ext.define('Person', {
  *         extend: 'Ext.data.Model',
  *         config: {
- *             fields: [ // ...
+ *             fields: [
+ *                 // ...
  *             ],
  *
  *             associations: [

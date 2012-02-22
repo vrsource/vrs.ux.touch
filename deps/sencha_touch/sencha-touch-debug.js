@@ -2,7 +2,7 @@
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -4675,22 +4675,22 @@ var noArgs = [],
                 defaultConfig = this.defaultConfig,
                 initialConfig = this.initialConfig,
                 configList = [],
-                name, value, i, ln, nameMap;
+                name, i, ln, nameMap;
 
             applyIfNotSet = Boolean(applyIfNotSet);
 
             for (name in config) {
-                if ((applyIfNotSet && (name in initialConfig)) || !(name in defaultConfig)) {
+                if ((applyIfNotSet && (name in initialConfig))) {
                     continue;
                 }
 
-                value = config[name];
-                currentConfig[name] = value;
+                currentConfig[name] = config[name];
 
-                configList.push(name);
-
-                nameMap = configNameCache[name];
-                this[nameMap.get] = this[nameMap.initGet];
+                if (name in defaultConfig) {
+                    configList.push(name);
+                    nameMap = configNameCache[name];
+                    this[nameMap.get] = this[nameMap.initGet];
+                }
             }
 
             for (i = 0,ln = configList.length; i < ln; i++) {
@@ -5719,7 +5719,6 @@ var noArgs = [],
  * @singleton
  */
 (function(Class, alias, arraySlice, arrayFrom, global) {
-
     var Manager = Ext.ClassManager = {
 
         /**
@@ -7988,7 +7987,7 @@ This process will be automated with Sencha Command, to be released and documente
             return this;
         },
 
-        // @ignore
+        // duplicate definition (documented above)
         onReady: function(fn, scope, withDomReady, options) {
             var oldFn;
 
@@ -8238,7 +8237,7 @@ This process will be automated with Sencha Command, to be released and documente
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -8410,7 +8409,7 @@ Ext.EventManager.un = Ext.EventManager.removeListener;
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.0.beta3');
+Ext.setVersion('touch', '2.0.0.rc');
 
 Ext.apply(Ext, {
     /**
@@ -9133,6 +9132,8 @@ function(el){
         if (!config) {
             config = {};
         }
+
+        Ext.Loader.setPath(config.name, config.appFolder || 'app');
 
         config.requires = Ext.Array.from(config.requires);
         config.requires.push('Ext.app.Application');
@@ -10128,13 +10129,21 @@ Ext.define('Ext.env.OS', {
 
     osName = osEnv.name;
 
-    var search = window.location.search.match(/deviceType=(Tablet|Phone)/);
+    var search = window.location.search.match(/deviceType=(Tablet|Phone)/),
+        nativeDeviceType = window.deviceType;
 
     // Override deviceType by adding a get variable of deviceType. NEEDED FOR DOCS APP.
     // E.g: example/kitchen-sink.html?deviceType=Phone
     if (search && search[1]) {
         deviceType = search[1];
-    } else {
+    }
+    else if (nativeDeviceType === 'iPhone') {
+        deviceType = 'Phone';
+    }
+    else if (nativeDeviceType === 'iPad') {
+        deviceType = 'Tablet';
+    }
+    else {
         if (!osEnv.is.Android && !osEnv.is.iOS && /Windows|Linux|MacOS/.test(osName)) {
             deviceType = 'Desktop';
         }
@@ -10943,7 +10952,7 @@ Ext.define('Ext.dom.Helper', {
     },
 
     /**
-     * @ignore
+     * @private
      * Fix for browsers which no longer support createContextualFragment
      */
     createContextualFragment: function(html){
@@ -13275,12 +13284,11 @@ Ext.dom.Element.addMembers({
     },
 
     getVisibilityMode: function() {
-        var statics = this.self,
-            dom = this.dom,
-            mode = statics.data(dom, 'visibilityMode');
+        var dom = this.dom,
+            mode = Ext.dom.Element.data(dom, 'visibilityMode');
 
         if (mode === undefined) {
-            statics.data(dom, 'visibilityMode', mode = this.DISPLAY);
+            Ext.dom.Element.data(dom, 'visibilityMode', mode = this.DISPLAY);
         }
 
         return mode;
@@ -13432,7 +13440,6 @@ Ext.dom.Element.addMembers({
      */
     setStyle: function(prop, value) {
         var me = this,
-            statics = this.self,
             dom = me.dom,
             hooks = me.styleHooks,
             style = dom.style,
@@ -13444,7 +13451,7 @@ Ext.dom.Element.addMembers({
             hook = hooks[prop];
 
             if (!hook) {
-                hooks[prop] = hook = { name: statics.normalize(prop) };
+                hooks[prop] = hook = { name: Ext.dom.Element.normalize(prop) };
             }
             value = valueFrom(value, '');
 
@@ -13460,7 +13467,7 @@ Ext.dom.Element.addMembers({
                     hook = hooks[name];
 
                     if (!hook) {
-                        hooks[name] = hook = { name: statics.normalize(name) };
+                        hooks[name] = hook = { name: Ext.dom.Element.normalize(name) };
                     }
 
                     value = valueFrom(prop[name], '');
@@ -14290,7 +14297,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -14376,6 +14383,8 @@ this.ExtBootstrapData = {
         ],
         "Ext.data.Batch":[],
         "Ext.data.Connection":[],
+        "Ext.data.DirectStore":["store.direct"
+        ],
         "Ext.data.Error":[],
         "Ext.data.Errors":[],
         "Ext.data.Field":["data.field"
@@ -14415,6 +14424,8 @@ this.ExtBootstrapData = {
         "Ext.data.proxy.Ajax":["proxy.ajax"
         ],
         "Ext.data.proxy.Client":[],
+        "Ext.data.proxy.Direct":["proxy.direct"
+        ],
         "Ext.data.proxy.JsonP":["proxy.jsonp",
             "proxy.scripttag"
         ],
@@ -14465,6 +14476,8 @@ this.ExtBootstrapData = {
         "Ext.direct.JsonProvider":["direct.jsonprovider"
         ],
         "Ext.direct.Manager":[],
+        "Ext.direct.PollingProvider":["direct.pollingprovider"
+        ],
         "Ext.direct.Provider":["direct.provider"
         ],
         "Ext.direct.RemotingEvent":["direct.rpc"
@@ -14720,6 +14733,7 @@ this.ExtBootstrapData = {
         "Ext.data.HttpProxy":"Ext.data.proxy.Ajax",
         "Ext.data.AjaxProxy":"Ext.data.proxy.Ajax",
         "Ext.proxy.ClientProxy":"Ext.data.proxy.Client",
+        "Ext.data.DirectProxy":"Ext.data.proxy.Direct",
         "Ext.data.ScriptTagProxy":"Ext.data.proxy.JsonP",
         "Ext.data.LocalStorageProxy":"Ext.data.proxy.LocalStorage",
         "Ext.data.MemoryProxy":"Ext.data.proxy.Memory",
@@ -14822,7 +14836,7 @@ this.ExtBootstrapData = {
 
     Loader.setConfig({
         enabled: true,
-        disableCaching: true,
+        disableCaching: !/[?&](cache|breakpoint)/i.test(location.search),
         paths: {
             'Ext': path + 'src'
         }

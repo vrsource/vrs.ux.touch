@@ -174,25 +174,25 @@ Ext.define('Ext.Panel', {
         if (centerLineSegment.intersects(new LineSegment(leftTopPoint, rightTopPoint))) {
             tipX = Math.min(Math.max(alignToCenterX, left), right - (tipWidth / 2));
             tipY = top;
-            offsetTop = tipHeight;
+            offsetTop = tipHeight + 10;
             tipPosition = 'top';
         }
         else if (centerLineSegment.intersects(new LineSegment(leftTopPoint, leftBottomPoint))) {
             tipX = left;
             tipY = Math.min(Math.max(alignToCenterY + (tipWidth / 2), top), bottom);
-            offsetLeft = tipHeight;
+            offsetLeft = tipHeight + 10;
             tipPosition = 'left';
         }
         else if (centerLineSegment.intersects(new LineSegment(leftBottomPoint, rightBottomPoint))) {
             tipX = Math.min(Math.max(alignToCenterX, left), right - (tipWidth / 2));
             tipY = bottom;
-            offsetTop = -tipHeight;
+            offsetTop = -tipHeight - 10;
             tipPosition = 'bottom';
         }
         else if (centerLineSegment.intersects(new LineSegment(rightTopPoint, rightBottomPoint))) {
             tipX = right;
             tipY = Math.min(Math.max(alignToCenterY - (tipWidth / 2), top), bottom);
-            offsetLeft = -tipHeight;
+            offsetLeft = -tipHeight - 10;
             tipPosition = 'right';
         }
 

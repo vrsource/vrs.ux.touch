@@ -1,3 +1,6 @@
+/**
+ * Demonstrates how use an Ext.Carousel in vertical and horizontal configurations
+ */
 Ext.define('Kitchensink.view.Carousel', {
     extend: 'Ext.Container',
 

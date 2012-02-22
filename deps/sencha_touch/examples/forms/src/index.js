@@ -157,7 +157,6 @@ Ext.setup({
                             xtype: 'textareafield',
                             name: 'bio',
                             label: 'Bio',
-                            maxLength: 60,
                             maxRows: 10
                         },
                         {

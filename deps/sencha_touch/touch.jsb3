@@ -1,6 +1,6 @@
 {
     "projectName": "Sencha Touch",
-    "licenseText": "\nThis file is part of Sencha Touch 2\n\nCopyright (c) 2011 Sencha Inc\n\nContact:  http://www.sencha.com/contact\n\nCommercial Usage\nLicensees holding valid commercial licenses may use this file in accordance with the Commercial Software License Agreement provided with the Software or, alternatively, in accordance with the terms contained in a written agreement between you and Sencha.\n\nIf you are unsure which license is appropriate for your use, please contact the sales department at http://www.sencha.com/contact.\n",
+    "licenseText": "\nThis file is part of Sencha Touch 2\n\nCopyright (c) 2012 Sencha Inc\n\nContact:  http://www.sencha.com/contact\n\nCommercial Usage\nLicensees holding valid commercial licenses may use this file in accordance with the Commercial Software License Agreement provided with the Software or, alternatively, in accordance with the terms contained in a written agreement between you and Sencha.\n\nIf you are unsure which license is appropriate for your use, please contact the sales department at http://www.sencha.com/contact.\n",
     "packages": [
         {
             "name": "Foundation",
@@ -658,6 +658,11 @@
                     "clsName": "Ext.direct.JsonProvider"
                 },
                 {
+                    "path": "src/direct/",
+                    "name": "PollingProvider.js",
+                    "clsName": "Ext.direct.PollingProvider"
+                },
+                {
                     "path": "src/fx/animation/",
                     "name": "Abstract.js",
                     "clsName": "Ext.fx.animation.Abstract"
@@ -843,6 +848,11 @@
                     "clsName": "Ext.direct.Manager"
                 },
                 {
+                    "path": "src/data/proxy/",
+                    "name": "Direct.js",
+                    "clsName": "Ext.data.proxy.Direct"
+                },
+                {
                     "path": "src/direct/",
                     "name": "Event.js",
                     "clsName": "Ext.direct.Event"
@@ -981,6 +991,11 @@
                     "path": "src/data/",
                     "name": "ArrayStore.js",
                     "clsName": "Ext.data.ArrayStore"
+                },
+                {
+                    "path": "src/data/",
+                    "name": "DirectStore.js",
+                    "clsName": "Ext.data.DirectStore"
                 },
                 {
                     "path": "src/data/",

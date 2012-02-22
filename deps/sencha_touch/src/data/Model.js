@@ -564,11 +564,6 @@ Ext.define('Ext.data.Model', {
     },
 
     /**
-     * @method getData
-     * Returns the current field data for this Model instance.
-     */
-
-    /**
      * This method is used to set the data for this Record instance.
      * Note that the existing data is removed. If a field is not specified
      * in the passed data it will use the field's default value. If a convert
@@ -643,9 +638,6 @@ Ext.define('Ext.data.Model', {
                         reader = new Ext.data.JsonReader({
                             model: association.getAssociatedModel()
                         });
-                        if (!Ext.isArray(associationData)) {
-                            associationData = [associationData];
-                        }
                     }
                 }
                 association.read(this, reader, associationData);
@@ -1101,7 +1093,7 @@ Ext.define('Ext.data.Model', {
      * afterCommit method is called
      */
     afterCommit: function(modified) {
-        this.notifyStores('afterCommit', modified);
+        this.notifyStores('afterCommit', Ext.Object.getKeys(modified || {}), modified);
     },
 
     /**
@@ -1148,6 +1140,14 @@ Ext.define('Ext.data.Model', {
         return new me.self(null, newId, raw, data);
     },
 
+    /**
+     * Returns an object containing the data set on this record. This method also allows you to
+     * retrieve all the associated data. Note that if you should always use this method if you
+     * need all the associated data, since the data property on the record instance is not
+     * ensured to be updated at all times.
+     * @param {Boolean} includeAssociated True to include the associated data.
+     * @return {Object} The data
+     */
     getData: function(includeAssociated) {
         var data = this.data;
 
@@ -1207,7 +1207,7 @@ Ext.define('Ext.data.Model', {
                 allow = type == associationType;
             }
 
-            if (allow && type == 'hasMany') {
+            if (allow && type.toLowerCase() == 'hasmany') {
                 //this is the hasMany store filled with the associated data
                 associatedStore = record[association.getStoreName()];
 
@@ -1235,7 +1235,7 @@ Ext.define('Ext.data.Model', {
                         }
                     }
                 }
-            } else if (allow && (type == 'belongsTo' || type == 'hasOne')) {
+            } else if (allow && (type.toLowerCase() == 'belongsto' || type.toLowerCase() == 'hasone')) {
                 associatedRecord = record[association.getInstanceName()];
                 if (associatedRecord !== undefined) {
                     id = associatedRecord.id;

@@ -1,3 +1,6 @@
+/**
+ * Demonstrates the Ext.Video component
+ */
 Ext.define('Kitchensink.view.Video', {
     extend: 'Ext.Container',
     requires: [

@@ -2,7 +2,7 @@
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -88,6 +88,8 @@ this.ExtBootstrapData = {
         ],
         "Ext.data.Batch":[],
         "Ext.data.Connection":[],
+        "Ext.data.DirectStore":["store.direct"
+        ],
         "Ext.data.Error":[],
         "Ext.data.Errors":[],
         "Ext.data.Field":["data.field"
@@ -127,6 +129,8 @@ this.ExtBootstrapData = {
         "Ext.data.proxy.Ajax":["proxy.ajax"
         ],
         "Ext.data.proxy.Client":[],
+        "Ext.data.proxy.Direct":["proxy.direct"
+        ],
         "Ext.data.proxy.JsonP":["proxy.jsonp",
             "proxy.scripttag"
         ],
@@ -177,6 +181,8 @@ this.ExtBootstrapData = {
         "Ext.direct.JsonProvider":["direct.jsonprovider"
         ],
         "Ext.direct.Manager":[],
+        "Ext.direct.PollingProvider":["direct.pollingprovider"
+        ],
         "Ext.direct.Provider":["direct.provider"
         ],
         "Ext.direct.RemotingEvent":["direct.rpc"
@@ -432,6 +438,7 @@ this.ExtBootstrapData = {
         "Ext.data.HttpProxy":"Ext.data.proxy.Ajax",
         "Ext.data.AjaxProxy":"Ext.data.proxy.Ajax",
         "Ext.proxy.ClientProxy":"Ext.data.proxy.Client",
+        "Ext.data.DirectProxy":"Ext.data.proxy.Direct",
         "Ext.data.ScriptTagProxy":"Ext.data.proxy.JsonP",
         "Ext.data.LocalStorageProxy":"Ext.data.proxy.LocalStorage",
         "Ext.data.MemoryProxy":"Ext.data.proxy.Memory",
@@ -534,7 +541,7 @@ this.ExtBootstrapData = {
 
     Loader.setConfig({
         enabled: true,
-        disableCaching: true,
+        disableCaching: !/[?&](cache|breakpoint)/i.test(location.search),
         paths: {
             'Ext': path + 'src'
         }

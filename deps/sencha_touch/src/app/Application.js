@@ -117,9 +117,26 @@
  *
  * ## Launching
  *
- * The final item in the example above is a launch function. This is called as soon as all of the dependencies have
- * been loaded and the Controllers instantiated. Usually this function is used to create the initial UI of your
- * application, check authentication or initialize any other application-launching behavior.
+ * Each Application can define a {@link Ext.app.Application#launch launch} function, which is called as soon as all of
+ * your app's classes have been loaded and the app is ready to be launched. This is usually the best place to put any
+ * application startup logic, typically creating the main view structure for your app.
+ *
+ * In addition to the Application launch function, there are two other places you can put app startup logic. Firstly,
+ * each Controller is able to define an {@link Ext.app.Controller#init init} function, which is called before the
+ * Application launch function. Secondly, if you are using Device Profiles, each Profile can define a
+ * {@link Ext.app.Profile#launch launch} function, which is called after the Controller init functions but before the
+ * Application launch function.
+ *
+ * Note that only the active Profile has its launch function called - for example if you define profiles for Phone and
+ * Tablet and then launch the app on a tablet, only the Tablet Profile's launch function is called.
+ *
+ * 1. Controller#init functions called
+ * 2. Profile#launch function called
+ * 3. Application#launch function called
+ * 4. Controller#launch functions called
+ *
+ * When using Profiles it is common to place most of the bootup logic inside the Profile launch function because each
+ * Profile has a different set of views that need to be constructed at startup.
  *
  * ## Adding to Home Screen
  *
@@ -147,6 +164,9 @@
  * If you are not already familiar with writing applications with Sencha Touch 2 we recommend reading the
  * <a href="#!/guide/apps_intro">intro to applications</a> guide, which lays out the core principles of writing apps
  * with Sencha Touch 2.
+ *
+ * @aside guide apps_intro
+ * @aside guide first_app
  */
 Ext.define('Ext.app.Application', {
     extend: 'Ext.app.Controller',
@@ -163,46 +183,39 @@ Ext.define('Ext.app.Application', {
          * @cfg {String/Object} icon Path to the .png image file to use when your app is added to the home screen on an
          * iOS device. When passed in as a String, the same icon will be used for both phone and tablet devices. To set
          * different icons for tablets and phones see the {@link #tabletIcon} and {@link #phoneIcon} configs.
-         * @accessor
          */
 
         /**
          * @cfg {String} tabletIcon Path to the .png image file to use when your app is added to the home screen on an
          * iOS **tablet** device (iPad).
-         * @accessor
          */
 
         /**
          * @cfg {String} phoneIcon Path to the .png image file to use when your app is added to the home screen on an
          * iOS **phone** device (iPhone or iPod).
-         * @accessor
          */
 
         /**
          * @cfg {Boolean} glossOnIcon If set to false, the 'gloss' effect added to home screen {@link #icon icons} on
          * iOS devices will be removed.
-         * @accessor
          */
 
         /**
          * @cfg {String} statusBarStyle Allows you to set the style of the status bar when your app is added to the
          * home screen on iOS devices. Defaults to 'black'. Alternative is to set to 'black-translucent', which turns
          * the status bar semi-transparent and overlaps the app content. This is usually not a good option for web apps
-         * @accessor
          */
 
         /**
          * @cfg {String} phoneStartupScreen Path to the .png image file that will be displayed while the app is
          * starting up once it has been added to the home screen of an iOS phone device (iPhone or iPod). This .png
          * file should be 320px wide and 460px high.
-         * @accessor
          */
 
         /**
          * @cfg {String} tabletStartupScreen Path to the .png image file that will be displayed while the app is
          * starting up once it has been added to the home screen of an iOS tablet device (iPad). This .png file should
          * be 768px wide and 1004px high.
-         * @accessor
          */
 
         /**
@@ -223,22 +236,6 @@ Ext.define('Ext.app.Application', {
         profiles: [],
 
         /**
-         * @cfg {Array} stores The set of stores to load for this Application. Each store is expected to
-         * exist inside the *app/store* directory and define a class following the convention
-         * AppName.store.StoreName. For example, in the code below, the *AppName.store.Users* class will be loaded.
-         * Note that we are able to specify either the full class name (as with *AppName.store.Groups*) or just the
-         * final part of the class name and leave Application to automatically prepend *AppName.store.’* to each:
-         *
-         *     stores: [
-         *         'Users',
-         *         'AppName.store.Groups',
-         *         'SomeCustomNamespace.store.Orders'
-         *     ]
-         * @accessor
-         */
-        stores: [],
-
-        /**
          * @cfg {Array} controllers The set of controllers to load for this Application. Each controller is expected to
          * exist inside the *app/controller* directory and define a class following the convention
          * AppName.controller.ControllerName. For example, in the code below, the classes *AppName.controller.Users*,
@@ -255,40 +252,6 @@ Ext.define('Ext.app.Application', {
          * @accessor
          */
         controllers: [],
-
-        /**
-         * @cfg {Array} models The set of models to load for this Application. Each model is expected to exist inside the
-         * *app/model* directory and define a class following the convention AppName.model.ModelName. For example, in the
-         * code below, the classes *AppName.model.User*, *AppName.model.Group* and *AppName.model.Product* will be loaded.
-         * Note that we are able to specify either the full class name (as with *AppName.model.Product*) or just the
-         * final part of the class name and leave Application to automatically prepend *AppName.model.* to each:
-         *
-         *     models: [
-         *         'User',
-         *         'Group',
-         *         'AppName.model.Product',
-         *         'SomeCustomNamespace.model.Order'
-         *     ]
-         * @accessor
-         */
-        models: [],
-
-        /**
-         * @cfg {Array} views The set of views to load for this Application. Each view is expected to exist inside the
-         * *app/view* directory and define a class following the convention AppName.view.ViewName. For example, in the
-         * code below, the classes *AppName.view.Users*, *AppName.view.Groups* and *AppName.view.Products* will be loaded.
-         * Note that we are able to specify either the full class name (as with *AppName.view.Products*) or just the
-         * final part of the class name and leave Application to automatically prepend *AppName.view.* to each:
-         *
-         *     views: [
-         *         'Users',
-         *         'Groups',
-         *         'AppName.view.Products',
-         *         'SomeCustomNamespace.view.Orders'
-         *     ]
-         * @accessor
-         */
-        views: [],
 
         /**
          * @cfg {Ext.app.History} history The global {@link Ext.app.History History} instance attached to this
@@ -365,6 +328,12 @@ Ext.define('Ext.app.Application', {
      * Constructs a new Application instance
      */
     constructor: function(config) {
+        config = config || {};
+
+        Ext.applyIf(config, {
+            application: this
+        });
+
         this.initConfig(config);
 
         //it's common to pass in functions to an application but because they are not predictable config names they
@@ -551,34 +520,20 @@ Ext.define('Ext.app.Application', {
 
     /**
      * @private
-     * This is solely present for backwards compatibility with 1.x. In 1.x a Controller could specify additional
-     * Models, Views and Stores to load. Here we look to see if any Controller is doing so and load them before
-     * finalizing application bootup.
+     * Controllers can also specify dependencies, so we grab them all here and require them
      */
     loadControllerDependencies: function() {
-        var controllers = this.getControllers(),
-            length = controllers.length,
+        this.instantiateStores();
+        this.instantiateControllers();
+
+        var controllers = this.getControllerInstances(),
             classes = [],
-            name = this.getName(),
-            format = Ext.String.format,
-            controller, proto, i;
+            i, controller, name;
 
-        for (i = 0; i < length; i++) {
-            controller = Ext.ClassManager.classes[controllers[i]];
-            proto = controller.prototype;
+        for (name in controllers) {
+            controller = controllers[name];
 
-            Ext.each(proto.models, function(modelName) {
-                classes.push(format('{0}.model.{1}', name, modelName));
-            }, this);
-
-            Ext.each(proto.views, function(viewName) {
-                classes.push(format('{0}.view.{1}', name, viewName));
-            }, this);
-
-            Ext.each(proto.stores, function(storeName) {
-                classes.push(format('{0}.store.{1}', name, storeName));
-                this.setStores(this.getStores().concat([storeName]));
-            }, this);
+            classes = classes.concat(controller.getModels().concat(controller.getViews()).concat(controller.getStores()));
         }
 
         Ext.require(classes, this.onDependenciesLoaded, this);
@@ -586,8 +541,8 @@ Ext.define('Ext.app.Application', {
 
     /**
      * @private
-     * Callback that is invoked when all of the Application + current Profile dependencies have been loaded.
-     * Instantiates all of the controllers and stores then launches the app
+     * Callback that is invoked when all of the Application, Controller and Profile dependencies have been loaded.
+     * Launches the controllers, then the profile and application
      */
     onDependenciesLoaded: function() {
         var me = this,
@@ -603,9 +558,11 @@ Ext.define('Ext.app.Application', {
         }
         //</deprecated>
 
-        me.instantiateStores();
-        me.instantiateControllers();
         controllers = this.getControllerInstances();
+
+        for (name in controllers) {
+            controllers[name].init(this);
+        }
 
         if (profile) {
             profile.launch();
@@ -614,7 +571,15 @@ Ext.define('Ext.app.Application', {
         launcher.call(me);
 
         for (name in controllers) {
-            controllers[name].launch(this);
+            //<debug warn>
+            if (controllers[name] && !(controllers[name] instanceof Ext.app.Controller)) {
+                Ext.Logger.warn("The controller '" + name + "' doesn't have a launch method. Are you sure it extends from Ext.app.Controller?");
+            } else {
+            //</debug>
+                controllers[name].launch(this);
+            //<debug warn>
+            }
+            //</debug>
         }
 
         me.redirectTo(window.location.hash.substr(1));
@@ -691,8 +656,6 @@ Ext.define('Ext.app.Application', {
             instances[name] = Ext.create(name, {
                 application: this
             });
-
-            instances[name].init();
         }
 
         return this.setControllerInstances(instances);
@@ -704,86 +667,7 @@ Ext.define('Ext.app.Application', {
      * 'MyApp.controller.MyController'). This just makes sure everything ends up fully qualified
      */
     applyControllers: function(controllers) {
-        var length  = controllers.length,
-            appName = this.getName(),
-            name, i;
-
-        for (i = 0; i < length; i++) {
-            name = controllers[i];
-
-            //we check name === appName to allow MyApp.controller.MyApp to exist
-            if (Ext.Loader.getPrefix(name) === "" || name === appName) {
-                controllers[i] = appName + '.controller.' + name;
-            }
-        }
-
-        return controllers;
-    },
-
-    /**
-     * @private
-     * As a convenience developers can locally qualify store names (e.g. 'MyStore' vs
-     * 'MyApp.store.MyStore'). This just makes sure everything ends up fully qualified
-     */
-    applyStores: function(stores) {
-        var length  = stores.length,
-            appName = this.getName(),
-            name, i;
-
-        for (i = 0; i < length; i++) {
-            name = stores[i];
-
-            //we check name === appName to allow MyApp.store.MyApp to exist
-            if (Ext.isString(name) && (Ext.Loader.getPrefix(name) === "" || name === appName)) {
-                stores[i] = appName + '.store.' + name;
-            }
-        }
-
-        return stores;
-    },
-
-    /**
-     * @private
-     * As a convenience developers can locally qualify model names (e.g. 'MyModel' vs
-     * 'MyApp.model.MyModel'). This just makes sure everything ends up fully qualified
-     */
-    applyModels: function(models) {
-        var length  = models.length,
-            appName = this.getName(),
-            name, i;
-
-        for (i = 0; i < length; i++) {
-            name = models[i];
-
-            //we check name === appName to allow MyApp.model.MyApp to exist
-            if (Ext.isString(name) && (Ext.Loader.getPrefix(name) === "" || name === appName)) {
-                models[i] = appName + '.model.' + name;
-            }
-        }
-
-        return models;
-    },
-
-    /**
-     * @private
-     * As a convenience developers can locally qualify view names (e.g. 'MyView' vs
-     * 'MyApp.view.MyView'). This just makes sure everything ends up fully qualified
-     */
-    applyViews: function(views) {
-        var length  = views.length,
-            appName = this.getName(),
-            name, i;
-
-        for (i = 0; i < length; i++) {
-            name = views[i];
-
-            //we check name === appName to allow MyApp.view.MyApp to exist
-            if (Ext.isString(name) && (Ext.Loader.getPrefix(name) === "" || name === appName)) {
-                views[i] = appName + '.view.' + name;
-            }
-        }
-
-        return views;
+        return this.getFullyQualified(controllers, 'controller');
     },
 
     /**
@@ -792,20 +676,7 @@ Ext.define('Ext.app.Application', {
      * 'MyApp.profile.MyProfile'). This just makes sure everything ends up fully qualified
      */
     applyProfiles: function(profiles) {
-        var length  = profiles.length,
-            appName = this.getName(),
-            name, i;
-
-        for (i = 0; i < length; i++) {
-            name = profiles[i];
-
-            //we check name === appName to allow MyApp.profile.MyApp to exist
-            if (Ext.isString(name) && (Ext.Loader.getPrefix(name) === "" || name === appName)) {
-                profiles[i] = appName + '.profile.' + name;
-            }
-        }
-
-        return profiles;
+        return this.getFullyQualified(profiles, 'profile');
     },
 
     /**

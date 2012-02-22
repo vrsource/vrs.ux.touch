@@ -43,12 +43,6 @@ Ext.define('JWF.view.Form', {
                     }
                 ]
             },
-            // {
-            //     xtype: 'container',
-            //     html: [
-            //         '<label class="addToWall"><input id="postToWallField" type="checkbox" checked="checked" /> Send this jog to my wall</label>'
-            //     ].join('')
-            // },
             {
                 xtype: 'button',
                 text: 'Add Jog',

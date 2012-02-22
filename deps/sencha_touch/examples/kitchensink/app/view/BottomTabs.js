@@ -1,3 +1,7 @@
+/**
+ * Demonstrates usage of the Ext.tab.Panel component with the tabBar docked to the bottom of the screen.
+ * See also app/view/Tabs.js for an example with the tabBar docked to the top
+ */
 Ext.define('Kitchensink.view.BottomTabs', {
     extend: 'Ext.tab.Panel',
 
@@ -14,11 +18,7 @@ Ext.define('Kitchensink.view.BottomTabs', {
                 pack : 'center',
                 align: 'center'
             },
-            docked: 'bottom',
-            scrollable: {
-                direction: 'horizontal',
-                indicators: false
-            }
+            docked: 'bottom'
         },
         items: [
             {
@@ -38,7 +38,7 @@ Ext.define('Kitchensink.view.BottomTabs', {
                 title    : 'Downloads',
                 id       : 'tab3',
                 html     : 'Downloads Card',
-                badgeText: 'Text can go here too, but it will be cut off if it is too long.',
+                badgeText: 'Text Ellipsis',
                 cls      : 'card card3',
                 iconCls  : 'download'
             },

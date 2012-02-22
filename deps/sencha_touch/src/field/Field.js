@@ -159,22 +159,21 @@ Ext.define('Ext.field.Field', {
 
         return {
             reference: 'element',
-            cls: 'x-container x-table-inner x-table-fixed',
-            children: [{
-                cls: 'x-table-row',
-                reference: 'fieldRow',
-                children: [{
+            className: 'x-container',
+            children: [
+                {
                     reference: 'label',
                     cls: prefix + 'form-label',
                     children: [{
                         reference: 'labelspan',
                         tag: 'span'
                     }]
-                }, {
+                },
+                {
                     reference: 'innerElement',
                     cls: prefix + 'component-outer'
-                }]
-            }]
+                }
+            ]
         };
     },
 
@@ -194,24 +193,15 @@ Ext.define('Ext.field.Field', {
     // @private
     updateLabelAlign: function(newLabelAlign, oldLabelAlign) {
         var renderElement = this.renderElement,
-            prefix = Ext.baseCSSPrefix,
-            label = this.label,
-            innerElement = this.innerElement;
+            prefix = Ext.baseCSSPrefix;
 
         if (newLabelAlign) {
             renderElement.addCls(prefix + 'label-align-' + newLabelAlign);
 
             if (newLabelAlign == "top") {
-                label.insertBefore(this.fieldRow);
+                this.label.setWidth('100%');
             } else {
                 this.updateLabelWidth(this.getLabelWidth());
-
-                if (newLabelAlign == 'right') {
-                    label.insertAfter(innerElement);
-                }
-                else {
-                    label.insertBefore(innerElement);
-                }
             }
         }
 

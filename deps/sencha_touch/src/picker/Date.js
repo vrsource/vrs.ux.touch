@@ -108,6 +108,16 @@ Ext.define('Ext.picker.Date', {
          */
     },
 
+    initialize: function() {
+        this.callParent();
+
+        this.on({
+            scope: this,
+            delegate: '> slot',
+            slotpick: this.onSlotPick
+        });
+    },
+
     setValue: function(value, animated) {
         if (Ext.isDate(value)) {
             value = {
@@ -132,6 +142,11 @@ Ext.define('Ext.picker.Date', {
             if (item instanceof Ext.picker.Slot) {
                 values[item.getName()] = item.getValue();
             }
+        }
+
+        //if all the slots return null, we should not reutrn a date
+        if (values.year === null && values.month === null && values.day === null) {
+            return null;
         }
 
         year = Ext.isNumber(values.year) ? values.year : 1;
@@ -315,6 +330,74 @@ Ext.define('Ext.picker.Date', {
                     flex: 2
                 };
         }
+    },
+
+    onSlotPick: function() {
+        var value = this.getValue(),
+            slot = this.getDaySlot(),
+            year = value.getFullYear(),
+            month = value.getMonth(),
+            days = [],
+            selected = slot,
+            daysInMonth, i;
+
+        if (!value || !Ext.isDate(value) || !slot) {
+            return;
+        }
+
+        //get the new days of the month for this new date
+        daysInMonth = this.getDaysInMonth(month + 1, year);
+        for (i = 0; i < daysInMonth; i++) {
+            days.push({
+                text: i + 1,
+                value: i + 1
+            });
+        }
+
+        // We dont need to update the slot days unless it has changed
+        if (slot.getData().length == days.length) {
+            return;
+        }
+
+        // Now we have the correct amounnt of days for the day slot, lets update it
+        var store = slot.getStore(),
+            viewItems = slot.getViewItems(),
+            valueField = slot.getValueField(),
+            index, item;
+
+        slot.setData(days);
+
+        index = store.find(valueField, value.getDate());
+        if (index == -1) {
+            return;
+        }
+
+        item = Ext.get(viewItems[index]);
+
+        slot.selectedIndex = index;
+        slot.scrollToItem(item);
+
+        slot._value = value;
+    },
+
+    getDaySlot: function() {
+        var innerItems = this.getInnerItems(),
+            ln = innerItems.length,
+            i, slot;
+
+        if (this.daySlot) {
+            return this.daySlot;
+        }
+
+        for (i = 0; i < ln; i++) {
+            slot = innerItems[i];
+            if (slot.isSlot && slot.getName() == "day") {
+                this.daySlot = slot;
+                return slot;
+            }
+        }
+
+        return null;
     },
 
     // @private

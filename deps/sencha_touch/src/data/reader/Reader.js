@@ -370,7 +370,7 @@ Ext.define('Ext.data.reader.Reader', {
             field = fields[i];
             varName = fieldVarName[i];
             fieldName = field.getName();
-            if (fieldName === model.getIdProperty()) {
+            if (fieldName === model.getIdProperty() && field.getMapping() === null) {
                 field.setMapping(this.getIdProperty());
             }
             // createFieldAccessExpression must be implemented in subclasses to extract data from the source object in the correct way.
@@ -492,6 +492,16 @@ Ext.define('Ext.data.reader.Reader', {
         me.rawData = data;
 
         data = me.getData(data);
+
+        if (data.metaData) {
+            me.onMetaChange(data.metaData);
+        }
+
+        // <debug>
+        if (!me.getModel()) {
+            Ext.Logger.warn('In order to read record data, a Reader needs to have a Model defined on it.');
+        }
+        // </debug>
 
         // If we pass an array as the data, we dont use getRoot on the data.
         // Instead the root equals to the data.
@@ -632,6 +642,65 @@ Ext.define('Ext.data.reader.Reader', {
      */
     getAssociatedDataRoot: function(data, associationName) {
         return data[associationName];
+    },
+
+    /**
+     * @private
+     * Reconfigures the meta data tied to this Reader
+     */
+    onMetaChange : function(meta) {
+        var fields = meta.fields,
+            me = this,
+            newModel, config, idProperty;
+
+        // save off the raw meta data
+        me.metaData = meta;
+
+        // set any reader-specific configs from meta if available
+        if (meta.rootProperty !== undefined) {
+            me.setRootProperty(meta.rootProperty);
+        }
+        else if (meta.root !== undefined) {
+            me.setRootProperty(meta.root);
+        }
+
+        if (meta.idProperty !== undefined) {
+            me.setIdProperty(meta.idProperty);
+        }
+        if (meta.totalProperty !== undefined) {
+            me.setTotalProperty(meta.totalProperty);
+        }
+        if (meta.successProperty !== undefined) {
+            me.setSuccessProperty(meta.successProperty);
+        }
+        if (meta.messageProperty !== undefined) {
+            me.setMessageProperty(meta.messageProperty);
+        }
+
+        if (fields) {
+            if (me.getModel()) {
+                me.getModel().setFields(fields);
+                me.buildExtractors();
+            }
+            else {
+                idProperty = me.getIdProperty();
+                config = {fields: fields};
+
+                if (idProperty) {
+                    config.idProperty = idProperty;
+                }
+
+                newModel = Ext.define("Ext.data.reader.MetaModel" + Ext.id(), {
+                    extend: 'Ext.data.Model',
+                    config: config
+                });
+
+                me.setModel(newModel);
+            }
+        }
+        else {
+            me.buildExtractors();
+        }
     }
 
 
@@ -658,51 +727,6 @@ Ext.define('Ext.data.reader.Reader', {
         data.config = config;
     }
     // </deprecated>
-
-//
-//    /**
-//     * @private
-//     * Reconfigures the meta data tied to this Reader
-//     */
-//    onMetaChange : function(meta) {
-//        var fields = meta.fields,
-//            me = this,
-//            newModel;
-//
-//        // save off the raw meta data
-//        me.metaData = meta;
-//
-//        // set any reader-specific configs from meta if available
-//        me.root = meta.root || me.root;
-//        me.idProperty = meta.idProperty || me.idProperty;
-//        me.totalProperty = meta.totalProperty || me.totalProperty;
-//        me.successProperty = meta.successProperty || me.successProperty;
-//        me.messageProperty = meta.messageProperty || me.messageProperty;
-//
-//        if (fields) {
-//            if (me.model) {
-//                me.model.setFields(fields);
-//                me.setModel(me.model, true);
-//            }
-//            else {
-//                newModel = Ext.define("Ext.data.reader.Json-Model" + Ext.id(), {
-//                    extend: 'Ext.data.Model',
-//                    fields: fields
-//                });
-//                if (me.idProperty) {
-//                    // We only do this if the reader actually has a custom idProperty set,
-//                    // otherwise let the model use its own default value. It is valid for
-//                    // the reader idProperty to be undefined, in which case it will use the
-//                    // model's idProperty (in getIdProperty()).
-//                    newModel.idProperty = me.idProperty;
-//                }
-//                me.setModel(newModel, true);
-//            }
-//        }
-//        else {
-//            me.buildExtractors(true);
-//        }
-//    }
 }, function() {
     Ext.apply(this.prototype, {
         // Private. Empty ResultSet to return when response is falsy (null|undefined|empty string)

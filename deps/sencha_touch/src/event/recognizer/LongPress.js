@@ -28,7 +28,7 @@ Ext.define('Ext.event.recognizer.LongPress', {
     /**
      * @member Ext.dom.Element
      * @event taphold
-     * @deprecated 2.0.0 Please listener to 'longpress' event instead
+     * @deprecated 2.0.0 Please add listener to 'longpress' event instead
      * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
      * @param {HTMLElement} node The target of the event.
      * @param {Object} options The options object passed to Ext.util.Observable.addListener.

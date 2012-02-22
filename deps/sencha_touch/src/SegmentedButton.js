@@ -8,6 +8,7 @@
  *
  * ## Example usage:
  *
+ *     @example
  *     var segmentedButton = new Ext.SegmentedButton({
  *         allowMultiple: true,
  *         items: [
@@ -28,6 +29,7 @@
  *             }
  *         }
  *     });
+ *     Ext.Viewport.add(segmentedButton);
  *
  */
 Ext.define('Ext.SegmentedButton', {
@@ -64,6 +66,8 @@ Ext.define('Ext.SegmentedButton', {
         /**
          * @cfg {Array} pressedButtons
          * The pressed buttons for this segmented button.
+         *
+         * You can remove all pressed buttons by calling {@link #setPressedButtons} with an empty array.
          * @accessor
          */
         pressedButtons: null,
@@ -94,14 +98,12 @@ Ext.define('Ext.SegmentedButton', {
         me.on({
             delegate: '> button',
             scope   : me,
-
-            release: 'onButtonRelease'
+            tap: 'onButtonRelease'
         });
 
         me.onAfter({
             delegate: '> button',
             scope   : me,
-
             hiddenchange: 'onButtonHiddenChange'
         });
     },
@@ -166,10 +168,10 @@ Ext.define('Ext.SegmentedButton', {
 
             me.setPressedButtons(buttons);
 
-            me.fireEvent('toggle', me, button, me.isPressed(button));
+            Ext.defer(function() {
+                me.fireEvent('toggle', me, button, me.isPressed(button));
+            }, 50);
         }
-
-        return false;
     },
 
     // @private
@@ -180,13 +182,14 @@ Ext.define('Ext.SegmentedButton', {
     // @private
     updateFirstAndLastCls: function(items) {
         var ln = items.length,
-        item, i;
+            basePrefix = Ext.baseCSSPrefix,
+            item, i;
 
         //add a first cls to the first non-hidden button
         for (i = 0; i < ln; i++) {
             item = items.items[i];
             if (!item.isHidden()) {
-                item.addCls(Ext.baseCSSPrefix + 'first');
+                item.addCls(basePrefix + 'first');
                 break;
             }
         }
@@ -195,7 +198,7 @@ Ext.define('Ext.SegmentedButton', {
         for (i = ln - 1; i >= 0; i--) {
             item = items.items[i];
             if (!item.isHidden()) {
-                item.addCls(Ext.baseCSSPrefix + 'last');
+                item.addCls(basePrefix + 'last');
                 break;
             }
         }
@@ -204,7 +207,7 @@ Ext.define('Ext.SegmentedButton', {
     /**
      * @private
      */
-    applyPressedButtons: function(newButtons, oldButtons) {
+    applyPressedButtons: function(newButtons) {
         var me    = this,
             array = [],
             button, ln, i;
@@ -231,23 +234,24 @@ Ext.define('Ext.SegmentedButton', {
      * Updates the pressed buttons.
      * @private
      */
-    updatePressedButtons: function(newButtons, oldButtons) {
+    updatePressedButtons: function(newButtons) {
         var me    = this,
             items = me.getItems(),
+            pressedCls = me.getPressedCls(),
             item, button, ln, i;
 
         //loop through existing items and remove the pressed cls from them
         ln = items.length;
         for (i = 0; i < ln; i++) {
             item = items.items[i];
-            item.removeCls(me.getPressedCls());
+            item.removeCls([pressedCls, item.getPressedCls()]);
         }
 
         //loop through the new pressed buttons and add the pressed cls to them
         ln = newButtons.length;
         for (i = 0; i < ln; i++) {
             button = newButtons[i];
-            button.addCls(me.getPressedCls());
+            button.addCls(pressedCls);
         }
     },
 

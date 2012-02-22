@@ -2,7 +2,7 @@
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -190,7 +190,7 @@ Ext.EventManager.un = Ext.EventManager.removeListener;
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.0.beta3');
+Ext.setVersion('touch', '2.0.0.rc');
 
 Ext.apply(Ext, {
     /**
@@ -915,6 +915,8 @@ function(el){
         if (!config) {
             config = {};
         }
+
+        Ext.Loader.setPath(config.name, config.appFolder || 'app');
 
         config.requires = Ext.Array.from(config.requires);
         config.requires.push('Ext.app.Application');
@@ -1932,13 +1934,21 @@ Ext.define('Ext.env.OS', {
 
     osName = osEnv.name;
 
-    var search = window.location.search.match(/deviceType=(Tablet|Phone)/);
+    var search = window.location.search.match(/deviceType=(Tablet|Phone)/),
+        nativeDeviceType = window.deviceType;
 
     // Override deviceType by adding a get variable of deviceType. NEEDED FOR DOCS APP.
     // E.g: example/kitchen-sink.html?deviceType=Phone
     if (search && search[1]) {
         deviceType = search[1];
-    } else {
+    }
+    else if (nativeDeviceType === 'iPhone') {
+        deviceType = 'Phone';
+    }
+    else if (nativeDeviceType === 'iPad') {
+        deviceType = 'Tablet';
+    }
+    else {
         if (!osEnv.is.Android && !osEnv.is.iOS && /Windows|Linux|MacOS/.test(osName)) {
             deviceType = 'Desktop';
         }
@@ -2751,7 +2761,7 @@ Ext.define('Ext.dom.Helper', {
     },
 
     /**
-     * @ignore
+     * @private
      * Fix for browsers which no longer support createContextualFragment
      */
     createContextualFragment: function(html){
@@ -5109,12 +5119,11 @@ Ext.dom.Element.addMembers({
     },
 
     getVisibilityMode: function() {
-        var statics = this.self,
-            dom = this.dom,
-            mode = statics.data(dom, 'visibilityMode');
+        var dom = this.dom,
+            mode = Ext.dom.Element.data(dom, 'visibilityMode');
 
         if (mode === undefined) {
-            statics.data(dom, 'visibilityMode', mode = this.DISPLAY);
+            Ext.dom.Element.data(dom, 'visibilityMode', mode = this.DISPLAY);
         }
 
         return mode;
@@ -5266,7 +5275,6 @@ Ext.dom.Element.addMembers({
      */
     setStyle: function(prop, value) {
         var me = this,
-            statics = this.self,
             dom = me.dom,
             hooks = me.styleHooks,
             style = dom.style,
@@ -5278,7 +5286,7 @@ Ext.dom.Element.addMembers({
             hook = hooks[prop];
 
             if (!hook) {
-                hooks[prop] = hook = { name: statics.normalize(prop) };
+                hooks[prop] = hook = { name: Ext.dom.Element.normalize(prop) };
             }
             value = valueFrom(value, '');
 
@@ -5294,7 +5302,7 @@ Ext.dom.Element.addMembers({
                     hook = hooks[name];
 
                     if (!hook) {
-                        hooks[name] = hook = { name: statics.normalize(name) };
+                        hooks[name] = hook = { name: Ext.dom.Element.normalize(name) };
                     }
 
                     value = valueFrom(prop[name], '');

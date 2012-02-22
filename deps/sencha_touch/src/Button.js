@@ -8,19 +8,23 @@
  *
  * Here is an {@link Ext.Button} is it's simplist form:
  *
+ *     @example miniphone
  *     var button = Ext.create('Ext.Button', {
  *         text: 'Button'
  *     });
+ *     Ext.Viewport.add(button);
  *
  * ## Icons
  *
  * You can also create a {@link Ext.Button} with just an icon using the {@link #iconCls}
  * configuration:
  *
- *     var iconButton = Ext.create('Ext.Button', {
+ *     @example miniphone
+ *     var button = Ext.create('Ext.Button', {
  *         iconCls: 'refresh',
  *         iconMask: true
  *     });
+ *     Ext.Viewport.add(button);
  *
  * Note that the {@link #iconMask} configuration is required when you want to use any of the
  * bundled Pictos icons.
@@ -228,7 +232,7 @@ Ext.define('Ext.Button', {
          * The CSS class to add to the Button when it is pressed.
          * @accessor
          */
-        pressedCls: Ext.baseCSSPrefix + 'button-pressed',
+        pressedCls: Ext.baseCSSPrefix + 'button-pressing',
 
         /**
          * @cfg {String} badgeCls
@@ -681,7 +685,7 @@ Ext.define('Ext.Button', {
             return;
         }
 
-        me.isPressed = true;
+        me.isPressed = false;
 
         if (me.hasOwnProperty('pressedTimeout')) {
             clearTimeout(me.pressedTimeout);

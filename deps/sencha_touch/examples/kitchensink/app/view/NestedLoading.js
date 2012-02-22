@@ -2,7 +2,6 @@
  * This panel sets up a DataView, which defines an XTemplate used to render our data. We also set up
  * the toolbar with the "Load Nested Data" button here
  */
-
 Ext.require(['Ext.data.Store', 'Kitchensink.model.User'], function() {
     Ext.define('Kitchensink.view.NestedLoading', {
         extend: 'Ext.Container',

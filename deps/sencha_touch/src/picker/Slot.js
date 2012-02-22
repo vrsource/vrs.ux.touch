@@ -75,9 +75,9 @@ Ext.define('Ext.picker.Slot', {
         value: null,
 
         /**
-         * @hide
          * @cfg {Number} flex
          * @accessor
+         * @hide
          */
         flex: 1,
 
@@ -88,13 +88,6 @@ Ext.define('Ext.picker.Slot', {
          * @accessor
          */
         align: 'left',
-
-        /**
-         * @hide
-         * @cfg {String} itemSelector
-         * @accessor
-         */
-        itemSelector: 'div.' + Ext.baseCSSPrefix + 'picker-item',
 
         /**
          * @cfg {String} displayField
@@ -113,9 +106,9 @@ Ext.define('Ext.picker.Slot', {
         valueField: 'value',
 
         /**
-         * @hide
          * @cfg {Object} scrollable
          * @accessor
+         * @hide
          */
         scrollable: {
             direction: 'vertical',
@@ -367,6 +360,11 @@ Ext.define('Ext.picker.Slot', {
             return;
         }
 
+        //if the value is ever false, that means we do not want to return anything
+        if (this._value === false) {
+            return null;
+        }
+
         record = store.getAt(this.selectedIndex);
 
         value = record ? record.get(this.getValueField()) : null;
@@ -384,7 +382,7 @@ Ext.define('Ext.picker.Slot', {
             return;
         }
 
-        if (!this.rendered) {
+        if (!this.rendered || !value) {
             //we don't want to call this until the slot has been rendered
             this._value = value;
             return;

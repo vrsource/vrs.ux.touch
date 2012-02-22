@@ -197,7 +197,9 @@
  * @singleton
  */
 (function(Class, alias, arraySlice, arrayFrom, global) {
-
+    //<if nonBrowser>
+    var isNonBrowser = typeof window == 'undefined';
+    //</if>
     var Manager = Ext.ClassManager = {
 
         /**
@@ -893,6 +895,9 @@
             // Still not existing at this point, try to load it via synchronous mode as the last resort
             if (!cls) {
                 //<debug warn>
+                //<if nonBrowser>
+                !isNonBrowser &&
+                //</if>
                 Ext.Logger.warn("[Ext.Loader] Synchronously loading '" + name + "'; consider adding '" +
                     ((possibleName) ? alias : name) + "' explicitly as a require of the corresponding class");
                 //</debug>

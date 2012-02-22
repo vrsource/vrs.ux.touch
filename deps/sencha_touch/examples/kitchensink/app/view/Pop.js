@@ -1,3 +1,6 @@
+/**
+ * Demonstrates the 'pop' card transition
+ */
 Ext.define('Kitchensink.view.Pop', {
     extend: 'Ext.Panel',
     config: {

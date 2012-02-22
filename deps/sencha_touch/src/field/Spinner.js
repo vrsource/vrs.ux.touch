@@ -25,17 +25,34 @@ Ext.define('Ext.field.Spinner', {
      * @param {Number} value
      * @param {String} direction 'up' or 'down'
      */
+
     /**
      * @event spindown
      * Fires when the value is changed via the spinner down button
      * @param {Ext.field.Spinner} this
      * @param {Number} value
      */
+
     /**
      * @event spinup
      * Fires when the value is changed via the spinner up button
      * @param {Ext.field.Spinner} this
      * @param {Number} value
+     */
+
+    /**
+     * @event change
+     * @hide
+     */
+
+    /**
+     * @event updatedata
+     * @hide
+     */
+
+    /**
+     * @event action
+     * @hide
      */
 
     config: {
@@ -107,51 +124,6 @@ Ext.define('Ext.field.Spinner', {
     },
 
     syncEmptyCls: Ext.emptyFn,
-
-    getElementConfig: function() {
-        var element = this.callParent(),
-            prefix = Ext.baseCSSPrefix;
-
-        element.children[0].children[1] = {
-            cls: prefix + 'component-outer-outer',
-            reference: 'outerElement',
-            children: [{
-                cls: prefix + 'component-outer',
-                reference: 'innerElement'
-            }]
-        };
-
-        return element;
-    },
-
-    // @private
-    updateLabelAlign: function(newLabelAlign, oldLabelAlign) {
-        var renderElement = this.renderElement,
-            prefix = Ext.baseCSSPrefix,
-            label = this.label,
-            outerElement = this.outerElement;
-
-        if (newLabelAlign) {
-            renderElement.addCls(prefix + 'label-align-' + newLabelAlign);
-
-            if (newLabelAlign == "top") {
-                label.insertBefore(this.fieldRow);
-            } else {
-                this.updateLabelWidth(this.getLabelWidth());
-
-                if (newLabelAlign == 'right') {
-                    label.insertAfter(outerElement);
-                }
-                else {
-                    label.insertBefore(outerElement);
-                }
-            }
-        }
-
-        if (oldLabelAlign) {
-            renderElement.removeCls(prefix + 'label-align-' + oldLabelAlign);
-        }
-    },
 
     /**
      * Updates the {@link #component} configuration

@@ -2,19 +2,19 @@
 
 ## What is Sencha Touch?
 
-Sencha Touch enables you to quickly and easily create HTML-5 based mobile apps that work on Android, iOS, and Blackberry devices and produce a native-app-like experience inside a browser.
+Sencha Touch enables you to quickly and easily create HTML5 based mobile apps that work on Android, iOS and Blackberry devices and produce a native-app-like experience inside a browser.
 
 ## Things you'll need
 
 Here's what you need to get started:
 
- - The free [Sencha Touch 2.0 SDK](http://www.sencha.com/blog/sencha-touch-2-raising-the-bar), currently in beta
+ - The free [Sencha Touch 2.0 SDK](http://www.sencha.com/products/touch/download/)
  - A web server running locally on your computer
- - A modern web browser; Chrome or Safari are recommended
+ - A modern web browser; Chrome and Safari are recommended
 
-Download and unzip the latest version of the SDK. Place the unzipped folder into your web server's document root. If you don't have a web server or aren't sure, we recommend using a simple one-click installer like WAMP or MAMP.
+Download and unzip the latest version of the SDK. Place the unzipped folder into your web server's document root. If you don't have a web server or aren't sure, we recommend using a simple one-click installer like [WAMP](http://www.wampserver.com/en/) or [MAMP](http://www.mamp.info/en/index.html).
 
-Once you have the folder in the right place just open your web browser, point it to http://localhost/sencha-touch-folder (or wherever your web server is configured to serve from) and you should see the Sencha Touch Welcome page. If that's all working you're ready to start your first app.
+Once you have the folder in the right place, open your web browser and point it to http://localhost/sencha-touch-folder (or wherever your web server is configured to serve from) and you should see the Sencha Touch Welcome page. If that's all working you're ready to start your first app.
 
 ## Starting your app
 
@@ -84,12 +84,12 @@ If you'd like to skip ahead or find out more detailed information about other as
 
 ### Application Examples
 
-* [Kitchen Sink](#!/example/kitchensink/index.html)
-* [Twitter](#!/example/twitter/index.html)
-* [Kiva](#!/example/kiva/index.html)
+* [Kitchen Sink](#!/example/kitchen-sink)
+* [Twitter](#!/example/twitter)
+* [Kiva](#!/example/kiva)
 
 ### Component Examples
 
-* [Carousel](#!/example/carousel/index.html)
-* [Forms](#!/example/forms/index.html)
-* [Date Picker](#!/example/picker/index.html)
+* [Carousel](#!/example/carousel)
+* [Forms](#!/example/forms)
+* [Date Picker](#!/example/pickers)

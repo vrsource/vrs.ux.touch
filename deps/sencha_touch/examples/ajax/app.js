@@ -151,6 +151,9 @@ Ext.application({
 
                 //and finally we unmask the contentView so the content is viewable
                 contentView.unmask();
+            },
+            failure: function() {
+                contentView.unmask();
             }
         });
     },
@@ -228,7 +231,7 @@ Ext.application({
     /**
      * Returns a Ext.XTemplate instance which will be used to display each weather result when makeJSONPRequest
      * is called.
-     * @return {Ext.XTemaplte} The returned template
+     * @return {Ext.XTemplate} The returned template
      */
     getWeatherTemplate: function() {
         return new Ext.XTemplate([

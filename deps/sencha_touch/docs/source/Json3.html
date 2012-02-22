@@ -195,19 +195,6 @@
  *             ]
  *         }
  *     }
- *
- * The Reader will automatically read the meta fields config and rebuild the Model based on the new fields, but to handle
- * the new column configuration you would need to handle the metadata within the application code. This is done simply enough
- * by handling the metachange event on either the store or the proxy, e.g.:
- *
- *     var store = Ext.create('Ext.data.Store', {
- *         ...
- *         listeners: {
- *             'metachange': function(store, meta) {
- *                 myGrid.reconfigure(store, meta.columns);
- *             }
- *         }
- *     });
  */
 Ext.define('Ext.data.reader.Json', {
     extend: 'Ext.data.reader.Reader',
@@ -260,8 +247,7 @@ Ext.define('Ext.data.reader.Json', {
              * @param {String} error The error message.
              */
             this.fireEvent('exception', this, response, 'Unable to parse the JSON returned by the server: ' + ex.toString());
-
-            Ext.Logger.error('Unable to parse the JSON returned by the server: ' + ex.toString());
+            Ext.Logger.warn('Unable to parse the JSON returned by the server: ' + ex.toString());
         }
         //&lt;debug&gt;
         if (!data) {

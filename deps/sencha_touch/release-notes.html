@@ -13,6 +13,94 @@
         <div id="releases">
             <div class="release">
                 <h1>
+                    Release Notes for Sencha Touch 2.0.RC
+                </h1>
+                <p class="notes">
+                    Release Notes: Release Notes: February 21, 2012<br>
+                    Version Number: 2.0.0.RC
+                </p>
+
+                <ul>
+                    <li>Enhancements/Changes
+                        <ul>
+                            <li>Added inline config to DataView and List.  This allows for horizontal scrolling lists and optionally wraps at the container</li>
+                            <li>[TOUCH-1894] Implemented PollingProvider, DirectStore, and DirectProxy</li>
+                            <li>[TOUCH-2004] Added modifiedFieldNames and modifiedValues to the updaterecord signature in Store</li>
+                            <li>Added a ui: 'round' to list to enable a rounded corner look to lists and grouped lists</li>
+                            <li>Added an isLoaded function to store</li>
+                            <li>[TOUCH-2025] Updated documentation on Video component</li>
+                            <li>[TOUCH-2028] Updated documentation to indicate showAnimation should use an inbound animation such as fadeIn/slideIn and hideAnimation should use an configuration such as fadeOut/slideOut</li>
+                            <li>[TOUCH-2029] Layout animations will now stop if interrupted</li>
+                            <li>[TOUCH-2024] Reverted forms back to use box layout from table layout</li>
+                            <li>[TOUCH-1925] When using a Server Proxy with a JSON Reader, the Operation is now given the correct error state if invalid JSON is returned from the server</li>
+                            <li>[TOUCH-2046] Changed setting a default background to only effect card items</li>
+                            <li>[TOUCH-2009] Ext.Ajax no longer throws an error when calling abort. Instead it sets the request success state to false and aborts the request correctly</li>
+                            <li>[TOUCH-2026] Clarified build directory listing in the builds guide</li>
+                            <li>[TOUCH-2047] Removed the @accessor tags from the Ext.app.Application configs that are not changeable after boot (home screen icon settings and start up screen images)</li>
+                            <li>[TOUCH-2011] Changed card layout to not show the item when it is removed from the container IF it is being destroyed</li>
+                            <li>Added a warning to application if you try and include a controller that doesn't extend app.Controller</li>
+                            <li>[TOUCH-2054] Added a handleException method to DataView which will clear the LoadMask when a reader exception occurs.  Users can override this method ago add custom error handling/alerts</li>
+                            <li>[TOUCH-2027] Allow date picker/picker/slot to accept for null values</li>
+                            <li>[TOUCH-2074] Added AJAX guide</li>
+                            <li>Added O'Reilly example</li>
+                            <li>[TOUCH-1474] Added TouchStyle example which includes an infinite scroller</li>
+                            <li>Updated NestedList to prevent interaction on selection once an item is selected</li>
+                            <li>Ext.application now sets the app's namespace before requires are processed. This means MyApp can requires:['MyApp.util.SomeClass'], which previously was not possible</li>
+                            <li>[TOUCH-2099] Added a check for the change event in Select to ensure ti doesn't get fired when it hasn't changed</li>
+                            <li>[TOUCH-2084] Added an 'updatedata' event to DataItem</li>
+                            <li>Geolocation will now throw a locationerror event if the devices which do not support Geolocation</li>
+                            <li>Moved models, views and stores configs from Application down to Controller</li>
+                            <li>Added support for "?breakpoint" for sencha-touch-debug.js when released</li>
+                            <li>[TOUCH-2077, TOUCH-2094] Improved initial viewport size detection on Android</li>
+                            <li>[TOUCH-2082] Implemented a withCredentials configuration on Ajax proxy to allow cross-origin resources</li>
+                            <li>[TOUCH-2082] Added ability to pass withCredentials to the Store#load method</li>
+                            <li>Added the ability for beforeHooks in mixins to return false to prevent the original function from being called</li>
+                            <li>[TOUCH-1922] Implemented the ability to configure your reader and model definition using metaData in your response</li>
+                            <li>The default CSS ClassName for Button's press has been changed to 'x-button-pressing' from 'x-button-pressed'.  'x-button-pressed' is now used when the button is pressed in a SegmentedButton.  SegmentedButton now listens to its Button's tap event and results in a much better user experience</li>
+                        </ul>
+                    </li>
+                    <li>Bug Fixes
+                        <ul>
+                            <li>[TOUCH-1983] Fixed Android's lack of native ISO 8601 Date parsing support</li>
+                            <li>[TOUCH-2005] Fixed an issue that prevented Component DataView items to not be properly updated when changing a data field on a record</li>
+                            <li>Fixed a regression with maxRows in field/Input</li>
+                            <li>Fixed footerCls removal on Grouped lists</li>
+                            <li>[TOUCH-2014] Fixed problems with using setStyle/getStyle from within ComponsiteElement/CompositeElementList</li>
+                            <li>[TOUCH-2045] Fixed issue in Decorator when trying to detach from a component which has already been destroyed</li>
+                            <li>[TOUCH-2051] Fixed issue with programmatically setting active tabs</li>
+                            <li>[TOUCH-1877] Fixed issue where ComponentQuery would no longer match against an Id if an itemId was set</li>
+                            <li>[TOUCH-2062] Fixed warnings on invalid dates to not display in production builds</li>
+                            <li>[TOUCH-2071] Fixed ComponentQuery to use proper getter methods instead of directly accessing properties when getters exist</li>
+                            <li>[TOUCH-2060] Fixed Icons example to show text properly</li>
+                            <li>[TOUCH-2066] Fix truncation of the search field in the twitter example</li>
+                            <li>Fixed an issue causing error when removing sorters from a Ext.util.Collection</li>
+                            <li>[TOUCH-2070] Fixed leap years in the Date Picker</li>
+                            <li>[TOUCH-2080] Fixed a bug with navigation bar where the title animation was not preserved, so it would snap the title off the screen</li>
+                            <li>[TOUCH-2101] Fixed incorrect element reference in Ext.Anim.run</li>
+                            <li>[TOUCH-2100] Fixed modals which are neither centered nor have positioning information.  This will now throw a warning and set the top/left to 0</li>
+                            <li>[TOUCH-2106] Fixed issue with using setMapOptions to replace the existing config</li>
+                            <li>[TOUCH-2095] Fixed GeoCongrss example on the Kindle which has no Geolocation API</li>
+                            <li>[TOUCH-2034] Fixed issue with Selectable improperly maintaining selection on items when a store is loaded</li>
+                            <li>Fixed an issue where mapping on an id field wasn't respected by the Reader</li>
+                            <li>[TOUCH-2082] Fixed being able to pass withCredentials to the Ext.data.Connection using an Ajax proxy</li>
+                            <li>[TOUCH-1847] Fixed showBy margins and orientation change issues on Android</li>
+                            <li>Fixed Viewport 'resize' event to use SizeMonitor and no longer use window.onresize for reliability on Android</li>
+                            <li>[TOUCH-2114] Fixed issue with checkbox's handling of [name=foor[bar]]</li>
+                            <li>[TOUCH-2098] Fixed setConfig() to not discard non-default-config values</li>
+                            <li>[TOUCH-2112] Fixed an issue with replacing an item in a Collection</li>
+                            <li>[TOUCH-2122] Fixed the Association creation code to handle custom types</li>
+                        </ul>
+                    </li>
+                    <li>Known Issues
+                        <ul>
+                            <li>Assosciations are not compatible with localstorage</li>
+                            <li>Android 4 transitions are hampered by a <a href="http://code.google.com/p/android/issues/detail?id=25147" target="_blank">bug reported to the Android team</a>.  Help get its attention by starring the issue.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="release">
+                <h1>
                     Release Notes for Sencha Touch 2.0.beta3
                 </h1>
                 <p class="notes">

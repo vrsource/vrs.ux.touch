@@ -229,13 +229,15 @@ Ext.define('Ext.data.proxy.Server', {
             try {
                 resultSet = reader.process(response);
             } catch(e) {
-                operation.setException(operation, {
-                    status: null,
-                    statusText: e.message
-                });
+                operation.setException(e.message);
 
                 me.fireEvent('exception', this, response, operation);
                 return;
+            }
+
+            // This could happen if the model was configured using metaData
+            if (!operation.getModel()) {
+                operation.setModel(this.getModel());
             }
 
             if (operation.process(action, resultSet, request, response) === false) {
@@ -429,6 +431,8 @@ Ext.define('Ext.data.proxy.Server', {
      * @param {Ext.data.Operation} operation The Ext.data.Operation object
      * @param {Function} callback The callback function to call when the Operation has completed
      * @param {Object} scope The scope in which to execute the callback
+     * @protected
+     * @template
      */
     doRequest: function(operation, callback, scope) {
         //<debug>

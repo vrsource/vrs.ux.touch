@@ -18,7 +18,7 @@ var config = {
     redirect_uri:  'http://example.com',
 
     // Facebook Application ID
-    client_id:     '123123123',
+    client_id:     '123132123',
 
     // Facebook Application Secret
     client_secret: '413914e6f9fd896bd035fe18cd54bae0',
@@ -29,6 +29,7 @@ var config = {
     // Session encyption key
     sessionSecret: 'oasjdf0asduf0asd9f0adfks'
 }
+
 
 
 

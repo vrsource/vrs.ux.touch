@@ -61,7 +61,7 @@ Because each build is good for a different purpose an created using a different 
         <td>Use in production with a custom build</td>
     </tr>
     <tr>
-        <th>sencha-touch-all.js</th>
+        <th>builds/sencha-touch-all.js</th>
         <td>All</td>
         <td></td>
         <td>{@img tick.png}</td>
@@ -71,7 +71,7 @@ Because each build is good for a different purpose an created using a different 
         <td>Use in production if you don't have a custom build</td>
     </tr>
     <tr>
-        <th>sencha-touch-all-debug.js</th>
+        <th>builds/sencha-touch-all-debug.js</th>
         <td>All</td>
         <td></td>
         <td></td>
@@ -81,7 +81,7 @@ Because each build is good for a different purpose an created using a different 
         <td>Use to debug your app in staging/production</td>
     </tr>
     <tr>
-        <th>sencha-touch-all-compat.js</th>
+        <th>builds/sencha-touch-all-compat.js</th>
         <td>All</td>
         <td></td>
         <td></td>
@@ -92,7 +92,7 @@ Because each build is good for a different purpose an created using a different 
     </tr>
 </table>
 
-If the table above is not self-explanatory, here's a little more detail on what each option means:
+Note that the last 3 builds are contained within the 'builds' directory in the SDK download. If the table above is not self-explanatory, here's a little more detail on what each option means:
 
 <ul>
     <li><strong>Type</strong>: either "Core" or "All" - Core includes the base classes but none of the Components, All means everything is included</li>

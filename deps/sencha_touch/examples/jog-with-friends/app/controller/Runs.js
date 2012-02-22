@@ -72,21 +72,10 @@ Ext.define('JWF.controller.Runs', {
             caption += ' in ' + location;
         }
 
-        // if (Ext.get('postToWallField').dom.checked) {
-        //     FB.ui({
-        //         method: 'feed',
-        //         name: 'Job With Friends',
-        //         link: 'http://www.sencha.com/products/touch',
-        //         caption: caption,
-        //         description: '',
-        //         display: 'touch'
-        //     });
-        // } else {
-            Ext.getCmp('runForm').setMasked({
-                xtype: 'loadmask',
-                message: 'Adding New Jog...'
-            });
-        // }
+        Ext.getCmp('runForm').setMasked({
+            xtype: 'loadmask',
+            message: 'Adding New Jog...'
+        });
 
         Ext.Ajax.request({
             url: '/run',

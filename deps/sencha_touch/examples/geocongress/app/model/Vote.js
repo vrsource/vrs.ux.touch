@@ -22,11 +22,7 @@ Ext.define('GeoCon.model.Vote', {
                 name: 'voted_at_str',
                 type: 'string',
                 convert: function(v, record) {
-                    if (typeof record.data.voted_at != 'date') {
-                        return 'Unknown Date';
-                    }  else {
-                        return Ext.Date.format(record.data.voted_at, 'F j, Y, g:i a');
-                    }
+                    return Ext.Date.format(record.data.voted_at, 'F j, Y');
                 }
             },
             { name: 'voter_ids',      type: 'object' },

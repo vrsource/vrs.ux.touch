@@ -71,13 +71,6 @@ Ext.define('Ext.slider.Slider', {
         value: 0,
 
         /**
-         * @cfg {Number} tabIndex
-         * @hide
-         * @accessor
-         */
-        tabIndex: -1,
-
-        /**
          * @cfg {Number} minValue The lowest value any thumb on this slider can be set to.
          * @accessor
          */

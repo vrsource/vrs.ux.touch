@@ -8,13 +8,13 @@
  */
 Ext.define('Kitchensink.controller.tablet.Main', {
     extend: 'Kitchensink.controller.Main',
-    
+
     /**
      * This is called whenever the user taps on an item in the main navigation NestedList
      */
     onNavTap: function(nestedList, list, index) {
         var record = list.getStore().getAt(index);
-        
+
         if (record.isLeaf()) {
             this.redirectTo(record);
         }
@@ -30,12 +30,13 @@ Ext.define('Kitchensink.controller.tablet.Main', {
             view = this.createView(this.getViewName(item)),
             main = this.getMain(),
             anim = item.get('animation'),
-
-            mainLayout  = main.getLayout(),
-            initialAnim = mainLayout.getAnimation();
+            layout  = main.getLayout(),
+            initialAnim = layout.getAnimation(),
+            newAnim;
 
         if (anim) {
-            mainLayout.setAnimation(anim);
+            layout.setAnimation(anim);
+            newAnim = layout.getAnimation();
         }
 
         nav.setDetailContainer(main);
@@ -44,14 +45,16 @@ Ext.define('Kitchensink.controller.tablet.Main', {
         nav.goToLeaf(item);
         nav.getActiveItem().select(item);
 
-        if (anim) {
-            mainLayout.setAnimation(initialAnim);
+        if (newAnim) {
+            newAnim.on('animationend', function() {
+                layout.setAnimation(initialAnim);
+            }, this, { single: true });
         }
 
         this.getToolbar().setTitle(item.get('text'));
         this.getSourceButton().setHidden(false);
-        nav.goToNode(item.parentNode);
-        nav.goToLeaf(item);
+//        nav.goToNode(item.parentNode);
+//        nav.goToLeaf(item);
 //    },
 //
 //    /**
@@ -83,6 +86,6 @@ Ext.define('Kitchensink.controller.tablet.Main', {
 //        this.getToolbar().setTitle(item.get('text'));
 //        this.getSourceButton().setHidden(false);
     },
-    
+
     showMenuById: Ext.emptyFn
 });

@@ -1,3 +1,6 @@
+/**
+ * Demonstrates a very simple tab panel with 3 tabs
+ */
 Ext.define('Kitchensink.view.Tabs', {
     extend: 'Ext.tab.Panel',
 

@@ -3,21 +3,25 @@
  * functionality such as input validation, standard events, state management and look and feel. Typically we create
  * text fields inside a form, like this:
  *
+ *     @example
  *     Ext.create('Ext.form.Panel', {
- *         tbar: {
- *             text: 'Enter your name'
- *         },
- *
+ *         fullscreen: true,
  *         items: [
  *             {
- *                 xtype: 'textfield',
- *                 label: 'First Name',
- *                 name: 'firstName'
- *             },
- *             {
- *                 xtype: 'textfield',
- *                 label: 'Last Name',
- *                 name: 'lastName'
+ *                 xtype: 'fieldset',
+ *                 title: 'Enter your name',
+ *                 items: [
+ *                     {
+ *                         xtype: 'textfield',
+ *                         label: 'First Name',
+ *                         name: 'firstName'
+ *                     },
+ *                     {
+ *                         xtype: 'textfield',
+ *                         label: 'Last Name',
+ *                         name: 'lastName'
+ *                     }
+ *                 ]
  *             }
  *         ]
  *     });
@@ -174,6 +178,7 @@ Ext.define('Ext.field.Text', {
 
         /**
          * @cfg {Object} component The inner component for this field, which defaults to an input text.
+         * @accessor
          */
         component: {
             xtype: 'input',
@@ -367,7 +372,9 @@ Ext.define('Ext.field.Text', {
         }
     },
 
-    doAction: Ext.emptyFn,
+    doAction: function() {
+        this.blur();
+    },
 
     onClearIconTap: function(e) {
         this.fireAction('clearicontap', [this, e], 'doClearIconTap');

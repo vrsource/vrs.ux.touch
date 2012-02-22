@@ -409,6 +409,13 @@ Ext.define('Ext.Container', {
         if (newModal) {
             this.on(listeners);
             newModal.on('destroy', 'onModalDestroy', this);
+            if (this.getTop() === null && this.getBottom() === null && this.getRight() === null && this.getLeft() === null && !this.getCentered()) {
+                //<debug warn>
+                Ext.Logger.warn("You have specified a modal config on a container that is neither centered nor has any positioning information.  Setting to top and left to 0 to compensate.");
+                //</debug>
+                this.setTop(0);
+                this.setLeft(0);
+            }
 
             if (this.isPainted()) {
                 this.refreshModalMask();
@@ -752,7 +759,7 @@ Ext.define('Ext.Container', {
             me.removeInner(item);
         }
 
-        me.onItemRemove(item, index);
+        me.onItemRemove(item, index, destroy);
 
         item.setParent(null);
 
@@ -1213,7 +1220,10 @@ Ext.define('Ext.Container', {
         var layout = this.getLayout(),
             defaultAnimation;
 
-        animation = new Ext.fx.layout.Card(animation);
+        if (this.activeItemAnimation) {
+            this.activeItemAnimation.destroy();
+        }
+        this.activeItemAnimation = animation = new Ext.fx.layout.Card(animation);
         if (animation && layout.isCard) {
             animation.setLayout(layout);
             defaultAnimation = layout.getAnimation();

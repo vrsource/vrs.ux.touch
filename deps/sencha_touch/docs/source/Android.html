@@ -114,8 +114,9 @@ Ext.define('Ext.viewport.Android', {
     },
 
     applyAutoMaximize: function(autoMaximize) {
-        autoMaximize = this.callParent();
+        this.callParent(arguments);
 
+        this.on('add', 'fixSize', this, { single: true });
         if (!autoMaximize) {
             this.on('ready', 'fixSize', this, { single: true });
             this.onAfter('orientationchange', 'doFixSize', this);
@@ -253,11 +254,24 @@ Ext.define('Ext.viewport.Android', {
             },
 
             fixSize: function() {
-                var outerHeight = this.getActualWindowOuterHeight();
+                var orientation = this.getOrientation(),
+                    outerHeight = window.outerHeight,
+                    outerWidth = window.outerWidth,
+                    actualOuterHeight;
+
+                // On some Android 2 devices such as the Kindle Fire, outerWidth and outerHeight are reported wrongly
+                // when navigating from another page that has larger size.
+                if (orientation === 'landscape' &amp;&amp; (outerHeight &lt; outerWidth)
+                    || orientation === 'portrait' &amp;&amp; (outerHeight &gt;= outerWidth)) {
+                    actualOuterHeight = this.getActualWindowOuterHeight();
+                }
+                else {
+                    actualOuterHeight = this.getWindowHeight();
+                }
 
                 this.waitUntil(function() {
-                    return outerHeight !== this.getWindowHeight();
-                }, this.doFixSize, this.doFixSize);
+                    return actualOuterHeight &gt; this.getWindowHeight();
+                }, this.doFixSize, this.doFixSize, 50, 1000);
             }
         });
     }

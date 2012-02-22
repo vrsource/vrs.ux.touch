@@ -8,24 +8,21 @@
  *
  * ## Example
  *
- *     Ext.define('TweetList', {
- *         extend: 'Ext.List',
+ *     Ext.create('Ext.dataview.List', {
  *
- *         config: {
- *             store: Ext.create('TweetStore'),
+ *         store: Ext.create('TweetStore'),
  *
- *             plugins: [
- *                 {
- *                     xclass: 'Ext.plugin.ListPaging',
- *                     autoPaging: true
- *                 }
- *             ],
+ *         plugins: [
+ *             {
+ *                 xclass: 'Ext.plugin.ListPaging',
+ *                 autoPaging: true
+ *             }
+ *         ],
  *
- *             itemTpl: [
- *                 '<img src="{profile_image_url}" />',
- *                 '<div class="tweet">{text}</div>'
- *             ]
- *         }
+ *         itemTpl: [
+ *             '<img src="{profile_image_url}" />',
+ *             '<div class="tweet">{text}</div>'
+ *         ]
  *     });
  */
 Ext.define('Ext.plugin.ListPaging', {
@@ -120,18 +117,7 @@ Ext.define('Ext.plugin.ListPaging', {
         // We provide our own load mask so if the Store is autoLoading already disable the List's mask straight away,
         // otherwise if the Store loads later allow the mask to show once then remove it thereafter
         if (store) {
-            if (store.isAutoLoading()) {
-                list.setLoadingText(null);
-            } else {
-                store.on({
-                    load: {
-                        single: true,
-                        fn: function() {
-                            list.setLoadingText(null);
-                        }
-                    }
-                });
-            }
+            this.disableDataViewMask(store);
         }
 
         // The List's Store could change at any time so make sure we are informed when that happens
@@ -145,6 +131,9 @@ Ext.define('Ext.plugin.ListPaging', {
         }
     },
 
+    /**
+     * @private
+     */
     bindStore: function(newStore, oldStore) {
         if (oldStore) {
             oldStore.un({
@@ -159,6 +148,32 @@ Ext.define('Ext.plugin.ListPaging', {
                 load: this.onStoreLoad,
                 beforeload: this.onStoreBeforeLoad,
                 scope: this
+            });
+
+//            this.disableDataViewMask(newStore);
+        }
+    },
+
+    /**
+     * @private
+     * Removes the List/DataView's loading mask because we show our own in the plugin. The logic here disables the
+     * loading mask immediately if the store is autoloading. If it's not autoloading, allow the mask to show the first
+     * time the Store loads, then disable it and use the plugin's loading spinner.
+     * @param {Ext.data.Store} store The store that is bound to the DataView
+     */
+    disableDataViewMask: function(store) {
+        var list = this.getList();
+
+        if (store.isAutoLoading()) {
+            list.setLoadingText(null);
+        } else {
+            store.on({
+                load: {
+                    single: true,
+                    fn: function() {
+                        list.setLoadingText(null);
+                    }
+                }
             });
         }
     },

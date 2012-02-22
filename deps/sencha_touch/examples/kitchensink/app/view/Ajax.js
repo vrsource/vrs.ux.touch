@@ -1,3 +1,7 @@
+/**
+ * Demonstrates loading data over AJAX. See http://docs.sencha.com/touch/2-0/#!/guide/ajax for more
+ * background on Sencha Touch 2's AJAX capabilities
+ */
 Ext.define('Kitchensink.view.Ajax', {
     extend: 'Ext.Container',
     config: {

@@ -1,3 +1,6 @@
+/**
+ * Demonstrates some of the many icons that are bundled with Sencha Touch 2
+ */
 Ext.define('Kitchensink.view.Icons', {
     extend: 'Ext.tab.Panel',
 
@@ -22,7 +25,7 @@ Ext.define('Kitchensink.view.Icons', {
                 iconCls: 'bookmarks',
                 title  : 'Bookmarks',
                 cls    : 'card card3',
-                html   : 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is no hassle.<p><small>If you can&#8217;t see all of the buttons below, try scrolling left/right.</small></p>'
+                html   : 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is easy.'
             },
             {
                 iconCls: 'download',

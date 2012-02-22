@@ -2,7 +2,8 @@ Ext.define('Kitchensink.profile.Phone', {
     extend: 'Kitchensink.profile.Base',
 
     config: {
-        controllers: ['Main']
+        controllers: ['Main'],
+        views: ['Main', 'TouchEvents']
     },
 
     isActive: function() {

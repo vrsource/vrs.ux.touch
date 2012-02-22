@@ -1,3 +1,6 @@
+/**
+ * Demonstrates a 'flip' card transition
+ */
 Ext.define('Kitchensink.view.Flip', {
     extend: 'Ext.Panel',
     config: {

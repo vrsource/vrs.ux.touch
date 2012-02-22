@@ -1,3 +1,7 @@
+/**
+ * This is used to display the source code for any given example. Each example has a 'Source' button
+ * on its top toolbar that activates this
+ */
 Ext.define('Kitchensink.view.SourceOverlay', {
     extend: 'Ext.Panel',
     xtype: 'sourceoverlay',

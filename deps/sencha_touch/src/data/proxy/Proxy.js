@@ -124,15 +124,36 @@ Ext.define('Ext.data.proxy.Proxy', {
     },
 
     updateReader: function(reader) {
-        var model = this.getModel();
-        if (!model) {
-            model = reader.getModel();
-            if (model) {
-                this.setModel(model);
+        if (reader) {
+            var model = this.getModel();
+            if (!model) {
+                model = reader.getModel();
+                if (model) {
+                    this.setModel(model);
+                }
+            } else {
+                reader.setModel(model);
             }
-        } else {
-            reader.setModel(model);
+
+            if (reader.onMetaChange) {
+                 reader.onMetaChange = Ext.Function.createSequence(reader.onMetaChange, this.onMetaChange, this);
+            }
         }
+    },
+
+    onMetaChange: function(data) {
+        var model = this.getReader().getModel();
+        if (!this.getModel() && model) {
+            this.setModel(model);
+        }
+
+        /**
+         * @event metachange
+         * Fires whenever the server has sent back new metadata to reconfigure the Reader.
+         * @param {Ext.data.Proxy} this
+         * @param {Object} data The metadata sent back from the server
+         */
+        this.fireEvent('metachange', this, data);
     },
 
     applyWriter: function(writer, currentWriter) {

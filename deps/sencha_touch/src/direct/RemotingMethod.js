@@ -1,7 +1,7 @@
 /**
  * Small utility class used internally to represent a Direct method.
  * @class Ext.direct.RemotingMethod
- * @ignore
+ * @private
  */
 Ext.define('Ext.direct.RemotingMethod', {
     config: {
@@ -36,29 +36,28 @@ Ext.define('Ext.direct.RemotingMethod', {
         }
     },
 
-//    getArgs: function(params, paramOrder, paramsAsHash) {
-//        var args = [],
-//            i,
-//            len;
-//
-//        if (this.ordered) {
-//            if (this.len > 0) {
-//                // If a paramOrder was specified, add the params into the argument list in that order.
-//                if (paramOrder) {
-//                    for (i = 0, len = paramOrder.length; i < len; i++) {
-//                        args.push(params[paramOrder[i]]);
-//                    }
-//                } else if (paramsAsHash) {
-//                    // If paramsAsHash was specified, add all the params as a single object argument.
-//                    args.push(params);
-//                }
-//            }
-//        } else {
-//            args.push(params);
-//        }
-//
-//        return args;
-//    },
+    getArgs: function(params, paramOrder, paramsAsHash) {
+        var args = [],
+            i, ln;
+
+        if (this.getOrdered()) {
+            if (this.getLen() > 0) {
+                // If a paramOrder was specified, add the params into the argument list in that order.
+                if (paramOrder) {
+                    for (i = 0, ln = paramOrder.length; i < ln; i++) {
+                        args.push(params[paramOrder[i]]);
+                    }
+                } else if (paramsAsHash) {
+                    // If paramsAsHash was specified, add all the params as a single object argument.
+                    args.push(params);
+                }
+            }
+        } else {
+            args.push(params);
+        }
+
+        return args;
+    },
 
     /**
      * Takes the arguments for the Direct function and splits the arguments

@@ -1,3 +1,6 @@
+/**
+ * This is a simple utility class that just renders a bunch of lorem ipsum text
+ */
 Ext.define('Kitchensink.view.LoremIpsum', {
     extend: 'Ext.Component',
     xtype: 'loremipsum',

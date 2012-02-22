@@ -1,3 +1,6 @@
+/**
+ * Demonstrates how to issue JSON-P request to fetch weather data from a web API
+ */
 Ext.define('Kitchensink.view.JSONP', {
     extend: 'Ext.Container',
     config: {

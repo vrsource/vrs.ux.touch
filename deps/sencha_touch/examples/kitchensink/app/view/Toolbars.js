@@ -1,3 +1,6 @@
+/**
+ * Demonstrates several options available when using Toolbars
+ */
 Ext.define('Kitchensink.view.Toolbars', {
     extend: 'Ext.Container',
 

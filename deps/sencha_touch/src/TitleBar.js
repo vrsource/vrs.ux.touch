@@ -122,6 +122,7 @@ Ext.define('Ext.TitleBar', {
         defaultType: 'button',
 
         /**
+         * @cfg
          * @hide
          */
         layout: {

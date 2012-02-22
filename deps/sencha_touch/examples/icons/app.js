@@ -49,9 +49,10 @@ Ext.application({
             // Set the UI of the tabbar to light
             ui  : 'light',
 
-            // Add some text about the example into the tabpanel as html and style it using default CSS
-            html: 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is no hassle.<p><small>If you cant see all of the buttons below, try scrolling left/right.</small></p>',
-            styleHtmlContent: true,
+            defaults: {
+                // Add some text about the example into the tabpanel as html and style it using default CSS
+                html: 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is no hassle.<p><small>If you cant see all of the buttons below, try scrolling left/right.</small></p>'
+            },
 
             // Add a bunch of items into the tabpanel, with iconCls'
             items: [
@@ -72,6 +73,8 @@ Ext.application({
 
                     // Dock it to the top
                     docked: 'top',
+
+                    html: null,
 
                     // Center all items horizontally and vertically
                     layout: {

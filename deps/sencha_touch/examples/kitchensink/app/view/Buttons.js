@@ -1,3 +1,6 @@
+/**
+ * Demonstrates a range of Button options the framework offers out of the box
+ */
 Ext.define('Kitchensink.view.Buttons', {
     extend: 'Ext.Container',
 

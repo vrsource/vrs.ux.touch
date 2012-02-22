@@ -234,6 +234,11 @@ Ext.define('Ext.data.Store', {
      * this gives you the new index in the store.
      * @param {Number} oldIndex If the update changed the index of the record (due to sorting for example), then
      * this gives you the old index in the store.
+     * @param {Array} modifiedFieldNames An array containing the field names that have been modified since the
+     * record was committed or created
+     * @param {Object} modifiedValues An object where each key represents a field name that had it's value modified,
+     * and where the value represents the old value for that field. To get the new value in a listener
+     * you should use the {@link Ext.data.Model#get get} method.
      */
 
     /**
@@ -409,7 +414,25 @@ Ext.define('Ext.data.Store', {
 
         /**
          * @cfg {Object[]} grouper
-         * A configuration object for this Store's grouper.
+         * A configuration object for this Store's {@link Ext.util.Grouper grouper}.
+         *
+         * For example, to group a store's items by the first letter of the last name:
+         *
+         *     Ext.define('People', {
+         *         extend: 'Ext.data.Store',
+         *
+         *         config: {
+         *             fields: ['first_name', 'last_name'],
+         *
+         *             grouper: {
+         *                 groupFn: function(record) {
+         *                     return record.get('last_name').substr(0, 1);
+         *                 },
+         *                 sortProperty: 'last_name'
+         *             }
+         *         }
+         *     });
+         *
          * @accessor
          */
         grouper: null,
@@ -591,7 +614,7 @@ Ext.define('Ext.data.Store', {
 
         // <debug>
         if (!model) {
-            Ext.Logger.error('A store needs to have a model defined on either itself or on its proxy');
+            Ext.Logger.warn('Unless you define your model through metadata, a store needs to have a model defined on either itself or on its proxy');
         }
         // </debug>
 
@@ -623,8 +646,11 @@ Ext.define('Ext.data.Store', {
     },
 
     updateProxy: function(proxy) {
-        if (proxy && !proxy.getModel()) {
-            proxy.setModel(this.getModel());
+        if (proxy) {
+            if (!proxy.getModel()) {
+                proxy.setModel(this.getModel());
+            }
+            proxy.on('metachange', this.onMetaChange, this);
         }
     },
 
@@ -634,36 +660,38 @@ Ext.define('Ext.data.Store', {
      * @param data
      */
     applyData: function(data) {
+        var me = this,
+            proxy;
         if (data) {
-            var proxy = this.getProxy();
+            proxy = me.getProxy();
             if (proxy instanceof Ext.data.proxy.Memory) {
                 proxy.setData(data);
-                this.load();
+                me.load();
             } else {
                 // We make it silent because we don't want to fire a refresh event
-                this.removeAll(true);
+                me.removeAll(true);
 
                 // This means we have to fire a clear event though
-                this.fireEvent('clear', this);
+                me.fireEvent('clear', me);
 
                 // We don't want to fire addrecords event since we will be firing
                 // a refresh event later which will already take care of updating
                 // any views bound to this store
-                this.suspendEvents();
-                this.add(data);
-                this.resumeEvents();
+                me.suspendEvents();
+                me.add(data);
+                me.resumeEvents();
 
                 // We set this to true so isAutoLoading to try
-                this.dataLoaded = true;
+                me.dataLoaded = true;
             }
         } else {
-            this.removeAll(true);
+            me.removeAll(true);
 
             // This means we have to fire a clear event though
-            this.fireEvent('clear', this);
+            me.fireEvent('clear', me);
         }
 
-        this.fireEvent('refresh', this, this.data);
+        me.fireEvent('refresh', me, me.data);
     },
 
     clearData: function() {
@@ -1113,7 +1141,7 @@ Ext.define('Ext.data.Store', {
             me.fireEvent('removerecords', me, [record], [currentIndex]);
         }
         else if (newIndex !== -1) {
-            me.fireEvent('updaterecord', me, record, newIndex, currentIndex);
+            me.fireEvent('updaterecord', me, record, newIndex, currentIndex, modifiedFieldNames, modified);
         }
     },
 
@@ -1124,7 +1152,7 @@ Ext.define('Ext.data.Store', {
      */
     afterReject: function(record) {
         var index = this.data.indexOf(record);
-        this.fireEvent('updaterecord', this, record, index, index);
+        this.fireEvent('updaterecord', this, record, index, index, [], {});
     },
 
     /**
@@ -1132,7 +1160,7 @@ Ext.define('Ext.data.Store', {
      * A model instance should call this method on the Store it has been {@link Ext.data.Model#join joined} to.
      * @param {Ext.data.Model} record The model instance that was edited
      */
-    afterCommit: function(record, modified) {
+    afterCommit: function(record, modifiedFieldNames, modified) {
         var me = this,
             data = me.data,
             currentId = modified[record.getIdProperty()] || record.getId(),
@@ -1157,7 +1185,7 @@ Ext.define('Ext.data.Store', {
             me.fireEvent('removerecords', me, [record], [currentIndex]);
         }
         else if (newIndex !== -1) {
-            me.fireEvent('updaterecord', me, record, newIndex, currentIndex);
+            me.fireEvent('updaterecord', me, record, newIndex, currentIndex, modifiedFieldNames, modified);
         }
     },
 
@@ -1629,6 +1657,14 @@ Ext.define('Ext.data.Store', {
     },
 
     /**
+     * Returns true if the Store has been loaded.
+     * @return {Boolean} True if the Store has been loaded
+     */
+    isLoaded: function() {
+        return Boolean(this.loaded);
+    },
+
+    /**
      * Synchronizes the Store with its Proxy. This asks the Proxy to batch together any new, updated
      * and deleted records in the store, updating the Store's internal representation of the records
      * as each operation completes.
@@ -1848,6 +1884,7 @@ Ext.define('Ext.data.Store', {
             me.fireEvent('refresh', this, this.data);
         }
 
+        me.loaded = true;
         me.loading = false;
         me.fireEvent('load', this, records, successful);
 
@@ -1891,6 +1928,21 @@ Ext.define('Ext.data.Store', {
 
     onDestroyRecords: function(records, operation, success) {
         this.removed = [];
+    },
+
+    onMetaChange: function(data) {
+        var model = this.getProxy().getModel();
+        if (!this.getModel() && model) {
+            this.setModel(model);
+        }
+
+        /**
+         * @event metachange
+         * Fires whenever the server has sent back new metadata to reconfigure the Reader.
+         * @param {Ext.data.Store} this
+         * @param {Object} data The metadata sent back from the server
+         */
+        this.fireEvent('metachange', this, data);
     },
 
     /**

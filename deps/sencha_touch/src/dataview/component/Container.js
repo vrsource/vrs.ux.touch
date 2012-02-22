@@ -217,7 +217,7 @@ Ext.define('Ext.dataview.component.Container', {
             if (cacheLn) {
                 cacheLn--;
                 item = itemCache.pop();
-                item.setRecord(record);
+                this.updateListItem(record, item);
             }
             else {
                 item = me.getDataItemConfig(xtype, record, itemConfig);
@@ -233,8 +233,8 @@ Ext.define('Ext.dataview.component.Container', {
     },
 
     updateListItem: function(record, item) {
-        if (item.setRecord) {
-            item.setRecord(record);
+        if (item.updateRecord) {
+            item.updateRecord(record);
         }
     },
 

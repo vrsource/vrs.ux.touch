@@ -17,15 +17,29 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-field-Select'>/**
 </span> * Simple Select field wrapper. Example usage:
-&lt;pre&gt;&lt;code&gt;
-new Ext.field.Select({
-    options: [
-        {text: 'First Option',  value: 'first'},
-        {text: 'Second Option', value: 'second'},
-        {text: 'Third Option',  value: 'third'}
-    ]
-});
-&lt;/code&gt;&lt;/pre&gt;
+ *
+ *     @example
+ *     Ext.create('Ext.form.Panel', {
+ *         fullscreen: true,
+ *         items: [
+ *             {
+ *                 xtype: 'fieldset',
+ *                 title: 'Select',
+ *                 items: [
+ *                     {
+ *                         xtype: 'selectfield',
+ *                         label: 'Choose one',
+ *                         options: [
+ *                             {text: 'First Option',  value: 'first'},
+ *                             {text: 'Second Option', value: 'second'},
+ *                             {text: 'Third Option',  value: 'third'}
+ *                         ]
+ *                     }
+ *                 ]
+ *             }
+ *         ]
+ *     });
+ *
  */
 Ext.define('Ext.field.Select', {
     extend: 'Ext.field.Text',
@@ -99,8 +113,9 @@ Ext.define('Ext.field.Select', {
          */
         hiddenName: null,
 
-<span id='Ext-field-Select-cfg-input'>        /**
-</span>         * @cfg {Object} input
+<span id='Ext-field-Select-cfg-component'>        /**
+</span>         * @cfg {Object} component
+         * @accessor
          * @hide
          */
         component: {
@@ -226,7 +241,9 @@ Ext.define('Ext.field.Select', {
 
         this.callParent([newValue ? newValue.get(this.getDisplayField()) : '']);
 
-        this.fireEvent('change', this, newValue, oldValue);
+        if (oldValue !== newValue) {
+            this.fireEvent('change', this, newValue, oldValue);
+        }
     },
 
     getValue: function() {

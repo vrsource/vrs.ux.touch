@@ -28,7 +28,7 @@
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.0.beta3');
+Ext.setVersion('touch', '2.0.0.rc');
 
 Ext.apply(Ext, {
     /**
@@ -753,6 +753,8 @@ function(el){
         if (!config) {
             config = {};
         }
+
+        Ext.Loader.setPath(config.name, config.appFolder || 'app');
 
         config.requires = Ext.Array.from(config.requires);
         config.requires.push('Ext.app.Application');

@@ -249,11 +249,7 @@ Ext.define('Ext.data.Connection', {
             scope = options.scope || window,
             username = options.username || me.getUsername(),
             password = options.password || me.getPassword() || '',
-            async,
-            requestOptions,
-            request,
-            headers,
-            xhr;
+            async, requestOptions, request, headers, xhr;
 
         if (me.fireEvent('beforerequest', me, options) !== false) {
             requestOptions = me.setOptions(options, scope);
@@ -630,7 +626,9 @@ Ext.define('Ext.data.Connection', {
             me.fireEvent('exception', key, header);
         }
 
-        xhr.withCredentials = options.withCredentials;
+        if (options.withCredentials) {
+            xhr.withCredentials = options.withCredentials;
+        }
 
         return headers;
     },
@@ -665,7 +663,7 @@ Ext.define('Ext.data.Connection', {
 
     /**
      * Determines whether this object has a request outstanding.
-     * @param {Object} request (Optional) defaults to the last transaction
+     * @param {Object} request The request to check
      * @return {Boolean} True if there is an outstanding request.
      */
     isLoading : function(request) {
@@ -707,6 +705,13 @@ Ext.define('Ext.data.Connection', {
                 }
             }
         }
+    },
+    
+    /**
+     * Aborts all outstanding requests
+     */
+    abortAll: function() {
+        this.abort();
     },
 
     /**
@@ -830,7 +835,7 @@ Ext.define('Ext.data.Connection', {
 
         //we need to make this check here because if a request times out an exception is thrown
         //when calling getAllResponseHeaders() because the response never came back to populate it
-        if (request.timedout) {
+        if (request.timedout || request.aborted) {
             request.success = false;
             lines = [];
         } else {

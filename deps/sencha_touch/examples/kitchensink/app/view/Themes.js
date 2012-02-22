@@ -1,3 +1,7 @@
+/**
+ * Demonstrates a range of themes that can be applied to Sencha Touch. Each one changes the theme for the 
+ * entire Kitchen Sink app
+ */
 Ext.define('Kitchensink.view.Themes', {
     extend: 'Ext.Container',
     config: {

@@ -16,13 +16,6 @@ Ext.define('Ext.carousel.Infinite', {
         innerItemConfig: {}
     },
 
-    beforeInitialize: function() {
-        this.innerIndexToItem = {};
-        this.innerIdToIndex = {};
-
-        this.callParent();
-    },
-
     applyIndicator: function(indicator) {
         //<debug error>
         if (indicator) {
@@ -75,6 +68,9 @@ Ext.define('Ext.carousel.Infinite', {
 
 
         if (activeIndex === undefined) {
+            this.innerIndexToItem = indexToItem = {};
+            this.innerIdToIndex = idToIndex = {};
+
             for (i = 0; i < ln; i++) {
                 item = items[i];
                 id = item.getId();
@@ -106,6 +102,23 @@ Ext.define('Ext.carousel.Infinite', {
                 indexToItem[index] = item;
                 this.fireEvent('itemindexchange', this, item, index, oldIndex);
             }
+        }
+    },
+
+    reset: function() {
+        this.rebuildInnerIndexes();
+        this.setActiveItem(0);
+    },
+
+    refreshItems: function() {
+        var items = this.innerItems,
+            idToIndex = this.innerIdToIndex,
+            index, item, i, ln;
+
+        for (i = 0,ln = items.length; i < ln; i++) {
+            item = items[i];
+            index = idToIndex[item.getId()];
+            this.fireEvent('itemindexchange', this, item, index, -1);
         }
     },
 

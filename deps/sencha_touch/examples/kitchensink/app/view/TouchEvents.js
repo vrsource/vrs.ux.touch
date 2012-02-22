@@ -1,3 +1,6 @@
+/**
+ * Presents a large touch zone and reports all of the touch events fired when the user interacts with it
+ */
 Ext.define('Kitchensink.view.TouchEvents', {
     extend: 'Ext.Container',
     xtype: 'touchevents',

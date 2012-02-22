@@ -3,24 +3,42 @@
  *
  * ## Example
  *
- *     Ext.define('TweetList', {
- *         extend: 'Ext.List',
+ *     @example
+ *     var store = Ext.create('Ext.data.Store', {
+ *         fields: ['name', 'img', 'text'],
+ *         data: [
+ *             {
+ *                 name: 'ariyahidayat',
+ *                 img: 'https://si0.twimg.com/profile_images/1662373732/headshot_normal.jpg',
+ *                 text: 'Read about the first exciting year of #PhantomJS development'
+ *             },{
+ *                 name: 'whereisthysting',
+ *                 img: 'https://si0.twimg.com/profile_images/1628080808/Brendan_Coughran_normal.jpg',
+ *                 text: 'The power of canvas http://glittle.org/blog/smiley-slider/'
+ *             },{
+ *                 name: 'philogb',
+ *                 img: 'https://si0.twimg.com/profile_images/1249073521/ng_normal.png',
+ *                 text: '@ikarienator nice burritos!'
+ *             }
+ *         ]
+ *     });
+ * 
+ *     Ext.create('Ext.dataview.List', {
+ *         fullscreen: true,
  *
- *         config: {
- *             store: Ext.create('TweetStore'),
+ *         store: store,
  *
- *             plugins: [
- *                 {
- *                     xclass: 'Ext.plugin.PullRefresh',
- *                     pullRefreshText: 'Pull down for more new Tweets!'
- *                 }
- *             ],
+ *         plugins: [
+ *             {
+ *                 xclass: 'Ext.plugin.PullRefresh',
+ *                 pullRefreshText: 'Pull down for more new Tweets!'
+ *             }
+ *         ],
  *
- *             itemTpl: [
- *                 '<img src="{profile_image_url}" />',
- *                 '<div class="tweet">{text}</div>'
- *             ]
- *         }
+ *         itemTpl: [
+ *             '<img src="{img}" alt='{name} photo' />',
+ *             '<div class="tweet"><b>{name}:</b> {text}</div>'
+ *         ]
  *     });
  */
 Ext.define('Ext.plugin.PullRefresh', {

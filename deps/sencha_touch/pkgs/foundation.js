@@ -2,7 +2,7 @@
 
 This file is part of Sencha Touch 2
 
-Copyright (c) 2011 Sencha Inc
+Copyright (c) 2012 Sencha Inc
 
 Contact:  http://www.sencha.com/contact
 
@@ -4722,22 +4722,22 @@ var noArgs = [],
                 defaultConfig = this.defaultConfig,
                 initialConfig = this.initialConfig,
                 configList = [],
-                name, value, i, ln, nameMap;
+                name, i, ln, nameMap;
 
             applyIfNotSet = Boolean(applyIfNotSet);
 
             for (name in config) {
-                if ((applyIfNotSet && (name in initialConfig)) || !(name in defaultConfig)) {
+                if ((applyIfNotSet && (name in initialConfig))) {
                     continue;
                 }
 
-                value = config[name];
-                currentConfig[name] = value;
+                currentConfig[name] = config[name];
 
-                configList.push(name);
-
-                nameMap = configNameCache[name];
-                this[nameMap.get] = this[nameMap.initGet];
+                if (name in defaultConfig) {
+                    configList.push(name);
+                    nameMap = configNameCache[name];
+                    this[nameMap.get] = this[nameMap.initGet];
+                }
             }
 
             for (i = 0,ln = configList.length; i < ln; i++) {
@@ -5789,7 +5789,9 @@ var noArgs = [],
  * @singleton
  */
 (function(Class, alias, arraySlice, arrayFrom, global) {
-
+    //<if nonBrowser>
+    var isNonBrowser = typeof window == 'undefined';
+    //</if>
     var Manager = Ext.ClassManager = {
 
         /**
@@ -6485,6 +6487,9 @@ var noArgs = [],
             // Still not existing at this point, try to load it via synchronous mode as the last resort
             if (!cls) {
                 //<debug warn>
+                //<if nonBrowser>
+                !isNonBrowser &&
+                //</if>
                 Ext.Logger.warn("[Ext.Loader] Synchronously loading '" + name + "'; consider adding '" +
                     ((possibleName) ? alias : name) + "' explicitly as a require of the corresponding class");
                 //</debug>
@@ -8119,7 +8124,7 @@ This process will be automated with Sencha Command, to be released and documente
             return this;
         },
 
-        // @ignore
+        // duplicate definition (documented above)
         onReady: function(fn, scope, withDomReady, options) {
             var oldFn;
 

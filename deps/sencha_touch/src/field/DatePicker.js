@@ -208,6 +208,10 @@ Ext.define('Ext.field.DatePicker', {
         } else {
             this.getComponent().setValue('');
         }
+
+        if (this._picker && this._picker instanceof Ext.picker.Date) {
+            this._picker.setValue(newValue);
+        }
     },
 
     /**

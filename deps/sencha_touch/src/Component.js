@@ -225,6 +225,9 @@
  * See the [Component & Container Guide](#!/guide/components) for more information, and check out the
  * {@link Ext.Container} class docs also.
  *
+ * @aside guide components
+ * @aside guide events
+ *
  */
 Ext.define('Ext.Component', {
 
@@ -299,6 +302,7 @@ Ext.define('Ext.Component', {
          *
          * You can also update the flex of a component dynamically using the {@link Ext.layout.AbstractBox#setItemFlex}
          * method.
+         * @accessor
          */
 
         /**
@@ -538,13 +542,6 @@ Ext.define('Ext.Component', {
         translatable: null,
 
         /**
-         * @cfg {Object} droppable Configuration options to make this Component droppable
-         * @accessor
-         * @hide
-         */
-        droppable: null,
-
-        /**
          * @cfg {Ext.Element} renderTo Optional element to render this Component to. Usually this is not needed because
          * a Component is normally full screen or automatically rendered inside another {@link Ext.Container Container}
          * @accessor
@@ -570,7 +567,8 @@ Ext.define('Ext.Component', {
 
         /**
          * @cfg {String/Mixed} enterAnimation
-         * Animation effect to apply when the Component is being shown.
+         * Animation effect to apply when the Component is being shown.  Typically you want to use an
+         * inbound animation type such as 'fadeIn' or 'slideIn'.
          * @deprecated 2.0.0 Please use {@link #showAnimation} instead.
          * @accessor
          */
@@ -579,21 +577,24 @@ Ext.define('Ext.Component', {
         /**
          * @cfg {String/Mixed} exitAnimation
          * Animation effect to apply when the Component is being hidden.
-         * @deprecated 2.0.0 Please use {@link #hideAnimation} instead.
+         * @deprecated 2.0.0 Please use {@link #hideAnimation} instead.  Typically you want to use an
+         * outbound animation type such as 'fadeOut' or 'slideOut'.
          * @accessor
          */
         exitAnimation: null,
 
         /**
          * @cfg {String/Mixed} showAnimation
-         * Animation effect to apply when the Component is being shown.
+         * Animation effect to apply when the Component is being shown.  Typically you want to use an
+         * inbound animation type such as 'fadeIn' or 'slideIn'.
          * @accessor
          */
         showAnimation: null,
 
         /**
          * @cfg {String/Mixed} hideAnimation
-         * Animation effect to apply when the Component is being hidden.
+         * Animation effect to apply when the Component is being hidden.  Typically you want to use an
+         * outbound animation type such as 'fadeOut' or 'slideOut'.
          * @accessor
          */
         hideAnimation: null,
@@ -1967,30 +1968,28 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
     showBy: function(component, alignment) {
         var args = Ext.Array.from(arguments);
 
-        if (!this.currentShowByArgs) {
-            var viewport = Ext.Viewport,
-                parent = this.getParent();
+        var viewport = Ext.Viewport,
+            parent = this.getParent();
 
-            this.setVisibility(false);
+        this.setVisibility(false);
 
-            if (parent !== viewport) {
-                viewport.add(this);
-            }
-
-            this.show();
-
-            this.on('erased', 'onShowByErased', this, { single: true });
-            viewport.on('resize', 'refreshShowBy', this);
+        if (parent !== viewport) {
+            viewport.add(this);
         }
+
+        this.show();
+
+        this.on('erased', 'onShowByErased', this, { single: true });
+        viewport.on('resize', 'refreshShowBy', this, { args: [component, alignment] });
 
         this.currentShowByArgs = args;
 
-        this.alignTo.apply(this, arguments);
+        this.alignTo(component, alignment);
         this.setVisibility(true);
     },
 
-    refreshShowBy: function() {
-        this.alignTo.apply(this, this.currentShowByArgs);
+    refreshShowBy: function(component, alignment) {
+        this.alignTo(component, alignment);
     },
 
     /**
@@ -1998,7 +1997,6 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
      * @param component
      */
     onShowByErased: function() {
-        delete this.currentShowByArgs;
         Ext.Viewport.un('resize', 'refreshShowBy', this);
     },
 
@@ -2015,6 +2013,14 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             alignToWidth = alignToBox.width,
             height = box.height,
             width = box.width;
+
+        // Keep off the sides...
+        constrainBox.bottom -= 5;
+        constrainBox.height -= 10;
+        constrainBox.left += 5;
+        constrainBox.right -= 5;
+        constrainBox.top += 5;
+        constrainBox.width -= 10;
 
         if (!alignment || alignment === 'auto') {
             if (constrainBox.bottom - alignToBox.bottom < height) {
@@ -2051,13 +2057,17 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             toHorizontal = to[1] || toVertical,
             top = alignToBox.top,
             left = alignToBox.left,
+            halfAlignHeight = alignToHeight / 2,
+            halfAlignWidth = alignToWidth / 2,
+            halfWidth = width / 2,
+            halfHeight = height / 2,
             maxLeft, maxTop;
 
         switch (fromVertical) {
             case 't':
                 switch (toVertical) {
                     case 'c':
-                        top += alignToHeight / 2;
+                        top += halfAlignHeight;
                         break;
                     case 'b':
                         top += alignToHeight;
@@ -2067,7 +2077,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             case 'b':
                 switch (toVertical) {
                     case 'c':
-                        top -= (height - (alignToHeight / 2));
+                        top -= (height - halfAlignHeight);
                         break;
                     case 't':
                         top -= height;
@@ -2080,13 +2090,13 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             case 'c':
                 switch (toVertical) {
                     case 't':
-                        top -= (height / 2);
+                        top -= halfHeight;
                         break;
                     case 'c':
-                        top -= ((height / 2) - (alignToHeight / 2));
+                        top -= (halfHeight - halfAlignHeight);
                         break;
                     case 'b':
-                        top -= ((height / 2) - alignToHeight);
+                        top -= (halfHeight - alignToHeight);
                 }
                 break;
         }
@@ -2095,7 +2105,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             case 'l':
                 switch (toHorizontal) {
                     case 'c':
-                        left += alignToWidth / 2;
+                        left += halfAlignHeight;
                         break;
                     case 'r':
                         left += alignToWidth;
@@ -2108,7 +2118,7 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
                         left -= (width - alignToWidth);
                         break;
                     case 'c':
-                        left -= (width - (alignToWidth / 2));
+                        left -= (width - halfWidth);
                         break;
                     case 'l':
                         left -= width;
@@ -2118,13 +2128,13 @@ alert(t.getXTypes());  // alerts 'component/field/textfield'
             case 'c':
                 switch (toHorizontal) {
                     case 'l':
-                        left -= (width / 2);
+                        left -= halfWidth;
                         break;
                     case 'c':
-                        left -= ((width / 2) - (alignToWidth / 2));
+                        left -= (halfWidth - halfAlignWidth);
                         break;
                     case 'r':
-                        left -= ((width / 2) - alignToWidth);
+                        left -= (halfWidth - alignToWidth);
                 }
                 break;
         }

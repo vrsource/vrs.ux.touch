@@ -1,3 +1,6 @@
+/**
+ * This is used by the NestedList example to allow editing of an item in the Store
+ */
 Ext.define('Kitchensink.view.EditorPanel', {
     extend: 'Ext.form.Panel',
     id: 'editorPanel',
@@ -7,6 +10,7 @@ Ext.define('Kitchensink.view.EditorPanel', {
         centered: true,
         height: 200,
         width: 300,
+        scrollable: false,
         items: [{
             xtype: 'fieldset',
             items: [{

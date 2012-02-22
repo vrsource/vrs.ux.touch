@@ -144,6 +144,12 @@ Ext.define('Ext.data.Operation', {
          */
         response: null,
 
+<span id='Ext-data-Operation-cfg-withCredentials'>        /**
+</span>         * @cfg {Boolean} withCredentials
+         * This field is necessary when using cross-origin resource sharing.
+         */
+        withCredentials: null,
+
 <span id='Ext-data-Operation-cfg-params'>        /**
 </span>         * @cfg {Object} params
          * The params send along with this operation. These usually apply to a Server proxy if you are
@@ -232,7 +238,7 @@ Ext.define('Ext.data.Operation', {
 
         // &lt;debug&gt;
         if (!model) {
-            Ext.Logger.error('An Operation needs to have a model defined.');
+            Ext.Logger.warn('Unless you define your model using metadata, an Operation needs to have a model defined.');
         }
         // &lt;/debug&gt;
 

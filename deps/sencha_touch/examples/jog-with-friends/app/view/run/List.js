@@ -20,23 +20,15 @@ Ext.define('JWF.view.run.List', {
                 timeAgoInWords: function(date) {
                     try {
 
-                        var dateArr = String(date).split(/[- :T]/),
-                            runDate = new Date(dateArr[0], dateArr[1]-1, dateArr[2]),
-                            now = Math.ceil(Number(new Date()) / 1000),
-                            dateTime = Math.ceil(Number(runDate) / 1000),
+                        var now = Math.ceil(Number(new Date()) / 1000),
+                            dateTime = Math.ceil(Number(date) / 1000),
                             diff = now - dateTime,
                             str;
 
                         if (diff < 0) diff = -diff;
 
-                        if (diff < 60) {
-                            return String(diff) + ' seconds ago';
-                        } else if (diff < 3600) {
-                            str = String(Math.ceil(diff / (60)));
-                            return str + (str == "1" ? ' minute' : ' minutes') + ' ago';
-                        } else if (diff < 86400) {
-                            str = String(Math.ceil(diff / (3600)));
-                            return str + (str == "1" ? ' hour' : ' hours') + ' ago';
+                        if (diff < 86400) {
+                            return 'Today'
                         } else if (diff < 60*60*24*365) {
                             str = String(Math.ceil(diff / (60 * 60 * 24)));
                             return str + (str == "1" ? ' day' : ' days') + ' ago';

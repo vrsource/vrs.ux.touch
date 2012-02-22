@@ -214,7 +214,9 @@
  * @singleton
  */
 (function(Class, alias, arraySlice, arrayFrom, global) {
-
+    //&lt;if nonBrowser&gt;
+    var isNonBrowser = typeof window == 'undefined';
+    //&lt;/if&gt;
     var Manager = Ext.ClassManager = {
 
 <span id='Ext-ClassManager-property-classes'>        /**
@@ -910,6 +912,9 @@
             // Still not existing at this point, try to load it via synchronous mode as the last resort
             if (!cls) {
                 //&lt;debug warn&gt;
+                //&lt;if nonBrowser&gt;
+                !isNonBrowser &amp;&amp;
+                //&lt;/if&gt;
                 Ext.Logger.warn(&quot;[Ext.Loader] Synchronously loading '&quot; + name + &quot;'; consider adding '&quot; +
                     ((possibleName) ? alias : name) + &quot;' explicitly as a require of the corresponding class&quot;);
                 //&lt;/debug&gt;
