@@ -1,11 +1,11 @@
 /**
- * Jasmine Reporting - Companion reporting with metadata output for your 
+ * Jasmine Reporting - Companion reporting with metadata output for your
  * Jasmine specs with extended grammar
- * 
+ *
  * Copyright (C) 2010-2011, Rudy Lattae
  * License: Simplified BSD
  */
- 
+
 // Top level namespace for the package
 jasmine.reporting = (typeof jasmine.reporting === 'undefined') ? {} : jasmine.reporting;
 
@@ -13,8 +13,8 @@ jasmine.reporting = (typeof jasmine.reporting === 'undefined') ? {} : jasmine.re
 /**
  * The StyledHtmlReporter provides augments the jasmine.TrivialReporter
  *
- * It outputs additional meta-data relating to your specs to streamline 
- * the presentation of the spec report. When used in conjunction with the 
+ * It outputs additional meta-data relating to your specs to streamline
+ * the presentation of the spec report. When used in conjunction with the
  * the alternate BDD grammar, your Html report is much easier on the eyes.
  */
 jasmine.reporting.StyledHtmlReporter = function(doc) {
@@ -50,7 +50,12 @@ jasmine.reporting.StyledHtmlReporter.prototype.reportRunnerStarting = function(r
           this.finishedAtSpan = this.createDom('span', { className: 'finished-at' }, ""))
       );
 
-  this.document.body.appendChild(this.outerDiv);
+  var results_div = this.document.getElementById('jasmine_results');
+  if(results_div) {
+    results_div.appendChild(this.outerDiv);
+  } else {
+    this.document.body.appendChild(this.outerDiv);
+  }
 
   var suites = runner.suites();
   for (var i = 0; i < suites.length; i++) {
@@ -60,15 +65,15 @@ jasmine.reporting.StyledHtmlReporter.prototype.reportRunnerStarting = function(r
     var suiteDiv = this.createDom('div', { className: 'suite' + suiteTags },
         this.createDom('a', { className: 'run_spec', href: '?spec=' + encodeURIComponent(suite.getFullName()) }, "run"),
         this.createDom('a', { className: 'description', href: '?spec=' + encodeURIComponent(suite.getFullName()) }, suite.description));
-        
+
     if (suite.summary) {
       suiteDiv.appendChild(this.createDom('div', {className: 'summary'}, this.createDomFromListOrString(suite.summary)));
     }
-    
+
     if (suite.expose) {
       suiteDiv.appendChild(this.createDom('pre', {}, suite.defs));
     }
-    
+
     this.suiteDivs[suite.id] = suiteDiv;
     var parentDiv = this.outerDiv;
     if (suite.parentSuite) {
@@ -123,7 +128,7 @@ jasmine.reporting.StyledHtmlReporter.prototype.reportSpecResults = function(spec
   if (spec.details) {
     specDiv.appendChild(this.createDom('div', {className: 'details'}, this.createDomFromListOrString(spec.details)));
   }
-  
+
   var resultItems = results.getItems();
   var messagesDiv = this.createDom('div', { className: 'messages' });
   for (var i = 0; i < resultItems.length; i++) {
@@ -152,22 +157,22 @@ jasmine.reporting.StyledHtmlReporter.prototype.reportSpecResults = function(spec
  *
  * If the data is a simple string, the element created is a "p".
  * If the data is a list, the element created is an unordered list.
- * The tags are rendered to the class attribute on the dom element created  
+ * The tags are rendered to the class attribute on the dom element created
  */
 jasmine.reporting.StyledHtmlReporter.prototype.createDomFromListOrString = function(data, tags) {
     var classAttrs = '';
     if (typeof tags !== 'undefined') {
-        classAttrs = (tags instanceof Array) ? tags.join(' ') : tags; 
+        classAttrs = (tags instanceof Array) ? tags.join(' ') : tags;
     }
     if (data instanceof Array) {
         return this.createDomList('ul', ((classAttrs == '') ? {} : { className: classAttrs}), data);
     }
-    
+
     return this.createDom('p', { className: classAttrs}, data);
 }
 
 /**
- * Creates dom element with the suite defs as content 
+ * Creates dom element with the suite defs as content
  */
 jasmine.reporting.StyledHtmlReporter.prototype.createDomFromSuiteDefs = function(defs) {
     var classAttrs = '';
