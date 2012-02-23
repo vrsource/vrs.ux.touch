@@ -2,11 +2,14 @@ Ext.ns('vrs.ux.touch');
 
 
 vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
-   /**
-    * @cfg {String} baseCls
-    * The base CSS class to apply to the Maps's element (defaults to <code>'x-map'</code>).
-    */
-   baseCls: 'x-map',
+
+   config: {
+      /**
+       * @cfg {String} baseCls
+       * The base CSS class to apply to the Maps's element (defaults to <code>'x-map'</code>).
+       */
+      baseCls: 'x-map'
+   },
 
    /**
     * @cfg {Boolean} enableLocationTracking

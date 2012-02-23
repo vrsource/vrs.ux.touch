@@ -82,25 +82,29 @@ var pnl = new Ext.Panel({
  *  * ...
  */
 vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
+   xtype: 'leaflet_map',
+
    /**
     * initialize the component as part
     * of component construction.
     */
-   initComponent : function() {
+   initialize : function() {
+      this.callParent(arguments);
+
       var me = this;
 
       if(! window.L) {
          this.html = 'Leaflet API is required.';
       }
 
+      /** XXX
       Ext.applyIf(this.mapOptions, {
          center: new L.LatLng(0, 0),
          zoom: 1,
          attributionControl: false,
          closePopupOnClick:  false
       });
-
-      vrs.ux.touch.LeafletMap.superclass.initComponent.apply(this);
+      */
    },
 
    renderMap: function() {
@@ -151,8 +155,6 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
       return marker;
    }
 });
-
-Ext.reg('leaflet_map', vrs.ux.touch.LeafletMap);
 
 
 /**
