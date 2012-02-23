@@ -12,47 +12,6 @@ Ext.ns('vrs.ux.touch');
 
 
 /**
-* Overlay panel holder class.
-*
-* Acts as the glue to connect an overlay view to the
-* Sencha Touch popup panel below.
-*/
-function OverlayPanelHolder(opts) {
-   this.popupPanel = opts.popup;
-   this.divElt     = document.createElement('DIV');
-}
-OverlayPanelHolder.prototype = new google.maps.OverlayView();
-
-OverlayPanelHolder.prototype.draw = function() {
-   console.log('panelholder.draw');
-   this.popupPanel.updatePosition();
-};
-
-/**
-* Called when the map panes are available for attaching the popup to the map DOM.
-*/
-OverlayPanelHolder.prototype.onAdd = function() {
-   console.log('panelholder.onAdd');
-   this.popupPanel.onAdd();
-   // Add the div to the map pane
-   var panes = this.getPanes();
-   panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
-
-   this.popupPanel.afterAdd();
-};
-
-OverlayPanelHolder.prototype.onRemove = function() {
-   console.log('panelholder.onRemove');
-   // Remove our div from the map.
-   this.divElt.parentNode.removeChild(this.divElt);
-   //this.divElt = null;   // keep the div around for the popup to look at and remove.
-
-   this.popupPanel.afterRemove();
-};
-
-
-
-/**
 * A panel that can be used as popup window on a google maps map.
 * Handles the anchoring to a location and resizing as needed.
 *
@@ -381,6 +340,47 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       this.destroy();
    }
 });
+
+
+
+/**
+* Overlay panel holder class.
+*
+* Acts as the glue to connect an overlay view to the
+* Sencha Touch popup panel.
+*/
+function OverlayPanelHolder(opts) {
+   this.popupPanel = opts.popup;
+   this.divElt     = document.createElement('DIV');
+}
+OverlayPanelHolder.prototype = new google.maps.OverlayView();
+
+OverlayPanelHolder.prototype.draw = function() {
+   console.log('panelholder.draw');
+   this.popupPanel.updatePosition();
+};
+
+/**
+* Called when the map panes are available for attaching the popup to the map DOM.
+*/
+OverlayPanelHolder.prototype.onAdd = function() {
+   console.log('panelholder.onAdd');
+   this.popupPanel.onAdd();
+   // Add the div to the map pane
+   var panes = this.getPanes();
+   panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
+
+   this.popupPanel.afterAdd();
+};
+
+OverlayPanelHolder.prototype.onRemove = function() {
+   console.log('panelholder.onRemove');
+   // Remove our div from the map.
+   this.divElt.parentNode.removeChild(this.divElt);
+   //this.divElt = null;   // keep the div around for the popup to look at and remove.
+
+   this.popupPanel.afterRemove();
+};
 
 
 
