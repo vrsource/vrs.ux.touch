@@ -8,6 +8,15 @@
     <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
     <script type="text/javascript">
 
+// Suggested fix:
+Ext.override('Ext.overrides.Map', {
+    override: 'Ext.Map',
+    getMapOptions: function() {
+        return Ext.merge({}, this.options || this.getInitialConfig('mapOptions'));
+    }
+});
+
+
 Ext.setup({
    onReady: function() {
       var map_options = {
