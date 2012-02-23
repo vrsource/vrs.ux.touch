@@ -1,0 +1,47 @@
+<!-- See: http://www.sencha.com/forum/showthread.php?182854-Ext.Map-mapOptions-don-t-work-when-passed-in-config -->
+<!doctype html>
+<html>
+  <head>
+    <title>Simple Map App</title>
+    <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <script type="text/javascript">
+
+Ext.setup({
+   onReady: function() {
+      var map_options = {
+         center : new google.maps.LatLng(40, -90),  //nearby San Fran
+         zoom : 5,
+         mapTypeId : google.maps.MapTypeId.HYBRID,
+      };
+      
+      var map = Ext.Map.create({
+         mapOptions : map_options    // Doesn't work here because of timing
+      });
+   
+      var panel = Ext.Panel.create({
+         fullscreen: true,
+         layout: 'fit',
+         items: [
+            {
+               xtype: 'toolbar',
+               docked: 'top',
+               title: 'Map Bug'
+            },
+            map
+         ]
+      });
+      
+      // Set the values manually later.  
+      // (delay only needed to show initial settings, could call immediately)
+      setTimeout(function() {
+         map.setMapOptions(map_options);            
+      }, 2000);
+   }
+});
+    </script>
+</head>
+<body>
+</body>
+</html>
