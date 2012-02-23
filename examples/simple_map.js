@@ -269,7 +269,7 @@ Ext.define('vrs.MapPanel', {
       };
 
       this.mapCmp = Ext.Map.create({
-         mapOptions: map_options
+         //mapOptions: map_options
       });
 
       this.mapCmp.setMapOptions(map_options);
