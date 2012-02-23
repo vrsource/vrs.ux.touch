@@ -93,17 +93,16 @@ Ext.define('vrs.AppCtrl', {
                },
 
                id: 'close_panel' + idx,
-               dockedItems: [{
+               items: [{
                   xtype: 'toolbar',
                   title: 'Stuff',
-                  dock: 'top',
+                  docked: 'top',
                   items: [{
                      xtype: 'button',
                      text: 'close',
                      handler: function() { popup_window.remove(); }
                   }]
-               }],
-               items: [{
+               },{
                   html: "<b>Name:</b> " + marker.featureData.name
                }]
             });
@@ -129,10 +128,10 @@ Ext.define('vrs.AppCtrl', {
                },
 
                id: 'close_panel' + idx,
-               dockedItems: [{
+               items: [{
                   xtype: 'toolbar',
                   title: 'Anchor Test',
-                  dock: 'top',
+                  docked: 'top',
                   items: [
                      {
                         xtype: 'button',
@@ -152,8 +151,7 @@ Ext.define('vrs.AppCtrl', {
                         }
                      }
                   ]
-               }],
-               items: [{
+               },{
                   html: "<b>Name:</b> " + marker.featureData.name
                }]
             });

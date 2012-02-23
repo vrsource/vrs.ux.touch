@@ -104,7 +104,7 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
    },
 
    renderMap: function() {
-      this.map = new L.Map(this.el.dom, this.mapOptions);
+      this.map = new L.Map(this.element.dom, this.mapOptions);
    },
 
    /**
@@ -200,10 +200,10 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
 
       // Avoid race condition where the tap mask has not removed the panel yet but
       // the dom was cleaned up already.
-      if (! this.el.dom) { return; }
+      if (! this.element.dom) { return; }
 
       // These values will cascade into setPopSizeAndPosition
-      this.el.setTop(pos.y);
-      this.el.setLeft(pos.x);
+      this.element.setTop(pos.y);
+      this.element.setLeft(pos.x);
    }
 });

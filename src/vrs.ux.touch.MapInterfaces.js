@@ -184,7 +184,7 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
       Ext.destroy(this.geo);
 
       if (this.maskMap && this.mask) {
-         this.el.unmask();
+         this.element.unmask();
       }
 
       this.map = undefined;
@@ -259,14 +259,14 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
          // - hacked together from showBy and alignTo in Component.js
          //   todo: see if we can use more of alignTo logic.
          if(!this.anchorEl) {
-            this.anchorEl = this.el.createChild({
+            this.anchorEl = this.element.createChild({
                cls: 'x-anchor'
             });
          }
          this.anchorEl.show();
          this.anchorEl.addCls('x-anchor-bottom');
          this.anchorEl.setBottom(-10);
-         this.anchorEl.setLeft((this.el.getWidth() / 2.0) - (this.anchorEl.getWidth() / 2.0));
+         this.anchorEl.setLeft((this.element.getWidth() / 2.0) - (this.anchorEl.getWidth() / 2.0));
       }
    },
 
@@ -359,9 +359,9 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
       this.setSize(dims.w + dims.margin, dims.h + dims.margin);
-      this.el.setTop(this.el.getTop() - dims.h - dims.margin - 10); // 10 is for the anchor
-      this.el.setLeft(this.el.getLeft() - dims.w/2.0);
-      if(this.isVisible()) {
+      this.element.setTop(this.element.getTop() - dims.h - dims.margin - 10); // 10 is for the anchor
+      this.element.setLeft(this.element.getLeft() - dims.w/2.0);
+      if(!this.getHidden()) {
          this.doLayout();
       }
 
@@ -369,7 +369,7 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       // then change and possible update the rendering to remove/add anchor.
       if(should_anchor !== this.anchored) {
          this.anchored = should_anchor;
-         if(this.rendered && this.isVisible()) {
+         if(this.rendered && !this.isHidden()) {
             this.show();        // reshow to get anchor laid out correctly.
          }
       }
