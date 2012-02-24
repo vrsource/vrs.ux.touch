@@ -1,4 +1,4 @@
-
+/*  Disable Leaflet for now
 describe('LeafletMap Ext Component', function() {
    describe('Basics', function() {
       var Map = vrs.ux.touch.LeafletMap;
@@ -17,3 +17,4 @@ describe('LeafletMap Ext Component', function() {
 
    });
 });
+*/
