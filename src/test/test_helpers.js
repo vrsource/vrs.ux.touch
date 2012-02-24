@@ -7,7 +7,7 @@
 //
 //  see jasmine.createSpyClass below.
 //
-
+Ext.ns('test');
 
 /**
  * IDEA: Consider using Ext.override to add these
