@@ -15,6 +15,14 @@ Class and helpers for creating menu of items that can be used in forms or menus 
 
 Map component for OpenLayers.  Includes custom popup window that allows display of sencha touch panels on the map
 
+ * App Controller Framework
+
+A framework we put together for ST1 to allow management of hub-and-spoke model navigation stacks with dynamically created PanelControllers.  (view controllers)
+
+ * Utility Code
+
+Common utility code for widgets, bug fixes, and other random things of use for multiple projects.
+
 
 Future Work
 ===========
