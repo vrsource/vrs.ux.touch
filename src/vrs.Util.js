@@ -50,7 +50,7 @@ vrs.FlatJsonWriter = Ext.extend(Ext.data.JsonWriter, {
    }
 });
 
-Ext.data.WriterMgr.registerType('json_flat', vrs.FlatJsonWriter);
+// XXX: Ext.data.WriterMgr.registerType('json_flat', vrs.FlatJsonWriter); //
 
 
 
