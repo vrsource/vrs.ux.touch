@@ -15,21 +15,6 @@ Ext.ns('test');
  */
 test.helpers = {
    /**
-    * Setup p5.settings.getSettingsRecord to return
-    * the passed in settings records using a spy.
-    */
-   /*
-   setupSettingsSpy: function(retSettings) {
-      var spec     = jasmine.getEnv().currentSpec;
-      p5.settings = jasmine.createSpyObj('settings', ['getSettingsRecord',
-                                                      'commitRecordChanges',
-                                                      'on']);
-      p5.settings.getSettingsRecord.andReturn(retSettings);
-      spec.after(function() {p5.settings = undefined; });
-   },
-   */
-
-   /**
     * Create a panel holder with the spies needed to intercept calls
     * to the panel holder.
     *
@@ -65,7 +50,7 @@ test.helpers = {
     * ex:
     *   it('should do this', function() {
     *      var temp_obj = new MyObj();
-    *      replaceObj(p5.something, 'myObj', temp_obj);
+    *      replaceObj(myApp.something, 'myObj', temp_obj);
     *      // test stuff
     *   });
     */
@@ -215,7 +200,7 @@ test.helpers = {
    /**
    * Install spies and mocks for testing code that thinks it is running on phonegap.
    *
-   * This will flip the p5.isPhoneGap flag as well to make sure code tries the phonegap path.
+   * This will flip the vrs.isPhoneGap flag as well to make sure code tries the phonegap path.
    *
    * Options:
    *   - hasCamera: true/false
@@ -235,7 +220,7 @@ test.helpers = {
       });
 
       // Setup the mocks
-      test.helpers.replaceObj(p5, 'isPhoneGap', true);
+      test.helpers.replaceObj(vrs, 'isPhoneGap', true);
       test.helpers.replaceObj(window.plugins.Capabilities, 'hasCamera', opts.hasCamera);
       test.camera.installCamera();
 

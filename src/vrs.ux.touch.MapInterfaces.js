@@ -277,10 +277,10 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
           size_name, var_name,
           width, height,
           extra_margin = 12,  // extra margin to fix layout issues
-          config = config || {},
           auto_position      = config.autoPosition || true, // if we should update position.
           should_anchor      = config.anchor || true,       // if we should be anchored
           setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen
+      config = config || {};
 
       // Lookup table of named size values
       set_sizes = {
