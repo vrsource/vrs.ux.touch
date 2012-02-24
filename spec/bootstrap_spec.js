@@ -22,6 +22,10 @@ but   = jasmine.grammar.GWT.but;
 
 _addStepToCurrentSpec = jasmine.grammar.GWT._addStepToCurrentSpec;
 
+summary = jasmine.grammar.Meta.summary;
+details = jasmine.grammar.Meta.details;
+
+
 // Setup some matchers as helpers
 jasmine.Matchers.prototype.toBeEmpty = function() {
    return this.actual.length === 0;
@@ -30,6 +34,9 @@ jasmine.Matchers.prototype.toBeEmpty = function() {
 jasmine.Matchers.prototype.toBeLength = function(expected) {
    return (this.actual.length === expected);
 };
+
+/** Testing overrides */
+vrs.inTest    = true;
 
 /** Create a namespace for things in the testing. */
 Ext.ns('test');
