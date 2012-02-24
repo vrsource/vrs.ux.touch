@@ -21,6 +21,8 @@ vrs.AppObject = {
          fullscreen: true
       });
 
+      vrs.dumpEvents(this.baseStack, 'PanelHolder');
+
       // Create main controller
       this.mainCtrl = new vrs.MainMenuController({
          panelHolder : this.baseStack,
