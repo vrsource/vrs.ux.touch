@@ -22,11 +22,21 @@
    <script type="text/javascript" src="src/vrs.ux.touch.MapInterfaces.js"></script>
    <script type="text/javascript" src="src/vrs.ux.touch.LeafletMap.js"></script>
 
+   <script type="text/javascript" src="src/vrs.AppCtrl.js"></script>
+   <script type="text/javascript" src="src/vrs.Util.js"></script>
+   <script type="text/javascript" src="src/vrs.Widgets.js"></script>
+
+   <!-- Test helpers and setup -->
+   <script type="text/javascript" src="src/test/test_helpers.js"></script>
+   <script type="text/javascript" src="spec/bootstrap_spec.js"></script>
 
    <!-- SPECS -->
-   <script type="text/javascript" src="spec/bootstrap_spec.js"></script>
    <script type="text/javascript" src="spec/menu_panel_spec.js"></script>
    <script type="text/javascript" src="spec/leaflet_spec.js"></script>
+
+   <script type="text/javascript" src="spec/app_ctrl_spec.js"></script>
+   <script type="text/javascript" src="spec/utils_spec.js"></script>
+   <script type="text/javascript" src="spec/widgets_spec.js"></script>
 
     <!-- JS Coverage Code -->
     <button type="button" onclick="window.open('jscoverage.html');">Cov</button>
@@ -43,6 +53,7 @@
             var jasmineEnv = jasmine.getEnv(),
                 styledReporter = new jasmine.reporting.StyledHtmlReporter();
             jasmineEnv.addReporter(styledReporter);
+            // XXX: Not sure why this is here.
             jasmineEnv.specFilter = function(spec) {
                return styledReporter.specFilter(spec);
             }
