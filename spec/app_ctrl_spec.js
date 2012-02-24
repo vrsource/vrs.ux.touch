@@ -6,9 +6,9 @@ test.ExtPanel1 = Ext.extend(vrs.PanelController, {
       test.ExtPanel1.superclass.constructor.call(this, config);
    },
    getPanel: function() {
-      if(Ext.isEmpty(this.panel))
-      { this.panel = new Ext.Panel({});}
-      return this.panel;
+      if(Ext.isEmpty(this._panel))
+      { this.setPanel(new Ext.Panel({}));}
+      return this._panel;
    }
 });
 
@@ -17,9 +17,9 @@ test.ExtPanel2 = Ext.extend(vrs.PanelController, {
       test.ExtPanel2.superclass.constructor.call(this, config);
    },
    getPanel: function() {
-      if(Ext.isEmpty(this.panel))
-      { this.panel = new Ext.Panel({});}
-      return this.panel;
+      if(Ext.isEmpty(this._panel))
+      { this.setPanel(new Ext.Panel({}));}
+      return this._panel;
    }
 });
 
@@ -147,11 +147,11 @@ component('Panel Holder', function() {
          panel_holder.render(Ext.getBody());
 
          // then: base controller should be held
-         expect(panel_holder.baseController).toBe(base_ctrl);
-         expect(base_ctrl.panelHolder).toBe(panel_holder);
+         expect(panel_holder.getBaseController()).toBe(base_ctrl);
+         expect(base_ctrl.getPanelHolder()).toBe(panel_holder);
 
          // and: panel should have been added to the holder
-         expect(panel_holder.items.get(0)).toBe(base_ctrl.panel);
+         expect(panel_holder.items.get(0)).toBe(base_ctrl.getPanel());
       });
 
       it('should require that base controller is marked as base controller', function() {
@@ -215,14 +215,14 @@ component('Panel Holder', function() {
       });
 
       it('should start with empty stack', function() {
-         expect(panel_holder.ctrlStack).toBeEmpty();
+         expect(panel_holder._ctrlStack).toBeEmpty();
          expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
       });
 
       story('pushing panel into focus', function() {
          it('should set that as focus panel and expand the stack', function() {
             panel_holder.pushFocusCtrl(ctrl1);
-            expect(panel_holder.ctrlStack).toBeLength(1);
+            expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
          });
@@ -233,20 +233,20 @@ component('Panel Holder', function() {
             // given: panel holder with 2 controllers on it
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl2);
             expect(panel_holder.getActiveItem()).toBe(ctrl2.getPanel());
 
             // when: pop off controller, it should be removed and deactivated.
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(1);
+            expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
             expect(ctrl2.onDestroy).toHaveBeenCalled();
 
             // when: pop off controller, it should be removed and deactivated
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
             expect(ctrl1.onDestroy).toHaveBeenCalled();
@@ -254,12 +254,12 @@ component('Panel Holder', function() {
 
          it('should set to main if too many are popped', function() {
             // given: panel holder with just base controller
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
 
             // when: attempt to pop, should not do anything
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
          });
       });
@@ -269,7 +269,7 @@ component('Panel Holder', function() {
             // Given: Stack setup with 2 controls
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl2);
             expect(panel_holder.getActiveItem()).toBe(ctrl2.getPanel());
 
@@ -277,7 +277,7 @@ component('Panel Holder', function() {
             panel_holder.replaceFocusCtrl(ctrl3);
 
             // then: should still be length 2 and the new one should be on stack
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl3);
             expect(panel_holder.getActiveItem()).toBe(ctrl3.getPanel());
             expect(ctrl2.onDestroy).toHaveBeenCalled();
@@ -290,13 +290,13 @@ component('Panel Holder', function() {
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
             panel_holder.pushFocusCtrl(ctrl3);
-            expect(panel_holder.ctrlStack).toBeLength(3);
+            expect(panel_holder._ctrlStack).toBeLength(3);
 
             // when: pop to go to back controller
             panel_holder.gotoBaseController();
 
             // then: should be empty and should have destroyed all stck controllers
-            expect(panel_holder.ctrlStack).toBeEmpty();
+            expect(panel_holder._ctrlStack).toBeEmpty();
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
             // todo: fix this and figure out how the ones below seem to work.
             expect(ctrl1.onDestroy).toHaveBeenCalled();

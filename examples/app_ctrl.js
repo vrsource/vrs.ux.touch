@@ -32,149 +32,163 @@ vrs.AppObject = {
 
 
 // --- Main Menu View Controller and Panel --- //
-vrs.MainMenuController = Ext.extend(vrs.PanelController, {
-   backName : 'Main',
+Ext.define('vrs.MainMenuController', {
+   extend: 'vrs.PanelController',
+   config: {
+      backName : 'Main'
+   },
 
    constructor: function(config) {
-      var me = this;
-      vrs.MainMenuController.superclass.constructor.call(this, config);
-
-      this.panel = new vrs.MainMenuPanel({controller: this});
+      this.callParent(arguments);
+      this.setPanel(vrs.MainMenuPanel.create({controller: this}));
    },
 
    onButtonTap: function() {
-      var panel1_ctrl = new vrs.Panel1Controller({panelHolder: this.panelHolder});
-      this.panelHolder.pushFocusCtrl(panel1_ctrl);
+      var panel1_ctrl = vrs.Panel1Controller.create({panelHolder: this.getPanelHolder()});
+      this.getPanelHolder().pushFocusCtrl(panel1_ctrl);
    }
 });
 
-vrs.MainMenuPanel = Ext.extend(Ext.Panel, {
-   cls : 'main_menu_panel',
-   scroll : 'vertical',
-   layout: {
-      type  : 'vbox',
-      align : 'stretch', //'stretch',
-      pack  : 'justify'
+Ext.define('vrs.MainMenuPanel', {
+   extend: 'Ext.Panel',
+
+   config: {
+      controller : null,
+      cls        : 'main_menu_panel',
+      scrollable : 'vertical',
+      layout: {
+         type  : 'vbox',
+         align : 'stretch', //'stretch',
+         pack  : 'justify'
+      }
    },
 
-   initComponent: function() {
-      assert(this.controller, "Must have a valid controller");
+   initialize: function() {
+      assert(this.getController(), "Must have a valid controller");
+      this.callParent();
 
       var me = this,
-          ctrl = this.controller;
+          ctrl = this.getController();
 
-      this.dockedItems = [{
-         xtype : 'toolbar',
-         dock  : 'top',
-         title : 'Main Menu'
-      }];
-
-      this.items = [
+      this.add([
+         {
+            xtype : 'toolbar',
+            docked  : 'top',
+            title : 'Main Menu'
+         },
          vrs.containerWrapButton({
-               xtype: 'button',
-               text: 'Next Panel',
-               handler: function() { ctrl.onButtonTap(); }
+            xtype: 'button',
+            text: 'Next Panel',
+            handler: function() { ctrl.onButtonTap(); }
          })
-      ];
-
-      vrs.MainMenuPanel.superclass.initComponent.call(this);
+      ]);
    }
 
 });
 
 
 // ---- Panel1 Controller and Panel ---- //
-vrs.Panel1Controller = Ext.extend(vrs.PanelController, {
-   backName : 'Panel1',
+Ext.define('vrs.Panel1Controller', {
+   extend: 'vrs.PanelController',
+   config: {
+      backName : 'Panel1'
+   },
 
    constructor: function(config) {
-      vrs.Panel1Controller.superclass.constructor.call(this, config);
-      this.panel = new vrs.Panel1({controller: this});
+      this.callParent(arguments);
+      this.setPanel(vrs.Panel1.create({controller: this}));
    },
 
    onButtonTap: function() {
-      var panel2_ctrl = new vrs.Panel2Controller({panelHolder: this.panelHolder});
-      this.panelHolder.pushFocusCtrl(panel2_ctrl);
+      var panel2_ctrl = vrs.Panel2Controller.create({panelHolder: this.getPanelHolder()});
+      this.getPanelHolder().pushFocusCtrl(panel2_ctrl);
    }
 });
 
-vrs.Panel1 = Ext.extend(Ext.Panel, {
-   cls : 'panel1',
-   scroll : 'vertical',
-   layout: {
-      type  : 'vbox',
-      align : 'stretch', //'stretch',
-      pack  : 'justify'
+Ext.define('vrs.Panel1', {
+   extend: 'Ext.Panel',
+   config: {
+      controller : null,
+      cls : 'panel1',
+      scrollable : 'vertical',
+      layout: {
+         type  : 'vbox',
+         align : 'stretch', //'stretch',
+         pack  : 'justify'
+      }
    },
 
-   initComponent: function() {
-      assert(this.controller, "Must have a valid controller");
+   initialize: function() {
+      this.callParent();
+      assert(this.getController(), "Must have a valid controller");
 
       var me = this,
-          ctrl = this.controller;
+          ctrl = this.getController();
 
-      this.dockedItems = [{
-         xtype : 'toolbar',
-         dock  : 'top',
-         title : 'Panel 1',
-         items : [
-            ctrl.createBackButton()
-         ]
-      }];
-
-      this.items = [
+      this.add([
+         {
+            xtype : 'toolbar',
+            docked: 'top',
+            title : 'Panel 1',
+            items : [
+               ctrl.createBackButton()
+            ]
+         },
          vrs.containerWrapButton({
             xtype: 'button',
             text: 'Next Panel',
             handler: function() { ctrl.onButtonTap(); }
          })
-      ];
-
-      vrs.Panel1.superclass.initComponent.call(this);
+      ]);
    }
 });
 
 
 // ---- Panel2 Controller and Panel ---- //
-vrs.Panel2Controller = Ext.extend(vrs.PanelController, {
-   backName : 'Panel2',
+Ext.define('vrs.Panel2Controller', {
+   extend: 'vrs.PanelController',
+   config: {
+      backName : 'Panel2'
+   },
 
    constructor: function(config) {
-      vrs.Panel2Controller.superclass.constructor.call(this, config);
-      this.panel = new vrs.Panel2({controller: this});
+      this.callParent(arguments);
+      this.setPanel(vrs.Panel2.create({controller: this}));
    }
 });
 
-vrs.Panel2 = Ext.extend(Ext.Panel, {
-   cls : 'panel2',
-   scroll : 'vertical',
-   layout: {
-      type  : 'vbox',
-      align : 'stretch', //'stretch',
-      pack  : 'justify'
+Ext.define('vrs.Panel2', {
+   extend: 'Ext.Panel',
+   config: {
+      controller : null,
+      cls : 'panel2',
+      scroll : 'vertical',
+      layout: {
+         type  : 'vbox',
+         align : 'stretch', //'stretch',
+         pack  : 'justify'
+      }
    },
 
-   initComponent: function() {
-      assert(this.controller, "Must have a valid controller");
+   initialize: function() {
+      this.callParent();
+      assert(this.getController(), "Must have a valid controller");
 
       var me = this,
-          ctrl = this.controller;
+          ctrl = this.getController();
 
-      this.dockedItems = [{
-         xtype : 'toolbar',
-         dock  : 'top',
-         title : 'Panel 2',
-         items: [
-            ctrl.createBackButton()
-         ]
-      }];
-
-      this.items = [
+      this.add([
+         {
+            xtype : 'toolbar',
+            docked  : 'top',
+            title : 'Panel 2',
+            items: [
+               ctrl.createBackButton()
+            ]
+         },
          {
             html: 'This is Panel 2'
          }
-      ];
-
-      vrs.Panel2.superclass.initComponent.call(this);
+      ]);
    }
 });
