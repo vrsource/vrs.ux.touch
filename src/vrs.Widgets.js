@@ -1,6 +1,6 @@
 /*global simfla: false, document: false */
 // Utility helpers
-Ext.ns('vrs');
+Ext.ns('vrs.plugins');
 
 
 /**
