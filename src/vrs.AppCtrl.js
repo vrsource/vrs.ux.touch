@@ -15,7 +15,7 @@ Ext.ns('vrs');
 *       - activationCompleted(): when the control panel has completed it's transition
 *       - removalStarted(): when we start removing the focus
 *       - removalCompleted(): when we end removal from view.
-*       - onDestroy(): when we should destroy our information.
+*       - destroy(): when we should destroy our information.
 *
 *  revealBegin(new), revealEnd(new)
 *  concealBegin, concealEnd
@@ -89,6 +89,11 @@ Ext.define('vrs.PanelController', {
       // XXX: this.clearListeners();
       // should happen in base class for observable
       this.callParent();
+   },
+
+   onDestroy: function() {
+      console.log("[DEPRECATED]: Call destroy instead of onDestroy");
+      this.destroy();
    },
 
    // --- Helpers to figure out where we are being used --- //
@@ -323,7 +328,7 @@ Ext.define('vrs.SubPanelController', {
       panel: null
    },
 
-   onDestroy: function() {
+   destroy: function() {
       var panel = this.getPanel();
       if(panel)
       { panel.destroy(); }
@@ -469,12 +474,12 @@ Ext.define('vrs.PanelHolder', {
    destroy: function() {
       var me = this;
 
-      // XXX: Potential leak here because onDestroy
+      // XXX: Potential leak here because destroy
       Ext.each(this._ctrlStack, function(ctrl) {
          if(ctrl.getPanel()) {
             me.remove(ctrl.getPanel(), false);
          }
-         ctrl.onDestroy();  // Tell controller to destroy itself
+         ctrl.destroy();  // Tell controller to destroy itself
       });
       this._ctrlStack  = [];             // Clear the stack
 
@@ -483,7 +488,7 @@ Ext.define('vrs.PanelHolder', {
          if(this.getBaseController().getPanel()) {
             this.remove(this.getBaseController().getPanel(), false);
          }
-         this.getBaseController().onDestroy();
+         this.getBaseController().destroy();
          this._baseController = null;
       }
 
