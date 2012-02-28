@@ -46,20 +46,18 @@ test.EventSubPanel = Ext.extend(vrs.SubPanelController, {
 
 
 // ---- PANEL CONTROLLER --- //
-/*
 component('PanelController', function() {
    it('Should construct correctly', function() {
       var obj;
 
-      given('an object constructed with a config object', function() {
-         obj = new vrs.PanelController({panelHolder: {}, myvar:1});
-      });
-      then('configured property should be set', function() {
-         expect(obj.myvar).toEqual(1);
-      });
-      and('default panel is null', function() {
-         expect(obj.getPanel()).toEqual(null);
-      });
+      // given: an object constructed with a config object
+      obj = new vrs.PanelController({panelHolder: {}, backName: 'myname'});
+
+      // then: configured property should be set
+      expect(obj.getBackName()).toEqual('myname');
+
+      // and: default panel is null
+      expect(obj.getPanel()).toEqual(null);
    });
 
    it('Should require panelHolder to be set', function() {
@@ -74,8 +72,8 @@ component('PanelController', function() {
           panel_spy = jasmine.createSpyObj('panel', ['destroy']);
       spyOn(obj, 'getPanel').andReturn(panel_spy);
 
-      obj.onDestroy();
-      expect(obj.getPanel).toHaveBeenCalled();
+      obj.destroy();
+      //expect(obj.getPanel).toHaveBeenCalled();
       expect(panel_spy.destroy.callCount).toEqual(1);
    });
 
@@ -85,7 +83,7 @@ component('PanelController', function() {
       expect(obj.hasListener('direct_event')).toEqual(true);
 
       // when: destroy the panel
-      obj.onDestroy();
+      obj.destroy();
 
       // then: should not have the events registered any more
       expect(obj.hasListener('direct_event')).toEqual(false);
@@ -100,7 +98,7 @@ component('SubPanelController', function() {
       expect(obj.hasListener('direct_event')).toEqual(true);
 
       // when: destroy the panel
-      obj.onDestroy();
+      obj.destroy();
 
       // then: should not have the events registered any more
       expect(obj.hasListener('direct_event')).toEqual(false);
@@ -108,7 +106,7 @@ component('SubPanelController', function() {
 });
 
 
-
+/*
 component('Panel Holder', function() {
    var panel_holder = null,
        base_ctrl, ctrl1, ctrl2, ctrl3;
@@ -163,7 +161,7 @@ component('Panel Holder', function() {
             panelHolder: panel_holder,
             isBaseController: true
          });
-         spyOn(base_ctrl, 'onDestroy').andCallThrough();
+         spyOn(base_ctrl, 'destroy').andCallThrough();
          panel_holder.setBaseController(base_ctrl);
          panel_holder.render(Ext.getBody());
 
@@ -172,7 +170,7 @@ component('Panel Holder', function() {
          panel_holder = null;
 
          // then: should have called the destruction method on base controller
-         expect(base_ctrl.onDestroy).toHaveBeenCalled();
+         expect(base_ctrl.destroy).toHaveBeenCalled();
       });
    });
 
@@ -191,10 +189,10 @@ component('Panel Holder', function() {
          ctrl2 = new test.ExtPanel2({panelHolder: panel_holder});
          ctrl3 = new test.ExtPanel2({panelHolder: panel_holder});
 
-         spyOn(ctrl1, 'onDestroy').andCallThrough();
-         spyOn(ctrl2, 'onDestroy').andCallThrough();
-         spyOn(ctrl3, 'onDestroy').andCallThrough();
-         spyOn(base_ctrl, 'onDestroy').andCallThrough();
+         spyOn(ctrl1, 'destroy').andCallThrough();
+         spyOn(ctrl2, 'destroy').andCallThrough();
+         spyOn(ctrl3, 'destroy').andCallThrough();
+         spyOn(base_ctrl, 'destroy').andCallThrough();
 
          panel_holder.setBaseController(base_ctrl);
          panel_holder.render(Ext.getBody());
@@ -233,14 +231,14 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toHaveBeenCalled();
 
             // when: pop off controller, it should be removed and deactivated
             panel_holder.popFocusCtrl();
             expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toHaveBeenCalled();
          });
 
          it('should set to main if too many are popped', function() {
@@ -271,7 +269,7 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl3);
             expect(panel_holder.getActiveItem()).toBe(ctrl3.getPanel());
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toHaveBeenCalled();
          });
       });
 
@@ -290,9 +288,9 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeEmpty();
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
             // todo: fix this and figure out how the ones below seem to work.
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
-            expect(ctrl3.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toHaveBeenCalled();
+            expect(ctrl3.destroy).toHaveBeenCalled();
          });
       });
 
@@ -308,10 +306,10 @@ component('Panel Holder', function() {
             panel_holder = null;
 
             // then: it should have called deactivate on all of them including base controller
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
-            expect(ctrl3.onDestroy).toHaveBeenCalled();
-            expect(base_ctrl.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toHaveBeenCalled();
+            expect(ctrl3.destroy).toHaveBeenCalled();
+            expect(base_ctrl.destroy).toHaveBeenCalled();
          });
       });
    });
