@@ -78,16 +78,17 @@ Ext.define('vrs.PanelController', {
    * (note: can't just watch for deactive locally because that doesn't tell us
    * if we are just being held on the stack for a while.)
    */
-   onDestroy: function() {
+   destroy: function() {
       //console.log("Destroying panel for control: ", this);
-
       this.setPanelHolder(null);  // Clear reference to the stack
       var panel = this.getPanel();
       if(panel)
       { panel.destroy(); }
       this.setPanel(null);
 
-      this.clearListeners();
+      // XXX: this.clearListeners();
+      // should happen in base class for observable
+      this.callParent();
    },
 
    // --- Helpers to figure out where we are being used --- //
@@ -127,12 +128,24 @@ Ext.define('vrs.PanelController', {
 
       back_txt = (prev_ctrl && prev_ctrl.getBackName()) || 'Back';
 
-      back_btn = new Ext.Button(Ext.apply({}, btnConfig, {
+      back_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
          text    : back_txt,
          ui      : 'back',
          handler : function() { me.getPanelHolder().popFocusCtrl(); }
       }));
       return back_btn;
+   },
+
+   createHomeButton: function(btnConfig) {
+      var me = this,
+
+        home_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
+         iconMask : true,
+         ui       : 'action',
+         iconCls : 'home',
+         handler : function() { me.getPanelHolder().gotoBaseController(); }
+      }));
+      return home_btn;
    },
 
    /**
@@ -376,7 +389,10 @@ Ext.define('vrs.PanelHolder', {
 
    config: {
       /** Configuration for animation. Defaults to slide type. */
-      animConfig: {type: 'slide'},
+      animConfig: {
+         type: 'slide',
+         //duration: 2000
+      },
 
       /****** STACK SETTINGS *******/
       useStack: true,
@@ -487,22 +503,36 @@ Ext.define('vrs.PanelHolder', {
    /** Sets focus for the "main" window to the given panel.
    * @param animOpts - animation configuration options.
    *                   (anim config object, undefined, or false)
+   * @param onComple - Called when the transition to show the panel is completed.
    */
-   _setFocusCtrl: function(ctrl, animOpts) {
-      var config;
+   _setFocusCtrl: function(ctrl, animOpts, onComplete) {
+      var anim_config;
+      onComplete = onComplete || Ext.emptyFn;
+      console.log("============ Setting New Focus ================");
 
       assert(this.getBaseController(), 'Must have a base controller.');
       assert(this.getUseStack(), 'Must have stack enabled.');
       if(false === animOpts) {
-         config = false;
+         anim_config = false;
       } else {
-         config = Ext.apply({}, animOpts, this.getAnimConfig());
+         anim_config = Ext.apply({}, animOpts, this.getAnimConfig());
          if(!this.getAnimConfig())       // If animation is disabled
-         { config = false; }
+         { anim_config = false; }
       }
 
       ctrl.setPanelHolder(this);     // Let the controller know about us
-      this.animateActiveItem(ctrl.getPanel(), config);
+
+      if(anim_config) {
+         this.animateActiveItem(ctrl.getPanel(), anim_config);
+         assert(this.activeItemAnimation, "Must have animation");
+         this.activeItemAnimation.on('animationend', function() {
+            console.log('animation complete');
+            onComplete();
+         });
+      } else {
+         this.setActiveItem(ctrl.getPanel());
+         onComplete();
+      }
    },
 
    /** Return the controller that currently has focus.
@@ -550,26 +580,33 @@ Ext.define('vrs.PanelHolder', {
    *                 and replaces it with the new control
    */
    popFocusCtrl: function(newCtrl) {
-      // Remove the current panel from the stack
-      var cur_ctrl = this._ctrlStack.pop();
+      var me = this,
+          cur_ctrl;
 
-      // If there was a control on the stack, then remove that controller
-      if(cur_ctrl !== undefined)
-      { this._handleCtrlRemoval(cur_ctrl); }
+      // If we are going to the base controller, then go directly there.
+      if( (undefined === newCtrl) && (this._ctrlStack.length <= 1))
+      {
+         this.gotoBaseController();
+      }
+      // Else: pop off current controller and optionally put another in place.
+      else
+      {
+         cur_ctrl = this._ctrlStack.pop();
 
-      // If we don't have one to replace current, then pull one of stack or use base.
-      if(undefined === newCtrl) {
-         // If we have no other controllers, then go back to base controller
-         if (this._ctrlStack.length === 0)
-         { this.gotoBaseController(); }
-         else
-         {
-            this._setFocusCtrl(this._ctrlStack[this._ctrlStack.length - 1],
-                                {reverse: true});
+         // If there was a control on the stack, then remove that controller
+         function on_finish() {
+            console.log("Finish pop");
+            me._handleCtrlRemoval(cur_ctrl);
          }
-      } else {
-         // Push onto stack and into focus
-         this.pushFocusCtrl(newCtrl);
+
+         // If we don't have one to replace current, then pull one of stack or use base.
+         if(undefined === newCtrl) {
+            this._setFocusCtrl(this._ctrlStack[this._ctrlStack.length - 1],
+                               {reverse: true}, on_finish);
+         } else {
+            // Push onto stack and into focus
+            this.pushFocusCtrl(newCtrl, on_finish);
+         }
       }
    },
 
@@ -586,21 +623,19 @@ Ext.define('vrs.PanelHolder', {
    gotoBaseController: function() {
       assert(this.getBaseController(), 'Must have a base controller.');
       var me = this,
-          cur_ctrl = this._ctrlStack.pop();
+          ctrls_to_remove = this._ctrlStack;
 
-      // Start removal process for top of stack and manually destroy the others
-      if(cur_ctrl !== undefined)
-      { this._handleCtrlRemoval(cur_ctrl); }
-
-      Ext.each(this._ctrlStack, function(ctrl) {
-         if(ctrl.getPanel()) {
-            me.remove(ctrl.getPanel(), false);
-         }
-         ctrl.onDestroy();
-      }, this);
+      // store the controller that we need to remove, and then
+      // clear them out in the callback function
+      function on_finish() {
+         console.log("Clearing all controllers");
+         Ext.each(ctrls_to_remove, function(ctrl) {
+            me._handleCtrlRemoval(ctrl);
+         });
+      }
 
       this._ctrlStack      = [];             // Clear the stack
-      this._setFocusCtrl(this.getBaseController(), {reverse: true});
+      this._setFocusCtrl(this.getBaseController(), {reverse: true}, on_finish);
    },
 
    /** Handle the cleanup/destruction process of a controller
@@ -608,21 +643,28 @@ Ext.define('vrs.PanelHolder', {
    * to the controller and should let it know.
    */
    _handleCtrlRemoval: function(ctrl) {
-      //console.log('Removing control: ', ctrl);
+      console.log('Removing control: ', ctrl);
       var me = this,
-          panel;
+          panel = ctrl.getPanel();
 
-      panel = ctrl.getPanel();
       assert(panel);   // We should have a panel.
+      // ASSERT: panel for the given controller is not currently an active item
+      // being displayed by this controller.  (ie. should be ready to remove)
+      assert(panel !== this.getActiveItem());
 
+      this.remove(panel, false); // remove from the card stack
+      ctrl.destroy();            // Call to destroy (panel is destroyed in here)
+
+      /*
       // XXX: using deactivated is the wrong signal because it requires
       //      that controls are currently in view and are about to remove from view
       //      maybe use destroyed or some other signal.
       panel.on('deactivate', function() {
          //console.log('Control was deactivated: ', ctrl);
          me.remove(panel, false);  // Remove from our card stack
-         ctrl.onDestroy();         // Let the controller know it is being destroyed.
+         ctrl.destroy();         // Let the controller know it is being destroyed.
       });
+      */
    }
 
 }); // controller stack panel

@@ -18,10 +18,11 @@ vrs.AppObject = {
       // Create the core panel stack to slide items onto
       this.baseStack = new vrs.PanelHolder({
          id: 'base_stack',
-         fullscreen: true
+         fullscreen: true,
+         animConfig: false
       });
 
-      vrs.dumpEvents(this.baseStack, 'PanelHolder');
+      //vrs.dumpEvents(this.baseStack, 'PanelHolder');
 
       // Create main controller
       this.mainCtrl = new vrs.MainMenuController({
@@ -43,6 +44,7 @@ Ext.define('vrs.MainMenuController', {
    constructor: function(config) {
       this.callParent(arguments);
       this.setPanel(vrs.MainMenuPanel.create({controller: this}));
+      //vrs.dumpEvents(this.getPanel(), 'MainPanel');
    },
 
    onButtonTap: function() {
@@ -99,6 +101,7 @@ Ext.define('vrs.Panel1Controller', {
    constructor: function(config) {
       this.callParent(arguments);
       this.setPanel(vrs.Panel1.create({controller: this}));
+      //vrs.dumpEvents(this.getPanel(), 'Panel1');
    },
 
    onButtonTap: function() {
@@ -133,7 +136,9 @@ Ext.define('vrs.Panel1', {
             docked: 'top',
             title : 'Panel 1',
             items : [
-               ctrl.createBackButton()
+               ctrl.createBackButton(),
+               { xtype: 'spacer' },
+               ctrl.createHomeButton()
             ]
          },
          vrs.containerWrapButton({
@@ -156,6 +161,7 @@ Ext.define('vrs.Panel2Controller', {
    constructor: function(config) {
       this.callParent(arguments);
       this.setPanel(vrs.Panel2.create({controller: this}));
+      //vrs.dumpEvents(this.getPanel(), 'Panel2');
    }
 });
 
@@ -185,7 +191,9 @@ Ext.define('vrs.Panel2', {
             docked  : 'top',
             title : 'Panel 2',
             items: [
-               ctrl.createBackButton()
+               ctrl.createBackButton(),
+               { xtype: 'spacer' },
+               ctrl.createHomeButton()
             ]
          },
          {
