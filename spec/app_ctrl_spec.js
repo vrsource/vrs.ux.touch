@@ -168,12 +168,11 @@ component('Panel Holder', function() {
          panel_holder = null;
 
          // then: should have called the destruction method on base controller
-         expect(base_ctrl.destroy).toHaveBeenCalled();
+         expect(base_ctrl.destroy).toEqual(Ext.emptyFn);
       });
    });
 
 
-   /*
    feature('stack support', function() {
       beforeEach(function() {
          panel_holder = new vrs.PanelHolder({
@@ -305,13 +304,12 @@ component('Panel Holder', function() {
             panel_holder = null;
 
             // then: it should have called deactivate on all of them including base controller
-            expect(ctrl1.destroy).toHaveBeenCalled();
-            expect(ctrl2.destroy).toHaveBeenCalled();
-            expect(ctrl3.destroy).toHaveBeenCalled();
-            expect(base_ctrl.destroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl3.destroy).toEqual(Ext.emptyFn);
+            expect(base_ctrl.destroy).toEqual(Ext.emptyFn);
          });
       });
    });
-   */
 
 });
