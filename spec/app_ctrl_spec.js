@@ -106,7 +106,6 @@ component('SubPanelController', function() {
 });
 
 
-/*
 component('Panel Holder', function() {
    var panel_holder = null,
        base_ctrl, ctrl1, ctrl2, ctrl3;
@@ -123,7 +122,6 @@ component('Panel Holder', function() {
          }
       });
 
-
       it('should allow setting base controller to setup initial controller', function() {
          // given: holder with no base controller set
 
@@ -133,7 +131,7 @@ component('Panel Holder', function() {
             isBaseController: true
          });
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
 
          // then: base controller should be held
          expect(panel_holder.getBaseController()).toBe(base_ctrl);
@@ -163,7 +161,7 @@ component('Panel Holder', function() {
          });
          spyOn(base_ctrl, 'destroy').andCallThrough();
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
 
          // when: destroy the holder
          panel_holder.destroy();
@@ -175,6 +173,7 @@ component('Panel Holder', function() {
    });
 
 
+   /*
    feature('stack support', function() {
       beforeEach(function() {
          panel_holder = new vrs.PanelHolder({
@@ -195,7 +194,7 @@ component('Panel Holder', function() {
          spyOn(base_ctrl, 'destroy').andCallThrough();
 
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
          this.after(function() {
             if(null !== panel_holder) {
                panel_holder.destroy();
@@ -313,6 +312,6 @@ component('Panel Holder', function() {
          });
       });
    });
+   */
 
 });
-*/

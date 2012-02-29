@@ -70,7 +70,7 @@ Ext.define('Ext.SegmentedButton', {
          * You can remove all pressed buttons by calling {@link #setPressedButtons} with an empty array.
          * @accessor
          */
-        pressedButtons: null,
+        pressedButtons: [],
 
         // @inherit
         layout: {
@@ -147,7 +147,7 @@ Ext.define('Ext.SegmentedButton', {
      */
     onButtonRelease: function(button) {
         var me             = this,
-            pressedButtons = me.getPressedButtons(),
+            pressedButtons = me.getPressedButtons() || [],
             buttons        = [],
             alreadyPressed;
 
@@ -266,7 +266,7 @@ Ext.define('Ext.SegmentedButton', {
     },
 
     /**
-     *
+     * @private
      */
     doSetDisabled: function(disabled) {
         var me = this;

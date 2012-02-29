@@ -28,7 +28,7 @@
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.0.rc');
+Ext.setVersion('touch', '2.0.0.rc2');
 
 Ext.apply(Ext, {
     /**
@@ -170,9 +170,9 @@ Ext.apply(Ext, {
     /**
      * Attempts to destroy any objects passed to it by removing all event listeners, removing them from the
      * DOM (if applicable) and calling their destroy functions (if available).  This method is primarily
-     * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}, but any subclass of
-     * {@link Ext.util.Observable} can be passed in.  Any number of elements and/or components can be
-     * passed into this function in a single call as separate arguments.
+     * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}.
+     * Any number of elements and/or components can be passed into this function in a single
+     * call as separate arguments.
      * @param {Mixed...} args An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy
      */
     destroy: function() {
@@ -553,7 +553,8 @@ function(el){
                 tabletStartupScreen = config.tabletStartupScreen,
                 statusBarStyle = config.statusBarStyle,
                 phoneStartupScreen = config.phoneStartupScreen,
-                isIpad = Ext.os.is.iPad;
+                isIpad = Ext.os.is.iPad,
+                retina = window.devicePixelRatio > 1 ? true : false;
 
             // Inject meta viewport tag
             document.write(
@@ -592,16 +593,18 @@ function(el){
                 var icon72 = icon['72'],
                     icon57 = icon['57'],
                     icon114 = icon['114'],
-                    iconString = '<link rel="apple-touch-icon';
-                if (isIpad && icon72) {
-                    document.write(iconString + precomposed + '" sizes="72x72" href="' + icon72 + '">');
-                }
-                else if (!isIpad) {
-                    if (icon57) {
-                        document.write(iconString + precomposed + '" href="' + icon57 + '">');
-                    }
-                    if (icon114) {
-                        document.write(iconString + precomposed + '" sizes="114x114" href="' + icon114 + '">');
+                    iconString = '<link rel="apple-touch-icon' + precomposed;
+
+                // If we are on an iPad and we have a 72px icon defined, use it
+                if (isIpad && (icon72 || icon57 || icon114)) {
+                    document.write(iconString + '" sizes="72x72" href="' + (icon72 || icon114 || icon57) + '">');
+                } else {
+                    if (retina && (icon72 || icon114)) {
+                        // Other wise, check if we are a retina device and we have a 114 icon
+                        document.write(iconString + '" sizes="114x114" href="' + (icon114 || icon72) + '">');
+                    } else {
+                        // And resort to the default 57px icon
+                        document.write(iconString + '" href="' + icon57 + '">');
                     }
                 }
             }
@@ -747,14 +750,16 @@ function(el){
      *     });
      */
     application: function(config) {
-        var onReady,
-            scope;
+        var appName = config.name,
+            onReady, scope;
 
         if (!config) {
             config = {};
         }
 
-        Ext.Loader.setPath(config.name, config.appFolder || 'app');
+        if (!Ext.Loader.config.paths[appName]) {
+            Ext.Loader.setPath(appName, config.appFolder || 'app');
+        }
 
         config.requires = Ext.Array.from(config.requires);
         config.requires.push('Ext.app.Application');
@@ -1192,6 +1197,7 @@ Ext.deprecateMethod(Ext, 'log', function(message) {
 /**
  * @member Ext.Function
  * @method createDelegate
+ * @inheritdoc Ext.Function#bind
  * @deprecated 2.0.0
  * Please use {@link Ext.Function#bind bind} instead
  */
@@ -1200,6 +1206,7 @@ Ext.deprecateMethod(Ext.Function, 'createDelegate', Ext.Function.bind, "Ext.crea
 /**
  * @member Ext
  * @method createInterceptor
+ * @inheritdoc Ext.Function#createInterceptor
  * @deprecated 2.0.0
  * Please use {@link Ext.Function#createInterceptor createInterceptor} instead
  */
@@ -1209,6 +1216,8 @@ Ext.deprecateMethod(Ext, 'createInterceptor', Ext.Function.createInterceptor, "E
 /**
  * @member Ext
  * @property {Boolean} SSL_SECURE_URL
+ * URL to a blank file used by Ext when in secure mode for iframe src and onReady
+ * src to prevent the IE insecure content warning.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'SSL_SECURE_URL', null, "Ext.SSL_SECURE_URL has been removed");
@@ -1216,6 +1225,7 @@ Ext.deprecateProperty(Ext, 'SSL_SECURE_URL', null, "Ext.SSL_SECURE_URL has been 
 /**
  * @member Ext
  * @property {Boolean} enableGarbageCollector
+ * True to automatically uncache orphaned Ext.Elements periodically.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'enableGarbageCollector', null, "Ext.enableGarbageCollector has been removed");
@@ -1223,6 +1233,7 @@ Ext.deprecateProperty(Ext, 'enableGarbageCollector', null, "Ext.enableGarbageCol
 /**
  * @member Ext
  * @property {Boolean} enableListenerCollection
+ * True to automatically purge event listeners during garbageCollection.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'enableListenerCollection', null, "Ext.enableListenerCollection has been removed");
@@ -1230,6 +1241,7 @@ Ext.deprecateProperty(Ext, 'enableListenerCollection', null, "Ext.enableListener
 /**
  * @member Ext
  * @property {Boolean} isSecure
+ * True if the page is running over SSL.
  * @removed 2.0.0 Please use {@link Ext.env.Browser#isSecure} instead
  */
 Ext.deprecateProperty(Ext, 'isSecure', null, "Ext.enableListenerCollection has been removed, please use Ext.env.Browser.isSecure instead");
@@ -1237,6 +1249,7 @@ Ext.deprecateProperty(Ext, 'isSecure', null, "Ext.enableListenerCollection has b
 /**
  * @member Ext
  * @method dispatch
+ * Dispatches a request to a controller action.
  * @removed 2.0.0 Please use {@link Ext.app.Application#dispatch} instead
  */
 Ext.deprecateMethod(Ext, 'dispatch', null, "Ext.dispatch() is deprecated, please use Ext.app.Application.dispatch() instead");
@@ -1244,6 +1257,7 @@ Ext.deprecateMethod(Ext, 'dispatch', null, "Ext.dispatch() is deprecated, please
 /**
  * @member Ext
  * @method getOrientation
+ * Returns the current orientation of the mobile device.
  * @removed 2.0.0
  * Please use {@link Ext.Viewport#getOrientation getOrientation} instead
  */
@@ -1253,6 +1267,7 @@ Ext.deprecateMethod(Ext, 'getOrientation', null, "Ext.getOrientation() has been 
 /**
  * @member Ext
  * @method reg
+ * Registers a new xtype.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'reg', null, "Ext.reg() has been removed");
@@ -1260,6 +1275,7 @@ Ext.deprecateMethod(Ext, 'reg', null, "Ext.reg() has been removed");
 /**
  * @member Ext
  * @method preg
+ * Registers a new ptype.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'preg', null, "Ext.preg() has been removed");
@@ -1267,6 +1283,8 @@ Ext.deprecateMethod(Ext, 'preg', null, "Ext.preg() has been removed");
 /**
  * @member Ext
  * @method redirect
+ * Dispatches a request to a controller action, adding to the History stack
+ * and updating the page url as necessary.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'redirect', null, "Ext.redirect() has been removed");
@@ -1274,6 +1292,7 @@ Ext.deprecateMethod(Ext, 'redirect', null, "Ext.redirect() has been removed");
 /**
  * @member Ext
  * @method regApplication
+ * Creates a new Application class from the specified config object.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regApplication', null, "Ext.regApplication() has been removed");
@@ -1281,6 +1300,7 @@ Ext.deprecateMethod(Ext, 'regApplication', null, "Ext.regApplication() has been 
 /**
  * @member Ext
  * @method regController
+ * Creates a new Controller class from the specified config object.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regController', null, "Ext.regController() has been removed");
@@ -1288,6 +1308,7 @@ Ext.deprecateMethod(Ext, 'regController', null, "Ext.regController() has been re
 /**
  * @member Ext
  * @method regLayout
+ * Registers new layout type.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regLayout', null, "Ext.regLayout() has been removed");

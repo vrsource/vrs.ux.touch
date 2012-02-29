@@ -380,6 +380,7 @@ Ext.define('Ext.data.Field', {
     /**
      * @member Ext.data.Field
      * @cfg {Boolean} useNull
+     * @inheritdoc Ext.data.Field#allowNull
      * @deprecated 2.0.0 Please use {@link #allowNull} instead.
      */
     Ext.deprecateProperty(this, 'useNull', 'allowNull');

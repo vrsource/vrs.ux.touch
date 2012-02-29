@@ -84,9 +84,9 @@
             {
                 "text": "Forms",
                 "url": "forms/index.html",
-                "icon": "forms/icon.png",
+                "icon": "forms/resources/images/icon.png",
                 "device": "phone",
-                "desc": "Demo of the available form fields."
+                "desc": "A demo of some of the available form fields."
             },
             {
                 "text": "Forms (Toolbars)",

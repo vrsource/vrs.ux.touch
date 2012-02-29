@@ -32,11 +32,17 @@ Ext.define('Kitchensink.view.Overlays', {
 
                                     text: 'Delete draft',
                                     ui: 'decline',
-                                    handler: Ext.emptyFn
+                                    scope: this,
+                                    handler: function() {
+                                        this.actions.hide();
+                                    }
                                 },
                                 {
                                     text: 'Save draft',
-                                    handler: Ext.emptyFn
+                                    scope: this,
+                                    handler: function() {
+                                        this.actions.hide();
+                                    }
                                 },
                                 {
                                     xtype: 'button',

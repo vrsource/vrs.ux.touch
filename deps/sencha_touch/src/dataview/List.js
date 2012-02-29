@@ -83,6 +83,7 @@ Ext.define('Ext.dataview.List', {
 
         /**
          * @cfg {Boolean} clearSelectionOnDeactivate
+         * True to clear any selections on the list when the list is deactivated.
          * @removed 2.0.0
          */
 
@@ -204,6 +205,7 @@ Ext.define('Ext.dataview.List', {
             itemtap: 'onItemTap',
             itemtaphold: 'onItemTapHold',
             itemtouchmove: 'onItemTouchMove',
+            itemsingletap: 'onItemSingleTap',
             itemdoubletap: 'onItemDoubleTap',
             itemswipe: 'onItemSwipe',
             scope: me
@@ -424,7 +426,8 @@ Ext.define('Ext.dataview.List', {
     },
 
     getItemHeader: function(item) {
-        return item.childNodes[0];
+        var element = Ext.fly(item).down(this.container.headerClsCache);
+        return element ? element.dom : null;
     },
 
     onScroll: function(scroller, x, y) {
@@ -487,7 +490,7 @@ Ext.define('Ext.dataview.List', {
         var me = this,
             header = me.header;
         if (header) {
-            if (group) {
+            if (group && group.header) {
                 if (!me.activeGroup || me.activeGroup.header != group.header) {
                     header.show();
 
@@ -495,7 +498,7 @@ Ext.define('Ext.dataview.List', {
                         header.setHtml(group.header.innerHTML);
                     }
                 }
-            } else if (header && header.dom) {
+            } else if (header && header.element) {
                 header.hide();
             }
         }

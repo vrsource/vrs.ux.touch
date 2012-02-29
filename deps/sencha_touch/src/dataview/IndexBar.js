@@ -205,6 +205,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @member Ext.dataview.IndexBar
      * @method isHorizontal
+     * Returns true when direction is horizontal.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'isHorizontal', null, "Ext.dataview.IndexBar.isHorizontal() has been removed");
@@ -212,6 +213,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @member Ext.dataview.IndexBar
      * @method isVertical
+     * Returns true when direction is vertical.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'isVertical', null, "Ext.dataview.IndexBar.isVertical() has been removed");
@@ -219,6 +221,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @member Ext.dataview.IndexBar
      * @method refresh
+     * Refreshes the view by reloading the data from the store and re-rendering the template.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'refresh', null, "Ext.dataview.IndexBar.refresh() has been removed");
@@ -226,6 +229,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @Member Ext.dataview.IndexBar
      * @cfg {Boolean} alphabet
+     * True to use the letters property to show a list of the alphabet.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'alphabet', null, "Ext.dataview.IndexBar.alphabet has been removed");
@@ -233,6 +237,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @member Ext.dataview.IndexBar
      * @cfg {Boolean} itemSelector
+     * A simple CSS selector for items.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'itemSelector', null, "Ext.dataview.IndexBar.itemSelector has been removed");
@@ -240,6 +245,7 @@ Ext.define('Ext.dataview.IndexBar', {
     /**
      * @member Ext.dataview.IndexBar
      * @cfg {Boolean} store
+     * The store to be used for displaying data on the index bar.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'store', null, "Ext.dataview.IndexBar.store has been removed");

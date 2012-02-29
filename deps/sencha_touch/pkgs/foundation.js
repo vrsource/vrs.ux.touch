@@ -662,6 +662,7 @@ var version = '4.1.0', Version;
     Ext.Version = Version = Ext.extend(Object, {
 
         /**
+         * Creates new Version object.
          * @param {String/Number} version The version number in the follow standard format: major[.minor[.patch[.build[release]]]]
          * Examples: 1.0 or 1.2.3beta or 1.2.3.4RC
          * @return {Ext.Version} this
@@ -4765,7 +4766,11 @@ var noArgs = [],
         },
 
         /**
-         *
+         * Returns the initial configuration passed to constructor.
+         * 
+         * @param {String} [name] When supplied, value for particular configuration
+         * option is returned, otherwise the full config object is returned.
+         * @return {Object/Mixed}
          */
         getInitialConfig: function(name) {
             var config = this.config;
@@ -6965,15 +6970,25 @@ var noArgs = [],
         },
 
         /**
-         * Convenient shorthand, see {@link Ext.ClassManager#getName}
+         * Convenient shorthand for {@link Ext.ClassManager#getName}.
          * @member Ext
          * @method getClassName
+         * @inheritdoc Ext.ClassManager#getName
          */
         getClassName: alias(Manager, 'getName'),
 
         /**
+         * Returns the display name for object.  This name is looked for in order from the following places:
          *
-         * @param {Mixed} object
+         * - `displayName` field of the object.
+         * - `$name` and `$class` fields of the object.
+         * - '$className` field of the object.
+         *
+         * This method is used by {@link Ext.Logger#log} to display information about objects.
+         *
+         * @param {Mixed} [object] The object who's display name to determine.
+         * @return {String} The determined display name, or "Anonymous" if none found.
+         * @member Ext
          */
         getDisplayName: function(object) {
             if (object) {
@@ -8199,25 +8214,34 @@ This process will be automated with Sencha Command, to be released and documente
      * {@link Ext.Loader} for examples.
      * @member Ext
      * @method require
+     * @inheritdoc Ext.Loader#require
      */
     Ext.require = alias(Loader, 'require');
 
     /**
      * Synchronous version of {@link Ext#require}, convenient alias of {@link Ext.Loader#syncRequire}.
-     *
      * @member Ext
      * @method syncRequire
+     * @inheritdoc Ext.Loader#syncRequire
      */
     Ext.syncRequire = alias(Loader, 'syncRequire');
 
     /**
-     * Convenient shortcut to {@link Ext.Loader#exclude}
+     * Convenient shortcut to {@link Ext.Loader#exclude}.
      * @member Ext
      * @method exclude
+     * @inheritdoc Ext.Loader#exclude
      */
     Ext.exclude = alias(Loader, 'exclude');
 
     /**
+     * Adds a listener to be notified when the document is ready (before onload and before images are loaded).
+     * Shorthand of {@link Ext.Loader#onReady}(fn, scope, true, options).
+     *
+     * @param {Function} fn The method the event invokes.
+     * @param {Object} [scope] The scope in which the handler function executes. Defaults to the browser window.
+     * @param {Boolean} [options] Options object as passed to {@link Ext.Element#addListener}. It is recommended
+     * that the options `{single: true}` be used so that the handler is removed on first invocation.
      * @member Ext
      * @method onReady
      */
@@ -8238,7 +8262,7 @@ This process will be automated with Sencha Command, to be released and documente
               extend: 'Ext.MyClass',
               requires: ['Ext.some.OtherClass'],
               mixins: {
-                  observable: 'Ext.util.Observable';
+                  observable: 'Ext.mixin.Observable';
               }
         }
         which will later be transformed into:
@@ -8246,7 +8270,7 @@ This process will be automated with Sencha Command, to be released and documente
               extend: Ext.MyClass,
               requires: [Ext.some.OtherClass],
               mixins: {
-                  observable: Ext.util.Observable;
+                  observable: Ext.mixin.Observable;
               }
         }
         */

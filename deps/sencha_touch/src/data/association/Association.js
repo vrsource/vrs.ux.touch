@@ -152,7 +152,7 @@ Ext.define('Ext.data.association.Association', {
 
         /**
          * @cfg {String} associationKey The name of the property in the data to read the association from.
-         * Defaults to the name of the associated model.
+         * Defaults to the {@link #associatedName} plus _id.
          */
         associationKey: undefined,
 
@@ -229,8 +229,10 @@ Ext.define('Ext.data.association.Association', {
         return ownerName;
     },
 
-    updateOwnerModel: function(ownerModel) {
-        this.setOwnerName(ownerModel.modelName);
+    updateOwnerModel: function(ownerModel, oldOwnerModel) {
+        if (oldOwnerModel) {
+            this.setOwnerName(ownerModel.modelName);
+        }
     },
 
     applyAssociatedModel: function(associatedName) {
@@ -249,8 +251,10 @@ Ext.define('Ext.data.association.Association', {
         return associatedName;
     },
 
-    updateAssociatedModel: function(associatedModel) {
-        this.setAssociatedName(associatedModel.modelName);
+    updateAssociatedModel: function(associatedModel, oldAssociatedModel) {
+        if (oldAssociatedModel) {
+            this.setAssociatedName(associatedModel.modelName);
+        }
     },
 
     applyReader: function(reader) {

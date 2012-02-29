@@ -1373,15 +1373,25 @@
         },
 
         /**
-         * Convenient shorthand, see {@link Ext.ClassManager#getName}
+         * Convenient shorthand for {@link Ext.ClassManager#getName}.
          * @member Ext
          * @method getClassName
+         * @inheritdoc Ext.ClassManager#getName
          */
         getClassName: alias(Manager, 'getName'),
 
         /**
+         * Returns the display name for object.  This name is looked for in order from the following places:
          *
-         * @param {Mixed} object
+         * - `displayName` field of the object.
+         * - `$name` and `$class` fields of the object.
+         * - '$className` field of the object.
+         *
+         * This method is used by {@link Ext.Logger#log} to display information about objects.
+         *
+         * @param {Mixed} [object] The object who's display name to determine.
+         * @return {String} The determined display name, or "Anonymous" if none found.
+         * @member Ext
          */
         getDisplayName: function(object) {
             if (object) {

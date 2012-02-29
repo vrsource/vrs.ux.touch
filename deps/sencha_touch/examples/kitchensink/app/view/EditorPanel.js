@@ -8,7 +8,6 @@ Ext.define('Kitchensink.view.EditorPanel', {
         modal: true,
         hideOnMaskTap: false,
         centered: true,
-        height: 200,
         width: 300,
         scrollable: false,
         items: [{

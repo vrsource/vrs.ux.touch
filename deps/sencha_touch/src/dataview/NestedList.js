@@ -58,10 +58,12 @@
  *
  *      Ext.define('ListItem', {
  *          extend: 'Ext.data.Model',
- *          fields: [{
- *              name: 'text',
- *              type: 'string'
- *          }]
+ *          config: {
+ *              fields: [{
+ *                  name: 'text',
+ *                  type: 'string'
+ *              }]
+ *          }
  *      });
  *
  *      var store = Ext.create('Ext.data.TreeStore', {
@@ -99,25 +101,27 @@ Ext.define('Ext.dataview.NestedList', {
 
         /**
          * @cfg {String/Object/Boolean} cardSwitchAnimation
+         * Animation to be used during transitions of cards.
          * @removed 2.0.0 please use {@link Ext.layout.Card#animation}
          */
 
         /**
          * @cfg {String} backText
-         * The label to display for the back button. Defaults to "Back".
+         * The label to display for the back button.
          * @accessor
          */
         backText: 'Back',
 
         /**
          * @cfg {Boolean} useTitleAsBackText
+         * True to use title as a label for back button.
          * @accessor
          */
         useTitleAsBackText: true,
 
         /**
          * @cfg {Boolean} updateTitleText
-         * Update the title with the currently selected category. Defaults to true.
+         * Update the title with the currently selected category.
          * @accessor
          */
         updateTitleText: true,
@@ -126,7 +130,7 @@ Ext.define('Ext.dataview.NestedList', {
          * @cfg {String} displayField
          * Display field to use when setting item text and title.
          * This configuration is ignored when overriding getItemTextTpl or
-         * getTitleTextTpl for the item text or title. (Defaults to 'text')
+         * getTitleTextTpl for the item text or title.
          * @accessor
          */
         displayField: 'text',
@@ -800,6 +804,7 @@ Ext.define('Ext.dataview.NestedList', {
     /**
      * @member Ext.dataview.NestedList
      * @method getSubList
+     * Returns the subList for a specified node.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getSubList', null, "Ext.dataview.NestedList.getSubList() has been removed");
@@ -807,6 +812,7 @@ Ext.define('Ext.dataview.NestedList', {
     /**
      * @member Ext.dataview.NestedList
      * @cfg {Number} clearSelectionDelay
+     * Number of milliseconds to show the highlight when going back in a list.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'clearSelectionDelay', null, "Ext.dataview.NestedList.clearSelectionDelay has been removed");

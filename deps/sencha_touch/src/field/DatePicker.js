@@ -351,8 +351,8 @@ Ext.define('Ext.field.DatePicker', {
     });
 
     /**
-     * @member Ext.field.DatePicker
      * @method getDatePicker
+     * @inheritdoc Ext.field.DatePicker#getPicker
      * @deprecated 2.0.0 Please use #getPicker instead
      */
     Ext.deprecateMethod(this, 'getDatePicker', 'getPicker');

@@ -118,10 +118,12 @@ Ext.define('Ext.dataview.element.List', {
 
     doAddHeader: function(item, html) {
         item = Ext.fly(item);
-        item.insertFirst(Ext.Element.create({
-            cls: this.headerClsShortCache,
-            html: html
-        }));
+        if (html) {
+            item.insertFirst(Ext.Element.create({
+                cls: this.headerClsShortCache,
+                html: html
+            }));
+        }
         item.addCls(this.headerItemClsShortCache);
     },
 

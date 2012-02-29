@@ -880,30 +880,28 @@ Ext.define('Ext.carousel.Carousel', {
         }
     });
 
-<span id='Ext-carousel-Carousel-method-isVertical'>    /**
-</span>     * @member Ext.carousel.Carousel
-     * @method isVertical
-     * @deprecated 2.0.0 Ext.carousel.Carousel.isVertical() is deprecated, you should use getDirection() === 'vertical'
-     */
-
-<span id='Ext-carousel-Carousel-method-isHorizontal'>    /**
-</span>     * @member Ext.carousel.Carousel
-     * @method isHorizontal
-     * @deprecated 2.0.0 Ext.carousel.Carousel.isVertical() is deprecated, you should use getDirection() === 'horizontal'
-     */
-
-<span id='Ext-carousel-Carousel-method-prev'>    /**
-</span>     * @member Ext.carousel.Carousel
-     * @method prev
-     * @deprecated 2.0.0 Ext.carousel.Carousel.prev() is deprecated, you should use Ext.carousel.Carousel.previous()
-     */
     Ext.deprecateClassMethod(this, {
+<span id='Ext-carousel-Carousel-method-isVertical'>        /**
+</span>         * Returns true when direction is vertical.
+         * @return {Boolean}
+         * @deprecated 2.0.0 Use getDirection() === 'vertical' instead.
+         */
         isVertical: function getDirection() {
             return this.getDirection() === 'vertical';
         },
+<span id='Ext-carousel-Carousel-method-isHorizontal'>        /**
+</span>         * Returns true when direction is horizontal.
+         * @return {Boolean}
+         * @deprecated 2.0.0 Use getDirection() === 'horizontal' instead.
+         */
         isHorizontal: function getDirection() {
             return this.getDirection() === 'horizontal';
         },
+<span id='Ext-carousel-Carousel-method-prev'>        /**
+</span>         * @method
+         * @inheritdoc Ext.carousel.Carousel#previous
+         * @deprecated 2.0.0 Use {@link Ext.carousel.Carousel#previous} instead.
+         */
         prev: 'previous'
     });
     //&lt;/deprecated&gt;

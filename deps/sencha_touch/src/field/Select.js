@@ -130,7 +130,12 @@ Ext.define('Ext.field.Select', {
          * @cfg {Object} defaultTabletPickerConfig
          * The default configuration for the picker component when you are on a tablet
          */
-        defaultTabletPickerConfig: null
+        defaultTabletPickerConfig: null,
+
+        /**
+         * @inherit
+         */
+        name: 'picker'
     },
 
     // @private
@@ -224,7 +229,7 @@ Ext.define('Ext.field.Select', {
 
         this.callParent([newValue ? newValue.get(this.getDisplayField()) : '']);
 
-        if (oldValue !== newValue) {
+        if (oldValue !== newValue && this.initialized) {
             this.fireEvent('change', this, newValue, oldValue);
         }
     },

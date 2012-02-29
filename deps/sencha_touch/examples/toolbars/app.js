@@ -211,7 +211,11 @@ Ext.application({
                     indicators: false
                 },
                 defaults: {
-                    disabled: true
+                    disabled: true,
+
+                    defaults: {
+                        disabled: true
+                    }
                 },
                 items: [
                     { iconMask: true, iconCls: 'action' },

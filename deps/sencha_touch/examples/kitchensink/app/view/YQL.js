@@ -58,11 +58,11 @@ Ext.require('Ext.data.JsonP', function() {
                             Ext.YQL.request({
                                 query: "select * from rss where url='http://feeds.feedburner.com/extblog' limit 5",
                                 callback: function(success, response) {
-                                    if (response.query && response.query.results) {
+                                    if (success && response.query && response.query.results) {
                                         panel.setHtml(tpl.apply(response.query.results));
                                     }
                                     else {
-                                        alert('There was an error retrieving the YQL request.');
+                                        Ext.Msg.alert('Error', 'There was an error retrieving the YQL request.', Ext.emptyFn);
                                     }
 
                                     panel.getParent().unmask();

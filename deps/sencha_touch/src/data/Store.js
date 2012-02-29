@@ -1349,7 +1349,7 @@ Ext.define('Ext.data.Store', {
                 }
             }
         } else {
-            data.filter(property, value);
+            data.filter(property, value, anyMatch, caseSensitive);
             this.fireEvent('filter', this, data, data.getFilters());
 
             if (data.length !== ln) {
@@ -2089,6 +2089,7 @@ Ext.define('Ext.data.Store', {
     /**
      * @member Ext.data.Store
      * @method loadRecords
+     * @inheritdoc Ext.data.Store#add
      * @deprecated 2.0.0 Please use {@link #add} instead.
      */
     Ext.deprecateMethod(this, 'loadRecords', 'add', "Ext.data.Store#loadRecords has been deprecated. Please use the add method.");

@@ -6,6 +6,20 @@
  * it has a disclosure button so you can disclose more information for a list item.
  */
 
+Ext.define('Ext.dataview.Override', {
+    override: 'Ext.DataView',
+    deselectAll: function(supress) {
+        var me = this,
+            selections = me.getStore().getRange();
+
+        me.deselect(selections, supress);
+
+        me.selected.clear();
+        me.setLastSelected(null);
+        me.setLastFocused(null);
+    }
+});
+
 //define the application
 Ext.application({
     //define the startupscreens for tablet and phone, as well as the icon
@@ -111,9 +125,6 @@ Ext.application({
 
             //enable the indexBar
             indexBar: true,
-
-            //enable the pull to refresh plugin
-            plugins: 'pullrefresh',
 
             //set the function when a user taps on a disclsoure icon
             onItemDisclosure: function(record, item, index, e) {

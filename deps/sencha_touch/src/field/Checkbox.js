@@ -163,7 +163,6 @@ Ext.define('Ext.field.Checkbox', {
     getChecked: function() {
         // we need to get the latest value from the {@link #input} and then update the value
         this._checked = this.getComponent().getChecked();
-
         return this._checked;
     },
 
@@ -171,8 +170,12 @@ Ext.define('Ext.field.Checkbox', {
         return this.getChecked();
     },
 
-    setValue: function(value) {
-        return this.setChecked(value);
+    /**
+     * Returns the submit value for the checkbox which can be used when submitting forms.
+     * @return {Boolean/String} value The value of {@link #value} or true, if {@link #checked}.
+     */
+    getSubmitValue: function() {
+        return (this.getChecked()) ? this._value || true : false;
     },
 
     setChecked: function(newChecked) {

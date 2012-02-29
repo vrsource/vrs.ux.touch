@@ -134,6 +134,7 @@ Ext.define('Ext.dataview.DataView', {
 
     /**
      * @event containertap
+     * Fires when a tap occurs and it is not on a template node.
      * @removed 2.0.0
      */
 
@@ -183,6 +184,16 @@ Ext.define('Ext.dataview.DataView', {
      * @param {Ext.dataview.DataView} this
      * @param {Number} index The index of the item touched
      * @param {Ext.Element/Ext.dataview.component.DataItem} target The element or DataItem touched
+     * @param {Ext.data.Model} record The record assosciated to the item
+     * @param {Ext.EventObject} e The event object
+     */
+
+    /**
+     * @event itemsingletap
+     * Fires whenever an item is singletapped
+     * @param {Ext.dataview.DataView} this
+     * @param {Number} index The index of the item singletapped
+     * @param {Ext.Element/Ext.dataview.component.DataItem} target The element or DataItem singletapped
      * @param {Ext.data.Model} record The record assosciated to the item
      * @param {Ext.EventObject} e The event object
      */
@@ -306,8 +317,8 @@ Ext.define('Ext.dataview.DataView', {
 
         /**
          * @cfg {String} triggerEvent
-         * Determines what type of touch event causes an item to be selected.
-         * Valid options are 'tap' and 'singletap'.
+         * Determines what type of touch event causes an item to be selected. Defaults to 'itemtap'.
+         * Valid options are 'itemtap', 'itemsingletap', 'itemdoubletap', 'itemswipe', 'itemtaphold'.
          * @accessor
          */
         triggerEvent: 'itemtap',
@@ -460,6 +471,7 @@ Ext.define('Ext.dataview.DataView', {
             itemtap: 'onItemTap',
             itemtaphold: 'onItemTapHold',
             itemtouchmove: 'onItemTouchMove',
+            itemsingletap: 'onItemSingleTap',
             itemdoubletap: 'onItemDoubleTap',
             itemswipe: 'onItemSwipe',
             scope: me
@@ -601,6 +613,14 @@ Ext.define('Ext.dataview.DataView', {
             record = store && store.getAt(index);
 
         me.fireEvent('itemtaphold', me, index, target, record, e);
+    },
+
+    onItemSingleTap: function(container, target, index, e) {
+        var me = this,
+            store = me.getStore(),
+            record = store && store.getAt(index);
+
+        me.fireEvent('itemsingletap', me, index, target, record, e);
     },
 
     onItemDoubleTap: function(container, target, index, e) {
@@ -771,8 +791,15 @@ Ext.define('Ext.dataview.DataView', {
         this.hideEmptyText();
     },
 
-    updateEmptyText: function(newEmptyText) {
-        var me = this;
+    updateEmptyText: function(newEmptyText, oldEmptyText) {
+        var me = this,
+            store;
+
+        if (oldEmptyText && me.emptyTextCmp) {
+            me.remove(me.emptyTextCmp, true);
+            delete me.emptyTextCmp;
+        }
+
         if (newEmptyText) {
             me.emptyTextCmp = me.add({
                 xtype: 'component',
@@ -780,10 +807,10 @@ Ext.define('Ext.dataview.DataView', {
                 html: newEmptyText,
                 hidden: true
             });
-        }
-        else if (me.emptyTextCmp) {
-            me.remove(me.emptyTextCmp, true);
-            delete me.emptyTextCmp;
+            store = me.getStore();
+            if (store && me.hasLoadedStore && !store.getCount()) {
+                this.showEmptyText();
+            }
         }
     },
 
@@ -876,7 +903,7 @@ Ext.define('Ext.dataview.DataView', {
     },
 
     showEmptyText: function() {
-        if (this.hasLoadedStore && this.getEmptyText()) {
+        if (this.getEmptyText() && (this.hasLoadedStore || !this.getDeferEmptyText()) ) {
             this.emptyTextCmp.show();
         }
     },
@@ -935,6 +962,8 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method collectData
+     * Function which can be overridden which returns the data object passed to
+     * this DataView's template to render the whole DataView.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'collectData', null, "Ext.dataview.DataView.collectData() has been removed");
@@ -942,6 +971,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method findItemByChild
+     * Returns the template node the passed child belongs to, or null if it doesn't belong to one.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'findItemByChild', null, "Ext.dataview.DataView.findItemByChild() has been removed");
@@ -949,6 +979,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method findTargetByEvent
+     * Returns the template node by the Ext.EventObject or null if it is not found.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'findTargetByEvent', null, "Ext.dataview.DataView.findTargetByEvent() has been removed");
@@ -956,6 +987,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method getNode
+     * Gets a template node.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getNode', null, "Ext.dataview.DataView.getNode() has been removed");
@@ -963,6 +995,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method getNodes
+     * Gets a range nodes.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getNodes', null, "Ext.dataview.DataView.getNodes() has been removed");
@@ -970,6 +1003,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method getRecords
+     * Gets an array of the records from an array of nodes.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getRecords', null, "Ext.dataview.DataView.getRecords() has been removed");
@@ -977,6 +1011,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method getSelectedNodes
+     * Gets the currently selected nodes.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getSelectedNodes', null, "Ext.dataview.DataView.getSelectedNodes() has been removed");
@@ -984,6 +1019,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method getSelectedRecords
+     * Gets an array of the selected records.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'getSelectedRecords', null, "Ext.dataview.DataView.getSelectedRecords() has been removed");
@@ -991,6 +1027,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method indexOf
+     * Finds the index of the passed node.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'indexOf', null, "Ext.dataview.DataView.indexOf() has been removed");
@@ -998,6 +1035,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @method refreshNode
+     * Refreshes an individual node's data from the store.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(this, 'refreshNode', null, "Ext.dataview.DataView.refreshNode() has been removed");
@@ -1012,6 +1050,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} blockRefresh
+     * Set this to true to ignore datachanged events on the bound store.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'blockRefresh', null, "Ext.dataview.DataView.blockRefresh has been removed");
@@ -1019,6 +1058,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} itemSelector
+     * A simple CSS selector that will be used to determine what nodes this DataView will be working with.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'itemSelector', null, "Ext.dataview.DataView.itemSelector has been removed");
@@ -1026,6 +1066,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} multiSelect
+     * True to allow selection of more than one item at a time.
      * @removed 2.0.0 multiSelect is deprecated. Please use {@link Ext.mixin.Selectable#mode mode} instead
      */
     Ext.deprecateProperty(this, 'multiSelect', null, "Ext.dataview.DataView.multiSelect has been removed");
@@ -1033,6 +1074,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} overItemCls
+     * A CSS class to apply to each item in the view on mouseover.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'overItemCls', null, "Ext.dataview.DataView.overItemCls has been removed");
@@ -1040,6 +1082,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} selectedItemCls
+     * A CSS class to apply to each selected item in the view.
      * @removed 2.0.0 Please use {@link #selectedCls selectedCls} instead
      */
     Ext.deprecateProperty(this, 'selectedItemCls', null, "Ext.dataview.DataView.selectedItemCls has been removed");
@@ -1047,6 +1090,9 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} simpleSelect
+     * True to enable multiselection by clicking on multiple items without requiring
+     * the user to hold Shift or Ctrl, false to force the user to hold Ctrl or Shift
+     * to select more than on item.
      * @removed 2.0.0 Please use {@link Ext.mixin.Selectable#mode mode} instead
      */
     Ext.deprecateProperty(this, 'simpleSelect', null, "Ext.dataview.DataView.simpleSelect has been removed");
@@ -1054,6 +1100,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} singleSelect
+     * True to allow selection of exactly one item at a time, false to allow no selection at all.
      * @removed 2.0.0 Please use {@link Ext.mixin.Selectable#mode mode} instead
      */
     Ext.deprecateProperty(this, 'singleSelect', null, "Ext.dataview.DataView.singleSelect has been removed");
@@ -1061,6 +1108,7 @@ Ext.define('Ext.dataview.DataView', {
     /**
      * @member Ext.dataview.DataView
      * @cfg {Boolean} trackOver
+     * True to enable mouseenter and mouseleave events.
      * @removed 2.0.0
      */
     Ext.deprecateProperty(this, 'trackOver', null, "Ext.dataview.DataView.trackOver has been removed");

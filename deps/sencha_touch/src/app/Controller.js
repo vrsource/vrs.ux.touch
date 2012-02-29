@@ -386,6 +386,7 @@ Ext.define('Ext.app.Controller', {
     },
 
     /**
+     * @cfg
      * Called by the Controller's {@link #application} to initialize the Controller. This is always called before the
      * {@link Ext.app.Application Application} launches, giving the Controller a chance to run any pre-launch logic.
      * See also {@link #launch}, which is called after the {@link Ext.app.Application#launch Application's launch function}
@@ -393,6 +394,7 @@ Ext.define('Ext.app.Controller', {
     init: Ext.emptyFn,
 
     /**
+     * @cfg
      * Called by the Controller's {@link #application} immediately after the Application's own
      * {@link Ext.app.Application#launch launch function} has been called. This is usually a good place to run any
      * logic that has to run after the app UI is initialized. See also {@link #init}, which is called before the

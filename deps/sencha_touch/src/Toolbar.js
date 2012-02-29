@@ -239,6 +239,7 @@ Ext.define('Ext.Toolbar', {
     /**
      * @member Ext.Toolbar
      * @cfg {Boolean} titleCls
+     * The CSS class to apply to the titleEl.
      * @removed 2.0.0 Title class is now a config option of the title
      */
     Ext.deprecateProperty(this, 'titleCls', null, "Ext.Toolbar.titleCls has been removed. Use #cls config of title instead.");

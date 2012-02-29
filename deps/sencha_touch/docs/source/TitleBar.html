@@ -320,7 +320,9 @@ Ext.define('Ext.TitleBar', {
             leftBoxWidth, maxButtonWidth;
 
         if (leftButton) {
-            leftButton.renderElement.setWidth('auto');
+            if (leftButton.getWidth() == null) {
+                leftButton.renderElement.setWidth('auto');
+            }
 
             leftBoxWidth = leftBox.renderElement.getWidth();
             maxButtonWidth = this.getMaxButtonWidth();

@@ -174,7 +174,12 @@ Ext.define('Ext.data.association.HasOne', {
 
     applyForeignKey: function(foreignKey) {
         if (!foreignKey) {
-            foreignKey = this.getAssociatedName().toLowerCase() + '_id';
+            var inverse = this.getInverseAssociation();
+            if (inverse) {
+                foreignKey = inverse.getForeignKey();
+            } else {
+                foreignKey = this.getOwnerName().toLowerCase() + '_id';
+            }
         }
         return foreignKey;
     },
@@ -217,14 +222,16 @@ Ext.define('Ext.data.association.HasOne', {
 
     applyGetterName: function(getterName) {
         if (!getterName) {
-            getterName = 'get' + this.getAssociatedName();
+            var associatedName = this.getAssociatedName();
+            getterName = 'get' + associatedName[0].toUpperCase() + associatedName.slice(1);
         }
         return getterName;
     },
 
     applySetterName: function(setterName) {
         if (!setterName) {
-            setterName = 'set' + this.getAssociatedName();
+            var associatedName = this.getAssociatedName();
+            setterName = 'set' + associatedName[0].toUpperCase() + associatedName.slice(1);
         }
         return setterName;
     },
@@ -350,9 +357,8 @@ Ext.define('Ext.data.association.HasOne', {
      * @param {Object} associationData The raw associated data
      */
     read: function(record, reader, associationData) {
-        var inverse = this.getAssociatedModel().associations.findBy(function(assoc) {
-            return assoc.getType() === 'belongsTo' && assoc.getAssociatedName() === record.$className;
-        }), newRecord = reader.read([associationData]).getRecords()[0];
+        var inverse = this.getInverseAssociation(),
+            newRecord = reader.read([associationData]).getRecords()[0];
 
         record[this.getInstanceName()] = newRecord;
 
@@ -360,5 +366,13 @@ Ext.define('Ext.data.association.HasOne', {
         if (inverse) {
             newRecord[inverse.getInstanceName()] = record;
         }
+    },
+
+    getInverseAssociation: function() {
+        var ownerName = this.getOwnerModel().modelName;
+
+        return this.getAssociatedModel().associations.findBy(function(assoc) {
+            return assoc.getType().toLowerCase() === 'belongsto' && assoc.getAssociatedModel().modelName === ownerName;
+        });
     }
 });

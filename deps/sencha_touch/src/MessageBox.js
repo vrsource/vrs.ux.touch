@@ -364,10 +364,6 @@ Ext.define('Ext.MessageBox', {
                 });
             }
 
-            if (config.cls) {
-                    this.el.removeCls(config.cls);
-                }
-
             if (config.input) {
                 config.input.dom.blur();
             }
@@ -508,6 +504,15 @@ Ext.define('Ext.MessageBox', {
             config.prompt.multiLine = config.multiLine;
             delete config.multiLine;
         }
+
+        config = Ext.apply({
+            iconCls: null,
+            title: null,
+            buttons: null,
+            message: null,
+            prompt: null,
+            cls: null
+        }, config);
 
         this.setConfig(config);
 
@@ -685,6 +690,7 @@ Ext.define('Ext.MessageBox', {
         },
 
         /**
+         * @inheritdoc Ext.MessageBox#setMessage
          * @deprecated 2.0.0 Please use #setMessage instead.
          */
         updateText: function(text){

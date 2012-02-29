@@ -95,7 +95,7 @@ Ext.define('Ext.data.proxy.Direct', {
     },
 
     applyDirectFn: function(directFn) {
-        return Ext.direct.Manager.parseMethod(fn);
+        return Ext.direct.Manager.parseMethod(directFn);
     },
 
     applyApi: function(api) {
@@ -160,7 +160,7 @@ Ext.define('Ext.data.proxy.Direct', {
         var me = this;
 
         return function(data, event) {
-            me.processResponse(event.getStatus(), operation, request, event, callback, scope);
+            me.processResponse(event.getStatus(), operation, request, event.getResult(), callback, scope);
         };
     },
 

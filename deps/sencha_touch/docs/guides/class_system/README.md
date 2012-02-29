@@ -138,7 +138,7 @@ Acronyms should also follow CamelCase convention, for example:
 
 The names of the classes map directly to the file paths in which they are stored. As a result, there must only be one class per file. For example:
 
-  - `Ext.util.Observable` is stored in `path/to/src/Ext/util/Observable.js`
+  - `Ext.mixin.Observable` is stored in `path/to/src/Ext/mixin/Observable.js`
   - `Ext.form.action.Submit` is stored in `path/to/src/Ext/form/action/Submit.js`
   - `MyCompany.chart.axis.Numeric` is stored in `path/to/src/MyCompany/chart/axis/Numeric.js`
 

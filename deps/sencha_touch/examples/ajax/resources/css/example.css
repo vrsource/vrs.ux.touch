@@ -21,6 +21,7 @@
     text-shadow: #fff 0 1px 0;
     width: 8em;
     text-align: center;
+    border-radius: 15px;
     -webkit-border-radius: 15px;
     -webkit-box-shadow: inset 0 1px 1px #888;
     box-shadow: inset 0 1px 1px #888;
@@ -32,6 +33,7 @@
 }
 .icon img {
     -webkit-border-radius: 10px;
+    border-radius: 10px;
     margin: .6em;
     width: 3.5em;
 }

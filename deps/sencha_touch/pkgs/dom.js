@@ -95,6 +95,7 @@ Ext.EventManager = {
     },
 
     /**
+     * Adds a listener to be notified when the document is ready (before onload and before images are loaded).
      * @removed 2.0.0 Please use {@link Ext#onReady onReady}
      */
     onDocumentReady: function() {
@@ -190,7 +191,7 @@ Ext.EventManager.un = Ext.EventManager.removeListener;
  *
  * [getting_started]: #!/guide/getting_started
  */
-Ext.setVersion('touch', '2.0.0.rc');
+Ext.setVersion('touch', '2.0.0.rc2');
 
 Ext.apply(Ext, {
     /**
@@ -332,9 +333,9 @@ Ext.apply(Ext, {
     /**
      * Attempts to destroy any objects passed to it by removing all event listeners, removing them from the
      * DOM (if applicable) and calling their destroy functions (if available).  This method is primarily
-     * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}, but any subclass of
-     * {@link Ext.util.Observable} can be passed in.  Any number of elements and/or components can be
-     * passed into this function in a single call as separate arguments.
+     * intended for arguments of type {@link Ext.Element} and {@link Ext.Component}.
+     * Any number of elements and/or components can be passed into this function in a single
+     * call as separate arguments.
      * @param {Mixed...} args An {@link Ext.Element}, {@link Ext.Component}, or an Array of either of these to destroy
      */
     destroy: function() {
@@ -715,7 +716,8 @@ function(el){
                 tabletStartupScreen = config.tabletStartupScreen,
                 statusBarStyle = config.statusBarStyle,
                 phoneStartupScreen = config.phoneStartupScreen,
-                isIpad = Ext.os.is.iPad;
+                isIpad = Ext.os.is.iPad,
+                retina = window.devicePixelRatio > 1 ? true : false;
 
             // Inject meta viewport tag
             document.write(
@@ -754,16 +756,18 @@ function(el){
                 var icon72 = icon['72'],
                     icon57 = icon['57'],
                     icon114 = icon['114'],
-                    iconString = '<link rel="apple-touch-icon';
-                if (isIpad && icon72) {
-                    document.write(iconString + precomposed + '" sizes="72x72" href="' + icon72 + '">');
-                }
-                else if (!isIpad) {
-                    if (icon57) {
-                        document.write(iconString + precomposed + '" href="' + icon57 + '">');
-                    }
-                    if (icon114) {
-                        document.write(iconString + precomposed + '" sizes="114x114" href="' + icon114 + '">');
+                    iconString = '<link rel="apple-touch-icon' + precomposed;
+
+                // If we are on an iPad and we have a 72px icon defined, use it
+                if (isIpad && (icon72 || icon57 || icon114)) {
+                    document.write(iconString + '" sizes="72x72" href="' + (icon72 || icon114 || icon57) + '">');
+                } else {
+                    if (retina && (icon72 || icon114)) {
+                        // Other wise, check if we are a retina device and we have a 114 icon
+                        document.write(iconString + '" sizes="114x114" href="' + (icon114 || icon72) + '">');
+                    } else {
+                        // And resort to the default 57px icon
+                        document.write(iconString + '" href="' + icon57 + '">');
                     }
                 }
             }
@@ -909,14 +913,16 @@ function(el){
      *     });
      */
     application: function(config) {
-        var onReady,
-            scope;
+        var appName = config.name,
+            onReady, scope;
 
         if (!config) {
             config = {};
         }
 
-        Ext.Loader.setPath(config.name, config.appFolder || 'app');
+        if (!Ext.Loader.config.paths[appName]) {
+            Ext.Loader.setPath(appName, config.appFolder || 'app');
+        }
 
         config.requires = Ext.Array.from(config.requires);
         config.requires.push('Ext.app.Application');
@@ -1354,6 +1360,7 @@ Ext.deprecateMethod(Ext, 'log', function(message) {
 /**
  * @member Ext.Function
  * @method createDelegate
+ * @inheritdoc Ext.Function#bind
  * @deprecated 2.0.0
  * Please use {@link Ext.Function#bind bind} instead
  */
@@ -1362,6 +1369,7 @@ Ext.deprecateMethod(Ext.Function, 'createDelegate', Ext.Function.bind, "Ext.crea
 /**
  * @member Ext
  * @method createInterceptor
+ * @inheritdoc Ext.Function#createInterceptor
  * @deprecated 2.0.0
  * Please use {@link Ext.Function#createInterceptor createInterceptor} instead
  */
@@ -1371,6 +1379,8 @@ Ext.deprecateMethod(Ext, 'createInterceptor', Ext.Function.createInterceptor, "E
 /**
  * @member Ext
  * @property {Boolean} SSL_SECURE_URL
+ * URL to a blank file used by Ext when in secure mode for iframe src and onReady
+ * src to prevent the IE insecure content warning.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'SSL_SECURE_URL', null, "Ext.SSL_SECURE_URL has been removed");
@@ -1378,6 +1388,7 @@ Ext.deprecateProperty(Ext, 'SSL_SECURE_URL', null, "Ext.SSL_SECURE_URL has been 
 /**
  * @member Ext
  * @property {Boolean} enableGarbageCollector
+ * True to automatically uncache orphaned Ext.Elements periodically.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'enableGarbageCollector', null, "Ext.enableGarbageCollector has been removed");
@@ -1385,6 +1396,7 @@ Ext.deprecateProperty(Ext, 'enableGarbageCollector', null, "Ext.enableGarbageCol
 /**
  * @member Ext
  * @property {Boolean} enableListenerCollection
+ * True to automatically purge event listeners during garbageCollection.
  * @removed 2.0.0
  */
 Ext.deprecateProperty(Ext, 'enableListenerCollection', null, "Ext.enableListenerCollection has been removed");
@@ -1392,6 +1404,7 @@ Ext.deprecateProperty(Ext, 'enableListenerCollection', null, "Ext.enableListener
 /**
  * @member Ext
  * @property {Boolean} isSecure
+ * True if the page is running over SSL.
  * @removed 2.0.0 Please use {@link Ext.env.Browser#isSecure} instead
  */
 Ext.deprecateProperty(Ext, 'isSecure', null, "Ext.enableListenerCollection has been removed, please use Ext.env.Browser.isSecure instead");
@@ -1399,6 +1412,7 @@ Ext.deprecateProperty(Ext, 'isSecure', null, "Ext.enableListenerCollection has b
 /**
  * @member Ext
  * @method dispatch
+ * Dispatches a request to a controller action.
  * @removed 2.0.0 Please use {@link Ext.app.Application#dispatch} instead
  */
 Ext.deprecateMethod(Ext, 'dispatch', null, "Ext.dispatch() is deprecated, please use Ext.app.Application.dispatch() instead");
@@ -1406,6 +1420,7 @@ Ext.deprecateMethod(Ext, 'dispatch', null, "Ext.dispatch() is deprecated, please
 /**
  * @member Ext
  * @method getOrientation
+ * Returns the current orientation of the mobile device.
  * @removed 2.0.0
  * Please use {@link Ext.Viewport#getOrientation getOrientation} instead
  */
@@ -1415,6 +1430,7 @@ Ext.deprecateMethod(Ext, 'getOrientation', null, "Ext.getOrientation() has been 
 /**
  * @member Ext
  * @method reg
+ * Registers a new xtype.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'reg', null, "Ext.reg() has been removed");
@@ -1422,6 +1438,7 @@ Ext.deprecateMethod(Ext, 'reg', null, "Ext.reg() has been removed");
 /**
  * @member Ext
  * @method preg
+ * Registers a new ptype.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'preg', null, "Ext.preg() has been removed");
@@ -1429,6 +1446,8 @@ Ext.deprecateMethod(Ext, 'preg', null, "Ext.preg() has been removed");
 /**
  * @member Ext
  * @method redirect
+ * Dispatches a request to a controller action, adding to the History stack
+ * and updating the page url as necessary.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'redirect', null, "Ext.redirect() has been removed");
@@ -1436,6 +1455,7 @@ Ext.deprecateMethod(Ext, 'redirect', null, "Ext.redirect() has been removed");
 /**
  * @member Ext
  * @method regApplication
+ * Creates a new Application class from the specified config object.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regApplication', null, "Ext.regApplication() has been removed");
@@ -1443,6 +1463,7 @@ Ext.deprecateMethod(Ext, 'regApplication', null, "Ext.regApplication() has been 
 /**
  * @member Ext
  * @method regController
+ * Creates a new Controller class from the specified config object.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regController', null, "Ext.regController() has been removed");
@@ -1450,6 +1471,7 @@ Ext.deprecateMethod(Ext, 'regController', null, "Ext.regController() has been re
 /**
  * @member Ext
  * @method regLayout
+ * Registers new layout type.
  * @removed 2.0.0
  */
 Ext.deprecateMethod(Ext, 'regLayout', null, "Ext.regLayout() has been removed");
@@ -1637,6 +1659,13 @@ Ext.define('Ext.env.Browser', {
         if (engineMatch) {
             engineName = engineNames[Ext.Object.getKey(statics.enginePrefixes, engineMatch[1])];
             engineVersion = new Ext.Version(engineMatch[2]);
+        }
+
+        // Facebook changes the userAgent when you view a website within their iOS app. For some reason, the strip out information
+        // about the browser, so we have to detect that and fake it...
+        if (userAgent.match(/FB/) && browserName == "Other") {
+            browserName = browserNames.safari;
+            engineName = engineNames.webkit;
         }
 
         Ext.apply(this, {
@@ -2196,6 +2225,7 @@ Ext.define('Ext.env.Feature', {
         /**
          * @member Ext.feature.has
          * @property {Boolean} WebSockets
+         * True if the current device supports WebSockets.
          */
         WebSockets: function() {
             return 'WebSocket' in window;
@@ -2204,6 +2234,9 @@ Ext.define('Ext.env.Feature', {
         /**
          * @member Ext.feature.has
          * @property {Boolean} Range
+         * True if the current device supports [DOM document fragments.][1]
+         *
+         * [1]: https://developer.mozilla.org/en/DOM/range
          */
         Range: function() {
             return !!document.createRange;
@@ -2212,6 +2245,9 @@ Ext.define('Ext.env.Feature', {
         /**
          * @member Ext.feature.has
          * @property {Boolean} CreateContextualFragment
+         * True if the current device supports HTML fragment parsing using [range.createContextualFragment()][1].
+         *
+         * [1]: https://developer.mozilla.org/en/DOM/range.createContextualFragment
          */
         CreateContextualFragment: function() {
             var range = !!document.createRange ? document.createRange() : false;
@@ -2221,6 +2257,9 @@ Ext.define('Ext.env.Feature', {
         /**
          * @member Ext.feature.has
          * @property {Boolean} History
+         * True if the current device supports history management with [history.pushState()][1].
+         *
+         * [1]: https://developer.mozilla.org/en/DOM/Manipulating_the_browser_history#The_pushState().C2.A0method
          */
         History: function() {
             return ('history' in window && 'pushState' in window.history);
@@ -2294,6 +2333,7 @@ Ext.define('Ext.env.Feature', {
     //<deprecated product=touch since=2.0>
     /**
      * @class Ext.supports
+     * Determines information about features are supported in the current environment.
      * @deprecated 2.0.0
      * Please use the {@link Ext.env.Browser}, {@link Ext.env.OS} and {@link Ext.feature.has} classes.
      */
@@ -2301,6 +2341,7 @@ Ext.define('Ext.env.Feature', {
     /**
      * @member Ext.supports
      * @property Transitions
+     * @inheritdoc Ext.feature.has#CssTransitions
      * @deprecated 2.0.0 Please use {@link Ext.feature.has#CssTransitions} instead
      */
     Ext.deprecatePropertyValue(has, 'Transitions', has.CssTransitions,
@@ -2309,6 +2350,7 @@ Ext.define('Ext.env.Feature', {
     /**
      * @member Ext.supports
      * @property SVG
+     * @inheritdoc Ext.feature.has#Svg
      * @deprecated 2.0.0 Please use {@link Ext.feature.has#Svg} instead
      */
     Ext.deprecatePropertyValue(has, 'SVG', has.Svg,
@@ -2317,6 +2359,7 @@ Ext.define('Ext.env.Feature', {
     /**
      * @member Ext.supports
      * @property VML
+     * @inheritdoc Ext.feature.has#Vml
      * @deprecated 2.0.0 Please use {@link Ext.feature.has#Vml} instead
      */
     Ext.deprecatePropertyValue(has, 'VML', has.Vml,
@@ -2325,6 +2368,7 @@ Ext.define('Ext.env.Feature', {
     /**
      * @member Ext.supports
      * @property AudioTag
+     * @inheritdoc Ext.feature.has#Audio
      * @deprecated 2.0.0 Please use {@link Ext.feature.has#Audio} instead
      */
     Ext.deprecatePropertyValue(has, 'AudioTag', has.Audio,
@@ -2333,6 +2377,7 @@ Ext.define('Ext.env.Feature', {
     /**
      * @member Ext.supports
      * @property GeoLocation
+     * @inheritdoc Ext.feature.has#Geolocation
      * @deprecated 2.0.0 Please use {@link Ext.feature.has#Geolocation} instead
      */
     Ext.deprecatePropertyValue(has, 'GeoLocation', has.Geolocation,
@@ -3560,6 +3605,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method cssTranslate
+     * Translates an element using CSS 3 in 2D.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'cssTranslate', null, "Ext.dom.Element.cssTranslate() has been removed");
@@ -3567,6 +3613,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method getOuterHeight
+     * Retrieves the height of the element account for the top and bottom margins.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'getOuterHeight', null, "Ext.dom.Element.getOuterHeight() has been removed");
@@ -3574,6 +3621,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method getOuterWidth
+     * Retrieves the width of the element accounting for the left and right margins.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'getOuterWidth', null, "Ext.dom.Element.getOuterWidth() has been removed");
@@ -3581,6 +3629,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method getScrollParent
+     * Gets the Scroller instance of the first parent that has one.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'getScrollParent', null, "Ext.dom.Element.getScrollParent() has been removed");
@@ -3588,6 +3637,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method isDescendent
+     * Determines if this element is a descendent of the passed in Element.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'isDescendent', null, "Ext.dom.Element.isDescendent() has been removed");
@@ -3595,6 +3645,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method mask
+     * Puts a mask over this element to disable user interaction.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'mask', null, "Ext.dom.Element.mask() has been removed");
@@ -3602,6 +3653,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method setTopLeft
+     * Sets the element's top and left positions directly using CSS style.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'setTopLeft', null, "Ext.dom.Element.setTopLeft() has been removed");
@@ -3609,6 +3661,7 @@ Ext.define('Ext.dom.Element', {
     /**
      * @member Ext.dom.Element
      * @method unmask
+     * Removes a previously applied mask.
      * @removed 2.0.0
      */
     Ext.deprecateMethod(Ext.dom.Element, 'unmask', null, "Ext.dom.Element.unmask() has been removed");
@@ -5156,10 +5209,10 @@ Ext.dom.Element.addMembers({
     hide: function() {
         var dom = this.dom,
             domStyle = dom.style,
-            needsRedraw = Ext.os.is.iOS5;
+            needsRedraw = Ext.os.is.iOS;
 
         if (domStyle.getPropertyValue('display') !== 'none') {
-            // iOS5 sometimes has a long delay before redrawing elements with their CSS 'display' set to 'none'
+            // iOS sometimes has a long delay before redrawing elements with their CSS 'display' set to 'none'
             // This force a redraw to make sure the element is hidden instantly
             if (needsRedraw) {
                 domStyle.setProperty('display', 'none', 'important');
@@ -5802,7 +5855,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
     // private
     getElement: function(el) {
         // Set the shared flyweight dom property to the current element
-        return this.el.attach(el);
+        return this.el.attach(el).synchronize();
     },
 
     // private

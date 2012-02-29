@@ -297,7 +297,7 @@ Ext.define('Ext.Button', {
 
         /**
          * @cfg {String} iconAlign
-         * The position within the Button to render the icon Options are: `top`, `right`, `botom`, `left` and `center` (when you have
+         * The position within the Button to render the icon Options are: `top`, `right`, `bottom`, `left` and `center` (when you have
          * no {@link #text} set).
          * @accessor
          */
@@ -383,7 +383,6 @@ Ext.define('Ext.Button', {
             scope      : this,
             tap        : 'onTap',
             touchstart : 'onPress',
-            touchmove  : 'onTouchMove',
             touchend   : 'onRelease'
         });
     },
@@ -668,10 +667,6 @@ Ext.define('Ext.Button', {
                 element.addCls(pressedCls);
             }
         }
-    },
-
-    onTouchMove: function(e) {
-        return;
     },
 
     // @private

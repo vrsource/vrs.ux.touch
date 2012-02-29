@@ -13,6 +13,96 @@
         <div id="releases">
             <div class="release">
                 <h1>
+                    Release Notes for Sencha Touch 2.0.RC2
+                </h1>
+                <p class="notes">
+                    Release Notes: Release Notes: February 28, 2012<br>
+                    Version Number: 2.0.0.RC2
+                </p>
+
+                <div style="margin: 10px">
+                    <p><b>Special Notes:</b></p>
+                    <p>The SASS $base-color in the default theme has been changed to Triton blue. If you want to continue to use the 1.x $base-color, you set it to `#354F6E` in your SASS theme file.</p>
+                </div>
+
+                <ul>
+                    <li>Enhancements/Changes
+                        <ul>
+                            <li>Updated base color to Triton blue</li>
+                            <li>Updated bottom tabs CSS design to not use alpha channel and improve performance</li>
+                            <li>$include-tab-highlights is now respected for bottom tabs</li>
+                            <li>Simplified default button/tab badge styling</li>
+                            <li>Added zebrastripe to list with a new $list-zebrastripe SASS configuration</li>
+                            <li>[TOUCH-2165] Added a margin to message boxes so they will not stick to the edge of the screen</li>
+                            <li>[TOUCH-2170] Added rounded corners on android devices on some examples</li>
+                            <li>Removed a call to remove a custom cls in onClick; instead, it will remove when you call #show again</li>
+                            <li>[TOUCH-2198] Removed desktop specific styling for fields in toolbars</li>
+                            <li>[TOUCH-2211] Updated the documentation for field.Field#reset</li>
+                            <li>[TOUCH-2225] Updated Operation to automatically match up a single created record, even when no clientId has been sent back</li>
+                            <li>[TOUCH-2233] Added 'itemsingletap' event to DataView/List</li>
+                            <li>Updated documentation for triggerEvent</li>
+                            <li>[TOUCH-2234] Updated Nested List API example</li>
+                            <li>[TOUCH-2171] SizeMonitor will no longer fire a sizing event the first time it is added to a container</li>
+                            <li>[TOUCH-2247] Added support for empty headers in Lists</li>
+                            <li>[TOUCH-2189] Added initialOffset to Draggable.  Fixed an issue with clearing the constraint of a draggable item</li>
+                            <li>Update Box layout docs to reflect proper CSS3 definition</li>
+                            <li>[TOUCH-2228] If you specify an Ext.Loader path for your application's namespace outside of Ext.application (and therefore do not use the appFolder configuration), appFolder no longer overwrites the mapping</li>
+                            <li>[TOUCH-2185] Trying to set the layout of a TabPanel to something that does not derive from a Card layout will now throw a hard error in debug mode</li>
+                            <li>[TOUCH-2217] Stores defined in Controllers are now instantiated automatically just like Stores defined in Ext.application</li>
+                            <li>[TOUCH-2242] Changed the logic of form#getValues slightly to allow for multiple values with the same name (saves as array) and the same for checkboxes and radio fields</li>
+                            <li>[TOUCH-2242] Added a getSubmitValue function into CheckBox fields so the form#getValues returns the correct value when there are multiple results</li>
+                            <li>Added a warning into ComponentManager#register so it warns developers if they create a component with an ID which already exists</li>
+                            <li>[TOUCH-2264] Removed all Ext.util.Observable internal uses</li>
+                            <li>[TOUCH-2252] Added a check for Facebook in os.Browser, as they change the userAgent</li>
+                            <li>[TOUCH-2257] Xml reader now accepts DOCUMENT_MODE (9) in addition to ELEMENT_NODE (1)</li>
+                            <li>[TOUCH-2103] Added support for reading an array using an Ajax proxy and an Array reader</li>
+                            <li>[TOUCH-2207] Updated Reader to not read undefined values</li>
+                            <li>[TOUCH-2248] Changed the fire change event on selectfield to only happen after initialization</li>
+                            <li>[TOUCH-2226] Improved client side association reference / store updating</li>
+                        </ul>
+                    </li>
+                    <li>Bug Fixes
+                        <ul>
+                            <li>[TOUCH-2182] Fixed problems with the routes in touch style app</li>
+                            <li>[TOUCH-2196] Fixed a bug with MessageBox where the configuration options were persistent when using Ext.Msg#show()</li>
+                            <li>Fixed Ext.mixin.Observable dependency in AbstractMixedCollection</li>
+                            <li>[TOUCH-2193] Fixed the logic for application icons with retina devices</li>
+                            <li>[TOUCH-2208] Fixed the defaultBackButtonText configuration of NavigationView to ensure it gets proxied to NavigationBar</li>
+                            <li>[TOUCH-2210] Fixed the docs for the change event in picker and datepicker</li>
+                            <li>[TOUCH-2210] Fixed the change event on pickers to only fire when the data changes</li>
+                            <li>[TOUCH-2205] Fixed a reference to this.el in MessageBox which was throwing a deprecation warning</li>
+                            <li>[TOUCH-2223] Fixed issue with Map not recognizing mapOptions passed in as a config </li>
+                            <li>[TOUCH-2229] Fixed syntax error in Ext.proxy.Direct</li>
+                            <li>Fixed exponential loop of doom in Selectable.deselectAll()</li>
+                            <li>[TOUCH-2231] Fixed two issues that prevented inverted instances of associations to be updated sometimes</li>
+                            <li>[TOUCH-2199] Fixed an issue where anyMatch and caseSensitive where not correctly passed along to the data.filter method</li>
+                            <li>[TOUCH-2215] Fixed unnecessary MixedCollection dependency in the Error class</li>
+                            <li>[TOUCH-2230] Fixed style config in component to use element.applyStyles so the old formats are available</li>
+                            <li>[TOUCH-2040] Fixed issue with animations which could throw an error</li>
+                            <li>[TOUCH-2204] Fixed synchronization issue with CompositeElementLite</li>
+                            <li>[TOUCH-2246] Fixed issue with dynamically setting emptyText on an empty list and the old emptyText component is now always removed when cleared or changed</li>
+                            <li>[TOUCH-2250] Fixed issue with DataView not respecting deferEmptyText when a store is added but not loaded on a DataView/List</li>
+                            <li>[TOUCH-2251] Fixed issue with destroying a translated item in a layout</li>
+                            <li>[TOUCH-2259] Fixed issue with setting a width of the left button in a TitleBar</li>
+                            <li>[TOUCH-2235] Fixed issue with Containers where the activeItem was still pointing to the last item in the container even after all items were removed</li>
+                            <li>[TOUCH-2237] Fixed an indexOf error with SegmentedButton when pressedButtons was not an array</li>
+                            <li>[TOUCH-2267] Fixed repaint issue on iOS when hiding components</li>
+                            <li>[TOUCH-2222] Fixed a issue with Picker where the set value was not being set if it wasn't already rendered</li>
+                            <li>[TOUCH-2135] Fixed issue with tapping multiple times on a mask while it is being animated</li>
+                            <li>[TOUCH-2227] Fixed an issue where the root was not properly extracted from the response data in Direct proxy and added Direct examples</li>
+                            <li>Fixed issue with setting the center property of mapOptions of Map before the map is on the screen</li>
+                        </ul>
+                    </li>
+                    <li>Known Issues
+                        <ul>
+                            <li>Android 4 transitions are hampered by a <a href="http://code.google.com/p/android/issues/detail?id=25147" target="_blank">bug reported to the Android team</a>.  Help get its attention by starring the issue.</li>
+                            <li><a href="http://www.sencha.com/forum/showthread.php?173327-WebStorage-proxy-can-t-deal-with-associated-data&p=740031&viewfull=1#post740031" target="_blank">Dealing with localstorage and associations</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="release">
+                <h1>
                     Release Notes for Sencha Touch 2.0.RC
                 </h1>
                 <p class="notes">

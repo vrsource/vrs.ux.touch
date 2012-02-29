@@ -1,3 +1,10 @@
+// Ext.Loader.setConfig({
+//     enabled: true,
+//     paths: {
+//         Ext: 'touch/src'
+//     }
+// });
+
 Ext.application({
     name: 'Device',
 

@@ -194,6 +194,11 @@
                 },
                 {
                     "path": "src/data/",
+                    "name": "Error.js",
+                    "clsName": "Ext.data.Error"
+                },
+                {
+                    "path": "src/data/",
                     "name": "JsonP.js",
                     "clsName": "Ext.data.JsonP"
                 },
@@ -839,6 +844,11 @@
                 },
                 {
                     "path": "src/data/",
+                    "name": "Errors.js",
+                    "clsName": "Ext.data.Errors"
+                },
+                {
+                    "path": "src/data/",
                     "name": "StoreManager.js",
                     "clsName": "Ext.data.StoreManager"
                 },
@@ -961,16 +971,6 @@
                     "path": "src/",
                     "name": "ItemCollection.js",
                     "clsName": "Ext.ItemCollection"
-                },
-                {
-                    "path": "src/data/",
-                    "name": "Error.js",
-                    "clsName": "Ext.data.Error"
-                },
-                {
-                    "path": "src/data/",
-                    "name": "Errors.js",
-                    "clsName": "Ext.data.Errors"
                 },
                 {
                     "path": "src/data/proxy/",

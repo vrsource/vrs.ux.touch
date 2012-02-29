@@ -29,14 +29,18 @@ Ext.define('Ext.tab.Bar', {
 
     eventedConfig: {
         /**
-         * @cfg {Ext.Component} activeTab
+         * @cfg {Number/String/Ext.Component} activeTab
+         * The initially activated tab. Can be specified as numeric index,
+         * component ID or as the component instance itself.
          * @accessor
+         * @evented
          */
         activeTab: null
     },
 
     /**
      * @event tabchange
+     * Fired when active tab changes.
      * @param {Ext.tab.Bar} this
      * @param {Ext.tab.Tab} newTab The new Tab
      * @param {Ext.tab.Tab} oldTab The old Tab

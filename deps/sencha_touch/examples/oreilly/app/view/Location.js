@@ -22,7 +22,6 @@ Ext.define('Oreilly.view.Location', {
 	},
 
 	initialize: function() {
-
 		var position = new google.maps.LatLng(Oreilly.app.mapCenter[0], Oreilly.app.mapCenter[1]),
 			infoWindow = new google.maps.InfoWindow({ content: Oreilly.app.mapText }),
 			map, marker;
@@ -46,9 +45,5 @@ Ext.define('Oreilly.view.Location', {
 	    google.maps.event.addListener(marker, 'click', function() {
 	        infoWindow.open(map, marker);
 	    });
-
-	    setTimeout(function() {
-            map.getMap().panTo(position);
-        }, 2000);
 	}
 });

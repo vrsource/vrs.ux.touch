@@ -23,12 +23,14 @@ Ext.define('Ext.Map', {
     config: {
         /**
          * @event maprender
+         * Fired when Map initially rendered.
          * @param {Ext.Map} this
          * @param {google.maps.Map} map The rendered google.map.Map instance
          */
 
         /**
          * @event centerchange
+         * Fired when map is panned around.
          * @param {Ext.Map} this
          * @param {google.maps.Map} map The rendered google.map.Map instance
          * @param {google.maps.LatLng} center The current LatLng center of the map
@@ -36,6 +38,7 @@ Ext.define('Ext.Map', {
 
         /**
          * @event typechange
+         * Fired when display type of the map changes.
          * @param {Ext.Map} this
          * @param {google.maps.Map} map The rendered google.map.Map instance
          * @param {Number} mapType The current display type of the map
@@ -43,6 +46,7 @@ Ext.define('Ext.Map', {
 
         /**
          * @event zoomchange
+         * Fired when map is zoomed.
          * @param {Ext.Map} this
          * @param {google.maps.Map} map The rendered google.map.Map instance
          * @param {Number} zoomLevel The current zoom level of the map
@@ -72,6 +76,7 @@ Ext.define('Ext.Map', {
 
         /**
          * @cfg {Ext.util.GeoLocation} geo
+         * Geolocation provider for the map.
          * @accessor
          */
         geo: null,
@@ -87,7 +92,6 @@ Ext.define('Ext.Map', {
 
     constructor: function() {
         this.callParent(arguments);
-        this.options= {};
         this.element.setVisibilityMode(Ext.Element.OFFSETS);
 
         if (!(window.google || {}).maps) {
@@ -113,16 +117,21 @@ Ext.define('Ext.Map', {
     },
 
     updateMapOptions: function(newOptions) {
-        var gm = (window.google || {}).maps,
+        var me = this,
+            gm = (window.google || {}).maps,
             map = this.getMap();
 
         if (gm && map) {
             map.setOptions(newOptions);
         }
+        if (newOptions.center && !me.isPainted()) {
+            me.un('painted', 'setMapCenter', this);
+            me.on('painted', 'setMapCenter', this, { delay: 50, single: true, args: [newOptions.center] });
+        }
     },
 
     getMapOptions: function() {
-        return Ext.merge({}, this.options);
+        return Ext.merge({}, this.options || this.getInitialConfig('mapOptions'));
     },
 
     updateUseCurrentLocation: function(useCurrentLocation) {
@@ -240,7 +249,7 @@ Ext.define('Ext.Map', {
         if (gm) {
             if (!me.isPainted()) {
                 me.un('painted', 'setMapCenter', this);
-                me.on('painted', 'setMapCenter', this, { single: true, args: [coordinates] });
+                me.on('painted', 'setMapCenter', this, { delay: 50, single: true, args: [coordinates] });
                 return;
             }
             coordinates = coordinates || new gm.LatLng(37.381592, -122.135672);

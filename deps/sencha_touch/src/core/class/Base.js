@@ -1084,7 +1084,11 @@ var noArgs = [],
         },
 
         /**
-         *
+         * Returns the initial configuration passed to constructor.
+         * 
+         * @param {String} [name] When supplied, value for particular configuration
+         * option is returned, otherwise the full config object is returned.
+         * @return {Object/Mixed}
          */
         getInitialConfig: function(name) {
             var config = this.config;

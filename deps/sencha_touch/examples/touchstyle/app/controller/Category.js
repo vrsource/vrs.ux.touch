@@ -28,7 +28,9 @@ Ext.define('TouchStyle.controller.Category', {
             ':id': 'showCategoryById'
         },
 
-        currentRecord: null
+        currentRecord: null,
+
+        stack: []
     },
 
     init: function() {
@@ -53,7 +55,8 @@ Ext.define('TouchStyle.controller.Category', {
         var history = this.getApplication().getHistory(),
             record = this.getCurrentRecord().parentNode,
             urlId = (record && record.get('urlId')) ? record.get('urlId') : '',
-            productView = this.productView;
+            productView = this.productView,
+            stack = this.getStack();
 
         this.setCurrentRecord(record);
 
@@ -61,12 +64,24 @@ Ext.define('TouchStyle.controller.Category', {
             url: urlId
         }), true);
 
+        stack.pop();
+        this.setStack(stack);
+
         if (productView && !productView.isHidden()) {
             productView.hide();
         }
     },
 
     showRootCategory: function() {
+        var stack = this.getStack();
+
+        if (stack.length) {
+            this.getMain().pop();
+            return;
+        }
+
+        this.setStack([]);
+
         var store = Ext.getStore('Categories'),
             record = store.getRoot();
 
@@ -80,7 +95,14 @@ Ext.define('TouchStyle.controller.Category', {
 
     showCategoryById: function(id) {
         var store = Ext.getStore('Categories'),
+            stack = this.getStack(),
+            previousStackItem = stack[stack.length - 2],
             records, record;
+
+        if (previousStackItem && previousStackItem == id) {
+            this.getMain().pop();
+            return;
+        }
 
         records = Ext.Array.filter(store.data.all, function(record) {
             if (record.get('urlId') == id) {
@@ -91,6 +113,10 @@ Ext.define('TouchStyle.controller.Category', {
         record = records[0];
         if (record) {
             this.addPreviousViews(record);
+
+            stack.push(id);
+            this.setStack(stack);
+
             if (record.childNodes.length) {
                 this.showCategory(record);
             } else {
@@ -106,7 +132,8 @@ Ext.define('TouchStyle.controller.Category', {
             main = this.getMain(),
             layout = main.getLayout(),
             animation = layout.getAnimation(),
-            ln, i;
+            stack = this.getStack(),
+            ln, i, urlId;
 
         if (main.getInnerItems().length) {
             return;
@@ -120,8 +147,15 @@ Ext.define('TouchStyle.controller.Category', {
 
         ln = parents.length;
         for (i = 0; i < ln; i++) {
+            urlId = parents[i].get('urlId');
+            if (urlId) {
+                stack.push(urlId);
+            }
+
             this.showCategory(parents[i]);
         }
+
+        this.setStack(stack);
 
         setTimeout(function() {
             layout.setAnimation(animation);

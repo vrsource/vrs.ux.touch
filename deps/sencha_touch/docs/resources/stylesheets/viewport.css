@@ -476,20 +476,64 @@ pre, code, kbd, samp, tt {
   background: url(../images/icons.png) no-repeat 0 -520px;
 }
 /* line 111, ../sass/_header.scss */
+#search-dropdown .meta {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+}
+/* line 175, ../sass/_mixins.scss */
+#search-dropdown .meta .signature {
+  font-size: 0.6em;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0 0.5em;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  color: white;
+  background-color: #aaa;
+}
+/* line 157, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.deprecated {
+  background-color: #aa0000;
+}
+/* line 159, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.removed {
+  color: #aa0000;
+  background-color: transparent;
+  border: 1px solid #aa0000;
+  text-decoration: line-through;
+}
+/* line 164, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.static {
+  background-color: #484848;
+}
+/* line 166, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.required {
+  background-color: #484848;
+}
+/* line 168, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.private {
+  background-color: #FD6B1B;
+}
+/* line 170, ../sass/_mixins.scss */
+#search-dropdown .meta .signature.protected {
+  background-color: #9B86FC;
+}
+/* line 117, ../sass/_header.scss */
 #search-dropdown .item.x-item-selected {
   background-color: #ffffaa;
 }
-/* line 113, ../sass/_header.scss */
+/* line 119, ../sass/_header.scss */
 #search-dropdown .item.x-view-over {
   background-color: #ffffaa;
 }
-/* line 115, ../sass/_header.scss */
+/* line 121, ../sass/_header.scss */
 #search-dropdown .footer {
   cursor: auto;
   text-align: right;
   font-size: 0.85em;
 }
-/* line 119, ../sass/_header.scss */
+/* line 125, ../sass/_header.scss */
 #search-dropdown .footer a {
   padding: 0 0.5em;
 }
@@ -924,8 +968,8 @@ pre, code, kbd, samp, tt {
   color: #083772;
   text-decoration: underline;
 }
-/* line 39, ../sass/_hover_menu.scss */
-.hover-menu a span.signature {
+/* line 175, ../sass/_mixins.scss */
+.hover-menu a .signature {
   font-size: 0.6em;
   text-transform: uppercase;
   font-weight: bold;
@@ -936,34 +980,34 @@ pre, code, kbd, samp, tt {
   background-color: #aaa;
 }
 /* line 157, ../sass/_mixins.scss */
-.hover-menu a span.signature.deprecated {
+.hover-menu a .signature.deprecated {
   background-color: #aa0000;
 }
 /* line 159, ../sass/_mixins.scss */
-.hover-menu a span.signature.removed {
+.hover-menu a .signature.removed {
   color: #aa0000;
   background-color: transparent;
   border: 1px solid #aa0000;
   text-decoration: line-through;
 }
 /* line 164, ../sass/_mixins.scss */
-.hover-menu a span.signature.static {
+.hover-menu a .signature.static {
   background-color: #484848;
 }
 /* line 166, ../sass/_mixins.scss */
-.hover-menu a span.signature.required {
+.hover-menu a .signature.required {
   background-color: #484848;
 }
 /* line 168, ../sass/_mixins.scss */
-.hover-menu a span.signature.private {
+.hover-menu a .signature.private {
   background-color: #FD6B1B;
 }
 /* line 170, ../sass/_mixins.scss */
-.hover-menu a span.signature.protected {
+.hover-menu a .signature.protected {
   background-color: #9B86FC;
 }
 
-/* line 47, ../sass/_hover_menu.scss */
+/* line 41, ../sass/_hover_menu.scss */
 .hover-menu a {
   font-family: Helvetica, Arial, clean, sans-serif;
   font-size: 12px;
@@ -2349,18 +2393,26 @@ p.screenshot span {
   padding-bottom: 7px;
 }
 /* line 99, ../sass/_comments.scss */
+.comment-list form.editCommentForm .subscribe,
+.comment-list form.newCommentForm .subscribe {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: block;
+}
+/* line 105, ../sass/_comments.scss */
 .comment-list form.editCommentForm .com-meta,
 .comment-list form.newCommentForm .com-meta {
   position: relative;
   margin-top: 8px;
   text-align: right;
 }
-/* line 103, ../sass/_comments.scss */
+/* line 109, ../sass/_comments.scss */
 .comment-list form.editCommentForm .com-meta .toggleCommentGuide,
 .comment-list form.newCommentForm .com-meta .toggleCommentGuide {
   font-weight: bold;
 }
-/* line 105, ../sass/_comments.scss */
+/* line 111, ../sass/_comments.scss */
 .comment-list form.editCommentForm img,
 .comment-list form.newCommentForm img {
   border-radius: 2px;
@@ -2369,7 +2421,7 @@ p.screenshot span {
   left: 0;
   margin-right: 10px;
 }
-/* line 109, ../sass/_comments.scss */
+/* line 115, ../sass/_comments.scss */
 .comment-list form.editCommentForm .author,
 .comment-list form.newCommentForm .author {
   line-height: 25px;
@@ -2377,7 +2429,7 @@ p.screenshot span {
   left: 35px;
   margin-bottom: 10px;
 }
-/* line 114, ../sass/_comments.scss */
+/* line 120, ../sass/_comments.scss */
 .comment-list form.editCommentForm .CodeMirror,
 .comment-list form.editCommentForm textarea,
 .comment-list form.newCommentForm .CodeMirror,
@@ -2390,14 +2442,14 @@ p.screenshot span {
   padding: 3px;
   border: auto;
 }
-/* line 122, ../sass/_comments.scss */
+/* line 128, ../sass/_comments.scss */
 .comment-list form.editCommentForm .CodeMirror .CodeMirror-scroll,
 .comment-list form.editCommentForm textarea,
 .comment-list form.newCommentForm .CodeMirror .CodeMirror-scroll,
 .comment-list form.newCommentForm textarea {
   min-height: 8em;
 }
-/* line 124, ../sass/_comments.scss */
+/* line 130, ../sass/_comments.scss */
 .comment-list form.editCommentForm input.sub,
 .comment-list form.newCommentForm input.sub {
   box-shadow: inset #b3f33d 0 1px 0;
@@ -2433,7 +2485,7 @@ p.screenshot span {
   background: -moz-linear-gradient(top, #bbbbbb, #9c9c9c);
   box-shadow: inset #d7d7d7 0 1px 0;
 }
-/* line 131, ../sass/_comments.scss */
+/* line 137, ../sass/_comments.scss */
 .comment-list form.editCommentForm .toggleCodeEditor,
 .comment-list form.newCommentForm .toggleCodeEditor {
   position: absolute;
@@ -2443,26 +2495,26 @@ p.screenshot span {
   background: url(../images/example-icons.png) no-repeat -2px -20px;
   right: 15px;
 }
-/* line 139, ../sass/_comments.scss */
+/* line 145, ../sass/_comments.scss */
 .comment-list form.editCommentForm .toggleCodeEditor.selected, .comment-list form.editCommentForm .toggleCodeEditor:hover,
 .comment-list form.newCommentForm .toggleCodeEditor.selected,
 .comment-list form.newCommentForm .toggleCodeEditor:hover {
   background-position: -30px -20px;
 }
-/* line 141, ../sass/_comments.scss */
+/* line 147, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt,
 .comment-list form.newCommentForm .commentGuideTxt {
   border-top: 1px solid #C7D1D9;
   margin-top: 15px;
   padding-top: 10px;
 }
-/* line 145, ../sass/_comments.scss */
+/* line 151, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt .markdown.preview,
 .comment-list form.newCommentForm .commentGuideTxt .markdown.preview {
   float: left;
   width: 310px;
 }
-/* line 148, ../sass/_comments.scss */
+/* line 154, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt .markdown.preview pre,
 .comment-list form.newCommentForm .commentGuideTxt .markdown.preview pre {
   border: 0;
@@ -2471,13 +2523,13 @@ p.screenshot span {
   line-height: 1.5em;
   background: transparent;
 }
-/* line 154, ../sass/_comments.scss */
+/* line 160, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt .markdown.result,
 .comment-list form.newCommentForm .commentGuideTxt .markdown.result {
   margin-left: 320px;
   width: 260px;
 }
-/* line 157, ../sass/_comments.scss */
+/* line 163, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt .markdown,
 .comment-list form.newCommentForm .commentGuideTxt .markdown {
   background: #fff;
@@ -2486,7 +2538,7 @@ p.screenshot span {
   border-radius: 5px;
   -moz-border-radius: 5px;
 }
-/* line 162, ../sass/_comments.scss */
+/* line 168, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt .markdown h4,
 .comment-list form.newCommentForm .commentGuideTxt .markdown h4 {
   position: absolute;
@@ -2495,27 +2547,27 @@ p.screenshot span {
   padding: 5px 10px;
   background: rgba(0, 0, 0, 0.05);
 }
-/* line 168, ../sass/_comments.scss */
+/* line 174, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt code,
 .comment-list form.newCommentForm .commentGuideTxt code {
   padding-left: 5px;
 }
-/* line 170, ../sass/_comments.scss */
+/* line 176, ../sass/_comments.scss */
 .comment-list form.editCommentForm .commentGuideTxt ul,
 .comment-list form.newCommentForm .commentGuideTxt ul {
   margin-top: 5px;
 }
-/* line 173, ../sass/_comments.scss */
+/* line 179, ../sass/_comments.scss */
 .comment-list.open form.newCommentForm {
   display: block;
 }
 
-/* line 175, ../sass/_comments.scss */
+/* line 181, ../sass/_comments.scss */
 .comment {
   padding-top: 10px;
   padding-left: 2px;
 }
-/* line 182, ../sass/_comments.scss */
+/* line 188, ../sass/_comments.scss */
 .comment:hover .com-meta .editComment,
 .comment:hover .com-meta .deleteComment,
 .comment:hover .com-meta .vote {
@@ -2524,27 +2576,27 @@ p.screenshot span {
   -o-transition: opacity 0.2s linear;
   opacity: 1;
 }
-/* line 185, ../sass/_comments.scss */
+/* line 191, ../sass/_comments.scss */
 .comment .target {
   color: #666;
   font-size: 90%;
   font-weight: normal;
 }
-/* line 189, ../sass/_comments.scss */
+/* line 195, ../sass/_comments.scss */
 .comment .target a {
   color: #666;
 }
-/* line 191, ../sass/_comments.scss */
+/* line 197, ../sass/_comments.scss */
 .comment .com-meta {
   position: relative;
   text-size: 13px;
 }
-/* line 194, ../sass/_comments.scss */
+/* line 200, ../sass/_comments.scss */
 .comment .com-meta img {
   border-radius: 2px;
   -moz-border-radius: 2px;
 }
-/* line 196, ../sass/_comments.scss */
+/* line 202, ../sass/_comments.scss */
 .comment .com-meta .author {
   position: absolute;
   left: 40px;
@@ -2552,7 +2604,7 @@ p.screenshot span {
   top: 2px;
   font-size: 14px;
 }
-/* line 202, ../sass/_comments.scss */
+/* line 208, ../sass/_comments.scss */
 .comment .com-meta .author .problem {
   color: #fff;
   border-radius: 2px;
@@ -2562,14 +2614,14 @@ p.screenshot span {
   padding: 0 3px 1px 3px;
   background-color: #aa0000;
 }
-/* line 209, ../sass/_comments.scss */
+/* line 215, ../sass/_comments.scss */
 .comment .com-meta .time {
   position: absolute;
   right: 20px;
   color: #999;
   top: 0;
 }
-/* line 214, ../sass/_comments.scss */
+/* line 220, ../sass/_comments.scss */
 .comment .com-meta .deleteComment {
   right: 110px;
   color: #999;
@@ -2579,7 +2631,7 @@ p.screenshot span {
   -o-transition: opacity 0.2s linear;
   position: absolute;
 }
-/* line 220, ../sass/_comments.scss */
+/* line 226, ../sass/_comments.scss */
 .comment .com-meta .editComment {
   right: 160px;
   color: #999;
@@ -2589,13 +2641,13 @@ p.screenshot span {
   -o-transition: opacity 0.2s linear;
   position: absolute;
 }
-/* line 226, ../sass/_comments.scss */
+/* line 232, ../sass/_comments.scss */
 .comment .com-meta .vote {
   position: absolute;
   left: 2px;
   top: 33px;
 }
-/* line 230, ../sass/_comments.scss */
+/* line 236, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentUp {
   position: absolute;
   display: block;
@@ -2603,17 +2655,17 @@ p.screenshot span {
   height: 18px;
   background: url(../images/vote-arrows.png) no-repeat;
 }
-/* line 236, ../sass/_comments.scss */
+/* line 242, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentUp.selected {
   opacity: 0.4;
   background-position: -22px 0;
 }
-/* line 239, ../sass/_comments.scss */
+/* line 245, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentUp:hover {
   opacity: 1 !important;
   background-position: -22px 0;
 }
-/* line 242, ../sass/_comments.scss */
+/* line 248, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentDown {
   position: absolute;
   display: block;
@@ -2622,17 +2674,17 @@ p.screenshot span {
   top: 36px;
   background: url(../images/vote-arrows.png) no-repeat 0 -35px;
 }
-/* line 249, ../sass/_comments.scss */
+/* line 255, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentDown.selected {
   background-position: -22px -35px;
   opacity: 0.4;
 }
-/* line 252, ../sass/_comments.scss */
+/* line 258, ../sass/_comments.scss */
 .comment .com-meta .vote .voteCommentDown:hover {
   opacity: 1 !important;
   background-position: -22px -35px;
 }
-/* line 255, ../sass/_comments.scss */
+/* line 261, ../sass/_comments.scss */
 .comment .com-meta .vote .score {
   position: absolute;
   font-weight: bold;
@@ -2642,7 +2694,7 @@ p.screenshot span {
   text-align: center;
   font-size: 16px;
 }
-/* line 263, ../sass/_comments.scss */
+/* line 269, ../sass/_comments.scss */
 .comment .content {
   min-height: 65px;
   padding: 0 0 15px 40px;

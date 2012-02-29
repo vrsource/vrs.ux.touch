@@ -1,5 +1,5 @@
 Ext.define('Device.view.camera.ImageList', {
-    extend: 'Ext.DataView',
+    extend: 'Ext.dataview.DataView',
     xtype: 'imageList',
 
     config: {

@@ -540,19 +540,23 @@ Ext.define('Ext.app.Application', {
      * Controllers can also specify dependencies, so we grab them all here and require them
      */
     loadControllerDependencies: function() {
-        this.instantiateStores();
         this.instantiateControllers();
 
         var controllers = this.getControllerInstances(),
             classes = [],
-            i, controller, name;
+            stores = [],
+            i, controller, controllerStores, name;
 
         for (name in controllers) {
             controller = controllers[name];
+            controllerStores = controller.getStores();
+            stores = stores.concat(controllerStores);
 
-            classes = classes.concat(controller.getModels().concat(controller.getViews()).concat(controller.getStores()));
+            classes = classes.concat(controller.getModels().concat(controller.getViews()).concat(controllerStores));
         }
-
+        
+        this.setStores(this.getStores().concat(stores));
+        
         Ext.require(classes, this.onDependenciesLoaded, this);
     },
 
@@ -566,6 +570,8 @@ Ext.define('Ext.app.Application', {
             profile = this.getCurrentProfile(),
             launcher = this.getLaunch(),
             controllers, name;
+        
+        this.instantiateStores();
 
         //&lt;deprecated product=touch since=2.0&gt;
         Ext.app.Application.appInstance = this;
