@@ -56,11 +56,27 @@
     <!-- Boot Jasmine Support -->
     <script type="text/javascript">
 
+        //delete Ext.defaultSetupConfig.eventPublishers.dom;
 
         Ext.setup({
             viewport: {
                 fullscreen: false
             },
+            /*
+            eventPublishers: {
+                touchGesture: {
+                    drag      : null,
+                    tap       : null,
+                    doubleTap : null,
+                    longPress : null,
+                    swipe  : null,
+                    pinch  : null,
+                    rotate : null
+                }
+            },
+            */
+
+
             onReady: function() {
                 var jasmineEnv = jasmine.getEnv(),
                     styledReporter = new jasmine.reporting.StyledHtmlReporter();
