@@ -573,9 +573,9 @@ Ext.define('vrs.PanelHolder', {
    },
 
    /** Push a new controller onto the stack. */
-   pushFocusCtrl: function(ctrl, animOpts) {
+   pushFocusCtrl: function(ctrl, animOpts, onComplete) {
       this._ctrlStack.push(ctrl);
-      this._setFocusCtrl(ctrl, animOpts);
+      this._setFocusCtrl(ctrl, animOpts, onComplete);
    },
 
    /** Pop a controller from the stack and go back one.
@@ -610,7 +610,7 @@ Ext.define('vrs.PanelHolder', {
                                {reverse: true}, on_finish);
          } else {
             // Push onto stack and into focus
-            this.pushFocusCtrl(newCtrl, on_finish);
+            this.pushFocusCtrl(newCtrl, this.getAnimConfig(), on_finish);
          }
       }
    },

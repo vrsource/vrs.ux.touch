@@ -229,14 +229,14 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
-            expect(ctrl2.destroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
 
             // when: pop off controller, it should be removed and deactivated
             panel_holder.popFocusCtrl();
             expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
-            expect(ctrl1.destroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
          });
 
          it('should set to main if too many are popped', function() {
@@ -267,7 +267,7 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl3);
             expect(panel_holder.getActiveItem()).toBe(ctrl3.getPanel());
-            expect(ctrl2.destroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
          });
       });
 
@@ -286,9 +286,9 @@ component('Panel Holder', function() {
             expect(panel_holder._ctrlStack).toBeEmpty();
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
             // todo: fix this and figure out how the ones below seem to work.
-            expect(ctrl1.destroy).toHaveBeenCalled();
-            expect(ctrl2.destroy).toHaveBeenCalled();
-            expect(ctrl3.destroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl3.destroy).toEqual(Ext.emptyFn);
          });
       });
 
