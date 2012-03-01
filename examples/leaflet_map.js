@@ -11,19 +11,22 @@ Ext.setup({
 });
 
 
-vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
+Ext.define('vrs.AppCtrl', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
    panel: null,
 
    /** List of markers on the map. */
    markers: null,
 
    constructor: function(config) {
-      vrs.AppCtrl.superclass.constructor.call(this, config);
+      this.initConfig(config);
+      this.mixins.observable.constructor.call(this, config);
 
-      this.panel = new vrs.MapPanel();
-
+      this.panel = vrs.MapPanel.create({controller: this});
       this.panel.mapCmp.on('repPicked', this.onRepPicked, this);
-
       this.addThings();
    },
 
@@ -57,23 +60,24 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 /*
 * Main view for the application.
 */
-vrs.MapPanel = Ext.extend(Ext.Panel, {
-   cls: 'map_panel',
+Ext.define('vrs.MapPanel', {
+   extend: 'Ext.Panel',
 
-   controller: null,
-   fullscreen: true,
-
-   layout: {
-      type: 'vbox',
-      align: 'stretch'
+   config: {
+      controller : null,
+      cls        : 'map_panel',
+      fullscreen : true,
+      layout     : 'fit'
    },
 
-   initComponent: function() {
-      var me = this,
-          ctrl = this.controller,
+   initialize: function() {
+      this.callParent(arguments);
+
+      var me   = this,
+          ctrl = this.getController(),
           toolbar;
 
-      this.addBtn = new Ext.Button({
+      this.addBtn = Ext.Button.create({
          text: 'Add',
          ui: 'action',
          handler: function() {
@@ -81,9 +85,9 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          }
       });
 
-      this.topToolbar = new Ext.Toolbar({
+      this.topToolbar = Ext.Toolbar.create({
          title: 'Map',
-         dock: 'top',
+         docked: 'top',
          items: [
             this.addBtn,
             {xtype: 'spacer'}
@@ -103,16 +107,10 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          this.map.addLayer(layer);
       });
 
-      // finalize the setup
-      this.dockedItems = [
-         this.topToolbar
-      ];
-
-      this.items = [
-         this.mapCmp
-      ];
-
       // Finish setup
-      vrs.MapPanel.superclass.initComponent.call(this);
+      me.add([
+         this.topToolbar,
+         this.mapCmp
+      ]);
    }
 });
