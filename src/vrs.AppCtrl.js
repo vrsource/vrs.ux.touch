@@ -395,8 +395,7 @@ Ext.define('vrs.PanelHolder', {
    config: {
       /** Configuration for animation. Defaults to slide type. */
       animConfig: {
-         type: 'slide',
-         //duration: 2000
+         type: 'slide'
       },
 
       /****** STACK SETTINGS *******/
@@ -588,6 +587,12 @@ Ext.define('vrs.PanelHolder', {
       var me = this,
           cur_ctrl;
 
+      // If there was a control on the stack, then remove that controller
+      function on_finish() {
+         console.log("Finish pop");
+         me._handleCtrlRemoval(cur_ctrl);
+      }
+
       // If we are going to the base controller, then go directly there.
       if( (undefined === newCtrl) && (this._ctrlStack.length <= 1))
       {
@@ -597,12 +602,6 @@ Ext.define('vrs.PanelHolder', {
       else
       {
          cur_ctrl = this._ctrlStack.pop();
-
-         // If there was a control on the stack, then remove that controller
-         function on_finish() {
-            console.log("Finish pop");
-            me._handleCtrlRemoval(cur_ctrl);
-         }
 
          // If we don't have one to replace current, then pull one of stack or use base.
          if(undefined === newCtrl) {
