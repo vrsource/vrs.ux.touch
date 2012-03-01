@@ -30,8 +30,6 @@ Ext.define('vrs.AppCtrl', {
       this.initConfig(config);
       this.mixins.observable.constructor.call(this, config);
 
-      //vrs.AppCtrl.superclass.constructor.call(this, config);
-
       this.panel = vrs.MapPanel.create({ controller: this});
       this.map   = this.panel.mapCmp.getMap();
 
