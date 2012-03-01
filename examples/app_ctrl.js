@@ -18,8 +18,7 @@ vrs.AppObject = {
       // Create the core panel stack to slide items onto
       this.baseStack = new vrs.PanelHolder({
          id: 'base_stack',
-         fullscreen: true,
-         animConfig: false
+         fullscreen: true
       });
 
       //vrs.dumpEvents(this.baseStack, 'PanelHolder');
