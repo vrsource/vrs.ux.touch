@@ -61,6 +61,10 @@ Ext.define('vrs.ux.touch.LeafletMap', {
 
 
       this.setMap(new L.Map(this.element.dom, map_options));
+
+      // When we finally get painted, then we need to invalidate our size to
+      // reset everything.
+      this.on('painted', this.fixLayout, this);
    },
 
    /**
@@ -69,11 +73,9 @@ Ext.define('vrs.ux.touch.LeafletMap', {
     *
     * XXX: May not be used.
     */
-   /*
    fixLayout: function() {
       this.getMap().invalidateSize();
    },
-   */
 
    // ---- Interface Functions ---- //
    /**
