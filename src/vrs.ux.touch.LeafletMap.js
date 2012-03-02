@@ -26,22 +26,21 @@ var pnl = new Ext.Panel({
  * TODO:
  *  * ...
  */
-vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
+
+Ext.define('vrs.ux.touch.LeafletMap', {
+   extend: 'vrs.ux.touch.IMapComponent',
+
    xtype: 'leaflet_map',
 
-   /**
-    * initialize the component as part
-    * of component construction.
-    */
-   initialize : function() {
+   constructor : function() {
       this.callParent(arguments);
 
-      var me = this;
-
       if(! window.L) {
-         this.html = 'Leaflet API is required.';
+         this.setHtml('Leaflet API is required.');
       }
+   },
 
+   renderMap: function() {
       /** XXX
       Ext.applyIf(this.mapOptions, {
          center: new L.LatLng(0, 0),
@@ -50,19 +49,21 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
          closePopupOnClick:  false
       });
       */
-   },
 
-   renderMap: function() {
-      this.map = new L.Map(this.element.dom, this.mapOptions);
+      this.setMap(new L.Map(this.element.dom, this.getMapOptions()));
    },
 
    /**
     * Helper that is called at the last possible second in the components show cycle.
     * Once sencha has the layout ready we tell the map to figure out its bounds again.
+    *
+    * XXX: May not be used.
     */
+   /*
    fixLayout: function() {
-      this.map.invalidateSize();
+      this.getMap().invalidateSize();
    },
+   */
 
    // ---- Interface Functions ---- //
    /**
@@ -76,27 +77,27 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
     * Change the current zoom level to be zoomLevel
     */
    setZoom: function(zoomLevel) {
-      this.map.setZoom(zoomLevel);
+      this.getMap().setZoom(zoomLevel);
    },
 
    /**
     * Returns the number of zoomLevels available for the map.
     */
    numZoomLevels: function() {
-      return this.map.getMaxZoom();
+      return this.getMap().getMaxZoom();
    },
 
    /**
     * Moves the map center to the location which is the format returned by toLocation.
     */
    updateCenter : function(location) {
-      this.map.panTo(location);
+      this.getMap().panTo(location);
    },
 
    addMarker: function(lat, lon) {
       var marker = new L.Marker(this.toLocation(lat, lon));
 
-      this.map.addLayer(marker);
+      this.getMap().addLayer(marker);
       return marker;
    }
 });
@@ -107,8 +108,12 @@ vrs.ux.touch.LeafletMap = Ext.extend(vrs.ux.touch.IMapComponent, {
 * maps.  Support anchoring to a location so it moves
 * accordingly when the map is panned and zoomed
 */
-vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
-   componentCls: 'leaflet-popup',
+Ext.define('vrs.ux.touch.LeafletPopupPanel', {
+   extend: 'vrs.ux.touch.IMapPopupPanel',
+
+   config: {
+      cls: 'x-map-popup'  // 'leaflet-popup'
+   },
 
    /**
    * Construct the popup panel.
@@ -116,18 +121,17 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
    * Note: Since this is a panel, normal panel configuration settings can
    *       be passed in.  (ex: items, dockedItems, layout, ...)
    */
-   constructor: function(config) {
-      Ext.applyIf(config, {
-         renderTo: config.map._panes.popupPane
-      });
+   initialize: function() {
+      this.setRenderTo(this.getMap()._panes.popupPane);
 
-      vrs.ux.touch.LeafletPopupPanel.superclass.constructor.apply(this, arguments);
+      // Call parent which will show us.
+      this.callParent();
 
       // Connect to the maps reset for the duration of the popup
       // Be sure to remove this connection when the popup is closed
       // Otherwise, the next zoom will cause an error in setPopupSizeAndPosition
-      this.map.on('viewreset', this.setPopupSizeAndPosition, this);
-      this.on('beforehide', function() {
+      this.getMap().on('viewreset', this.setPopupSizeAndPosition, this);
+      this.on('hide', function() {
          this.map.off('viewreset', this.setPopupSizeAndPosition, this);
       }, this);
 
@@ -143,11 +147,13 @@ vrs.ux.touch.LeafletPopupPanel = Ext.extend(vrs.ux.touch.IMapPopupPanel, {
 
    // --- INTERNAL HELPERS ---- //
    updatePosition: function() {
-      var pos = this.map.latLngToLayerPoint(this.location);
+      var pos = this.getMap().latLngToLayerPoint(this.getLocation());
 
       // Avoid race condition where the tap mask has not removed the panel yet but
       // the dom was cleaned up already.
-      if (! this.element.dom) { return; }
+      if (! this.element.dom) {
+         return;
+      }
 
       // These values will cascade into setPopSizeAndPosition
       this.element.setTop(pos.y);

@@ -550,7 +550,7 @@ vrs.ux.touch.OpenLayersPopupPanel = Ext.extend(Ext.Panel, {
         // change our visibility
         if(this._mapMove === true) {
             visible = this.map.getExtent().containsLonLat(this.location);
-            if(visible !== !this.isHidden()) {
+            if(visible === this.isHidden()) {
                 this.setVisible(visible);
             }
         }

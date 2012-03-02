@@ -308,7 +308,11 @@ Ext.define('vrs.ux.touch.MenuPanel', {
          if(!Ext.isEmpty(item.content))
          { htmlFrags.push('<div class="' + me.getContentCls() + '">' + item.content + '</div>'); }
          if(hasRightContent)
-         { htmlFrags.push(getSectionDivStr(me.getRightItemCls(), item.rightIconCls, item.rightIcon)); }
+         {
+            htmlFrags.push(getSectionDivStr(me.getRightItemCls(),
+                                            item.rightIconCls,
+                                            item.rightIcon));
+         }
          htmlFrags.push('</div>');
       }
 

@@ -1,84 +1,96 @@
 Ext.ns('vrs.ux.touch');
 
+Ext.define('vrs.ux.touch.IMapComponent', {
+   extend: 'Ext.Component',
 
-vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
+   /**
+   * @event maprender
+   * Fired when Map is initially rendered.
+   * @param {Map} this
+   * @param {...}
+   */
+
+   /**
+   * @event reppicked
+   * Fired when a rep on the map is picked.
+   *
+   */
 
    config: {
       /**
        * @cfg {String} baseCls
        * The base CSS class to apply to the Maps's element (defaults to <code>'x-map'</code>).
        */
-      baseCls: 'x-map'
+      baseCls: 'x-map',
+
+      /**
+       * @cfg {Boolean} enableLocationTracking
+       * If true, automatically registers location tracking support on startup.
+       *
+       * note: this does *not* start the geo location updating, simply registers
+       *       the events to allow us to track the location.
+       *       call geo.setAutoUpdate(true/false) to enable/disable tracking.
+       *       and call enable/disableTracking on this class.
+       */
+      enableLocationTracking: false,
+
+      /**
+       * @cfg {Boolean} useHighAccuracyLocation
+       * If true and enableLocationTracking is true, then request the high accuracy version.
+       */
+      useHighAccuracyLocation: true,
+
+      monitorResize : true,
+
+      /**
+       * @cfg {Object} mapOptions
+       * options as specified in Leaflet documentation. Passed as options
+       * to the Map constructor.
+       */
+      mapOptions: {},
+
+      /**
+       * @type {Leaflet.Map}
+       * The wrapped map.
+       */
+      map: null,
+
+      /**
+       * @type {Ext.util.GeoLocation}
+       * The geolocation utility object to use with the map.
+       */
+      geo: null,
+
+      /**
+       * @cfg {Boolean} maskMap
+       * Masks the map (Defaults to false)
+       */
+      maskMap: false,
+
+      /**
+       * @cfg {Strng} maskMapCls
+       * CSS class to add to the map when maskMap is set to true.
+       */
+      maskMapCls: 'x-mask-map'
    },
-
-   /**
-    * @cfg {Boolean} enableLocationTracking
-    * If true, automatically registers location tracking support on startup.
-    *
-    * note: this does *not* start the geo location updating, simply registers
-    *       the events to allow us to track the location.
-    *       call geo.setAutoUpdate(true/false) to enable/disable tracking.
-    *       and call enable/disableTracking on this class.
-    */
-   enableLocationTracking: false,
-
-   /**
-    * @cfg {Boolean} useHighAccuracyLocation
-    * If true and enableLocationTracking is true, then request the high accuracy version.
-    */
-   useHighAccuracyLocation: true,
-
-   monitorResize : true,
-
-   /**
-    * @cfg {Object} mapOptions
-    * options as specified in Leaflet documentation. Passed as options
-    * to the Map constructor.
-    */
-   mapOptions: {},
-
-   /**
-    * @type {Leaflet.Map}
-    * The wrapped map.
-    */
-   map: null,
-
-   /**
-    * @type {Ext.util.GeoLocation}
-    * The geolocation utility object to use with the map.
-    */
-   geo: null,
-
-   /**
-    * @cfg {Boolean} maskMap
-    * Masks the map (Defaults to false)
-    */
-   maskMap: false,
-
-   /**
-    * @cfg {Strng} maskMapCls
-    * CSS class to add to the map when maskMap is set to true.
-    */
-   maskMapCls: 'x-mask-map',
 
    constructor: function() {
-      vrs.ux.touch.IMapComponent.superclass.constructor.apply(this, arguments);
-
-      this.addEvents({
-         'repPicked': true,
-         'maprender': true
-      });
+      this.callParent(arguments);
    },
 
    /**
-    * Add a helper function to the afterRender chain for rendering the map
-    * once the DOM is ready.
-    */
-   afterRender: function() {
-      vrs.ux.touch.IMapComponent.superclass.afterRender.apply(this, arguments);
+   * Initialize the UI pieces.
+   */
+   initialize: function() {
+      this.callParent(arguments);
       this.renderMap();
       this.fireEvent('maprender');
    },
+
+   /**
+   * This method should setup the map in the DOM.
+   */
+   renderMap: Ext.emptyFn,
 
    // ---- Interface Functions ---- //
    /**
@@ -123,11 +135,11 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
    registerLocationTracking: function(enable) {
       enable = (enable === undefined) ? true : enable;
 
-      if(!this.geo) {
-         this.geo = new Ext.util.GeoLocation({
+      if(!this.getGeo()) {
+         this.setGeo(new Ext.util.GeoLocation({
             autoUpdate:        false,
             allowHighAccuracy: this.useHighAccuracyLocation
-         });
+         }));
       }
 
       this.geo.on({
@@ -197,42 +209,47 @@ vrs.ux.touch.IMapComponent = Ext.extend(Ext.Component, {
 });
 
 
+/*
+* Base class for all Map Popup panels.
+*/
+Ext.define('vrs.ux.touch.IMapPopupPanel', {
+   extend: 'Ext.Panel',
 
-vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
-   /**
-   * The map that we are attached onto.
-   */
-   map: null,
+   config: {
+      /**
+      * The map that we are attached onto.
+      *
+      * This is the underlying map object. (leaflet, etc)
+      */
+      map: null,
 
-   /** LatLng location of the panel anchor. */
-   location: null,
+      /** LatLng location of the panel anchor. */
+      location: null,
 
-   /** {bool} True if the popup should be anchored to it's location. */
-   anchored: true,
+      /** {bool} True if the popup should be anchored to it's location. */
+      anchored: true,
 
-   scroll: true,
+      scroll: true,
 
-   /** {bool} True if we should pan the map so the popup is in view. */
-   panIn: true,
+      /** {bool} True if we should pan the map so the popup is in view. */
+      panIn: true,
 
-   /** A config object to pass to setPanelSize after panel
-   * is constructed.
-   */
-   sizeConfig: null,
+      /** A config object to pass to setPanelSize after panel
+      * is constructed.
+      */
+      sizeConfig: null,
 
-   /** Set to allow custom styling. */
-   componentCls: 'x-map-popup',
+      /** Set to allow custom styling. */
+      cls: 'x-map-popup',
 
-   /** override the panel details. */
-   floating      : true,
-   hideOnMaskTap : false,  // Don't auto-hide when tap outside the component.
+      /** override the panel details. */
+      floating      : true,
+      hideOnMaskTap : false  // Don't auto-hide when tap outside the component.
+   },
 
-   constructor: function() {
-      var me = this;
 
-      vrs.ux.touch.IMapPopupPanel.superclass.constructor.apply(this, arguments);
-
-      // Once hidden the popup is nolonger important so seppuku
+   initialize: function() {
+      // Once hidden the popup is nolonger important so destroy it
       this.on({
          hide: function() {
             this.destroy();
@@ -240,24 +257,26 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       });
 
       // Set the starting size if possible
-      if(this.sizeConfig) {
-         this.setPopupSizeAndPosition(this.sizeConfig);
-      }
+      // - Update should handle this.
 
       // Popups are shown by default.
       this.show();
    },
 
+   updateSizeConfig: function(value, oldValue) {
+      this.setPopupSizeAndPosition();
+   },
+
    /** Override the show method to position the panel. */
    show: function() {
-      vrs.ux.touch.IMapPopupPanel.superclass.show.apply(this, arguments);
+      this.callParent(arguments);
 
       if(this.anchorEl) {
          this.anchorEl.hide();  // If we had anchor in past, hide for now.
       }
 
       // If we are anchored, position ourselves and potentially pan into view.
-      if(this.anchored) {
+      if(this.getAnchored()) {
          // Setup the anchor.
          // - hacked together from showBy and alignTo in Component.js
          //   todo: see if we can use more of alignTo logic.
@@ -273,6 +292,66 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       }
    },
 
+   /**
+   * Set the size of the panel to use.
+   *
+   * @param config
+   *      fullscreen: If true, then set to a fullscreen panel centered on screen.
+   *                 (still respects width and height settings as computed)
+   *      width: if set, sets to this width in pixels.
+   *      height: if set, sets to this height in pixels.
+   *      size: if set to one of 'small', 'medium', 'large', 'fullscreen'
+   *           or variation ending in '-tall' or '-wide'. (ex: 'small-wide')
+   *           automatically picks window of good size for the current device.
+   *      autoPosition: If true, automatically call the position setting. (default: true)
+   *      anchor: If true, we set anchored (if not already set) and update.
+   *               (true by default except for fullscreen which is false by default)
+   *
+   * note: fullscreen is a special variation that will override some other settings.
+   */
+   setPopupSizeAndPosition: function() {
+      var config             = this.getSizeConfig() || {},
+          dims               = this.calculatePanelSize(config),
+          auto_position      = config.autoPosition || true, // if we should update position.
+          should_anchor      = config.anchor || true,       // if we should be anchored
+          setting_fullscreen = config.fullscreen || false,  // if we are setting to fullscreen;
+          was_fullscreen     = this._isFullscreen;          // if we were previously fullscreen.
+
+      this.updatePosition();
+
+      // finalize the size and layout if we are visible.
+      // - we don't layout if not visible because that would remove the sizing for first show
+      this.setSize(dims.w + dims.margin, dims.h + dims.margin);
+      // 10 is for the anchor
+      this.element.setTop(this.element.getTop() - dims.h - dims.margin - 10);
+      this.element.setLeft(this.element.getLeft() - dims.w/2.0);
+      if(!this.getHidden()) {
+         this.doLayout();
+      }
+
+      // If we should be anchoring and it doesn't match previous setting,
+      // then change and possible update the rendering to remove/add anchor.
+      if(should_anchor !== this.getAnchored()) {
+         this.setAnchored(should_anchor);
+         if(this.rendered && !this.isHidden()) {
+            this.show();        // reshow to get anchor laid out correctly.
+         }
+      }
+
+      if(setting_fullscreen) {
+         this.setCentered(true, true);  // set to centered and update it
+      } else if(was_fullscreen && this.centered) {
+         this.setCentered(false);      // reset to not be centered
+      }
+
+      // update fullscreen flag.
+      this._isFullscreen = setting_fullscreen;
+   },
+
+   /**
+   * Calculate the size of the panel we want to show based upon the
+   * passed in sizing configuration object.
+   */
    calculatePanelSize: function(config) {
       var vp_size = Ext.Viewport.getSize(),
          tall_wide_factor = 1.5,  // Factor used to increase size of tall/wide panels.
@@ -280,9 +359,9 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
           size_name, var_name,
           width, height,
           extra_margin = 12,  // extra margin to fix layout issues
-          auto_position      = config.autoPosition || true, // if we should update position.
-          should_anchor      = config.anchor || true,       // if we should be anchored
-          setting_fullscreen = config.fullscreen || false;  // if we are setting to fullscreen
+          auto_position      = config.autoPosition || true,  // if we should update position.
+          should_anchor      = config.anchor       || true,  // if we should be anchored
+          setting_fullscreen = config.fullscreen   || false; // if we are setting to fullscreen
       config = config || {};
 
       // Lookup table of named size values
@@ -330,61 +409,6 @@ vrs.ux.touch.IMapPopupPanel = Ext.extend(Ext.Panel, {
       }
 
       return {w: width, h: height, margin: extra_margin};
-   },
-
-   /**
-   * Set the size of the panel to use.
-   *
-   * @param config
-   *      fullscreen: If true, then set to a fullscreen panel centered on screen.
-   *                 (still respects width and height settings as computed)
-   *      width: if set, sets to this width in pixels.
-   *      height: if set, sets to this height in pixels.
-   *      size: if set to one of 'small', 'medium', 'large', 'fullscreen'
-   *           or variation ending in '-tall' or '-wide'. (ex: 'small-wide')
-   *           automatically picks window of good size for the current device.
-   *      autoPosition: If true, automatically call the position setting. (default: true)
-   *      anchor: If true, we set anchored (if not already set) and update.
-   *               (true by default except for fullscreen which is false by default)
-   *
-   * note: fullscreen is a special variation that will override some other settings.
-   */
-   setPopupSizeAndPosition: function() {
-      var config = this.sizeConfig || {},
-          dims = this.calculatePanelSize(config),
-          auto_position      = config.autoPosition || true, // if we should update position.
-          should_anchor      = config.anchor || true,       // if we should be anchored
-          setting_fullscreen = config.fullscreen || false,  // if we are setting to fullscreen;
-          was_fullscreen     = this._isFullscreen;          // if we were previously fullscreen.
-
-      this.updatePosition();
-
-      // finalize the size and layout if we are visible.
-      // - we don't layout if not visible because that would remove the sizing for first show
-      this.setSize(dims.w + dims.margin, dims.h + dims.margin);
-      this.element.setTop(this.element.getTop() - dims.h - dims.margin - 10); // 10 is for the anchor
-      this.element.setLeft(this.element.getLeft() - dims.w/2.0);
-      if(!this.getHidden()) {
-         this.doLayout();
-      }
-
-      // If we should be anchoring and it doesn't match previous setting,
-      // then change and possible update the rendering to remove/add anchor.
-      if(should_anchor !== this.anchored) {
-         this.anchored = should_anchor;
-         if(this.rendered && !this.isHidden()) {
-            this.show();        // reshow to get anchor laid out correctly.
-         }
-      }
-
-      if(setting_fullscreen) {
-         this.setCentered(true, true);  // set to centered and update it
-      } else if(was_fullscreen && this.centered) {
-         this.setCentered(false);      // reset to not be centered
-      }
-
-      // update fullscreen flag.
-      this._isFullscreen = setting_fullscreen;
    }
 
 });
