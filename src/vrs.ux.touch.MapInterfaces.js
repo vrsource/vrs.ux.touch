@@ -263,9 +263,18 @@ Ext.define('vrs.ux.touch.IMapPopupPanel', {
       this.show();
    },
 
+   /*
    updateSizeConfig: function(value, oldValue) {
-      this.setPopupSizeAndPosition();
+      this.applyPopupSizeAndPosition();
    },
+   */
+
+   /**
+   * This method should update the position of the panel relative
+   * to the map.
+   */
+   updatePosition: Ext.emptyFn,
+
 
    /** Override the show method to position the panel. */
    show: function() {
@@ -309,7 +318,7 @@ Ext.define('vrs.ux.touch.IMapPopupPanel', {
    *
    * note: fullscreen is a special variation that will override some other settings.
    */
-   setPopupSizeAndPosition: function() {
+   applyPopupSizeAndPosition: function() {
       var config             = this.getSizeConfig() || {},
           dims               = this.calculatePanelSize(config),
           auto_position      = config.autoPosition || true, // if we should update position.
@@ -325,9 +334,6 @@ Ext.define('vrs.ux.touch.IMapPopupPanel', {
       // 10 is for the anchor
       this.element.setTop(this.element.getTop() - dims.h - dims.margin - 10);
       this.element.setLeft(this.element.getLeft() - dims.w/2.0);
-      if(!this.getHidden()) {
-         this.doLayout();
-      }
 
       // If we should be anchoring and it doesn't match previous setting,
       // then change and possible update the rendering to remove/add anchor.

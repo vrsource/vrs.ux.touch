@@ -134,17 +134,20 @@ Ext.define('vrs.ux.touch.LeafletPopupPanel', {
    *       be passed in.  (ex: items, dockedItems, layout, ...)
    */
    initialize: function() {
-      this.setRenderTo(this.getMap()._panes.popupPane);
-
       // Call parent which will show us.
       this.callParent();
 
+      this.setRenderTo(this.getMap()._panes.popupPane);
+
+      // Now that we are configured, apply sizing settings
+      this.applyPopupSizeAndPosition();
+
       // Connect to the maps reset for the duration of the popup
       // Be sure to remove this connection when the popup is closed
-      // Otherwise, the next zoom will cause an error in setPopupSizeAndPosition
-      this.getMap().on('viewreset', this.setPopupSizeAndPosition, this);
+      // Otherwise, the next zoom will cause an error in applyPopupSizeAndPosition
+      this.getMap().on('viewreset', this.applyPopupSizeAndPosition, this);
       this.on('hide', function() {
-         this.map.off('viewreset', this.setPopupSizeAndPosition, this);
+         this.map.off('viewreset', this.applyPopupSizeAndPosition, this);
       }, this);
 
       // Add flag we use to track if have toggled ourselves into fullscreen mode
@@ -152,14 +155,17 @@ Ext.define('vrs.ux.touch.LeafletPopupPanel', {
       this._isFullscreen = false;
    },
 
-   afterRender: function() {
-      vrs.ux.touch.LeafletPopupPanel.superclass.afterRender.apply(this, arguments);
-      this.setPopupSizeAndPosition();
-   },
-
    // --- INTERNAL HELPERS ---- //
    updatePosition: function() {
-      var pos = this.getMap().latLngToLayerPoint(this.getLocation());
+      var leaflet_map = this.getMap(),
+          pos;
+
+      if(!leaflet_map) {
+         console.log('updatePosition: Map not set, returning');
+         return;
+      }
+
+      pos = this.getMap().latLngToLayerPoint(this.getLocation());
 
       // Avoid race condition where the tap mask has not removed the panel yet but
       // the dom was cleaned up already.
