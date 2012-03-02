@@ -50,7 +50,17 @@ Ext.define('vrs.ux.touch.LeafletMap', {
       });
       */
 
-      this.setMap(new L.Map(this.element.dom, this.getMapOptions()));
+      // Apply defaults
+      var map_options = this.getMapOptions();
+      map_options = Ext.merge({
+         center: new L.LatLng(0, 0),
+         zoom: 1,
+         attributionControl: false,
+         closePopupOnClick:  false
+      }, map_options);
+
+
+      this.setMap(new L.Map(this.element.dom, map_options));
    },
 
    /**

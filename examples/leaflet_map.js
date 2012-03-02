@@ -75,7 +75,8 @@ Ext.define('vrs.MapPanel', {
 
       var me   = this,
           ctrl = this.getController(),
-          toolbar;
+          toolbar,
+          map, layer;
 
       this.addBtn = Ext.Button.create({
          text: 'Add',
@@ -98,14 +99,21 @@ Ext.define('vrs.MapPanel', {
          html: 'Put stuff here'
       });
 
-      this.mapCmp = new vrs.ux.touch.LeafletMap();
+      this.mapCmp = vrs.ux.touch.LeafletMap.create();
 
+      /*
       this.mapCmp.on('maprender', function() {
          var layer = new L.TileLayer(
          'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
             {maxZoom: 17});
          this.map.addLayer(layer);
       });
+      */
+      map = this.mapCmp.getMap();
+      layer = new L.TileLayer(
+         'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+         {maxZoom: 17});
+      map.addLayer(layer);
 
       // Finish setup
       me.add([
