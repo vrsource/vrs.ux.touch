@@ -260,7 +260,7 @@ Ext.define('vrs.ux.touch.IMapPopupPanel', {
       // - Update should handle this.
 
       // Popups are shown by default.
-      this.show();
+      //this.show();
    },
 
    /*
