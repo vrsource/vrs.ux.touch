@@ -39,9 +39,9 @@ Ext.define('vrs.AppCtrl', {
 
    onRepPicked: function(evt) {
       var popup = new vrs.ux.touch.LeafletPopupPanel({
-         map:      this.panel.mapCmp.map,
-         location: evt.target.getLatLng(),
-         items:    [{'html': 'the body'}],
+         map      : this.panel.mapCmp.getMap(),
+         location : evt.target.getLatLng(),
+         items    : [{'html': 'the body'}],
          anchored : true,
 
          //hideOnMaskTap    : true,
