@@ -23,6 +23,52 @@ test.ExtPanel2 = Ext.extend(vrs.PanelController, {
    }
 });
 
+
+Ext.define('test.ViewPanel1', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_viewpanel1',
+
+   config: {
+      cls: 'view_panel',
+
+      items: [
+         {
+            docked : 'top',
+            xtype  : 'toolbar',
+            title  : 'App'
+         },
+         {
+            xtype : 'panel',
+            cls   : 'stuff_area'
+            html  : 'Stuff Here'
+         }
+      ]
+   }
+});
+
+Ext.define('test.ViewPanel2', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_viewpanel2',
+
+   config: {
+      cls: 'view_panel',
+      layout: 'vbox',
+
+      items: [
+         {
+            xtype : 'panel',
+            cls   : 'stuff_area'
+            html  : 'Stuff Here'
+         },
+         {
+            xtype : 'panel',
+            cls   : 'stuff_area2'
+            html  : 'Stuff Here'
+         }
+      ]
+   }
+});
+
 /**
 * Panel that registers events.
 */
@@ -59,6 +105,32 @@ component('PanelController', function() {
       // and: default panel is null
       expect(obj.getPanel()).toEqual(null);
    });
+
+   feature('panel auto initialization', function() {
+
+      it('should support initialization from xtype', function() {
+         // given: an object constructed with a panel xtype
+         var obj = vrs.PanelController.create({
+            panelConfig: { xtype: 'test_viewpanel1' }
+         });
+         // then: Should have created panel object
+         expect(obj.getPanel()).not.toEqual(null);
+      });
+
+      it('should support initialization from class reference', function() {
+         // given: an object constructed with a component class
+         // XXX: How to get configuration parameters into this one?
+         var obj = vrs.PanelController.create({
+            panelConfig: test.ViewPanel1
+         });
+         // then: Should have created panel object
+         expect(obj.getPanel()).not.toEqual(null);
+      });
+   });
+
+   it('Should support ref initialization for panel', function() {
+   });
+
 
    it('Should require panelHolder to be set', function() {
       // If panel holder is not set, it should throw an assertion exception.

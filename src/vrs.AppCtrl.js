@@ -58,7 +58,36 @@ Ext.define('vrs.PanelController', {
       * note: we do it this way to make sure the panel construction code knows
       *       if we are the base controller or not and what our holderPanel is.
       */
-      isBaseController: false
+      isBaseController: false,
+
+      /**
+      * @cfg {String} panelType
+      *
+      * The class type or xtype of the panel to create when instantiating this
+      * controller class.  If set, will automatically instantiate the panel.
+      */
+      panelType: null,
+
+      /**
+      * @cfg {Object} refs A collection of named ComponentQuery selectors to apply
+      *                    to create getters for getting access to key components on the panel.
+      */
+      refs: {},
+
+      /*
+      * @cfg {Object} control Provides mapping of Controller functions that should be called
+      *                       when the given component fires an event.  Callback can be
+      *                       a string to a name of a controller method or a function object.
+      *    control: {
+      *         myButton: {
+      *            tap: 'onTap'
+      *         },
+      *         otherButton: {
+      *            tap: function() { callBlah(); }
+      *         }
+      *     }
+      */
+      control: {}
    },
 
    constructor: function(config) {
