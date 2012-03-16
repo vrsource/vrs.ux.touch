@@ -3,6 +3,8 @@ Overview
 
 This project contains a set of extensions for sencha touch.  They are licensed under an MIT Open Source license.
 
+Note: This is the Sencha Touch 1.1 version of the code.  See other branches for other versions.
+
 
 Extensions
 ==========
