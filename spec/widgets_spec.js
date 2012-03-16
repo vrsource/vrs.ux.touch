@@ -1,11 +1,11 @@
 /*global simfla: false */
 
+/*
 component('Toggling Button', function() {
    var button, toggleHandler, normalHandler;
 
-   /** Create a button with given opts.
-   * Sets some defaults for common usage but can override with opts.
-   */
+   // Create a button with given opts.
+   //Sets some defaults for common usage but can override with opts.
    function createButton(opts) {
       toggleHandler = jasmine.createSpy();
       normalHandler = jasmine.createSpy();
@@ -95,11 +95,11 @@ component('Toggling Button', function() {
          expect(button.ui).toEqual('base');
       });
    }); // toggling button settings.
-
-
 }); // Toggling button
+*/
 
 
+/*
 component('Link Button', function() {
    var button;
 
@@ -136,11 +136,12 @@ component('Link Button', function() {
 
       expect(link_spy).toHaveBeenCalled();
    });
-
 });
+*/
 
 
 // ----- NUMERIC ONLY FIELD -------- //
+/*
 component('Numeric Only Field', function() {
    var field;
 
@@ -150,16 +151,13 @@ component('Numeric Only Field', function() {
       }
    });
 
-
-   /*
-   story('numbers only', function() {
-      summary('As a user, I only want it to accept numbers as input.', function() {
-      });
-
-      scenario('numbers and letters lead to only numbers', function() {
-      });
-   });
-   */
+   //story('numbers only', function() {
+   //   summary('As a user, I only want it to accept numbers as input.', function() {
+   //   });
+   //
+   //   scenario('numbers and letters lead to only numbers', function() {
+   //   });
+   //});
 
    story('ensure valid range', function() {
       summary('As a user, I want the value to stay in the valid range');
@@ -201,11 +199,10 @@ component('Numeric Only Field', function() {
          field.onBlur();
       });
    });
-
-
 });
+*/
 
-
+/*
 component('Requesting Input, vrs.requestFormData', function() {
       var done = false,
           form = null,
@@ -288,3 +285,4 @@ component('Requesting Input, vrs.requestFormData', function() {
       });
    });
 });
+*/

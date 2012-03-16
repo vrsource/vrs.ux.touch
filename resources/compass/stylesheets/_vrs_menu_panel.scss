@@ -22,7 +22,7 @@ $vrs-menupanel-include-default-icons: false !default;
 
 
 /** Size of icon mask to use for the settings. */
-$menupanel-iconmask-size: 1em !default;
+$menupanel-iconmask-size: 1.75em !default;
 
 /** Customizations for the field row.
 * note: remember that we also put a field class on the row
@@ -83,11 +83,14 @@ $menupanel-iconmask-size: 1em !default;
       min-width: $menupanel-iconmask-size;
       min-height: $menupanel-iconmask-size;
 
-      // Set fixed size for manually set icon images
+      /** Set fixed size for manually set icon images */
+      /** Note: if we use images, use that fixed size for now. */
+      /*
       img {
          width: $menupanel-iconmask-size;
          height: $menupanel-iconmask-size;
       }
+      */
    }
 }
 
@@ -128,6 +131,9 @@ img.x-menupanel-icon-mask.check1
 * not have them.  disabled for now.
 * TODO: no border radius on fields in fieldset unless
 *       we are the first or last element.
+*
+* TODO: Verify this is required for ST2.0
+*
 * see: .x-field style.
 */
 /** We need to add a bottom border in the case where we
@@ -176,7 +182,6 @@ img.x-menupanel-icon-mask.check1
 }
 
 .x-menu-panel.x-item-disabled {
-
   .x-menupanel-row {
     img, .x-menupanel-content {
       //color: lighten($form-dark, 50%);
@@ -214,13 +219,13 @@ img.x-menupanel-icon-mask.check1
    $form-field-bg-color: white;
 
    .x-form-label, .x-menupanel-row {
-      background-color: white;
+      background-color: white !important;
    }
 
    /* Pinstripe background for form panels.
    * Only do this with panels directly under a form.
    */
-   .x-form > .x-panel-body {
+   .x-form-inner {
       -webkit-background-size: 0.438em 100%;
       background: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
    }

@@ -1,10 +1,10 @@
-{
+[{
     "text": "Cars",
-    "items": [{
+    "children": [{
         "text": "Asia",
-        "items": [{
+        "children": [{
             "text": "Japan",
-            "items": [{
+            "children": [{
                 "text": "Acura",
                 "leaf": true
             },{
@@ -31,7 +31,7 @@
             }]
         },{
             "text": "Korea",
-            "items": [{
+            "children": [{
                 "text": "Hyundai",
                 "leaf": true
             },{
@@ -41,7 +41,7 @@
         }]
     },{
         "text": "United Kingdom",
-        "items": [{
+        "children": [{
             "text": "Aston Martin",
             "leaf": true
         },{
@@ -56,9 +56,9 @@
         }]
     },{
         "text": "Europe",
-        "items": [{
+        "children": [{
             "text": "Germany",
-            "items": [{
+            "children": [{
                 "text": "Audi",
                 "leaf": true
             },{
@@ -76,7 +76,7 @@
             }]
         },{
             "text": "France",
-            "items": [{
+            "children": [{
                 "text": "Citroën",
                 "leaf": true
             },{
@@ -89,7 +89,7 @@
         }]
     },{
         "text": "United States",
-        "items": [{
+        "children": [{
             "text": "Buick",
             "leaf": true
         },{
@@ -118,4 +118,4 @@
             "leaf": true
         }]
     }]
-}
+}]

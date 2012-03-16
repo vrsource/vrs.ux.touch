@@ -11,19 +11,22 @@ Ext.setup({
 });
 
 
-vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
+Ext.define('vrs.AppCtrl', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
    panel: null,
 
    /** List of markers on the map. */
    markers: null,
 
    constructor: function(config) {
-      vrs.AppCtrl.superclass.constructor.call(this, config);
+      this.initConfig(config);
+      this.mixins.observable.constructor.call(this, config);
 
-      this.panel = new vrs.MapPanel();
-
+      this.panel = vrs.MapPanel.create({controller: this});
       this.panel.mapCmp.on('repPicked', this.onRepPicked, this);
-
       this.addThings();
    },
 
@@ -36,9 +39,9 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 
    onRepPicked: function(evt) {
       var popup = new vrs.ux.touch.LeafletPopupPanel({
-         map:      this.panel.mapCmp.map,
-         location: evt.target.getLatLng(),
-         items:    [{'html': 'the body'}],
+         map      : this.panel.mapCmp.getMap(),
+         location : evt.target.getLatLng(),
+         items    : [{'html': 'the body'}],
          anchored : true,
 
          //hideOnMaskTap    : true,
@@ -57,23 +60,25 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 /*
 * Main view for the application.
 */
-vrs.MapPanel = Ext.extend(Ext.Panel, {
-   cls: 'map_panel',
+Ext.define('vrs.MapPanel', {
+   extend: 'Ext.Panel',
 
-   controller: null,
-   fullscreen: true,
-
-   layout: {
-      type: 'vbox',
-      align: 'stretch'
+   config: {
+      controller : null,
+      cls        : 'map_panel',
+      fullscreen : true,
+      layout     : 'fit'
    },
 
-   initComponent: function() {
-      var me = this,
-          ctrl = this.controller,
-          toolbar;
+   initialize: function() {
+      this.callParent(arguments);
 
-      this.addBtn = new Ext.Button({
+      var me   = this,
+          ctrl = this.getController(),
+          toolbar,
+          map, layer;
+
+      this.addBtn = Ext.Button.create({
          text: 'Add',
          ui: 'action',
          handler: function() {
@@ -81,9 +86,9 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          }
       });
 
-      this.topToolbar = new Ext.Toolbar({
+      this.topToolbar = Ext.Toolbar.create({
          title: 'Map',
-         dock: 'top',
+         docked: 'top',
          items: [
             this.addBtn,
             {xtype: 'spacer'}
@@ -94,25 +99,26 @@ vrs.MapPanel = Ext.extend(Ext.Panel, {
          html: 'Put stuff here'
       });
 
-      this.mapCmp = new vrs.ux.touch.LeafletMap();
+      this.mapCmp = vrs.ux.touch.LeafletMap.create();
 
+      /*
       this.mapCmp.on('maprender', function() {
          var layer = new L.TileLayer(
          'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
             {maxZoom: 17});
          this.map.addLayer(layer);
       });
-
-      // finalize the setup
-      this.dockedItems = [
-         this.topToolbar
-      ];
-
-      this.items = [
-         this.mapCmp
-      ];
+      */
+      map = this.mapCmp.getMap();
+      layer = new L.TileLayer(
+         'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+         {maxZoom: 17});
+      map.addLayer(layer);
 
       // Finish setup
-      vrs.MapPanel.superclass.initComponent.call(this);
+      me.add([
+         this.topToolbar,
+         this.mapCmp
+      ]);
    }
 });

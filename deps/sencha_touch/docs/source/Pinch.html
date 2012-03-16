@@ -1,103 +1,119 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js">Ext.gesture.Pinch = Ext.extend(Ext.gesture.Gesture, {
-    handles: ['pinchstart', 'pinch', 'pinchend'],
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-event-recognizer-Pinch'>/**
+</span> * A event recogniser which knows when you pinch.
+ *
+ * @private
+ */
+Ext.define('Ext.event.recognizer.Pinch', {
+    extend: 'Ext.event.recognizer.MultiTouch',
 
-    touches: 2,
+    requiredTouchesCount: 2,
 
-    onTouchStart: function(e) {
-        var me = this;
+    handledEvents: ['pinchstart', 'pinch', 'pinchend'],
 
-        if (this.isMultiTouch(e)) {
-            me.lock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
-            me.pinching = true;
+<span id='Ext-dom-Element-event-pinchstart'>    /**
+</span>     * @member Ext.dom.Element
+     * @event pinchstart
+     * Fired once when a pinch has started.
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.mixin.Observable.addListener.
+     */
 
-            var targetTouches = e.targetTouches;
+<span id='Ext-dom-Element-event-pinch'>    /**
+</span>     * @member Ext.dom.Element
+     * @event pinch
+     * Fires continuously when there is pinching (the touch must move for this to be fired).
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.mixin.Observable.addListener.
+     */
 
-            me.startFirstTouch = targetTouches[0];
-            me.startSecondTouch = targetTouches[1];
+<span id='Ext-dom-Element-event-pinchend'>    /**
+</span>     * @member Ext.dom.Element
+     * @event pinchend
+     * Fires when a pinch has ended.
+     * @param {Ext.event.Event} event The {@link Ext.event.Event} event encapsulating the DOM event.
+     * @param {HTMLElement} node The target of the event.
+     * @param {Object} options The options object passed to Ext.mixin.Observable.addListener.
+     */
 
-            me.previousDistance = me.startDistance = me.getDistance(me.startFirstTouch, me.startSecondTouch);
-            me.previousScale = 1;
+<span id='Ext-event-Event-property-scale'>    /**
+</span>     * @property {Number} scale
+     * The scape of a pinch event.
+     *
+     * **This is only available when the event type is `pinch`**
+     * @member Ext.event.Event
+     */
 
-            me.fire('pinchstart', e, {
-                distance: me.startDistance,
-                scale: me.previousScale
-            });
-        } else if (me.pinching) {
-            me.unlock('swipe', 'scroll', 'scrollstart', 'scrollend', 'touchmove', 'touchend', 'touchstart', 'tap', 'tapstart', 'taphold', 'tapcancel', 'doubletap');
-            me.pinching = false;
-        }
-    },
+    startDistance: 0,
 
-    isMultiTouch: function(e) {
-        return e && Ext.supports.Touch && e.targetTouches && e.targetTouches.length > 1;
-    },
+    lastTouches: null,
 
     onTouchMove: function(e) {
-        if (!this.isMultiTouch(e)) {
-            this.onTouchEnd(e);
+        if (!this.isTracking) {
             return;
         }
 
-        if (this.pinching) {
-            this.fire('pinch', e, this.getPinchInfo(e));
+        var touches = Array.prototype.slice.call(e.touches),
+            firstPoint, secondPoint, distance;
+
+        firstPoint = touches[0].point;
+        secondPoint = touches[1].point;
+
+        distance = firstPoint.getDistanceTo(secondPoint);
+
+        if (distance === 0) {
+            return;
         }
-    },
 
-    onTouchEnd: function(e) {
-        if (this.pinching) {
-            this.fire('pinchend', e);
+        if (!this.isStarted) {
+
+            this.isStarted = true;
+
+            this.startDistance = distance;
+
+            this.fire('pinchstart', e, touches, {
+                touches: touches,
+                distance: distance,
+                scale: 1
+            });
         }
+        else {
+            this.fire('pinch', e, touches, {
+                touches: touches,
+                distance: distance,
+                scale: distance / this.startDistance
+            });
+        }
+
+        this.lastTouches = touches;
     },
 
-    getPinchInfo: function(e) {
-        var me = this,
-            targetTouches = e.targetTouches,
-            firstTouch = targetTouches[0],
-            secondTouch = targetTouches[1],
-            distance = me.getDistance(firstTouch, secondTouch),
-            scale = distance / me.startDistance,
-            info = {
-            scale: scale,
-            deltaScale: scale - 1,
-            previousScale: me.previousScale,
-            previousDeltaScale: scale - me.previousScale,
-            distance: distance,
-            deltaDistance: distance - me.startDistance,
-            startDistance: me.startDistance,
-            previousDistance: me.previousDistance,
-            previousDeltaDistance: distance - me.previousDistance,
-            firstTouch: firstTouch,
-            secondTouch: secondTouch,
-            firstPageX: firstTouch.pageX,
-            firstPageY: firstTouch.pageY,
-            secondPageX: secondTouch.pageX,
-            secondPageY: secondTouch.pageY,
-            // The midpoint between the touches is (x1 + x2) / 2, (y1 + y2) / 2
-            midPointX: (firstTouch.pageX + secondTouch.pageX) / 2,
-            midPointY: (firstTouch.pageY + secondTouch.pageY) / 2
-        };
-
-        me.previousScale = scale;
-        me.previousDistance = distance;
-
-        return info;
+    fireEnd: function(e) {
+        this.fire('pinchend', e, this.lastTouches);
     },
 
-    getDistance: function(firstTouch, secondTouch) {
-        return Math.sqrt(
-        Math.pow(Math.abs(firstTouch.pageX - secondTouch.pageX), 2) + Math.pow(Math.abs(firstTouch.pageY - secondTouch.pageY), 2));
+    fail: function() {
+        return this.callParent(arguments);
     }
 });
-
-Ext.regGesture('pinch', Ext.gesture.Pinch);
-</pre>    
+</pre>
 </body>
 </html>

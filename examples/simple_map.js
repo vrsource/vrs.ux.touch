@@ -6,7 +6,6 @@ Ext.setup({
       vrs.ctrl = new vrs.AppCtrl();
    },
 
-   fullscreen     : true,
    statusBarStyle : 'black'
 });
 
@@ -14,7 +13,11 @@ Ext.setup({
 /**
 * Controller for the application.
 */
-vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
+Ext.define('vrs.AppCtrl', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
    panel: null,
 
    /** List of markers on the map. */
@@ -24,10 +27,11 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
    map: null,
 
    constructor: function(config) {
-      vrs.AppCtrl.superclass.constructor.call(this, config);
+      this.initConfig(config);
+      this.mixins.observable.constructor.call(this, config);
 
-      this.panel = new vrs.MapPanel({ controller: this});
-      this.map   = this.panel.mapCmp.map;
+      this.panel = vrs.MapPanel.create({ controller: this});
+      this.map   = this.panel.mapCmp.getMap();
 
       this.panel.on('activate', this.onActivate, this);
       this.initMap();
@@ -87,17 +91,16 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
                },
 
                id: 'close_panel' + idx,
-               dockedItems: [{
+               items: [{
                   xtype: 'toolbar',
                   title: 'Stuff',
-                  dock: 'top',
+                  docked: 'top',
                   items: [{
                      xtype: 'button',
                      text: 'close',
                      handler: function() { popup_window.remove(); }
                   }]
-               }],
-               items: [{
+               },{
                   html: "<b>Name:</b> " + marker.featureData.name
                }]
             });
@@ -123,10 +126,10 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
                },
 
                id: 'close_panel' + idx,
-               dockedItems: [{
+               items: [{
                   xtype: 'toolbar',
                   title: 'Anchor Test',
-                  dock: 'top',
+                  docked: 'top',
                   items: [
                      {
                         xtype: 'button',
@@ -146,8 +149,7 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
                         }
                      }
                   ]
-               }],
-               items: [{
+               },{
                   html: "<b>Name:</b> " + marker.featureData.name
                }]
             });
@@ -209,75 +211,77 @@ vrs.AppCtrl = Ext.extend(Ext.util.Observable, {
 /*
 * Main view for the application.
 */
-vrs.MapPanel = Ext.extend(Ext.Panel, {
-   cls: 'map_panel',
+Ext.define('vrs.MapPanel', {
+   extend: 'Ext.Panel',
 
-   controller: null,
-   fullscreen: true,
+   config: {
+      controller : null,
 
-   layout: {
-      type: 'vbox',
-      align: 'stretch'
+      cls        : 'map_panel',
+
+      fullscreen : true,
+      layout     : 'fit'
    },
 
-   initComponent: function() {
-      var me = this,
-          ctrl = this.controller,
-          toolbar;
+   initialize: function() {
+      this.callParent(arguments);
 
-      this.addBtn = new Ext.Button({
-         text: 'Add',
-         ui: 'action',
-         handler: function() {
+      var me   = this,
+          ctrl = this.getController(),
+          toolbar, map_options;
+
+      this.addBtn = Ext.Button.create({
+         text    : 'Add',
+         ui      : 'action',
+         handler : function() {
             var ctrl = me.controller,
                 map_cmp = me.mapCmp,
-                mtypes = map_cmp.map.mapTypes;
-
+                mtypes = map_cmp.getMap().mapTypes;
             console.log('do something');
          }
       });
 
-      this.topToolbar = new Ext.Toolbar({
-         title: 'Map',
-         dock: 'top',
-         items: [
+      this.topToolbar = Ext.Toolbar.create({
+         title  : 'Map',
+         docked : 'top',
+         items  : [
             this.addBtn,
             {xtype: 'spacer'}
          ]
       });
 
-      this.mainPanel = new Ext.Panel({
+      this.mainPanel = Ext.Panel.create({
          html: 'Put stuff here'
       });
 
-      this.mapCmp = new Ext.Map({
-         mapOptions: {
-            center : new google.maps.LatLng(30, -100),
-            zoom : 3,
-            mapTypeId : google.maps.MapTypeId.HYBRID,
-            scaleControl: true,
-            mapTypeControlOptions: {
-               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-            }
+      map_options = {
+         center : new google.maps.LatLng(30, -100),
+         zoom : 3,
+         mapTypeId : google.maps.MapTypeId.HYBRID,
+         scaleControl: true,
+         mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
          }
+      };
+
+      this.mapCmp = Ext.Map.create({
+         //mapOptions: map_options
       });
 
+      this.mapCmp.setMapOptions(map_options);
+
       // finalize the setup
-      this.dockedItems = [
-         this.topToolbar
-      ];
-
-      this.items = [
+      me.add([
+         this.topToolbar,
          this.mapCmp
-      ];
-
-      // Finish setup
-      vrs.MapPanel.superclass.initComponent.call(this);
+      ]);
    },
 
    // -- TEST HELPERS --- //
    tapAddBtn: function() {
-      this.addBtn.callHandler(null);
+      //this.addBtn.doTap(this.addBtn, callHandler(null);
+      this.addBtn.getHandler().apply(this.addBtn.getScope(), null);
+      //this.addBtn.getHandler().call(null);
    }
 });
 

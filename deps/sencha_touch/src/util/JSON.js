@@ -490,11 +490,11 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
  * @singleton
  */
 Ext.util.JSON = {
-    encode : function(o) {
+    encode: function(o) {
         return JSON.stringify(o);
     },
 
-    decode : function(s) {
+    decode: function(s) {
         return JSON.parse(s);
     }
 };

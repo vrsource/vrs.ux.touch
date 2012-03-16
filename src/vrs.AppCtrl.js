@@ -15,7 +15,7 @@ Ext.ns('vrs');
 *       - activationCompleted(): when the control panel has completed it's transition
 *       - removalStarted(): when we start removing the focus
 *       - removalCompleted(): when we end removal from view.
-*       - onDestroy(): when we should destroy our information.
+*       - destroy(): when we should destroy our information.
 *
 *  revealBegin(new), revealEnd(new)
 *  concealBegin, concealEnd
@@ -24,38 +24,47 @@ Ext.ns('vrs');
 *   - Provide (optional) smart handling of UI creation/destruction to
 *     remove the use of resources for UIs that are not on screen and
 *     delay construction of UI/panel until it is needed.
+*
+* TODO: XXX: See if we can remove the timing issue using apply/update/initialConfig
+*            support in ST2.
 */
-vrs.PanelController = Ext.extend(Ext.util.Observable, {
-   panel: null,
-
-   /** If set, this is the text that should be displayed in the back button
-   * of any panels we push onto the stack.  (ie. buttons that come back to us)
-   */
-   backName: null,
-
-   /** Our current panel holder.
-   * Should call to this to push, pop, and clear the stack and do any other holder ops.
-   * (this is set by the controller stack that we get pushed onto)
-   */
-   panelHolder: null,
-
-   /**
-   * If set true, then as part of construction, will set the
-   * controller as base on the holder.  (can only happen for one controller in holder)
-   *
-   * note: we do it this way to make sure the panel construction code knows
-   *       if we are the base controller or not and what our holderPanel is.
-   */
-   isBaseController: false,
-
-   constructor: function(config) {
-      vrs.PanelController.superclass.constructor.call(this, config);
-      assert(this.panelHolder !== null, "Must set stack controller on new Panels.");
+Ext.define('vrs.PanelController', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
    },
 
-   /** Return the panel for the controller. */
-   getPanel: function() {
-      return this.panel;
+   config: {
+
+      /**
+      * @cfg {Object} panel The view pnael that this controller holds/uses.
+      */
+      panel: null,
+
+      /** If set, this is the text that should be displayed in the back button
+      * of any panels we push onto the stack.  (ie. buttons that come back to us)
+      */
+      backName: null,
+
+      /** Our current panel holder.
+      * Should call to this to push, pop, and clear the stack and do any other holder ops.
+      * (this is set by the controller stack that we get pushed onto)
+      */
+      panelHolder: null,
+
+      /**
+      * If set true, then as part of construction, will set the
+      * controller as base on the holder.  (can only happen for one controller in holder)
+      *
+      * note: we do it this way to make sure the panel construction code knows
+      *       if we are the base controller or not and what our holderPanel is.
+      */
+      isBaseController: false
+   },
+
+   constructor: function(config) {
+      this.initConfig(config);
+      this.callParent(arguments);
+      assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
    },
 
    // ----- STATE CHANGE/UPDATE CALLBACKS ---- //
@@ -69,28 +78,41 @@ vrs.PanelController = Ext.extend(Ext.util.Observable, {
    * (note: can't just watch for deactive locally because that doesn't tell us
    * if we are just being held on the stack for a while.)
    */
-   onDestroy: function() {
+   destroy: function() {
       //console.log("Destroying panel for control: ", this);
-
-      this.panelHolder = null;  // Clear reference to the stack
+      this.setPanelHolder(null);  // Clear reference to the stack
       var panel = this.getPanel();
       if(panel)
       { panel.destroy(); }
-      this.clearListeners();
+      this.setPanel(null);
+
+      // XXX: this.clearListeners();
+      // should happen in base class for observable
+      this.callParent();
+   },
+
+   onDestroy: function() {
+      console.log("[DEPRECATED]: Call destroy instead of onDestroy");
+      this.destroy();
    },
 
    // --- Helpers to figure out where we are being used --- //
+   isBaseController: function() {
+      return this.getIsBaseController();
+   },
+
    /** Return true if we are being shown in a side panel. */
    inSidePanel: function() {
-      if(!this.panelHolder) { return false; }
+      if(!this.getPanelHolder())
+      { return false; }
 
-      return this.panelHolder.inSidePanel;
+      return this.getPanelHolder().getInSidePanel();
    },
 
    /** Return true if we are being shown in a popup panel. */
    inPopupPanel: function() {
-      if(!this.panelHolder) { return false; }
-      return this.panelHolder.inPopupPanel;
+      if(!this.getPanelHolder()) { return false; }
+      return this.getPanelHolder().getInPopupPanel();
    },
 
    // ---- CONTROLLER HELPERS ---- //
@@ -107,16 +129,28 @@ vrs.PanelController = Ext.extend(Ext.util.Observable, {
       var me = this,
           back_btn,
           back_txt,
-          prev_ctrl = this.panelHolder.getPrevCtrl(numBack);
+          prev_ctrl = this.getPanelHolder().getPrevCtrl(numBack);
 
-      back_txt = (prev_ctrl && prev_ctrl.backName) || 'Back';
+      back_txt = (prev_ctrl && prev_ctrl.getBackName()) || 'Back';
 
-      back_btn = new Ext.Button(Ext.apply({}, btnConfig, {
+      back_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
          text    : back_txt,
          ui      : 'back',
-         handler : function() { me.panelHolder.popFocusCtrl(); }
+         handler : function() { me.getPanelHolder().popFocusCtrl(); }
       }));
       return back_btn;
+   },
+
+   createHomeButton: function(btnConfig) {
+      var me = this,
+
+        home_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
+         iconMask : true,
+         ui       : 'action',
+         iconCls : 'home',
+         handler : function() { me.getPanelHolder().gotoBaseController(); }
+      }));
+      return home_btn;
    },
 
    /**
@@ -137,26 +171,26 @@ vrs.PanelController = Ext.extend(Ext.util.Observable, {
       var toolbar, back_btn, home_btn,
           toolbar_items = [],
           me = this,
-          holder = this.panelHolder;
+          holder = this.getPanelHolder();
 
       // If in stack and not base controller, need navigation
-      if(holder.useStack && !this.isBaseController) {
+      if(holder.getUseStack() && !this.isBaseController()) {
          // - Create back buttn
          back_btn = new Ext.Button(Ext.apply({}, backBtnConfig,
          {
             text: 'Back',
             ui: 'back',
-            handler: function() { me.panelHolder.popFocusCtrl(); }
+            handler: function() { me.getPanelHolder().popFocusCtrl(); }
          }));
 
          // - If not in side panel and not in popup, then need home button
-         if(!holder.inSidePanel  && !holder.inPopupPanel) {
+         if(!holder.getInSidePanel()  && !holder.getInPopupPanel()) {
             // create home button
             home_btn = new Ext.Button({
                iconMask: true,
                ui: 'action',
                iconCls: 'home',
-               handler: function() { me.panelHolder.gotoBaseController(); }
+               handler: function() { me.getPanelHolder().gotoBaseController(); }
             });
          }
       }
@@ -193,16 +227,19 @@ vrs.PanelController = Ext.extend(Ext.util.Observable, {
 * Used for testing when we need a panel controller
 * with no content.
 */
-vrs.HtmlPanelController = Ext.extend(vrs.PanelController, {
-   panelHtml: '',
+Ext.define('vrs.HtmlPanelController', {
+   extend: 'vrs.PanelController',
 
-   constructor: function(config) {
-      vrs.HtmlPanelController.superclass.constructor.call(this, config);
+   config: {
+      panelHtml: ''
    },
+
    getPanel: function() {
-      if(Ext.isEmpty(this.panel))
-      { this.panel = new Ext.Panel({html: this.panelHtml });}
-      return this.panel;
+      if(Ext.isEmpty(this._panel))
+      {
+         this.setPanel(Ext.Panel.create({html: this.getPanelHtml() }));
+      }
+      return this._panel;
    }
 });
 
@@ -211,38 +248,47 @@ vrs.HtmlPanelController = Ext.extend(vrs.PanelController, {
 * Panel controller that will be displayed with a title, a back button,
 * and an embedded IFrame.
 */
-vrs.HtmlViewerPanelController = Ext.extend(vrs.PanelController, {
-   /** URI of the page to view. */
-   pageUri: null,
+Ext.define('vrs.HtmlViewerPanelController', {
+   extend: 'vrs.PanelController',
 
-   panel: null,
-   title: '',
+   config: {
+      /** URI of the page to view. */
+      pageUri: null,
+
+      title: ''
+   },
 
    constructor: function(config) {
-      vrs.HtmlViewerPanelController.superclass.constructor.call(this, config);
-      this.panel = new vrs.HtmlViewerPanel({ controller: this });
+      this.callParent(arguments);
+      this.setPanel(vrs.HtmlViewerPanel.create({ controller: this }));
    }
 });
 
-vrs.HtmlViewerPanel = Ext.extend(Ext.Panel, {
-   cls: 'html-viewer-panel',
-   controller: null,
+Ext.define('vrs.HtmlViewerPanel', {
+   extend: 'Ext.Panel',
 
-   initComponent: function() {
+   config: {
+      cls: 'html-viewer-panel',
+      controller: null
+   },
+
+   initialize: function() {
+      this.callParent();
+
       var me = this,
-          ctrl = me.controller;
+          ctrl = me.getController();
 
-      this.backBtn = new Ext.Button({
+      this.backBtn = Ext.Button.create({
          text    : 'Back',
          ui      : 'back',
-         handler : function() { ctrl.panelHolder.popFocusCtrl(); }
+         handler : function() { ctrl.getPanelHolder().popFocusCtrl(); }
       });
 
-      this.topToolbar = new Ext.Toolbar({
-         dock  : 'top',
-         title : ctrl.title,
-         ui    : 'dark',
-         items : [
+      this.topToolbar = Ext.Toolbar.create({
+         docked  : 'top',
+         title   : ctrl.title,
+         ui      : 'dark',
+         items   : [
             this.backBtn,
             { xtype: 'spacer' }
          ]
@@ -255,15 +301,10 @@ vrs.HtmlViewerPanel = Ext.extend(Ext.Panel, {
       });
 
       // Hook everything up
-      this.dockedItems = [
-         this.topToolbar
-      ];
-
-      this.items = [
+      this.add([
+         this.topToolbar,
          this.embeddedPanel
-      ];
-
-      vrs.HtmlViewerPanel.superclass.initComponent.call(this);
+      ]);
    },
 
    // -- test helpers -- //
@@ -278,14 +319,16 @@ vrs.HtmlViewerPanel = Ext.extend(Ext.Panel, {
 * todo: Merge this up with the Panel controller in a common hierarchy
 *       to get some reuse and commonality.
 */
-vrs.SubPanelController = Ext.extend(Ext.util.Observable, {
-   panel: null,
-
-   getPanel: function() {
-      return this.panel;
+Ext.define('vrs.SubPanelController', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
    },
 
-   onDestroy: function() {
+   config: {
+      panel: null
+   },
+
+   destroy: function() {
       var panel = this.getPanel();
       if(panel)
       { panel.destroy(); }
@@ -335,64 +378,63 @@ vrs.SubPanelController = Ext.extend(Ext.util.Observable, {
 * note: this is currently implemented  as a single class that adapts based upon
 *       it's settings.  This could be done differently using plugins/mixins/etc.
 *       For now though this was the most simple and easily maintained method.
+*
+* TODO: Try to use a smarter layout that has less overhead like this code below
+*      if(this.getUseStack()) {
+*         this.layout = 'card';
+*      } else {
+*         this.layout = {
+*            type: 'vbox',
+*            align: 'stretch'
+*         }
+*      }
 */
-vrs.PanelHolder = Ext.extend(Ext.Panel, {
-   /** Configuration for animation. Defaults to slide type. */
-   animConfig: {type: 'slide'},
+Ext.define('vrs.PanelHolder', {
+   extend: 'Ext.Panel',
 
-   /****** STACK SETTINGS *******/
-   useStack: true,
+   config: {
+      /** Configuration for animation. Defaults to slide type. */
+      animConfig: {
+         type: 'slide'
+      },
 
-   /** Stack of controllers. */
-   ctrlStack: null,
+      /****** STACK SETTINGS *******/
+      useStack: true,
 
-   /****** SIDE PANEL SETTINGS ********/
-   /** If true, this holder is in a side panel.
-   * the sub-controls may want to adjust their
-   * UI accordingly.
-   */
-   inSidePanel: false,
-
-   /******* POPUP SETTINGS ****/
-   /** If true, this holder is in a popup window.
-   */
-   inPopupPanel: false,
-
-   /** The popup panel that we are contained within.
-   * Must be set before doing any popup operations.
-   */
-   popupPanel: null,
-
-   /******** CORE SETTINGS ****/
-   /**
-   * The initial controller to use.
-   * when passed in, set's panelHolder to point at this stack controller.
-   * MUST SET IMMEDIATELY using setBaseController()
-   */
-   baseController: null,
-
-   initComponent: function() {
-      var me = this;
-
-      this.ctrlStack = [];
-      this.items     = [];
-
-      // Change layout method based upon desired usage.
-      this.layout = 'card';
-
-      // TODO: Try to use a smarter layout that has less overhead like this code below
-      /*
-      if(this.useStack) {
-         this.layout = 'card';
-      } else {
-         this.layout = {
-            type: 'vbox',
-            align: 'stretch'
-         }
-      }
+      /****** SIDE PANEL SETTINGS ********/
+      /** If true, this holder is in a side panel.
+      * the sub-controls may want to adjust their
+      * UI accordingly.
       */
+      inSidePanel: false,
 
-      vrs.PanelHolder.superclass.initComponent.call(this);
+      /******* POPUP SETTINGS ****/
+      /** If true, this holder is in a popup window.
+      */
+      inPopupPanel: false,
+
+      /** The popup panel that we are contained within.
+      * Must be set before doing any popup operations.
+      */
+      popupPanel: null,
+
+      /******** CORE SETTINGS ****/
+      /**
+      * The initial controller to use.
+      * when passed in, set's panelHolder to point at this stack controller.
+      * MUST SET IMMEDIATELY using setBaseController()
+      */
+      baseController: null,
+
+      layout: 'card'
+   },
+
+   initialize: function() {
+      this.callParent();
+
+      // Stack of controllers we are managing.
+      this._ctrlStack = [];
+
       /*
       var signals = ['activate', 'add', 'added', 'afterlayout', 'afterrender', 'beforeactivate',
                      'beforeadd', 'beforecardswitch', 'beforedeactivate', 'beforedestroy',
@@ -406,94 +448,95 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
          });
       });
       */
-
-      me.on({
-         beforecardswitch : me.onBeforeCardSwitch,
-         cardswitch       : me.onCardSwitch,
-         scope            : me
-      });
-
    },
 
    /**
    * Set the base controller.
    */
-   setBaseController: function(baseController) {
-      assert(this.baseController === null, 'Must only call once');
-      assert(baseController.isBaseController, 'Must have been configured as base controller');
-      this.baseController = baseController;
-      this.baseController.panelHolder = this;
+   applyBaseController: function(baseController) {
+      assert(this.getBaseController() === null, 'Must only call once');
+      assert(baseController.isBaseController(), 'Must have been configured as base controller');
+      return baseController;
+   },
+
+   updateBaseController: function(baseController) {
+      baseController.setPanelHolder(this);
 
       // Set base controller panel to be the first one active
       // May need to set active item.
-      this.add(this.baseController.getPanel());
-      this.doLayout();
+      this.add(baseController.getPanel());
+      //this.doLayout();
    },
 
-   // @private
-   // At beginning of destruction, call deactivate
+   // As part of destruction, call deactivate
    // on all the sub controller so they clean up.
-   beforeDestroy: function() {
+   destroy: function() {
       var me = this;
 
-      // XXX: Potential leak here because onDestroy
-      Ext.each(this.ctrlStack, function(ctrl) {
+      // XXX: Potential leak here because destroy
+      Ext.each(this._ctrlStack, function(ctrl) {
          if(ctrl.getPanel()) {
             me.remove(ctrl.getPanel(), false);
          }
-         ctrl.onDestroy();  // Tell controller to destroy itself
+         ctrl.destroy();  // Tell controller to destroy itself
       });
-      this.ctrlStack  = [];             // Clear the stack
+      this._ctrlStack  = [];             // Clear the stack
 
       // cleanup the base controller
-      if(this.baseController) {
-         if(this.baseController.getPanel()) {
-            this.remove(this.baseController.getPanel(), false);
+      if(this.getBaseController()) {
+         if(this.getBaseController().getPanel()) {
+            this.remove(this.getBaseController().getPanel(), false);
          }
-         this.baseController.onDestroy();
-         this.baseController = null;
+         this.getBaseController().destroy();
+         this._baseController = null;
       }
 
-      // set activate item to something empty?
-      vrs.PanelHolder.superclass.beforeDestroy.call(this);
-   },
-
-   onBeforeCardSwitch: function(container, newCard, oldCard, index, animated) {
-      return true;
-   },
-
-   onCardSwitch: function(container, newCard, oldCard, index, animated) {
+      this.callParent();
    },
 
    // --- POPUP MANGEMENT ---- //
    /**
    * Set the parent popup panel that contains us.
    */
-   setPopupPanel: function(popupPanel) {
-      assert(this.inPopupPanel, "Must be in popup panel");
-      this.popupPanel = popupPanel;
+   applyPopupPanel: function(popupPanel) {
+      assert(this.getInPopupPanel(), "Must be in popup panel");
+      return popupPanel;
    },
 
    // --- PANEL STACK MANAGEMENT --- /
    /** Sets focus for the "main" window to the given panel.
    * @param animOpts - animation configuration options.
    *                   (anim config object, undefined, or false)
+   * @param onComple - Called when the transition to show the panel is completed.
    */
-   _setFocusCtrl: function(ctrl, animOpts) {
-      var config;
+   _setFocusCtrl: function(ctrl, animOpts, onComplete) {
+      var anim_config;
+      onComplete = onComplete || Ext.emptyFn;
+      console.log("============ Setting New Focus ================");
 
-      assert(this.baseController, 'Must have a base controller.');
-      assert(this.useStack, 'Must have stack enabled.');
+      assert(this.getBaseController(), 'Must have a base controller.');
+      assert(this.getUseStack(), 'Must have stack enabled.');
       if(false === animOpts) {
-         config = false;
+         anim_config = false;
       } else {
-         config = Ext.apply({}, animOpts, this.animConfig);
-         if(!this.animConfig)       // If animation is disabled
-         { config = false; }
+         anim_config = Ext.apply({}, animOpts, this.getAnimConfig());
+         if(!this.getAnimConfig())       // If animation is disabled
+         { anim_config = false; }
       }
 
-      ctrl.panelHolder = this;     // Let the controller know about us
-      this.setActiveItem(ctrl.getPanel(), config);
+      ctrl.setPanelHolder(this);     // Let the controller know about us
+
+      if(anim_config) {
+         this.animateActiveItem(ctrl.getPanel(), anim_config);
+         assert(this.activeItemAnimation, "Must have animation");
+         this.activeItemAnimation.on('animationend', function() {
+            console.log('animation complete');
+            onComplete();
+         });
+      } else {
+         this.setActiveItem(ctrl.getPanel());
+         onComplete();
+      }
    },
 
    /** Return the controller that currently has focus.
@@ -502,12 +545,12 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
    * TODO: Pull this from the panel checking what has focus.
    */
    getFocusCtrl: function() {
-      assert(this.baseController, 'Must have a base controller.');
-      if(this.ctrlStack.length > 0)
+      assert(this.getBaseController(), 'Must have a base controller.');
+      if(this._ctrlStack.length > 0)
       {
-         return this.ctrlStack[this.ctrlStack.length-1];
+         return this._ctrlStack[this._ctrlStack.length-1];
       }
-      return this.baseController;
+      return this.getBaseController();
    },
 
    /**
@@ -518,20 +561,20 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
    * note: this can return undefined/null if no base controller is set.
    */
    getPrevCtrl: function(offset) {
-      var ctrl = this.ctrlStack[this.ctrlStack.length-1-offset];
+      var ctrl = this._ctrlStack[this._ctrlStack.length-1-offset];
 
       // out of bounds
       if(undefined === ctrl) {
-         ctrl = this.baseController;
+         ctrl = this.getBaseController();
       }
 
       return ctrl;
    },
 
    /** Push a new controller onto the stack. */
-   pushFocusCtrl: function(ctrl, animOpts) {
-      this.ctrlStack.push(ctrl);
-      this._setFocusCtrl(ctrl, animOpts);
+   pushFocusCtrl: function(ctrl, animOpts, onComplete) {
+      this._ctrlStack.push(ctrl);
+      this._setFocusCtrl(ctrl, animOpts, onComplete);
    },
 
    /** Pop a controller from the stack and go back one.
@@ -541,26 +584,33 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
    *                 and replaces it with the new control
    */
    popFocusCtrl: function(newCtrl) {
-      // Remove the current panel from the stack
-      var cur_ctrl = this.ctrlStack.pop();
+      var me = this,
+          cur_ctrl;
 
       // If there was a control on the stack, then remove that controller
-      if(cur_ctrl !== undefined)
-      { this._handleCtrlRemoval(cur_ctrl); }
+      function on_finish() {
+         console.log("Finish pop");
+         me._handleCtrlRemoval(cur_ctrl);
+      }
 
-      // If we don't have one to replace current, then pull one of stack or use base.
-      if(undefined === newCtrl) {
-         // If we have no other controllers, then go back to base controller
-         if (this.ctrlStack.length === 0)
-         { this.gotoBaseController(); }
-         else
-         {
-            this._setFocusCtrl(this.ctrlStack[this.ctrlStack.length - 1],
-                                {reverse: true});
+      // If we are going to the base controller, then go directly there.
+      if( (undefined === newCtrl) && (this._ctrlStack.length <= 1))
+      {
+         this.gotoBaseController();
+      }
+      // Else: pop off current controller and optionally put another in place.
+      else
+      {
+         cur_ctrl = this._ctrlStack.pop();
+
+         // If we don't have one to replace current, then pull one of stack or use base.
+         if(undefined === newCtrl) {
+            this._setFocusCtrl(this._ctrlStack[this._ctrlStack.length - 1],
+                               {reverse: true}, on_finish);
+         } else {
+            // Push onto stack and into focus
+            this.pushFocusCtrl(newCtrl, this.getAnimConfig(), on_finish);
          }
-      } else {
-         // Push onto stack and into focus
-         this.pushFocusCtrl(newCtrl);
       }
    },
 
@@ -575,23 +625,21 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
 
    /** Switch back to the base controller. */
    gotoBaseController: function() {
-      assert(this.baseController, 'Must have a base controller.');
+      assert(this.getBaseController(), 'Must have a base controller.');
       var me = this,
-          cur_ctrl = this.ctrlStack.pop();
+          ctrls_to_remove = this._ctrlStack;
 
-      // Start removal process for top of stack and manually destroy the others
-      if(cur_ctrl !== undefined)
-      { this._handleCtrlRemoval(cur_ctrl); }
+      // store the controller that we need to remove, and then
+      // clear them out in the callback function
+      function on_finish() {
+         console.log("Clearing all controllers");
+         Ext.each(ctrls_to_remove, function(ctrl) {
+            me._handleCtrlRemoval(ctrl);
+         });
+      }
 
-      Ext.each(this.ctrlStack, function(ctrl) {
-         if(ctrl.getPanel()) {
-            me.remove(ctrl.getPanel(), false);
-         }
-         ctrl.onDestroy();
-      }, this);
-
-      this.ctrlStack      = [];             // Clear the stack
-      this._setFocusCtrl(this.baseController, {reverse: true});
+      this._ctrlStack      = [];             // Clear the stack
+      this._setFocusCtrl(this.getBaseController(), {reverse: true}, on_finish);
    },
 
    /** Handle the cleanup/destruction process of a controller
@@ -599,21 +647,28 @@ vrs.PanelHolder = Ext.extend(Ext.Panel, {
    * to the controller and should let it know.
    */
    _handleCtrlRemoval: function(ctrl) {
-      //console.log('Removing control: ', ctrl);
+      console.log('Removing control: ', ctrl);
       var me = this,
-          panel;
+          panel = ctrl.getPanel();
 
-      panel = ctrl.getPanel();
       assert(panel);   // We should have a panel.
+      // ASSERT: panel for the given controller is not currently an active item
+      // being displayed by this controller.  (ie. should be ready to remove)
+      assert(panel !== this.getActiveItem());
 
+      this.remove(panel, false); // remove from the card stack
+      ctrl.destroy();            // Call to destroy (panel is destroyed in here)
+
+      /*
       // XXX: using deactivated is the wrong signal because it requires
       //      that controls are currently in view and are about to remove from view
       //      maybe use destroyed or some other signal.
       panel.on('deactivate', function() {
          //console.log('Control was deactivated: ', ctrl);
          me.remove(panel, false);  // Remove from our card stack
-         ctrl.onDestroy();         // Let the controller know it is being destroyed.
+         ctrl.destroy();         // Let the controller know it is being destroyed.
       });
+      */
    }
 
 }); // controller stack panel

@@ -1,568 +1,911 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js"><div id="cls-Ext.Carousel"></div>/**
- * @class Ext.Carousel
- * @extends Ext.Panel
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-carousel-Carousel'>/**
+</span> * @class Ext.carousel.Carousel
+ * @author Jacky Nguyen &lt;jacky@sencha.com&gt;
  *
- * <p>A customized Panel which provides the ability to slide back and forth between
- * different child items.</p>
- * 
- * <h2>Useful Properties</h2>
- * <ul class="list">
- *   <li>{@link #ui} (defines the style of the carousel)</li>
- *   <li>{@link #direction} (defines the direction of the carousel)</li>
- *   <li>{@link #indicator} (defines if the indicator show be shown)</li>
- * </ul>
- * 
- * <h2>Useful Methods</h2>
- * <ul class="list">
- *   <li>{@link #next} (moves to the next card)</li>
- *   <li>{@link #prev} (moves to the previous card)</li>
- *   <li>{@link #setActiveItem} (moves to the passed card)</li>
- * </ul>
- * 
- * <h2>Screenshot:</h2>
+ * Carousels, like [tabs](#!/guide/tabs), are a great way to allow the user to swipe through multiple full-screen pages.
+ * A Carousel shows only one of its pages at a time but allows you to swipe through with your finger.
  *
- * {@img Ext.Carousel/screenshot.png Ext.Carousel screenshot}
+ * Carousels can be oriented either horizontally or vertically and are easy to configure - they just work like any other
+ * Container. Here's how to set up a simple horizontal Carousel:
+ *
+ *     @example
+ *     Ext.create('Ext.Carousel', {
+ *         fullscreen: true,
+ *
+ *         defaults: {
+ *             styleHtmlContent: true
+ *         },
+ *
+ *         items: [
+ *             {
+ *                 html : 'Item 1',
+ *                 style: 'background-color: #5E99CC'
+ *             },
+ *             {
+ *                 html : 'Item 2',
+ *                 style: 'background-color: #759E60'
+ *             },
+ *             {
+ *                 html : 'Item 3'
+ *             }
+ *         ]
+ *     });
+ *
+ * We can also make Carousels orient themselves vertically:
+ *
+ *     @example preview
+ *     Ext.create('Ext.Carousel', {
+ *         fullscreen: true,
+ *         direction: 'vertical',
+ *
+ *         defaults: {
+ *             styleHtmlContent: true
+ *         },
+ *
+ *         items: [
+ *             {
+ *                 html : 'Item 1',
+ *                 style: 'background-color: #759E60'
+ *             },
+ *             {
+ *                 html : 'Item 2',
+ *                 style: 'background-color: #5E99CC'
+ *             }
+ *         ]
+ *     });
+ *
+ * ### Common Configurations
+ * * {@link #ui} defines the style of the carousel
+ * * {@link #direction} defines the direction of the carousel
+ * * {@link #indicator} defines if the indicator show be shown
+ *
+ * ### Useful Methods
+ * * {@link #next} moves to the next card
+ * * {@link #previous} moves to the previous card
+ * * {@link #setActiveItem} moves to the passed card
+ *
+ * ## Further Reading
+ *
+ * For more information about Carousels see the [Carousel guide](#!/guide/carousel).
  * 
- * <h2>Example code:</h2>
-<pre><code>
-var carousel = new Ext.Carousel({
-    items: [
-        {
-            html: '&lt;p&gt;Navigate the carousel on this page by swiping left/right.&lt;/p&gt;',
-            cls : 'card card1'
-        },
-        {
-            html: '&lt;p&gt;Clicking on either side of the indicators below&lt;/p&gt;',
-            cls : 'card card2'
-        },
-        {
-            html: 'Card #3',
-            cls : 'card card3'
-        }
-    ]
-});
-
-var panel = new Ext.Panel({
-    cls: 'cards',
-    layout: {
-        type : 'vbox',
-        align: 'stretch'
-    },
-    defaults: {
-        flex: 1
-    },
-    items: [
-        carousel,
-        {
-            xtype    : 'carousel',
-            ui       : 'light',
-            direction: 'vertical',
-            
-            items: [
-            {
-                    html: '&lt;p&gt;Carousels can be vertical and given a ui of "light" or "dark".&lt;/p&gt;',
-                    cls : 'card card1'
-                },
-                {
-                    html: 'Card #2',
-                    cls : 'card card2'
-                },
-                {
-                    html: 'Card #3',
-                    cls : 'card card3'
-                }
-            ]
-        }
-    ]
-});
-</code></pre>
- * @xtype carousel
+ * @aside guide carousel
  */
-Ext.Carousel = Ext.extend(Ext.Panel, {
-    <div id="cfg-Ext.Carousel-baseCls"></div>/**
-     * @cfg {String} baseCls
-     * The base CSS class to apply to the Carousel's element (defaults to <code>'x-carousel'</code>).
-     */
-    baseCls: 'x-carousel',
+Ext.define('Ext.carousel.Carousel', {
+    extend: 'Ext.Container',
 
-    <div id="cfg-Ext.Carousel-indicator"></div>/**
-     * @cfg {Boolean} indicator
-     * Provides an indicator while toggling between child items to let the user
-     * know where they are in the card stack.
-     */
-    indicator: true,
+    alternateClassName: 'Ext.Carousel',
 
-    <div id="cfg-Ext.Carousel-ui"></div>/**
-     * @cfg {String} ui
-     * Style options for Carousel. Default is 'dark'. 'light' is also available.
-     */
-    ui: 'dark',
+    xtype: 'carousel',
 
-    <div id="cfg-Ext.Carousel-direction"></div>/**
-     * @cfg {String} direction
-     * The direction of the Carousel. Default is 'horizontal'. 'vertical' also available.
-     */
-    direction: 'horizontal',
+    requires: [
+        'Ext.fx.easing.EaseOut',
+        'Ext.carousel.Item',
+        'Ext.carousel.Indicator'
+    ],
 
-    // @private
-    horizontal: false,
-    // @private
-    vertical: false,
-    
-    // @private
-    initComponent: function() {
-        this.layout = {
-            type: 'card',
-            // This will set the size of all cards in this container on each layout
-            sizeAllCards: true,
-            // This will prevent the hiding of items on card switch
-            hideInactive: false,
-            itemCls: 'x-carousel-item',
-            targetCls: 'x-carousel-body',
-            setOwner : function(owner) {
-                Ext.layout.CardLayout.superclass.setOwner.call(this, owner);
+    config: {
+<span id='Ext-carousel-Carousel-cfg-layout'>        /**
+</span>         * @cfg layout
+         * Hide layout config in Carousel. It only causes confusion.
+         * @accessor
+         * @private
+         */
+
+        baseCls: 'x-carousel',
+
+<span id='Ext-carousel-Carousel-cfg-direction'>        /**
+</span>         * @cfg {String} direction
+         * The direction of the Carousel, either 'horizontal' or 'vertical'
+         * @accessor
+         */
+        direction: 'horizontal',
+
+        directionLock: false,
+
+        animation: {
+            duration: 250,
+            easing: {
+                type: 'ease-out'
             }
-        };
-         
-        if (this.indicator) {
-            var cfg = Ext.isObject(this.indicator) ? this.indicator : {};
-            this.indicator = new Ext.Carousel.Indicator(Ext.apply({}, cfg, {
-                direction: this.direction,
-                carousel: this,
-                ui: this.ui
-            }));
-        }
+        },
 
-        if (this.direction == 'horizontal') {
-            this.horizontal = true;
-        }
-        else {
-            this.vertical = true;
-        }
-        
-        Ext.Carousel.superclass.initComponent.call(this);
+<span id='Ext-carousel-Carousel-cfg-indicator'>        /**
+</span>         * @cfg {Boolean} indicator
+         * Provides an indicator while toggling between child items to let the user
+         * know where they are in the card stack.
+         * @accessor
+         */
+        indicator: true,
+
+<span id='Ext-carousel-Carousel-cfg-ui'>        /**
+</span>         * @cfg {String} ui
+         * Style options for Carousel. Default is 'dark'. 'light' is also available.
+         * @accessor
+         */
+        ui: 'dark',
+
+        itemConfig: {},
+
+        bufferSize: 1,
+
+        itemLength: null
     },
 
-    // @private
-    afterRender: function() {
-        Ext.Carousel.superclass.afterRender.call(this);
+    itemLength: 0,
 
-        // Bind the required listeners
-        this.mon(this.body, {
-            drag: this.onDrag,
-            dragThreshold: 5,
-            dragend: this.onDragEnd,
-            direction: this.direction,
+    offset: 0,
+
+    flickStartOffset: 0,
+
+    flickStartTime: 0,
+
+    dragDirection: 0,
+
+    count: 0,
+
+    painted: false,
+
+    activeIndex: -1,
+
+    beforeInitialize: function() {
+        this.animationListeners = {
+            animationframe: 'onActiveItemAnimationFrame',
+            animationend: 'onActiveItemAnimationEnd',
+            scope: this
+        };
+
+        this.element.on({
+            dragstart: 'onDragStart',
+            drag: 'onDrag',
+            dragend: 'onDragEnd',
             scope: this
         });
-        
-        this.el.addCls(this.baseCls + '-' + this.direction);
-    },
-    
-    // private, inherit docs
-    onAdd: function(){
-        Ext.Carousel.superclass.onAdd.apply(this, arguments);
-        var indicator = this.indicator;
-        if (indicator) {
-            indicator.onCardAdd();
-        }    
-    },
-    
-    // private, inherit docs
-    onRemove: function(){
-        Ext.Carousel.superclass.onRemove.apply(this, arguments);
-        var indicator = this.indicator;
-        if (indicator) {
-            indicator.onCardRemove();
-        }
-    },
-    
-    /**
-     * The afterLayout method on the carousel just makes sure the active card
-     * is still into view. It also makes sure the indicator is pointing to
-     * the right card.
-     * @private
-     */    
-    afterLayout : function() {
-        Ext.Carousel.superclass.afterLayout.apply(this, arguments);
-        
-        this.currentSize = this.body.getSize();
-        this.currentScroll = {x: 0, y: 0};
-        
-        this.updateCardPositions();
-        
-        var activeItem = this.layout.getActiveItem();        
-        if (activeItem && this.indicator) {  
-            this.indicator.onBeforeCardSwitch(this, activeItem, null, this.items.indexOf(activeItem));
-        }
+
+        this.on({
+            painted: 'onPainted',
+            erased: 'onErased',
+            resize: 'onSizeChange'
+        });
+
+        this.carouselItems = [];
+
+        this.orderedCarouselItems = [];
+
+        this.inactiveCarouselItems = [];
+
+        this.hiddenTranslation = 0;
     },
 
-    /**
-     * The onDrag method sets the currentScroll object. It also slows down the drag
-     * if we are at the bounds of the carousel.
-     * @private
-     */    
-    onDrag : function(e) {
-        this.currentScroll = {
-            x: e.deltaX,
-            y: e.deltaY
-        };
-        
-        // Slow the drag down in the bounce
-        var activeIndex = this.items.items.indexOf(this.layout.activeItem);
-        // If this is a horizontal carousel    
-        if (this.horizontal) {
-            if (
-                // And we are on the first card and dragging left
-                (activeIndex == 0 && e.deltaX > 0) || 
-                // Or on the last card and dragging right
-                (activeIndex == this.items.length - 1 && e.deltaX < 0)
-            ) {
-                // Then slow the drag down
-                this.currentScroll.x = e.deltaX / 2;             
-            }
-        }
-        // If this is a vertical carousel
-        else if (this.vertical) {
-            if (
-                // And we are on the first card and dragging up
-                (activeIndex == 0 && e.deltaY > 0) || 
-                // Or on the last card and dragging down
-                (activeIndex == this.items.length - 1 && e.deltaY < 0)
-            ) {
-                // Then slow the drag down
-                this.currentScroll.y = e.deltaY / 2;
-            }
-        }
-        // This will update all the cards to their correct position based on the current drag
-        this.updateCardPositions();
-    },
+    updateBufferSize: function(size) {
+        var ItemClass = Ext.carousel.Item,
+            total = size * 2 + 1,
+            isRendered = this.isRendered(),
+            innerElement = this.innerElement,
+            items = this.carouselItems,
+            ln = items.length,
+            itemConfig = this.getItemConfig(),
+            itemLength = this.getItemLength(),
+            direction = this.getDirection(),
+            setterName = direction === 'horizontal' ? 'setWidth' : 'setHeight',
+            i, item;
 
-    /**
-     * This will update all the cards to their correct position based on the current drag.
-     * It can be passed true to animate the position updates.
-     * @private
-     */
-    updateCardPositions : function(animate) {
-        var cards = this.items.items,
-            ln = cards.length,
-            cardOffset,
-            i, card, el, style;
-        
-        // Now we loop over the items and position the active item
-        // in the middle of the strip, and the two items on either
-        // side to the left and right.
-        for (i = 0; i < ln; i++) {
-            card = cards[i];  
-            
-            // This means the items is within 2 cards of the active item
-            if (this.isCardInRange(card)) {
-                if (card.hidden) {
-                    card.show();
-                }
-                
-                el = card.el;
-                style = el.dom.style;
-                
-                if (animate) {
-                    if (card === this.layout.activeItem) {
-                        el.on('webkitTransitionEnd', this.onTransitionEnd, this, {single: true});
-                    }
-                    style.webkitTransitionDuration = '300ms';
-                }
-                else {
-                    style.webkitTransitionDuration = '0ms';
-                }
+        for (i = ln; i &lt; total; i++) {
+            item = Ext.factory(itemConfig, ItemClass);
 
-                cardOffset = this.getCardOffset(card);
-                if (this.horizontal) {
-                    Ext.Element.cssTransform(el, {translate: [cardOffset, 0]});
-                }
-                else {
-                    Ext.Element.cssTransform(el, {translate: [0, cardOffset]});
-                }
+            if (itemLength) {
+                item[setterName].call(item, itemLength);
             }
-            else if (!card.hidden) {
-                // All other items we position far away
-                card.hide();
+
+            items.push(item);
+            innerElement.append(item.renderElement);
+
+            if (isRendered &amp;&amp; item.setRendered(true)) {
+                item.fireEvent('renderedchange', this, item, true);
             }
         }
     },
 
-    /**
-     * Returns the amount of pixels from the current drag to a card.
-     * @private
-     */    
-    getCardOffset : function(card) {
-        var cardOffset = this.getCardIndexOffset(card),
-            currentSize = this.currentSize,
-            currentScroll = this.currentScroll;
-            
-        return this.horizontal ?
-            (cardOffset * currentSize.width) + currentScroll.x :
-            (cardOffset * currentSize.height) + currentScroll.y;
+    getActiveCarouselItem: function() {
+        return this.orderedCarouselItems[this.getBufferSize()];
     },
 
-    /**
-     * Returns the difference between the index of the active card and the passed card.
-     * @private
-     */        
-    getCardIndexOffset : function(card) {
-        return this.items.items.indexOf(card) - this.getActiveIndex();
+    setRendered: function(rendered) {
+        var wasRendered = this.rendered;
+
+        if (rendered !== wasRendered) {
+            this.rendered = rendered;
+
+            var items = this.items.items,
+                carouselItems = this.carouselItems,
+                i, ln, item;
+
+            for (i = 0,ln = items.length; i &lt; ln; i++) {
+                item = items[i];
+
+                if (!item.isInnerItem()) {
+                    item.setRendered(rendered);
+                }
+            }
+
+            for (i = 0,ln = carouselItems.length; i &lt; ln; i++) {
+                carouselItems[i].setRendered(rendered);
+            }
+
+            return true;
+        }
+
+        return false;
     },
 
-    /**
-     * Returns true if the passed card is within 2 cards from the active card.
-     * @private
-     */    
-    isCardInRange : function(card) {
-        return Math.abs(this.getCardIndexOffset(card)) <= 2;
+    onPainted: function() {
+        this.painted = true;
+        this.refresh();
+        this.refreshCarouselItems();
     },
 
-    <div id="method-Ext.Carousel-getActiveIndex"></div>/**
-     * Returns the index of the currently active card.
-     * @return {Number} The index of the currently active card.
-     */    
-    getActiveIndex : function() {
-        return this.items.indexOf(this.layout.activeItem);
+    onErased: function() {
+        this.painted = false;
     },
 
-    /**
-     * This determines if we are going to the next card, the previous card, or back to the active card.
-     * @private
-     */        
-    onDragEnd : function(e, t) {
-        var previousDelta, deltaOffset; 
-            
-        if (this.horizontal) {
-            deltaOffset = e.deltaX;
-            previousDelta = e.previousDeltaX;
+    onSizeChange: function() {
+        this.refreshSizing();
+        this.refreshCarouselItems();
+        this.refreshOffset();
+    },
+
+    onItemAdd: function(item, index) {
+        this.callParent(arguments);
+
+        var innerIndex = this.getInnerItems().indexOf(item),
+            indicator = this.getIndicator();
+
+        if (indicator &amp;&amp; item.isInnerItem()) {
+            indicator.addIndicator();
         }
-        else {
-            deltaOffset = e.deltaY;
-            previousDelta = e.previousDeltaY;
+
+        if (innerIndex &lt;= this.getActiveIndex()) {
+            this.refreshActiveIndex();
         }
-            
-        // We have gone to the right
-        if (deltaOffset < 0 && Math.abs(deltaOffset) > 3 && previousDelta <= 0 && this.layout.getNext()) {
-            this.next();
-        }
-        // We have gone to the left
-        else if (deltaOffset > 0 && Math.abs(deltaOffset) > 3 && previousDelta >= 0 && this.layout.getPrev()) {
-            this.prev();
-        }
-        else {
-            // drag back to current active card
-            this.scrollToCard(this.layout.activeItem);
+
+        if (this.painted &amp;&amp; this.isIndexDirty(innerIndex)) {
+            this.refreshActiveItem();
         }
     },
 
-    /**
-     * Here we make sure that the card we are switching to is not translated
-     * by the carousel anymore. This is only if we are switching card using
-     * the setActiveItem of setActiveItem methods and thus customDrag is not set
-     * to true.
-     * @private
-     */
-    onBeforeCardSwitch : function(newCard) {
-        if (!this.customDrag && this.items.indexOf(newCard) != -1) {
-            var style = newCard.el.dom.style;
-            style.webkitTransitionDuration = null;
-            style.webkitTransform = null;
+    doItemLayoutAdd: function(item) {
+        if (item.isInnerItem()) {
+            return;
         }
-        return Ext.Carousel.superclass.onBeforeCardSwitch.apply(this, arguments);
+
+        this.callParent(arguments);
     },
 
-    /**
-     * This is an internal function that is called in onDragEnd that goes to
-     * the next or previous card.
-     * @private
-     */    
-    scrollToCard : function(newCard) {
-        this.currentScroll = {x: 0, y: 0};
-        this.oldCard = this.layout.activeItem;
-        
-        if (newCard != this.oldCard && this.isCardInRange(newCard) && this.onBeforeCardSwitch(newCard, this.oldCard, this.items.indexOf(newCard), true) !== false) {
-            this.layout.activeItem = newCard;
-            if (this.horizontal) {
-                this.currentScroll.x = -this.getCardOffset(newCard);
+    onItemRemove: function(item, index) {
+        this.callParent(arguments);
+
+        var innerIndex = this.getInnerItems().indexOf(item),
+            indicator = this.getIndicator(),
+            carouselItems = this.carouselItems,
+            i, ln, carouselItem;
+
+        if (item.isInnerItem() &amp;&amp; indicator) {
+            indicator.removeIndicator();
+        }
+
+        if (innerIndex &lt;= this.getActiveIndex()) {
+            this.refreshActiveIndex();
+        }
+
+        if (this.isIndexDirty(innerIndex)) {
+            for (i = 0,ln = carouselItems.length; i &lt; ln; i++) {
+                carouselItem = carouselItems[i];
+
+                if (carouselItem.getComponent() === item) {
+                    carouselItem.setComponent(null);
+                }
+            }
+
+            if (this.painted) {
+                this.refreshActiveItem();
+            }
+        }
+    },
+
+    doItemLayoutRemove: function(item) {
+        if (item.isInnerItem()) {
+            return;
+        }
+
+        this.callParent(arguments);
+    },
+
+    onInnerItemMove: function(item, toIndex, fromIndex) {
+        if (this.painted &amp;&amp; (this.isIndexDirty(toIndex) || this.isIndexDirty(fromIndex))) {
+            this.refreshActiveItem();
+        }
+    },
+
+    doItemLayoutMove: function(item) {
+        if (item.isInnerItem()) {
+            return;
+        }
+
+        this.callParent(arguments);
+    },
+
+    isIndexDirty: function(index) {
+        var activeIndex = this.getActiveIndex(),
+            bufferSize = this.getBufferSize();
+
+        return (index &gt;= activeIndex - bufferSize &amp;&amp; index &lt;= activeIndex + bufferSize);
+    },
+
+    onDragStart: function(e) {
+        var direction = this.getDirection(),
+            absDeltaX = e.absDeltaX,
+            absDeltaY = e.absDeltaY,
+            directionLock = this.getDirectionLock();
+
+        this.isDragging = true;
+
+        if (directionLock) {
+            if ((direction === 'horizontal' &amp;&amp; absDeltaX &gt; absDeltaY)
+                || (direction === 'vertical' &amp;&amp; absDeltaY &gt; absDeltaX)) {
+                e.stopPropagation();
             }
             else {
-                this.currentScroll.y = -this.getCardOffset(newCard);
+                this.isDragging = false;
+                return;
             }
         }
-        
-        this.updateCardPositions(true);
-    },    
 
-    // @private
-    onTransitionEnd : function(e, t) {
-        this.customDrag = false;
-        this.currentScroll = {x: 0, y: 0};
-        if (this.oldCard && this.layout.activeItem != this.oldCard) {
-            this.onCardSwitch(this.layout.activeItem, this.oldCard, this.items.indexOf(this.layout.activeItem), true);
+        if (this.isAnimating) {
+            this.getActiveCarouselItem().getTranslatable().stopAnimation();
         }
-        delete this.oldCard;
-    },
-        
-    /**
-     * This function makes sure that all the cards are in correct locations
-     * after a card switch
-     * @private
-     */
-    onCardSwitch : function(newCard, oldCard, index, animated) {
-        this.currentScroll = {x: 0, y: 0};
-        this.updateCardPositions();
-        Ext.Carousel.superclass.onCardSwitch.apply(this, arguments);
-        newCard.fireEvent('activate', newCard);
+
+        this.dragStartOffset = this.offset;
+        this.dragDirection = 0;
     },
 
-    <div id="method-Ext.Carousel-next"></div>/**
-     * Switches the next card
-     */
-    next: function() {
-        var next = this.layout.getNext();
-        if (next) {
-            this.customDrag = true;
-            this.scrollToCard(next);
+    onDrag: function(e) {
+        if (!this.isDragging) {
+            return;
         }
+
+        var startOffset = this.dragStartOffset,
+            direction = this.getDirection(),
+            delta = direction === 'horizontal' ? e.deltaX : e.deltaY,
+            lastOffset = this.offset,
+            flickStartTime = this.flickStartTime,
+            dragDirection = this.dragDirection,
+            now = Ext.Date.now(),
+            currentActiveIndex = this.getActiveIndex(),
+            maxIndex = this.getMaxItemIndex(),
+            lastDragDirection = dragDirection,
+            offset;
+
+        if ((currentActiveIndex === 0 &amp;&amp; delta &gt; 0) || (currentActiveIndex === maxIndex &amp;&amp; delta &lt; 0)) {
+            delta *= 0.5;
+        }
+
+        offset = startOffset + delta;
+
+        if (offset &gt; lastOffset) {
+            dragDirection = 1;
+        }
+        else if (offset &lt; lastOffset) {
+            dragDirection = -1;
+        }
+
+        if (dragDirection !== lastDragDirection || (now - flickStartTime) &gt; 300) {
+            this.flickStartOffset = lastOffset;
+            this.flickStartTime = now;
+        }
+
+        this.dragDirection = dragDirection;
+
+        this.setOffset(offset);
+    },
+
+    onDragEnd: function(e) {
+        if (!this.isDragging) {
+            return;
+        }
+
+        this.onDrag(e);
+
+        this.isDragging = false;
+
+        var now = Ext.Date.now(),
+            itemLength = this.itemLength,
+            threshold = itemLength / 2,
+            offset = this.offset,
+            activeIndex = this.getActiveIndex(),
+            maxIndex = this.getMaxItemIndex(),
+            animationDirection = 0,
+            flickDistance = offset - this.flickStartOffset,
+            flickDuration = now - this.flickStartTime,
+            indicator = this.getIndicator(),
+            velocity;
+
+        if (flickDuration &gt; 0 &amp;&amp; Math.abs(flickDistance) &gt;= 10) {
+            velocity = flickDistance / flickDuration;
+
+            if (Math.abs(velocity) &gt;= 1) {
+                if (velocity &lt; 0 &amp;&amp; activeIndex &lt; maxIndex) {
+                    animationDirection = -1;
+                }
+                else if (velocity &gt; 0 &amp;&amp; activeIndex &gt; 0) {
+                    animationDirection = 1;
+                }
+            }
+        }
+
+        if (animationDirection === 0) {
+            if (activeIndex &lt; maxIndex &amp;&amp; offset &lt; -threshold) {
+                animationDirection = -1;
+            }
+            else if (activeIndex &gt; 0 &amp;&amp; offset &gt; threshold) {
+                animationDirection = 1;
+            }
+        }
+
+        if (indicator) {
+            indicator.setActiveIndex(activeIndex - animationDirection);
+        }
+
+        this.animationDirection = animationDirection;
+
+        this.setOffsetAnimated(animationDirection * itemLength);
+    },
+
+    applyAnimation: function(animation) {
+        animation.easing = Ext.factory(animation.easing, Ext.fx.easing.EaseOut);
+
+        return animation;
+    },
+
+    updateDirection: function(direction) {
+        var indicator = this.getIndicator();
+
+        this.currentAxis = (direction === 'horizontal') ? 'x' : 'y';
+
+        if (indicator) {
+            indicator.setDirection(direction);
+        }
+    },
+
+    setOffset: function(offset) {
+        var orderedCarouselItems = this.orderedCarouselItems,
+            bufferSize = this.getBufferSize(),
+            activeItem = orderedCarouselItems[bufferSize],
+            itemLength = this.itemLength,
+            axis = this.currentAxis,
+            nextItem, previousItem, distance, i;
+
+        this.offset = offset;
+
+        offset += this.itemOffset;
+
+        if (activeItem) {
+            activeItem.translateAxis(axis, offset);
+
+            for (i = 1,distance = 0; i &lt;= bufferSize; i++) {
+                previousItem = orderedCarouselItems[bufferSize - i];
+
+                if (previousItem) {
+                    distance += itemLength;
+                    previousItem.translateAxis(axis, offset - distance);
+                }
+            }
+
+            for (i = 1,distance = 0; i &lt;= bufferSize; i++) {
+                nextItem = orderedCarouselItems[bufferSize + i];
+
+                if (nextItem) {
+                    distance += itemLength;
+                    nextItem.translateAxis(axis, offset + distance);
+                }
+            }
+        }
+
         return this;
     },
 
-    <div id="method-Ext.Carousel-prev"></div>/**
-     * Switches the previous card
-     */
-    prev: function() {
-        var prev = this.layout.getPrev();
-        if (prev) {
-            this.customDrag = true;
-            this.scrollToCard(prev);
+    setOffsetAnimated: function(offset) {
+        var activeCarouselItem = this.orderedCarouselItems[this.getBufferSize()],
+            indicator = this.getIndicator();
+
+        if (indicator) {
+            indicator.setActiveIndex(this.getActiveIndex() - this.animationDirection);
         }
+
+        this.offset = offset;
+        offset += this.itemOffset;
+
+        if (activeCarouselItem) {
+            this.isAnimating = true;
+
+            activeCarouselItem.getTranslatable().on(this.animationListeners);
+            activeCarouselItem.translateAxis(this.currentAxis, offset, this.getAnimation());
+        }
+
         return this;
     },
-    
-    <div id="method-Ext.Carousel-isVertical"></div>/**
-     * Method to determine whether this Sortable is currently disabled.
-     * @return {Boolean} the disabled state of this Sortable.
-     */
-    isVertical : function() {
-        return this.vertical;
+
+    onActiveItemAnimationFrame: function(translatable) {
+        var orderedCarouselItems = this.orderedCarouselItems,
+            bufferSize = this.getBufferSize(),
+            itemLength = this.itemLength,
+            axis = this.currentAxis,
+            offset = translatable[axis],
+            previousItem, nextItem, i, distance;
+
+        for (i = 1,distance = 0; i &lt;= bufferSize; i++) {
+            previousItem = orderedCarouselItems[bufferSize - i];
+
+            if (previousItem) {
+                distance += itemLength;
+                previousItem.translateAxis(axis, offset - distance);
+            }
+        }
+
+        for (i = 1,distance = 0; i &lt;= bufferSize; i++) {
+            nextItem = orderedCarouselItems[bufferSize + i];
+
+            if (nextItem) {
+                distance += itemLength;
+                nextItem.translateAxis(axis, offset + distance);
+            }
+        }
     },
-    
-    <div id="method-Ext.Carousel-isHorizontal"></div>/**
-     * Method to determine whether this Sortable is currently sorting.
-     * @return {Boolean} the sorting state of this Sortable.
-     */
-    isHorizontal : function() {
-        return this.horizontal;
-    },
-    
-    // private, inherit docs
-    beforeDestroy: function(){
-        Ext.destroy(this.indicator);
-        Ext.Carousel.superclass.beforeDestroy.call(this);
-    }
-});
 
-Ext.reg('carousel', Ext.Carousel);
+    onActiveItemAnimationEnd: function(translatable) {
+        var currentActiveIndex = this.getActiveIndex(),
+            animationDirection = this.animationDirection,
+            axis = this.currentAxis,
+            currentOffset = translatable[axis],
+            itemLength = this.itemLength,
+            offset;
 
-<div id="cls-Ext.Carousel.Indicator"></div>/**
- * @class Ext.Carousel.Indicator
- * @extends Ext.Component
- * @xtype carouselindicator
- * @private
- *
- * A private utility class used by Ext.Carousel to create indicators.
- */
-Ext.Carousel.Indicator = Ext.extend(Ext.Component, {
-    baseCls: 'x-carousel-indicator',
+        this.isAnimating = false;
 
-    initComponent: function() {
-        if (this.carousel.rendered) {
-            this.render(this.carousel.body);
-            this.onBeforeCardSwitch(null, null, this.carousel.items.indexOf(this.carousel.layout.getActiveItem()));
+        translatable.un(this.animationListeners);
+
+        if (animationDirection === -1) {
+            offset = itemLength + currentOffset;
+        }
+        else if (animationDirection === 1) {
+            offset = currentOffset - itemLength;
         }
         else {
-            this.carousel.on('render', function() {
-                this.render(this.carousel.body);
-            }, this, {single: true});
+            offset = currentOffset;
         }
-        Ext.Carousel.Indicator.superclass.initComponent.call(this);
+
+        offset -= this.itemOffset;
+        this.offset = offset;
+        this.setActiveItem(currentActiveIndex - animationDirection);
+    },
+
+    refresh: function() {
+        this.refreshSizing();
+        this.refreshActiveItem();
+    },
+
+    refreshSizing: function() {
+        var element = this.element,
+            itemLength = this.getItemLength(),
+            itemOffset, containerSize;
+
+        if (this.getDirection() === 'horizontal') {
+            containerSize = element.getWidth();
+        }
+        else {
+            containerSize = element.getHeight();
+        }
+
+        this.hiddenTranslation = -containerSize;
+
+        if (itemLength === null) {
+            itemLength = containerSize;
+            itemOffset = 0;
+        }
+        else {
+            itemOffset = (containerSize - itemLength) / 2;
+        }
+
+        this.itemLength = itemLength;
+        this.itemOffset = itemOffset;
+    },
+
+    refreshOffset: function() {
+        this.setOffset(this.offset);
+    },
+
+    refreshActiveItem: function() {
+        this.doSetActiveItem(this.getActiveItem());
+    },
+
+<span id='Ext-carousel-Carousel-method-getActiveIndex'>    /**
+</span>     * Returns the index of the currently active card.
+     * @return {Number} The index of the currently active card.
+     */
+    getActiveIndex: function() {
+        return this.activeIndex;
+    },
+
+    refreshActiveIndex: function() {
+        this.activeIndex = this.getInnerItemIndex(this.getActiveItem());
+    },
+
+    refreshCarouselItems: function() {
+        var items = this.carouselItems,
+            i, ln, item;
+
+        for (i = 0,ln = items.length; i &lt; ln; i++) {
+            item = items[i];
+            item.getTranslatable().refresh();
+        }
+
+        this.refreshInactiveCarouselItems();
+    },
+
+    refreshInactiveCarouselItems: function() {
+        var items = this.inactiveCarouselItems,
+            hiddenTranslation = this.hiddenTranslation,
+            axis = this.currentAxis,
+            i, ln, item;
+
+        for (i = 0,ln = items.length; i &lt; ln; i++) {
+            item = items[i];
+            item.translateAxis(axis, hiddenTranslation);
+        }
+    },
+
+    getMaxItemIndex: function() {
+        return this.innerItems.length - 1;
+    },
+
+    getInnerItemIndex: function(item) {
+        return this.innerItems.indexOf(item);
+    },
+
+    getInnerItemAt: function(index) {
+        return this.innerItems[index];
+    },
+
+    applyActiveItem: function() {
+        var activeItem = this.callParent(arguments),
+            activeIndex;
+
+        if (activeItem) {
+            activeIndex = this.getInnerItemIndex(activeItem);
+
+            if (activeIndex !== -1) {
+                this.activeIndex = activeIndex;
+                return activeItem;
+            }
+        }
+    },
+
+    doSetActiveItem: function(activeItem) {
+        var activeIndex = this.getActiveIndex(),
+            maxIndex = this.getMaxItemIndex(),
+            indicator = this.getIndicator(),
+            bufferSize = this.getBufferSize(),
+            carouselItems = this.carouselItems.slice(),
+            orderedCarouselItems = this.orderedCarouselItems,
+            visibleIndexes = {},
+            visibleItems = {},
+            visibleItem, component, id, i, index, ln, carouselItem;
+
+        if (carouselItems.length === 0) {
+            return;
+        }
+
+        this.callParent(arguments);
+
+        orderedCarouselItems.length = 0;
+
+        if (activeItem) {
+            id = activeItem.getId();
+            visibleItems[id] = activeItem;
+            visibleIndexes[id] = bufferSize;
+
+            if (activeIndex &gt; 0) {
+                for (i = 1; i &lt;= bufferSize; i++) {
+                    index = activeIndex - i;
+                    if (index &gt;= 0) {
+                        visibleItem = this.getInnerItemAt(index);
+                        id = visibleItem.getId();
+                        visibleItems[id] = visibleItem;
+                        visibleIndexes[id] = bufferSize - i;
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+
+            if (activeIndex &lt; maxIndex) {
+                for (i = 1; i &lt;= bufferSize; i++) {
+                    index = activeIndex + i;
+                    if (index &lt;= maxIndex) {
+                        visibleItem = this.getInnerItemAt(index);
+                        id = visibleItem.getId();
+                        visibleItems[id] = visibleItem;
+                        visibleIndexes[id] = bufferSize + i;
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+
+            for (i = 0,ln = carouselItems.length; i &lt; ln; i++) {
+                carouselItem = carouselItems[i];
+                component = carouselItem.getComponent();
+
+                if (component) {
+                    id = component.getId();
+
+                    if (visibleIndexes.hasOwnProperty(id)) {
+                        carouselItems.splice(i, 1);
+                        i--;
+                        ln--;
+                        delete visibleItems[id];
+                        orderedCarouselItems[visibleIndexes[id]] = carouselItem;
+                    }
+                }
+            }
+
+            for (id in visibleItems) {
+                if (visibleItems.hasOwnProperty(id)) {
+                    visibleItem = visibleItems[id];
+                    carouselItem = carouselItems.pop();
+                    carouselItem.setComponent(visibleItem);
+                    orderedCarouselItems[visibleIndexes[id]] = carouselItem;
+                }
+            }
+        }
+
+        this.inactiveCarouselItems.length = 0;
+        this.inactiveCarouselItems = carouselItems;
+        this.refreshOffset();
+        this.refreshInactiveCarouselItems();
+
+        if (indicator) {
+            indicator.setActiveIndex(activeIndex);
+        }
+    },
+
+<span id='Ext-carousel-Carousel-method-next'>    /**
+</span>     * Switches to the next card
+     * @return {Ext.carousel.Carousel} this
+     */
+    next: function() {
+        if (this.isAnimating) {
+            this.getActiveCarouselItem().getTranslatable().stopAnimation();
+            this.setOffset(0);
+        }
+
+        if (this.activeIndex === this.getMaxItemIndex()) {
+            return this;
+        }
+
+        this.animationDirection = -1;
+        this.setOffsetAnimated(-this.itemLength);
+        return this;
+    },
+
+<span id='Ext-carousel-Carousel-method-previous'>    /**
+</span>     * Switches to the previous card
+     * @return {Ext.carousel.Carousel} this
+     */
+    previous: function() {
+        if (this.isAnimating) {
+            this.getActiveCarouselItem().getTranslatable().stopAnimation();
+            this.setOffset(0);
+        }
+
+        if (this.activeIndex === 0) {
+            return this;
+        }
+
+        this.animationDirection = 1;
+        this.setOffsetAnimated(this.itemLength);
+        return this;
     },
 
     // @private
-    onRender: function() {
-        Ext.Carousel.Indicator.superclass.onRender.apply(this, arguments);
-
-        for (var i = 0, ln = this.carousel.items.length; i < ln; i++) {
-            this.createIndicator();
-        }
-
-        this.mon(this.carousel, {
-            beforecardswitch: this.onBeforeCardSwitch,
-            scope: this
-        });
-
-        this.mon(this.el, {
-            tap: this.onTap,
-            scope: this
-        });
-        
-        this.el.addCls(this.baseCls + '-' + this.direction);
+    applyIndicator: function(indicator, currentIndicator) {
+        return Ext.factory(indicator, Ext.carousel.Indicator, currentIndicator);
     },
 
     // @private
-    onTap: function(e, t) {
-        var box = this.el.getPageBox(),
-            centerX = box.left + (box.width / 2),
-            centerY = box.top + (box.height / 2),
-            carousel = this.carousel;
+    updateIndicator: function(indicator) {
+        if (indicator) {
+            this.insertFirst(indicator);
 
-        if ((carousel.isHorizontal() && e.pageX > centerX) || (carousel.isVertical() && e.pageY > centerY)) {
-            this.carousel.next();
-        } else {
-            this.carousel.prev();
+            indicator.setUi(this.getUi());
+            indicator.on({
+                next: 'next',
+                previous: 'previous',
+                scope: this
+            });
         }
     },
 
-    // @private
-    createIndicator: function() {
-        this.indicators = this.indicators || [];
-        this.indicators.push(this.el.createChild({
-            tag: 'span'
-        }));
-    },
+    destroy: function() {
+        var carouselItems = this.carouselItems.slice();
 
-    // @private
-    onBeforeCardSwitch: function(carousel, card, old, index) {
-        if (Ext.isNumber(index) && index != -1 && this.indicators[index]) {
-            this.indicators[index].radioCls('x-carousel-indicator-active');
-        }
-    },
+        this.carouselItems.length = 0;
 
-    // @private
-    onCardAdd: function() {
-        if (this.rendered) {
-            this.createIndicator();
-        }
-    },
+        Ext.destroy(carouselItems, this.getIndicator());
 
-    // @private
-    onCardRemove: function() {
-        if (this.rendered) {
-            this.indicators.pop().remove();
-        }
+        this.callParent();
+        delete this.carouselItems;
     }
-});
 
-Ext.reg('carouselindicator', Ext.Carousel.Indicator);</pre>    
+}, function() {
+    //&lt;deprecated product=touch since=2.0&gt;
+    this.override({
+        constructor: function(config) {
+            if (config &amp;&amp; 'activeIndex' in config) {
+                //&lt;debug warn&gt;
+                Ext.Logger.deprecate(&quot;'activeIndex' config is deprecated, please use 'activeItem' config instead }&quot;);
+                //&lt;/debug&gt;
+
+                config.activeItem = config.activeIndex;
+            }
+
+            this.callParent([config]);
+        }
+    });
+
+    Ext.deprecateClassMethod(this, {
+<span id='Ext-carousel-Carousel-method-isVertical'>        /**
+</span>         * Returns true when direction is vertical.
+         * @return {Boolean}
+         * @deprecated 2.0.0 Use getDirection() === 'vertical' instead.
+         */
+        isVertical: function getDirection() {
+            return this.getDirection() === 'vertical';
+        },
+<span id='Ext-carousel-Carousel-method-isHorizontal'>        /**
+</span>         * Returns true when direction is horizontal.
+         * @return {Boolean}
+         * @deprecated 2.0.0 Use getDirection() === 'horizontal' instead.
+         */
+        isHorizontal: function getDirection() {
+            return this.getDirection() === 'horizontal';
+        },
+<span id='Ext-carousel-Carousel-method-prev'>        /**
+</span>         * @method
+         * @inheritdoc Ext.carousel.Carousel#previous
+         * @deprecated 2.0.0 Use {@link Ext.carousel.Carousel#previous} instead.
+         */
+        prev: 'previous'
+    });
+    //&lt;/deprecated&gt;
+});
+</pre>
 </body>
 </html>
