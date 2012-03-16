@@ -31,11 +31,11 @@ onReady: function() {
    form_list = new vrs.ux.touch.MenuPanel({
       menuItems: menu_items,
       listeners: {
-         itemTap:       function(fl, index) { console.log('Tapped index: ', index); },
-         itemDoubleTap: function(fl, index) { console.log('Double tapped index: ', index); },
-         itemSwipe:     function(fl, index) { console.log('Swipped index: ', index); },
-         leftTap:       function(fl, index) { console.log('Left item selected: ', index); },
-         rightTap:      function(fl, index) { console.log('Right item selected: ', index); },
+         itemtap:       function(fl, index) { console.log('Tapped index: ', index); },
+         itemdoubletap: function(fl, index) { console.log('Double tapped index: ', index); },
+         itemswipe:     function(fl, index) { console.log('Swipped index: ', index); },
+         lefttap:       function(fl, index) { console.log('Left item selected: ', index); },
+         righttap:      function(fl, index) { console.log('Right item selected: ', index); },
          scope: this
       }
    });
@@ -46,7 +46,8 @@ onReady: function() {
    menuItemSelected = function(formList, index, el, ev) {
       console.log('Item selected: ', index);
       // Change the check to be on the one that was just selected
-      Ext.each(formList.menuItems, function(item, i) {
+      var menu_items = formList.getMenuItems();
+      Ext.each(menu_items, function(item, i) {
          item.leftIconCls = ((i === index) ? 'check1' : null);
       });
       formList.refresh();
@@ -57,7 +58,7 @@ onReady: function() {
          rightIcon: 'img/chevron.png'
       },
       listeners: {
-         itemTap: menuItemSelected
+         itemtap: menuItemSelected
       },
       menuItems: [
          {leftIconCls: 'check1', content: 'Area 1'},
@@ -72,7 +73,8 @@ onReady: function() {
    fastMenuItemSelected = function(formList, index, el, ev) {
       console.log('Item selected: ', index);
       // Change the check to be on the one that was just selected
-      Ext.each(formList.menuItems, function(item, i) {
+      var menu_items = formList.getMenuItems();
+      Ext.each(menu_items, function(item, i) {
          var left_icon_cls = ((i === index) ? 'check1' : null);
          formList.updateItem(i, {leftIconCls: left_icon_cls});
       });
@@ -83,7 +85,7 @@ onReady: function() {
          rightIcon: 'img/chevron.png'
       },
       listeners: {
-         itemTap: fastMenuItemSelected
+         itemtap: fastMenuItemSelected
       },
       menuItems: [
          {leftIconCls: 'check1', content: 'Area 1'},
@@ -120,14 +122,12 @@ onReady: function() {
       scroll: 'vertical',
       cls: 'x-form-settings-panel',
       id: 'MyFormPanel',
-      dockedItems: [
+      items: [
          {
-            dock : 'top',
+            docked : 'top',
             xtype: 'toolbar',
             title: 'Menu Panel Test'
-         }
-      ],
-      items: [
+         },
          {
             xtype: 'fieldset',
             title: 'Section 1',

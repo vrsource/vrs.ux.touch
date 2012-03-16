@@ -1,106 +1,122 @@
 /**
- * @class Ext.util.TapRepeater
- * @extends Ext.util.Observable
- *
  * A wrapper class which can be applied to any element. Fires a "tap" event while
  * touching the device. The interval between firings may be specified in the config but
  * defaults to 20 milliseconds.
- *
- * @constructor
- * @param {Mixed} el The element to listen on
- * @param {Object} config
  */
-Ext.util.TapRepeater = Ext.extend(Ext.util.Observable, {
+Ext.define('Ext.util.TapRepeater', {
+    requires: ['Ext.DateExtras'],
 
-    constructor: function(el, config) {
-        this.el = Ext.get(el);
-
-        Ext.apply(this, config);
-
-        this.addEvents(
-        /**
-         * @event touchstart
-         * Fires when the touch is started.
-         * @param {Ext.util.TapRepeater} this
-         * @param {Ext.EventObject} e
-         */
-        "touchstart",
-        /**
-         * @event tap
-         * Fires on a specified interval during the time the element is pressed.
-         * @param {Ext.util.TapRepeater} this
-         * @param {Ext.EventObject} e
-         */
-        "tap",
-        /**
-         * @event touchend
-         * Fires when the touch is ended.
-         * @param {Ext.util.TapRepeater} this
-         * @param {Ext.EventObject} e
-         */
-        "touchend"
-        );
-
-        this.el.on({
-            touchstart: this.onTouchStart,
-            touchend: this.onTouchEnd,
-            scope: this
-        });
-
-        if (this.preventDefault || this.stopDefault) {
-            this.el.on('tap', this.eventOptions, this);
-        }
-
-        Ext.util.TapRepeater.superclass.constructor.call(this);
+    mixins: {
+        observable: 'Ext.mixin.Observable'
     },
 
-    interval: 10,
-    delay: 250,
-    preventDefault: true,
-    stopDefault: false,
-    timer: 0,
+    /**
+     * @event touchstart
+     * Fires when the touch is started.
+     * @param {Ext.util.TapRepeater} this
+     * @param {Ext.event.Event} e
+     */
+
+    /**
+     * @event tap
+     * Fires on a specified interval during the time the element is pressed.
+     * @param {Ext.util.TapRepeater} this
+     * @param {Ext.event.Event} e
+     */
+
+    /**
+     * @event touchend
+     * Fires when the touch is ended.
+     * @param {Ext.util.TapRepeater} this
+     * @param {Ext.event.Event} e
+     */
+
+    config: {
+        el: null,
+        accelerate: true,
+        interval: 10,
+        delay: 250,
+        preventDefault: true,
+        stopDefault: false,
+        timer: 0,
+        pressCls: null
+    },
+
+    /**
+     * Creates new TapRepeater.
+     * @param {Mixed} el The element to listen on
+     * @param {Object} config
+     */
+    constructor: function(config) {
+        var me = this;
+        //<debug warn>
+        for (var configName in config) {
+            if (me.self.prototype.config && !(configName in me.self.prototype.config)) {
+                me[configName] = config[configName];
+                Ext.Logger.warn('Applied config as instance property: "' + configName + '"', me);
+            }
+        }
+        //</debug>
+        me.initConfig(config);
+    },
+
+    updateEl: function(newEl, oldEl) {
+        var eventCfg = {
+                touchstart: 'onTouchStart',
+                touchend: 'onTouchEnd',
+                tap: 'eventOptions',
+                scope: this
+            };
+        if (oldEl) {
+            oldEl.un(eventCfg)
+        }
+        newEl.on(eventCfg);
+    },
 
     // @private
     eventOptions: function(e) {
-        if (this.preventDefault) {
+        if (this.getPreventDefault()) {
             e.preventDefault();
         }
-        if (this.stopDefault) {
+        if (this.getStopDefault()) {
             e.stopEvent();
         }
     },
 
     // @private
     destroy: function() {
-        Ext.destroy(this.el);
         this.clearListeners();
+        Ext.destroy(this.el);
     },
 
     // @private
     onTouchStart: function(e) {
-        clearTimeout(this.timer);
-        if (this.pressClass) {
-            this.el.addCls(this.pressClass);
+        var me = this,
+            pressCls = me.getPressCls();
+        clearTimeout(me.getTimer());
+        if (pressCls) {
+            me.getEl().addCls(pressCls);
         }
-        this.tapStartTime = new Date();
+        me.tapStartTime = new Date();
 
-        this.fireEvent("touchstart", this, e);
-        this.fireEvent("tap", this, e);
+        me.fireEvent('touchstart', me, e);
+        me.fireEvent('tap', me, e);
 
         // Do not honor delay or interval if acceleration wanted.
-        if (this.accelerate) {
-            this.delay = 400;
+        if (me.getAccelerate()) {
+            me.delay = 400;
         }
-        this.timer = Ext.defer(this.tap, this.delay || this.interval, this, [e]);
+        me.setTimer(Ext.defer(me.tap, me.getDelay() || me.getInterval(), me, [e]));
     },
 
     // @private
     tap: function(e) {
-        this.fireEvent("tap", this, e);
-        this.timer = Ext.defer(this.tap, this.accelerate ? this.easeOutExpo(Ext.util.Date.getElapsed(this.tapStartTime),
+        var me = this;
+        me.fireEvent('tap', me, e);
+        me.setTimer(Ext.defer(me.tap, me.getAccelerate() ? me.easeOutExpo(Ext.Date.getElapsed(me.tapStartTime),
             400,
             -390,
-            12000) : this.interval, this, [e]);
+            12000) : me.getInterval(), me, [e]));
     },
 
     // Easing calculation
@@ -111,8 +127,9 @@ Ext.util.TapRepeater = Ext.extend(Ext.util.Observable, {
 
     // @private
     onTouchEnd: function(e) {
-        clearTimeout(this.timer);
-        this.el.removeCls(this.pressClass);
-        this.fireEvent("touchend", this, e);
+        var me = this;
+        clearTimeout(me.getTimer());
+        me.getEl().removeCls(me.getPressCls());
+        me.fireEvent('touchend', me, e);
     }
 });

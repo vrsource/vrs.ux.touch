@@ -1,5 +1,28 @@
 /** Tests for MenuPanel. */
-var wrapPanel;
+
+/**
+* Wrap the given menu in a panel
+* and return the panel.
+*/
+var wrapPanel = function(menu) {
+   var panel = new Ext.form.FormPanel({
+      fullscreen: true,
+      layout: 'fit',
+      items: [
+         {
+            xtype: 'fieldset',
+            items: [menu]
+         }
+      ]
+   });
+   return panel;
+};
+
+component('Stuff me', function() {
+   it('should do good stuff', function() {
+      expect(true).toBeTruthy();
+   });
+});
 
 component('MenuPanel', function() {
    var panel;
@@ -28,7 +51,7 @@ component('MenuPanel', function() {
          });
          panel = wrapPanel(menu);
          expect(menu.rendered).toBeTruthy();
-         expect(menu.getEl().is('.x-menu-panel')).toBeTruthy();
+         expect(menu.element.is('.x-menu-panel')).toBeTruthy();
       });
 
       it('should support configuration of multiple rows', function() {
@@ -39,7 +62,7 @@ component('MenuPanel', function() {
             ]
          });
          panel = wrapPanel(menu);
-         expect(panel.getEl().select('.x-menupanel-row').getCount()).toEqual(2);
+         expect(panel.element.select('.x-menupanel-row').getCount()).toEqual(2);
       });
 
       it('should allow specifying left and right icons', function() {
@@ -53,8 +76,8 @@ component('MenuPanel', function() {
             ]
          });
          panel = wrapPanel(menu);
-         left_src = panel.getEl().down('.x-menupanel-leftitem > img').getAttribute('src');
-         right_src = panel.getEl().down('.x-menupanel-rightitem > img').getAttribute('src');
+         left_src = panel.element.down('.x-menupanel-leftitem > img').getAttribute('src');
+         right_src = panel.element.down('.x-menupanel-rightitem > img').getAttribute('src');
          expect(left_src).toEqual(icon1);
          expect(right_src).toEqual(icon2);
       });
@@ -67,8 +90,8 @@ component('MenuPanel', function() {
             ]
          });
          panel = wrapPanel(menu);
-         left_img = panel.getEl().down('.x-menupanel-leftitem > img');
-         right_img = panel.getEl().down('.x-menupanel-rightitem > img');
+         left_img = panel.element.down('.x-menupanel-leftitem > img');
+         right_img = panel.element.down('.x-menupanel-rightitem > img');
          expect(left_img.is('.lefty')).toBeTruthy();
          expect(left_img.is('.righty')).toBeFalsy();
 
@@ -85,8 +108,8 @@ component('MenuPanel', function() {
             ]
          });
          panel = wrapPanel(menu);
-         left_img = panel.getEl().down('.x-menupanel-leftitem > img');
-         right_img = panel.getEl().down('.x-menupanel-rightitem > img');
+         left_img = panel.element.down('.x-menupanel-leftitem > img');
+         right_img = panel.element.down('.x-menupanel-rightitem > img');
          expect(left_img.is('.lefty')).toBeTruthy();
          expect(right_img.is('.righty')).toBeTruthy();
       });
@@ -102,24 +125,6 @@ component('MenuPanel', function() {
 
 
 });
-
-/**
-* Wrap the given menu in a panel
-* and return the panel.
-*/
-wrapPanel = function(menu) {
-   var panel = new Ext.form.FormPanel({
-      fullscreen: true,
-      layout: 'fit',
-      items: [
-         {
-            xtype: 'fieldset',
-            items: [menu]
-         }
-      ]
-   });
-   return panel;
-};
 
 
 /**

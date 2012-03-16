@@ -154,7 +154,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
     beforeDestroy : function() {
         Ext.destroy(this.geo);
         if (this.maskMap && this.mask) {
-            this.el.unmask();
+            this.element.unmask();
         }
         // XXX: Memory leak.  Doesn't seem to work right now
         //**// this.map.destroy();  // Destroy the map and all layers and controls
@@ -166,7 +166,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
     // @private
     onRender : function(container, position) {
         vrs.ux.touch.OpenLayersMap.superclass.onRender.apply(this, arguments);
-        this.el.setVisibilityMode(Ext.Element.OFFSETS);
+        this.element.setVisibilityMode(Ext.Element.OFFSETS);
     },
 
     // @private
@@ -188,7 +188,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
     /** Disable masking for now
     afterComponentLayout : function() {
         if (this.maskMap && !this.mask) {
-            this.el.mask(null, this.maskMapCls);
+            this.element.mask(null, this.maskMapCls);
             this.mask = true;
         }
     },
@@ -200,7 +200,7 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
     */
     renderMap : function(){
         var me     = this,
-            map_el = me.el;
+            map_el = me.element;
 
          // If we are an iPad use better navigation controls.
          if (Ext.is.iPad) {
@@ -209,13 +209,13 @@ vrs.ux.touch.OpenLayersMap = Ext.extend(Ext.Component, {
 
          // Setup the mask values
          if (me.maskMap && !me.mask) {
-             me.el.mask(null, this.maskMapCls);
+             me.element.mask(null, this.maskMapCls);
              me.mask = true;
          }
 
          // Remove any old children of the DOM element.
-         if (me.el && me.el.dom && me.el.dom.firstChild) {
-             Ext.fly(me.el.dom.firstChild).remove();
+         if (map_el && map_el.dom && map_el.dom.firstChild) {
+             Ext.fly(map_el.dom.firstChild).remove();
          }
 
          // Clear any existing event connections and listeners
@@ -523,7 +523,7 @@ vrs.ux.touch.OpenLayersPopupPanel = Ext.extend(Ext.Panel, {
             // Setup the anchor.
             // - hacked together from showBy and alignTo in Component.js
             if(!this.anchorEl) {
-                this.anchorEl = this.el.createChild({
+                this.anchorEl = this.element.createChild({
                     cls: 'x-anchor'
                 });
             }
@@ -550,12 +550,12 @@ vrs.ux.touch.OpenLayersPopupPanel = Ext.extend(Ext.Panel, {
         // change our visibility
         if(this._mapMove === true) {
             visible = this.map.getExtent().containsLonLat(this.location);
-            if(visible !== this.isVisible()) {
+            if(visible === this.isHidden()) {
                 this.setVisible(visible);
             }
         }
 
-        if(this.isVisible()) {
+        if(!this.isHidden()) {
             // Position of feature in global coords
             centerPx_map = this.map.getViewPortPxFromLonLat(this.location);
 
@@ -575,7 +575,10 @@ vrs.ux.touch.OpenLayersPopupPanel = Ext.extend(Ext.Panel, {
 
             //Assuming for now that the map viewport takes up
             //the entire area of the MapPanel
-            this.setPosition(center_x_page - panel_dx, center_y_page - panel_dy);
+            //this.setPosition(center_x_page - panel_dx, center_y_page - panel_dy);
+            this.setLeft(center_x_page - panel_dx);
+            this.setTop(center_y_page - panel_dy);
+
             if(this.anchorEl) {
                 this.anchorEl.setXY(center_x_page + arrow_dx, center_y_page + arrow_dy);
             }

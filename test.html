@@ -6,21 +6,32 @@
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="deps/jasmine/lib/jasmine-1.0.1/jasmine.css" type="text/css"/>
-    <link rel="stylesheet" href="../Leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="deps/Leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="resources/css/app.css" type="text/css"/>
+    <!-- <link rel="stylesheet" href="resources/css/sencha-jasmine.css" type="text/css"/> -->
+    <style type="text/css">
+       body, body.x-desktop {
+         overflow: auto !important;
+       }
+
+       .stackTrace {
+         max-height: 50em;
+       }
+    </style>
 
     <!-- TEST FRAMEWORK -->
-    <script type="text/javascript" src="deps/sencha_touch/sencha-touch-debug-w-comments.js"></script>
+    <script type="text/javascript" src="deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
     <script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine.js"></script>
     <script type="text/javascript" src="deps/jasmine/lib/jasmine-1.0.1/jasmine-html.js"></script>
+    <!-- <script type="text/javascript" src="src/vrs.ux.touch.SenchaJasmine.js"></script> -->
     <script type="text/javascript" src="deps/jasmine-species/jasmine-grammar.js"></script>
     <script type="text/javascript" src="deps/jasmine-species/jasmine-reporting.js"></script>
 
    <!-- LIBRARIES -->
-   <script src="../Leaflet/dist/leaflet-src.js"></script>
+   <script type="text/javascript" src="deps/Leaflet/dist/leaflet-src.js"></script>
    <script type="text/javascript" src="src/vrs.ux.touch.MenuPanel.js"></script>
-   <script type="text/javascript" src="src/vrs.ux.touch.MapInterfaces.js"></script>
-   <script type="text/javascript" src="src/vrs.ux.touch.LeafletMap.js"></script>
+   <!-- <script type="text/javascript" src="src/vrs.ux.touch.MapInterfaces.js"></script> -->
+   <!-- <script type="text/javascript" src="src/vrs.ux.touch.LeafletMap.js"></script> -->
 
    <script type="text/javascript" src="src/vrs.AppCtrl.js"></script>
    <script type="text/javascript" src="src/vrs.Util.js"></script>
@@ -32,7 +43,7 @@
 
    <!-- SPECS -->
    <script type="text/javascript" src="spec/menu_panel_spec.js"></script>
-   <script type="text/javascript" src="spec/leaflet_spec.js"></script>
+   <!-- <script type="text/javascript" src="spec/leaflet_spec.js"></script> -->
 
    <script type="text/javascript" src="spec/app_ctrl_spec.js"></script>
    <script type="text/javascript" src="spec/utils_spec.js"></script>
@@ -40,32 +51,44 @@
 
     <!-- JS Coverage Code -->
     <button type="button" onclick="window.open('jscoverage.html');">Cov</button>
+    <div id="jasmine_results"></div>  <!-- Put results here -->
 
     <!-- Boot Jasmine Support -->
     <script type="text/javascript">
-        var config = {};
 
-        if (!Ext.is.Desktop) {
-            config.fullscreen = true;
-        }
+        //delete Ext.defaultSetupConfig.eventPublishers.dom;
 
-        config.onReady = function() {
-            var jasmineEnv = jasmine.getEnv(),
-                styledReporter = new jasmine.reporting.StyledHtmlReporter();
-            jasmineEnv.addReporter(styledReporter);
-            // XXX: Not sure why this is here.
-            jasmineEnv.specFilter = function(spec) {
-               return styledReporter.specFilter(spec);
+        Ext.setup({
+            viewport: {
+                fullscreen: false
+            },
+            /*
+            eventPublishers: {
+                touchGesture: {
+                    drag      : null,
+                    tap       : null,
+                    doubleTap : null,
+                    longPress : null,
+                    swipe  : null,
+                    pinch  : null,
+                    rotate : null
+                }
+            },
+            */
+
+
+            onReady: function() {
+                var jasmineEnv = jasmine.getEnv(),
+                    styledReporter = new jasmine.reporting.StyledHtmlReporter();
+                jasmineEnv.addReporter(styledReporter);
+                // XXX: Not sure why this is here.
+                jasmineEnv.specFilter = function(spec) {
+                   return styledReporter.specFilter(spec);
+                }
+                jasmineEnv.execute();
             }
-            jasmineEnv.execute();
+        });
 
-            //jasmine.getEnv().addReporter(new SenchaReporter());
-            //jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-        }
-
-        // Not sure if I need this
-        var eventSimulator = new Ext.util.EventSimulator();
-        Ext.setup(config);
     </script>
 
 </head>

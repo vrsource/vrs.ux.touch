@@ -6,9 +6,9 @@ test.ExtPanel1 = Ext.extend(vrs.PanelController, {
       test.ExtPanel1.superclass.constructor.call(this, config);
    },
    getPanel: function() {
-      if(Ext.isEmpty(this.panel))
-      { this.panel = new Ext.Panel({});}
-      return this.panel;
+      if(Ext.isEmpty(this._panel))
+      { this.setPanel(new Ext.Panel({}));}
+      return this._panel;
    }
 });
 
@@ -17,9 +17,9 @@ test.ExtPanel2 = Ext.extend(vrs.PanelController, {
       test.ExtPanel2.superclass.constructor.call(this, config);
    },
    getPanel: function() {
-      if(Ext.isEmpty(this.panel))
-      { this.panel = new Ext.Panel({});}
-      return this.panel;
+      if(Ext.isEmpty(this._panel))
+      { this.setPanel(new Ext.Panel({}));}
+      return this._panel;
    }
 });
 
@@ -32,9 +32,6 @@ test.EventPanel = Ext.extend(vrs.PanelController, {
 
       // Add a normal event
       this.on('direct_event', function() { console.log('event'); });
-
-      // Add managed event
-      this.mon(Ext.Ajax, 'indirect_event', function() { console.log('event'); });
    }
 });
 
@@ -44,9 +41,6 @@ test.EventSubPanel = Ext.extend(vrs.SubPanelController, {
 
       // Add a normal event
       this.on('direct_event', function() { console.log('event'); });
-
-      // Add managed event
-      this.mon(Ext.Ajax, 'indirect_event', function() { console.log('event'); });
    }
 });
 
@@ -56,15 +50,14 @@ component('PanelController', function() {
    it('Should construct correctly', function() {
       var obj;
 
-      given('an object constructed with a config object', function() {
-         obj = new vrs.PanelController({panelHolder: {}, myvar:1});
-      });
-      then('configured property should be set', function() {
-         expect(obj.myvar).toEqual(1);
-      });
-      and('default panel is null', function() {
-         expect(obj.getPanel()).toEqual(null);
-      });
+      // given: an object constructed with a config object
+      obj = new vrs.PanelController({panelHolder: {}, backName: 'myname'});
+
+      // then: configured property should be set
+      expect(obj.getBackName()).toEqual('myname');
+
+      // and: default panel is null
+      expect(obj.getPanel()).toEqual(null);
    });
 
    it('Should require panelHolder to be set', function() {
@@ -79,8 +72,8 @@ component('PanelController', function() {
           panel_spy = jasmine.createSpyObj('panel', ['destroy']);
       spyOn(obj, 'getPanel').andReturn(panel_spy);
 
-      obj.onDestroy();
-      expect(obj.getPanel).toHaveBeenCalled();
+      obj.destroy();
+      //expect(obj.getPanel).toHaveBeenCalled();
       expect(panel_spy.destroy.callCount).toEqual(1);
    });
 
@@ -88,14 +81,12 @@ component('PanelController', function() {
       // given: a panel with registered events
       var obj = new test.EventPanel({ panelHolder: test.helpers.createPanelHolderSpy()});
       expect(obj.hasListener('direct_event')).toEqual(true);
-      expect(Ext.Ajax.hasListener('indirect_event')).toEqual(true);
 
       // when: destroy the panel
-      obj.onDestroy();
+      obj.destroy();
 
       // then: should not have the events registered any more
       expect(obj.hasListener('direct_event')).toEqual(false);
-      expect(Ext.Ajax.hasListener('indirect_event')).toEqual(false);
    });
 });
 
@@ -105,17 +96,14 @@ component('SubPanelController', function() {
       // given: a panel with registered events
       var obj = new test.EventSubPanel();
       expect(obj.hasListener('direct_event')).toEqual(true);
-      expect(Ext.Ajax.hasListener('indirect_event')).toEqual(true);
 
       // when: destroy the panel
-      obj.onDestroy();
+      obj.destroy();
 
       // then: should not have the events registered any more
       expect(obj.hasListener('direct_event')).toEqual(false);
-      expect(Ext.Ajax.hasListener('indirect_event')).toEqual(false);
    });
 });
-
 
 
 component('Panel Holder', function() {
@@ -134,7 +122,6 @@ component('Panel Holder', function() {
          }
       });
 
-
       it('should allow setting base controller to setup initial controller', function() {
          // given: holder with no base controller set
 
@@ -144,14 +131,14 @@ component('Panel Holder', function() {
             isBaseController: true
          });
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
 
          // then: base controller should be held
-         expect(panel_holder.baseController).toBe(base_ctrl);
-         expect(base_ctrl.panelHolder).toBe(panel_holder);
+         expect(panel_holder.getBaseController()).toBe(base_ctrl);
+         expect(base_ctrl.getPanelHolder()).toBe(panel_holder);
 
          // and: panel should have been added to the holder
-         expect(panel_holder.items.get(0)).toBe(base_ctrl.panel);
+         expect(panel_holder.items.get(0)).toBe(base_ctrl.getPanel());
       });
 
       it('should require that base controller is marked as base controller', function() {
@@ -172,16 +159,16 @@ component('Panel Holder', function() {
             panelHolder: panel_holder,
             isBaseController: true
          });
-         spyOn(base_ctrl, 'onDestroy').andCallThrough();
+         spyOn(base_ctrl, 'destroy').andCallThrough();
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
 
          // when: destroy the holder
          panel_holder.destroy();
          panel_holder = null;
 
          // then: should have called the destruction method on base controller
-         expect(base_ctrl.onDestroy).toHaveBeenCalled();
+         expect(base_ctrl.destroy).toEqual(Ext.emptyFn);
       });
    });
 
@@ -200,13 +187,13 @@ component('Panel Holder', function() {
          ctrl2 = new test.ExtPanel2({panelHolder: panel_holder});
          ctrl3 = new test.ExtPanel2({panelHolder: panel_holder});
 
-         spyOn(ctrl1, 'onDestroy').andCallThrough();
-         spyOn(ctrl2, 'onDestroy').andCallThrough();
-         spyOn(ctrl3, 'onDestroy').andCallThrough();
-         spyOn(base_ctrl, 'onDestroy').andCallThrough();
+         spyOn(ctrl1, 'destroy').andCallThrough();
+         spyOn(ctrl2, 'destroy').andCallThrough();
+         spyOn(ctrl3, 'destroy').andCallThrough();
+         spyOn(base_ctrl, 'destroy').andCallThrough();
 
          panel_holder.setBaseController(base_ctrl);
-         panel_holder.render(Ext.getBody());
+         //panel_holder.render(Ext.getBody());
          this.after(function() {
             if(null !== panel_holder) {
                panel_holder.destroy();
@@ -215,14 +202,14 @@ component('Panel Holder', function() {
       });
 
       it('should start with empty stack', function() {
-         expect(panel_holder.ctrlStack).toBeEmpty();
+         expect(panel_holder._ctrlStack).toBeEmpty();
          expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
       });
 
       story('pushing panel into focus', function() {
          it('should set that as focus panel and expand the stack', function() {
             panel_holder.pushFocusCtrl(ctrl1);
-            expect(panel_holder.ctrlStack).toBeLength(1);
+            expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
          });
@@ -233,33 +220,33 @@ component('Panel Holder', function() {
             // given: panel holder with 2 controllers on it
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl2);
             expect(panel_holder.getActiveItem()).toBe(ctrl2.getPanel());
 
             // when: pop off controller, it should be removed and deactivated.
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(1);
+            expect(panel_holder._ctrlStack).toBeLength(1);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl1);
             expect(panel_holder.getActiveItem()).toBe(ctrl1.getPanel());
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
 
             // when: pop off controller, it should be removed and deactivated
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getFocusCtrl()).toEqual(base_ctrl);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
          });
 
          it('should set to main if too many are popped', function() {
             // given: panel holder with just base controller
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
 
             // when: attempt to pop, should not do anything
             panel_holder.popFocusCtrl();
-            expect(panel_holder.ctrlStack).toBeLength(0);
+            expect(panel_holder._ctrlStack).toBeLength(0);
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
          });
       });
@@ -269,7 +256,7 @@ component('Panel Holder', function() {
             // Given: Stack setup with 2 controls
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl2);
             expect(panel_holder.getActiveItem()).toBe(ctrl2.getPanel());
 
@@ -277,10 +264,10 @@ component('Panel Holder', function() {
             panel_holder.replaceFocusCtrl(ctrl3);
 
             // then: should still be length 2 and the new one should be on stack
-            expect(panel_holder.ctrlStack).toBeLength(2);
+            expect(panel_holder._ctrlStack).toBeLength(2);
             expect(panel_holder.getFocusCtrl()).toBe(ctrl3);
             expect(panel_holder.getActiveItem()).toBe(ctrl3.getPanel());
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
          });
       });
 
@@ -290,18 +277,18 @@ component('Panel Holder', function() {
             panel_holder.pushFocusCtrl(ctrl1);
             panel_holder.pushFocusCtrl(ctrl2);
             panel_holder.pushFocusCtrl(ctrl3);
-            expect(panel_holder.ctrlStack).toBeLength(3);
+            expect(panel_holder._ctrlStack).toBeLength(3);
 
             // when: pop to go to back controller
             panel_holder.gotoBaseController();
 
             // then: should be empty and should have destroyed all stck controllers
-            expect(panel_holder.ctrlStack).toBeEmpty();
+            expect(panel_holder._ctrlStack).toBeEmpty();
             expect(panel_holder.getActiveItem()).toBe(base_ctrl.getPanel());
             // todo: fix this and figure out how the ones below seem to work.
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
-            expect(ctrl3.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl3.destroy).toEqual(Ext.emptyFn);
          });
       });
 
@@ -317,10 +304,10 @@ component('Panel Holder', function() {
             panel_holder = null;
 
             // then: it should have called deactivate on all of them including base controller
-            expect(ctrl1.onDestroy).toHaveBeenCalled();
-            expect(ctrl2.onDestroy).toHaveBeenCalled();
-            expect(ctrl3.onDestroy).toHaveBeenCalled();
-            expect(base_ctrl.onDestroy).toHaveBeenCalled();
+            expect(ctrl1.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl2.destroy).toEqual(Ext.emptyFn);
+            expect(ctrl3.destroy).toEqual(Ext.emptyFn);
+            expect(base_ctrl.destroy).toEqual(Ext.emptyFn);
          });
       });
    });

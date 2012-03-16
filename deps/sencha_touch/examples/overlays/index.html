@@ -1,180 +1,201 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html manifest="" lang="en-US">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-  <title>Overlay</title>
-  <link rel="stylesheet" href="../../resources/css/sencha-touch.css" type="text/css" />
-  <script type="text/javascript" src="../../sencha-touch.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+    <meta charset="UTF-8">
+    <title>Overlays</title>
+    <script id="microloader" type="text/javascript" src="../../microloader/development.js"></script>
 </head>
-
 <body>
-  <div style="display: none;">
-    <div id="lipsum">
-      <p><em>This content is in a scrollable panel. It also makes use of the <code>htmlcontent</code> class, which will automatically apply some basic typography to the content. Some filler text:</em></p>
-      <h2>This is a title</h2>
-      <h3>This is a subhead</h3>
-      <p>This is some text of dubious character. Isn&rsquo;t the use
-      of &ldquo;quotes&rdquo; just lazy writing&mdash;and theft of &lsquo;intellectual
-      property&rsquo; besides? I think the time has come to see a block quote.</p>
+    <!-- Content used for each overlay -->
+    <div style="display: none;" id="content">
+        <div id="lipsum">
+            <p><em>This content is in a scrollable panel. It also makes use of the
+            <code>htmlcontent</code> class, which will automatically apply some basic
+            typography to the content. Some filler text:</em></p>
 
-      <blockquote>
-        <p lang="fr" xml:lang="fr">This is a block quote. I&rsquo;ll admit it&rsquo;s not
-        the most exciting block quote ever devised.</p>
-      </blockquote>
+            <h2>This is a title</h2>
 
-      <p>Simple list:</p>
+            <h3>This is a subhead</h3>
 
-      <ol style="color:blue;">
-        <li>one</li>
-        <li>two</li>
-      </ol>
+            <p>This is some text of dubious character. Isn&rsquo;t the use of
+            &ldquo;quotes&rdquo; just lazy writing&mdash;and theft of &lsquo;intellectual
+            property&rsquo; besides? I think the time has come to see a block quote.</p>
 
-      <ol>
-        <li>three
-          <p>Multi-level list:</p>
-        </li>
+            <blockquote>
+                <p lang="fr" xml:lang="fr">This is a block quote. I&rsquo;ll admit
+                it&rsquo;s not the most exciting block quote ever devised.</p>
+            </blockquote>
 
-        <li>one
-          <ol>
-            <li>aye</li>
-            <li>bee</li>
-          </ol>
+            <p>Simple list:</p>
 
-          <ol>
-            <li>see</li>
-            <li>two</li>
-            <li>x</li>
-          </ol>
+            <ol style="color:blue;">
+                <li>one</li>
 
-          <ol>
-            <li>y</li>
-          </ol>
-        </li>
-      </ol>
+                <li>two</li>
+            </ol>
 
-      <ol>
-        <li>three
-          <p>Mixed list:</p>
-          <ul>
-            <li>Point one</li>
-            <li>Point two
-              <ol>
-                <li>Step 1</li>
-                <li>Step 2</li>
-              </ol>
-            </li>
+            <ol>
+                <li>three
 
-            <li style="list-style: none; display: inline">
-              <ol>
-                <li>Step 3</li>
-                <li>Point three
-                  <ul>
-                    <li>Sub point 1</li>
-                  </ul>
+                    <p>Multi-level list:</p>
                 </li>
-              </ol>
-            </li>
-          </ul>
-        </li>
-      </ol>
 
-      <ul>
-        <li>Sub point 2
-          <p>Well, that went well. How about we insert an <a href="/" title=
-          "watch out">old-fashioned hypertext link</a>? Will the quote marks in the tags
-          get messed up? No!</p>
+                <li>one
 
-          <p><a href="http://www.textism.com" title="optional title">This is a
-          link</a></p>
+                    <ol>
+                        <li>aye</li>
 
-          <table style="border:1px solid black;">
-            <tr>
-              <th>this</th>
+                        <li>bee</li>
+                    </ol>
 
-              <th>is</th>
+                    <ol>
+                        <li>see</li>
 
-              <th>a</th>
+                        <li>two</li>
 
-              <th>header</th>
-            </tr>
+                        <li>x</li>
+                    </ol>
 
-            <tr style="background:gray;text-align:left;">
-              <td colspan="2">this is</td>
+                    <ol>
+                        <li>y</li>
+                    </ol>
+                </li>
+            </ol>
 
-              <td style="background:red;width:200px;">a</td>
+            <ol>
+                <li>three
 
-              <td style="vertical-align:top;height:200px;text-align:justify;">row</td>
-            </tr>
+                    <p>Mixed list:</p>
 
-            <tr>
-              <td>this</td>
+                    <ul>
+                        <li>Point one</li>
 
-              <td style="padding:10px;text-align:justify;">is</td>
+                        <li>Point two
 
-              <td style="vertical-align:top;">another</td>
+                            <ol>
+                                <li>Step 1</li>
 
-              <td class="bob" id="bob">row</td>
-            </tr>
-          </table>
+                                <li>Step 2</li>
+                            </ol>
+                        </li>
 
-          <p>An image:</p>
+                        <li style="list-style: none; display: inline">
+                            <ol>
+                                <li>Step 3</li>
 
-          <p><img src="icon.png" title="optional alt text" alt="optional alt text" /></p>
+                                <li>Point three
 
-          <ol>
-            <li>Librarians rule</li>
-          </ol>
-        </li>
-      </ul>
+                                    <ul>
+                                        <li>Sub point 1</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
 
-      <ul>
-        <li>Yes they do</li>
+            <ul>
+                <li>Sub point 2
 
-        <li style="list-style: none; display: inline">
-          <ol>
-            <li>But you knew that
+                    <p>Well, that went well. How about we insert an <a href="/" title=
+                    "watch out">old-fashioned hypertext link</a>? Will the quote marks in
+                    the tags get messed up? No!</p>
 
-              <p>Some more text of dubious character. Here is a noisome string of CAPITAL
-              letters. Here is something we want to <em>emphasize</em>.<br />
-              That was a linebreak. And something to indicate <strong>strength</strong>.
-              Of course I could use <em>my own HTML tags</em> if I <strong>felt</strong>
-              like it.</p>
+                    <p><a href="http://www.textism.com" title="optional title">This is a
+                    link</a></p>
 
-              <h3>Coding</h3>
+                    <table style="border:1px solid black;">
+                        <tr>
+                            <th>this</th>
 
-              <p>This <code>is some code, "isn't it"</code>. Watch those quote marks! Now
-              for some preformatted text:</p>
-              <pre>
-            <code>
-            $text = str_replace("&lt;p&gt;%::%&lt;/p&gt;","",$text);
-            $text = str_replace("%::%&lt;/p&gt;","",$text);
-            $text = str_replace("%::%","",$text);
+                            <th>is</th>
 
-            </code>
-            
-</pre>
+                            <th>a</th>
 
-              <p>This isn&rsquo;t code.</p>
+                            <th>header</th>
+                        </tr>
 
-              <p>So you see, my friends:</p>
+                        <tr style="background:gray;text-align:left;">
+                            <td colspan="2">this is</td>
 
-              <ul>
-                <li>The time is now</li>
+                            <td style="background:red;width:200px;">a</td>
 
-                <li>The time is not later</li>
+                            <td style=
+                            "vertical-align:top;height:200px;text-align:justify;">
+                            row</td>
+                        </tr>
 
-                <li>The time is not yesterday</li>
-              </ul>
-            </li>
-          </ol>
+                        <tr>
+                            <td>this</td>
 
-          <ul>
-            <li>We must act</li>
-          </ul>
-        </li>
-      </ul>
+                            <td style="padding:10px;text-align:justify;">is</td>
+
+                            <td style="vertical-align:top;">another</td>
+
+                            <td class="bob" id="bob">row</td>
+                        </tr>
+                    </table>
+
+                    <p>An image:</p>
+
+                    <p><img src="resources/icons/icon.png" title="optional alt text"
+                    alt="optional alt text" /></p>
+
+                    <ol>
+                        <li>Librarians rule</li>
+                    </ol>
+                </li>
+            </ul>
+
+            <ul>
+                <li>Yes they do</li>
+
+                <li style="list-style: none; display: inline">
+                    <ol>
+                        <li>But you knew that
+
+                            <p>Some more text of dubious character. Here is a noisome
+                            string of CAPITAL letters. Here is something we want to
+                            <em>emphasize</em>.<br />
+                            That was a linebreak. And something to indicate
+                            <strong>strength</strong>. Of course I could use <em>my own
+                            HTML tags</em> if I <strong>felt</strong> like it.</p>
+
+                            <h3>Coding</h3>
+
+                            <p>This <code>is some code, "isn't it"</code>. Watch those
+                            quote marks! Now for some preformatted text:</p>
+
+                            <pre>
+                                <code>
+                                $text = str_replace("&lt;p&gt;%::%&lt;/p&gt;","",$text);
+                                $text = str_replace("%::%&lt;/p&gt;","",$text);
+                                $text = str_replace("%::%","",$text);
+
+                                </code>
+                            </pre>
+
+                            <p>This isn&rsquo;t code.</p>
+
+                            <p>So you see, my friends:</p>
+
+                            <ul>
+                                <li>The time is now</li>
+
+                                <li>The time is not later</li>
+
+                                <li>The time is not yesterday</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <ul>
+                        <li>We must act</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </body>
 </html>

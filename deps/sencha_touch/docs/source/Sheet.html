@@ -1,273 +1,187 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>The source code</title>
-    <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
 </head>
-<body  onload="prettyPrint();">
-    <pre class="prettyprint lang-js"><div id="cls-Ext.Sheet"></div>/**
- * @class Ext.Sheet
- * @extends Ext.Panel
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-Sheet'>/**
+</span> * A general sheet class. This renderable container provides base support for orientation-aware transitions for popup or
+ * side-anchored sliding Panels.
  *
- * <p>A general sheet class.  This renderable container provides base support for orientation-aware
- * transitions for popup or side-anchored sliding Panels.</p>
- *
- * <h2>Screenshot:</h2>
- *
- * {@img Ext.Sheet/screenshot.png Ext.Sheet screenshot}
- * 
- * <h2>Example usage:</h2>
- * <pre><code>
-var sheet = new Ext.Sheet({
-    height  : 200,
-    stretchX: true,
-    stretchY: true,
-    
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
-    },
-    
-    dockedItems: [
-        {
-            dock : 'bottom',
-            xtype: 'button',
-            text : 'Click me'
-        }
-    ]
-});
-sheet.show();
- * </code></pre>
- * 
- * <p>See {@link Ext.Picker} and {@link Ext.DatePicker}</p>
- * @xtype sheet
+ * In most cases, you should use {@link Ext.ActionSheet}, {@link Ext.MessageBox}, {@link Ext.picker.Picker} or {@link Ext.picker.Date}.
  */
-Ext.Sheet = Ext.extend(Ext.Panel, {
-    baseCls : 'x-sheet',
-    centered : false,
-    floating : true,
-    modal    : true,
-    draggable : false,
-    monitorOrientation : true,
-    
-    hidden    : true,
-    
-    <div id="cfg-Ext.Sheet-hideOnMaskTap"></div>/**
-    * @cfg {Boolean} hideOnMaskTap
-    * True to automatically bind a tap listener to the mask that hides the window.
-    * Defaults to false. Note: if you don't set this property to false you have to programmaticaly
-    * hide the overlay.
-    */
-    hideOnMaskTap : false,
-    
-    <div id="cfg-Ext.Sheet-stretchX"></div>/**
-     * @cfg {Boolean} stretchX
-     * If true, the width of anchored Sheets are adjusted to fill the entire top/bottom axis width,
-     * or false to center the Sheet along the same axis based upon the sheets current/calculated width.
-     * This option is ignored when {link #centered} is true or x/y coordinates are specified for the Sheet.
-     */
+Ext.define('Ext.Sheet', {
+    extend: 'Ext.Panel',
 
-    <div id="cfg-Ext.Sheet-stretchY"></div>/**
-     * @cfg {Boolean} stretchY
-     * If true, the height of anchored Sheets are adjusted to fill the entire right/left axis height,
-     * or false to center the Sheet along the same axis based upon the sheets current/calculated height.
-     * This option is ignored when {link #centered} is true or x/y coordinates are specified for the Sheet.
-     */
+    xtype: 'sheet',
 
-    <div id="cfg-Ext.Sheet-enter"></div>/**
-     * @cfg {String} enter
-     * The viewport side from which to anchor the sheet when made visible (top, bottom, left, right)
-     * Defaults to 'bottom'
-     */
-    enter : 'bottom',
+    requires: ['Ext.fx.Animation'],
 
-    <div id="cfg-Ext.Sheet-exit"></div>/**
-     * @cfg {String} exit
-     * The viewport side used as the exit point when hidden (top, bottom, left, right)
-     * Applies to sliding animation effects only. Defaults to 'bottom'
-     */
-    exit : 'bottom',
+    config: {
+<span id='Ext-Sheet-cfg-baseCls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
+        baseCls: Ext.baseCSSPrefix + 'sheet',
 
+<span id='Ext-Sheet-cfg-modal'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
+        modal: true,
 
-    <div id="cfg-Ext.Sheet-enterAnimation"></div>/**
-     * @cfg {String/Object} enterAnimation
-     * the named Ext.anim effect or animation configuration object used for transitions
-     * when the component is shown. Defaults to 'slide'
-     */
-    enterAnimation : 'slide',
+<span id='Ext-Sheet-cfg-centered'>        /**
+</span>         * @cfg {Boolean} centered
+         * Whether or not this component is absolutely centered inside its container
+         * @accessor
+         * @evented
+         */
+        centered: true,
 
-    <div id="cfg-Ext.Sheet-exitAnimation"></div>/**
-     *
-     * @cfg {String/Object} exitAnimation
-     * the named Ext.anim effect or animation configuration object used for transitions
-     * when the component is hidden. Defaults to 'slide'
-     */
-    exitAnimation : 'slide',
+<span id='Ext-Sheet-cfg-stretchX'>        /**
+</span>         * @cfg {Boolean} stretchX True to stretch this sheet horizontally.
+         */
+        stretchX: null,
 
-    // @private slide direction defaults
-    transitions : {
-        bottom : 'up',
-        top    : 'down',
-        right  : 'left',
-        left   : 'right'
+<span id='Ext-Sheet-cfg-stretchY'>        /**
+</span>         * @cfg {Boolean} stretchY True to stretch this sheet vertically.
+         */
+        stretchY: null,
+
+<span id='Ext-Sheet-cfg-enter'>        /**
+</span>         * @cfg {String} enter
+         * The viewport side used as the enter point when shown (top, bottom, left, right)
+         * Applies to sliding animation effects only. Defaults to 'bottom'
+         */
+        enter: 'bottom',
+
+<span id='Ext-Sheet-cfg-exit'>        /**
+</span>         * @cfg {String} exit
+         * The viewport side used as the exit point when hidden (top, bottom, left, right)
+         * Applies to sliding animation effects only. Defaults to 'bottom'
+         */
+        exit: 'bottom',
+
+<span id='Ext-Sheet-cfg-showAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
+        showAnimation: !Ext.os.is.Android2 ? {
+            type: 'slideIn',
+            duration: 250,
+            easing: 'ease-out'
+        } : null,
+
+<span id='Ext-Sheet-cfg-hideAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
+        hideAnimation: !Ext.os.is.Android2 ? {
+            type: 'slideOut',
+            duration: 250,
+            easing: 'ease-in'
+        } : null
     },
 
-    //@private
-    animSheet : function(animate) {
-      var anim = null,
-          me = this,
-          tr = me.transitions,
-          opposites = Ext.Anim.prototype.opposites || {};
+    applyHideAnimation: function(config) {
+        var exit = this.getExit(),
+            direction = exit;
 
-      if (animate && this[animate]) {
-         if (animate == 'enter') {
-             anim = (typeof me.enterAnimation == 'string') ?
-                 {
-                     type : me.enterAnimation || 'slide',
-                     direction : tr[me.enter] || 'up'
-                 } : me.enterAnimation;
-
-         }
-         else if (animate == 'exit') {
-            anim = (typeof me.exitAnimation == 'string') ?
-                 {
-                     type : me.exitAnimation || 'slide',
-                     direction : tr[me.exit] || 'down'
-                 } :  me.exitAnimation;
-         }
-      }
-      return anim;
-    },
-
-    // @private
-    orient : function(orientation, w, h) {
-        if(!this.container || this.centered || !this.floating){
-            return this;
+        if (exit === null) {
+            return null;
         }
 
-        var me = this,
-            cfg = me.initialConfig || {},
-            //honor metrics (x, y, height, width) initialConfig
-            size = {width : cfg.width, height : cfg.height},
-            pos  = {x : cfg.x, y : cfg.y},
-            box  = me.el.getPageBox(),
-            pageBox, scrollTop = 0;
-
-        if (me.container.dom == document.body) {
-            pageBox = {
-                width: window.innerWidth,
-                height: window.innerHeight
+        if (config === true) {
+            config = {
+                type: 'slideOut'
             };
-            scrollTop = document.body.scrollTop;
         }
-        else {
-            pageBox = me.container.getPageBox();
+        if (Ext.isString(config)) {
+            config = {
+                type: config
+            };
         }
+        var anim = Ext.factory(config, Ext.fx.Animation);
 
-        pageBox.centerY = pageBox.height / 2;
-        pageBox.centerX = pageBox.width / 2;
-
-        if(pos.x != undefined || pos.y != undefined){
-            pos.x = pos.x || 0;
-            pos.y = pos.y || 0;
-        }
-        else {
-            if (/^(bottom|top)/i.test(me.enter)) {
-                size.width  = me.stretchX ? pageBox.width : Math.min(200,Math.max(size.width || box.width || pageBox.width, pageBox.width));
-                size.height = Math.min(size.height || 0, pageBox.height) || undefined;
-                size = me.setSize(size).getSize();
-                pos.x = pageBox.centerX - size.width / 2;
-                pos.y = me.enter == 'top' ? 0 : pageBox.height - size.height + scrollTop;
-
-            } else if (/^(left|right)/i.test(me.enter)) {
-                size.height = me.stretchY ? pageBox.height : Math.min(200, Math.max(size.height || box.height || pageBox.height, pageBox.height));
-                size.width  = Math.min(size.width || 0, pageBox.width) || undefined;
-                size = me.setSize(size).getSize();
-                pos.y = 0;
-                pos.x = me.enter == 'left' ? 0 : pageBox.width - size.width;
+        if (anim) {
+            if (exit == 'bottom') {
+                direction = 'down';
             }
+            if (exit == 'top') {
+                direction = 'up';
+            }
+            anim.setDirection(direction);
         }
-        me.setPosition(pos);
-        return this;
+        return anim;
     },
 
-     // @private
-    afterRender : function() {
-        Ext.Sheet.superclass.afterRender.apply(this, arguments);
-        this.el.setVisibilityMode(Ext.Element.OFFSETS);
+    applyShowAnimation: function(config) {
+        var enter = this.getEnter(),
+            direction = enter;
+
+        if (enter === null) {
+            return null;
+        }
+
+        if (config === true) {
+            config = {
+                type: 'slideIn'
+            };
+        }
+        if (Ext.isString(config)) {
+            config = {
+                type: config
+            };
+        }
+        var anim = Ext.factory(config, Ext.fx.Animation);
+
+        if (anim) {
+            if (enter == 'bottom') {
+                direction = 'down';
+            }
+            if (enter == 'top') {
+                direction = 'up';
+            }
+            anim.setBefore({
+                display: null
+            });
+            anim.setReverse(true);
+            anim.setDirection(direction);
+        }
+        return anim;
     },
 
-    // @private
-    onShow : function(animation) {
-        this.orient();
-        return Ext.Sheet.superclass.onShow.call(this, animation || this.animSheet('enter'));
+    updateStretchX: function(newStretchX) {
+        this.getLeft();
+        this.getRight();
+
+        if (newStretchX) {
+            this.setLeft(0);
+            this.setRight(0);
+        }
     },
 
-    // @private
-    onOrientationChange : function(orientation, w, h) {
-        this.orient();
-        Ext.Sheet.superclass.onOrientationChange.apply(this, arguments);
-    },
+    updateStretchY: function(newStretchY) {
+        this.getTop();
+        this.getBottom();
 
-    // @private
-    beforeDestroy : function() {
-        delete this.showAnimation;
-        this.hide(false);
-        Ext.Sheet.superclass.beforeDestroy.call(this);
+        if (newStretchY) {
+            this.setTop(0);
+            this.setBottom(0);
+        }
     }
 });
-
-Ext.reg('sheet', Ext.Sheet);
-
-<div id="cls-Ext.ActionSheet"></div>/**
- * @class Ext.ActionSheet
- * @extends Ext.Sheet
- *
- * <p>A Button Sheet class designed to popup or slide/anchor a series of buttons.</p>
- * 
- * <h2>Screenshot:</h2>
- *
- * {@img Ext.ActionSheet/screenshot.png Ext.ActionSheet screenshot}
- *
- * <h2>Example code:</h2>
- * <pre><code>
-var actionSheet = new Ext.ActionSheet({
-    items: [
-        {
-            text: 'Delete draft',
-            ui  : 'decline'
-        },
-        {
-            text: 'Save draft'
-        },
-        {
-            text: 'Cancel',
-            ui  : 'confirm'
-        }
-    ]
-});
-actionSheet.show();</code></pre>
- * @xtype sheet
- */
-
-Ext.ActionSheet = Ext.extend(Ext.Sheet, {
-    componentCls: 'x-sheet-action',
-
-    stretchY: true,
-    stretchX: true,
-
-    defaultType: 'button',
-
-    constructor : function(config) {
-        config = config || {};
-
-        Ext.ActionSheet.superclass.constructor.call(this, Ext.applyIf({
-            floating : true
-        }, config));
-    }
-});
-
-Ext.reg('actionsheet', Ext.ActionSheet);</pre>    
+</pre>
 </body>
 </html>

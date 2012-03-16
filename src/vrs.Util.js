@@ -50,7 +50,7 @@ vrs.FlatJsonWriter = Ext.extend(Ext.data.JsonWriter, {
    }
 });
 
-Ext.data.WriterMgr.registerType('json_flat', vrs.FlatJsonWriter);
+// XXX: Ext.data.WriterMgr.registerType('json_flat', vrs.FlatJsonWriter); //
 
 
 
@@ -165,4 +165,34 @@ vrs.sleep = function sleep(milliSeconds){
        cur_time = new Date().getTime();
    while (cur_time < startTime + milliSeconds)
    { cur_time = new Date().getTime(); /* hog cpu */ }
+};
+
+/*
+* Capture all events from the specified object and call fn before they run
+* within the scope of scope.
+*/
+vrs.captureEvents = function(o, fn, scope) {
+   o.fireEvent = Ext.Function.createInterceptor(o.fireEvent, fn, scope);
+};
+
+vrs.captureActions = function(o, fn, scope) {
+   o.fireAction = Ext.Function.createInterceptor(o.fireAction, fn, scope);
+};
+
+/** Helper function to display details of all events/actions
+* for the given object.
+*/
+vrs.dumpEvents = function(o, name) {
+   if(name) {
+      name = "[" + name + "]";
+   } else {
+      name = '';
+   }
+
+   vrs.captureEvents(o, function(eventName) {
+      console.log(name + " Event: " + eventName, arguments);
+   });
+   vrs.captureActions(o, function(actionName) {
+      console.log(name + " Action: " + actionName, arguments);
+   });
 };

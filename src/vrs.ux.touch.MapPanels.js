@@ -15,7 +15,7 @@ Ext.ns('vrs.ux.touch');
 * Overlay panel holder class.
 *
 * Acts as the glue to connect an overlay view to the
-* Sencha Touch popup panel below.
+* Sencha Touch popup panel.
 */
 function OverlayPanelHolder(opts) {
    this.popupPanel = opts.popup;
@@ -33,7 +33,7 @@ OverlayPanelHolder.prototype.draw = function() {
 */
 OverlayPanelHolder.prototype.onAdd = function() {
    console.log('panelholder.onAdd');
-   this.popupPanel.onAdd();
+   //this.popupPanel.onAdd();
    // Add the div to the map pane
    var panes = this.getPanes();
    panes.floatPane.appendChild(this.divElt);  // overlayLayer, overlayMouseTarget, floatPane
@@ -49,6 +49,7 @@ OverlayPanelHolder.prototype.onRemove = function() {
 
    this.popupPanel.afterRemove();
 };
+
 
 
 
@@ -106,6 +107,19 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
    */
    _overlayHolder: null,
 
+   // --- Events --- //
+   /**
+   * @event afteradd
+   * Fired after the panel has been added to the map DOM.
+   * @param {Panel} this panel object.
+   */
+
+   /**
+   * @event afterremove
+   * Fired after the panel has been removed from the map DOM.
+   * @param {Panel} this panel object.
+   */
+
    /**
    * Construct the popup panel.
    *
@@ -129,18 +143,6 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          renderTo: this._overlayHolder.divElt
       });
 
-      this.addEvents({
-         /** Fired after the panel has been added to the map DOM.
-         * called as: afterAdd(panel)
-         */
-         'afterAdd': true,
-
-         /** Fired after the panel has been removed from the map DOM.
-         * called as: afterRemove(panel)
-         */
-         'afterRemove': true
-      });
-
       vrs.ux.touch.GmapPopupPanel.superclass.constructor.apply(this, arguments);
 
       // Add flag we use to track if have toggled ourselves into fullscreen mode
@@ -153,10 +155,6 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
             hide: function() { me.remove(); }
          });
       }
-   },
-
-   initComponent: function() {
-      vrs.ux.touch.GmapPopupPanel.superclass.initComponent.apply(this, arguments);
 
       // Connect it up to the map now that it has been initialized.
       this._overlayHolder.setMap(this.map);
@@ -238,21 +236,18 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       // finalize the size and layout if we are visible.
       // - we don't layout if not visible because that would remove the sizing for first show
       this.setSize(width + extra_margin, height + extra_margin);
-      if(this.isVisible()) {
-         this.doLayout();
-      }
 
       // If we should be anchoring and it doesn't match previous setting,
       // then change and possible update the rendering to remove/add anchor.
       if(should_anchor !== this.anchored) {
          this.anchored = should_anchor;
-         if(this.rendered && this.isVisible()) {
+         if(!this.isHidden()) {
             this.show();        // reshow to get anchor laid out correctly.
          }
       }
 
       // If we are rendered and we should update position, then do so now.
-      if(this.rendered && this.isVisible() && auto_position) {
+      if(this.rendered && !this.isHidden() && auto_position) {
          this.updatePosition();
       }
 
@@ -280,7 +275,7 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
          // - hacked together from showBy and alignTo in Component.js
          //   todo: see if we can use more of alignTo logic.
          if(!this.anchorEl) {
-            this.anchorEl = this.el.createChild({
+            this.anchorEl = this.element.createChild({
                cls: 'x-anchor'
             });
          }
@@ -299,7 +294,6 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       // Now that the divs are all added we can set the scroll flag if needed.
       if (this._config_scroll) {
          this.setScrollable(this._config_scroll);
-         this.doLayout();
       }
    },
 
@@ -346,10 +340,13 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       arrow_dy = -arrow_size.height;
 
       // left, top relative to pane.
-      this.setPosition(posDiv_pane.x - panel_dx, posDiv_pane.y - panel_dy);
+      this.setLeft(posDiv_pane.x - panel_dx);
+      this.setTop(posDiv_pane.y - panel_dy);
+
+      //this.setPosition(posDiv_pane.x - panel_dx, posDiv_pane.y - panel_dy);
       // left, top relative to the panel
-      this.anchorEl.setBox(panel_dx - arrow_dx,
-                           this.getHeight());
+      this.anchorEl.setBox({left: panel_dx - arrow_dx,
+                             top: this.getHeight()});
    },
 
    /**
@@ -366,14 +363,14 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       // Auto show the popup
       this.show();
 
-      this.fireEvent('afterAdd', this);
+      this.fireEvent('afteradd', this);
    },
 
    /**
    * Called after the overlay panel holder has removed us from the map.
    */
    afterRemove: function() {
-      this.fireEvent('afterRemove', this);
+      this.fireEvent('afterremove', this);
 
       // finish removal by destroying and cleaning up everything here.
       this.map            = null;
@@ -381,7 +378,6 @@ vrs.ux.touch.GmapPopupPanel = Ext.extend(Ext.Panel, {
       this.destroy();
    }
 });
-
 
 
 
