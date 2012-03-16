@@ -1,150 +1,122 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
- * This simple example shows the ability of the Ext.List component.
- *
- * In this example, it uses a grouped store to show group headers in the list. It also
- * includes an indicator so you can quickly swipe through each of the groups. On top of that
- * it has a disclosure button so you can disclose more information for a list item.
+ * This simple example shows the ability of the Ext.List component with horizontal content.
  */
 
 //define the application
 Ext.define('Oreilly.model.Speaker', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
-	config: {
-		fields: [
-			'id',
-			'first_name',
-			'last_name',
-			'sessionIds',
-			'bio',
-			'position',
-			'photo',
-			'affiliation',
-			'url',
-			'twitter'
-		]
-	}
+    config: {
+        fields: [
+            'id',
+            'first_name',
+            'last_name',
+            'sessionIds',
+            'bio',
+            'position',
+            'photo',
+            'affiliation',
+            'url',
+            'twitter'
+        ]
+    }
 });
 
 Ext.define('Oreilly.store.Speakers', {
-	extend: 'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
     config: {
         model: 'Oreilly.model.Speaker'
     }
 });
+
 Ext.define('Oreilly.util.Proxy', {
+    singleton: true,
+    requires: ['Ext.data.JsonP'],
 
-	singleton: true,
+    process: function(url) {
+        var speakerStore = Ext.getStore('Speakers'),
+            speakerIds = [],
+            speakerModel;
 
-	process: function(url, callback) {
+        Ext.data.JsonP.request({
+            url: url,
+            callbackName: 'feedCb',
 
-		var speakerStore = Ext.getStore('Speakers'),
-		    speakerModel;
+            success: function(data) {
+                Ext.Array.each(data.proposals, function(proposal) {
+                    Ext.Array.each(proposal.speakers, function(speaker) {
+                        // don't add duplicates or items with no photos.
+                        if (speakerIds.indexOf(speaker.id) == -1 && speaker.photo) {
+                            speakerIds.push(speaker.id);
 
-		Ext.data.JsonP.request({
-		    url: url,
-		    callbackName: 'feedCb',
-
-		    success: function(data) {
-		        Ext.Array.each(data.proposals, function(proposal) {
-		            proposal.speakerIds = [];
-		            Ext.Array.each(proposal.speakers, function(speaker) {
-		                proposal.speakerIds.push(speaker.id);
-
-		                speakerModel = Ext.create('Oreilly.model.Speaker', speaker);
-		                speakerStore.add(speakerModel);
-		            });
-		        });
-		        callback();
-		    }
-		});
-
-	}
+                            speakerModel = Ext.create('Oreilly.model.Speaker', speaker);
+                            speakerStore.add(speakerModel);
+                        }
+                    });
+                });
+            }
+        });
+    }
 });
 
 Ext.application({
-    //define the startupscreens for tablet and phone, as well as the icon
-    tabletStartupScreen: 'tablet_startup.png',
-    phoneStartupScreen: 'phone_startup.png',
-    icon: 'icon.png',
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     //require any components/classes what we will use in our example
     requires: [
-        'Ext.data.JsonP',
-        'Ext.data.Store',
-        'Ext.List',
-        'Ext.plugin.PullRefresh'
+        'Ext.List'
     ],
 
     /**
      * The launch method is called when the browser is ready, and the application can launch.
-     *
-     * Inside our launch method we create the list and show in in the viewport. We get the lists configuration
-     * using the getListConfiguration method which we defined below.
-     *
-     * If the user is not on a phone, we wrap the list inside a panel which is centered on the page.
      */
     launch: function() {
-        //get the configuration for the list
-        var listConfiguration = this.getListConfiguration();
-
-        //if the device is not a phone, we want to create a centered panel and put the list
-        //into that
-        if (!Ext.os.is.Phone) {
-            //use Ext.Viewport.add to add a new component into the viewport
-            Ext.Viewport.add({
-                //give it an xtype of panel
-                xtype: 'panel',
-
-                //give it a fixed witdh and height
-                width: 350,
-                height: 370,
-
-                //make it centered
-                centered: true,
-
-                //make the component modal so there is a mask around the panel
-                modal: true,
-
-                //set hideOnMaskTap to false so the panel does not hide when you tap on the mask
-                hideOnMaskTap: false,
-
-                //give it a layout of fit so the list stretches to the size of this panel
-                layout: 'fit',
-
-                //insert the listConfiguration as an item into this panel
-                items: [listConfiguration]
-            });
-        } else {
-            //if we are a phone, simply add the list as an item to the viewport
-            Ext.Viewport.add(listConfiguration);
-        }
-    },
-
-    /**
-     * Returns a configuration object to be used when adding the list to the viewport.
-     */
-    getListConfiguration: function() {
         //create a store instance
         var store = Ext.create('Oreilly.store.Speakers', { id: 'Speakers' });
+        Oreilly.util.Proxy.process('feed.js');
 
-        Oreilly.util.Proxy.process('feed.js', function(){});
-
-        return {
-            //give it an xtype of list for the list component
-            xtype: 'dataview',
-
-            inline: {
-                wrap: false
+        // add the list as an item to the viewport
+        Ext.Viewport.add({
+            layout: {
+                type: 'vbox',
+                pack: 'center'
             },
+            items: [
+                {
+                    //give it an xtype of list for the list component
+                    xtype: 'dataview',
 
-            //set the itemtpl to show the fields for the store
-            itemTpl: '<img src="{photo}">',
+                    height: 205,
 
-            //bind the store to this list
-            store: store
-        };
+                    scrollable: 'horizontal',
+
+                    inline: {
+                        wrap: false
+                    },
+
+                    //set the itemtpl to show the fields for the store
+                    itemTpl: '<img src="{photo}"><div>{first_name} {last_name}</div>',
+
+                    //bind the store to this list
+                    store: store
+                }
+            ]
+        });
     }
 });

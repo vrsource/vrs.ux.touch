@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 // This utility function takes a date and returns a representation in words.
 var timeAgoInWords = function(date) {
     try {
@@ -34,9 +40,16 @@ Ext.setup({
         'Ext.List'
     ],
 
-    icon: 'icon.png',
-    phoneStartupScreen:  'phone_startup.png',
-    tabletStartupScreen: 'tablet_startup.png',
+    glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     onReady: function() {
 

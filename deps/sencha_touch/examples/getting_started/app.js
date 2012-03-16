@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This is the output of the Sencha Touch 2.0 Getting Started Guide. It sets up a simple application
  * with Sencha Touch, creating a Tab Panel with 3 tabs - home, blog and contact. The home page just
@@ -6,6 +12,9 @@
  */
 Ext.application({
     name: 'Sencha',
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     launch: function() {
         //The whole app UI lives in this tab panel
@@ -39,12 +48,12 @@ Ext.application({
 
                     store: {
                         type: 'tree',
-                        
+
                         fields: ['title', 'link', 'author', 'contentSnippet', 'content', {
                             name: 'leaf',
                             defaultValue: true
                         }],
-                        
+
                         root: {
                             leaf: false
                         },
@@ -58,13 +67,13 @@ Ext.application({
                             }
                         }
                     },
-                    
+
                     detailCard: {
                         xtype: 'panel',
                         scrollable: true,
                         styleHtmlContent: true
                     },
-                    
+
                     listeners: {
                         itemtap: function(nestedList, list, index, element, post) {
                             this.getDetailCard().setHtml(post.get('content'));

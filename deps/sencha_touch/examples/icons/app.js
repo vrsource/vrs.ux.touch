@@ -1,14 +1,25 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This is a simple example which shows some of the built-in icons that are supported in Sencha Touch.
  */
 
 // Define our application
 Ext.application({
-    // Setup the icons and startup images for the example
-    icon: 'icon.png',
-    tabletStartupScreen: 'tablet_startup.png',
-    phoneStartupScreen: 'phone_startup.png',
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     // Require the components which will be used in this example
     requires: [
@@ -51,7 +62,7 @@ Ext.application({
 
             defaults: {
                 // Add some text about the example into the tabpanel as html and style it using default CSS
-                html: 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is no hassle.<p><small>If you cant see all of the buttons below, try scrolling left/right.</small></p>'
+                html: "Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is no hassle.<p><small>If you can't see all of the buttons below, try scrolling left/right.</small></p>"
             },
 
             // Add a bunch of items into the tabpanel, with iconCls'

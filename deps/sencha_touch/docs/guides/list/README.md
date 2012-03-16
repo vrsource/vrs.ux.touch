@@ -1,5 +1,17 @@
 # Using Lists in Sencha Touch 2
 
+{@video vimeo 37212149}
+
+Sencha Touch provides a list component which is ideal for presenting an index-style list of items. In this tutorial, we walk through setting up a basic list, and show how to add an index bar, and group items together under a marker. Also, you'll learn how to create a detail panel to reveal information about each item in the list.
+
+This tutorial features the new NavigationView and MVC Support built into Sencha Touch 2.
+
+View source code on GitHub: <a href="http://github.com/senchalearn/Presidents">github.com/senchalearn/Presidents</a>
+
+Live demo: <a href="http://senchalearn.github.com/Presidents/">senchalearn.github.com/Presidents/</a>
+
+## Guide
+
 List is a component that renders a {@link Ext.data.Store Store} as a list of items on the page. It's a subclass of {@link Ext.dataview.DataView DataView}, which gives it most of its capabilities ([see DataView guide](#/guide/dataview)). List adds a few capabilities of its own though:
 
 * Grouping of items, optional index bar, pinned headers

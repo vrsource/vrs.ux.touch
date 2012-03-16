@@ -5,7 +5,9 @@
     @example miniphone preview
     Ext.define('ListItem', {
         extend: 'Ext.data.Model',
-        fields: ['text']
+        config: {
+            fields: ['text']
+        }
     });
 
     var treeStore = Ext.create('Ext.data.TreeStore', {
@@ -55,7 +57,9 @@ Lets look at the at the code needed to create a basic {@link Ext.NestedList nest
     @example miniphone
     Ext.define('ListItem', {
         extend: 'Ext.data.Model',
-        fields: ['text']
+        config: {
+            fields: ['text']
+        }
     });
 
     var treeStore = Ext.create('Ext.data.TreeStore', {
@@ -195,7 +199,9 @@ A {@link Ext.NestedList#detailCard detail card} is what shows (if configured) if
     @example miniphone preview
     Ext.define('ListItem', {
         extend: 'Ext.data.Model',
-        fields: ['text']
+        config: {
+            fields: ['text']
+        }
     });
 
     var treeStore = Ext.create('Ext.data.TreeStore', {
@@ -283,7 +289,9 @@ Lets look at an example of this working:
     @example miniphone preview
     Ext.define('ListItem', {
         extend: 'Ext.data.Model',
-        fields: ['text']
+        config: {
+            fields: ['text']
+        }
     });
 
     var treeStore = Ext.create('Ext.data.TreeStore', {
@@ -339,7 +347,9 @@ Lets look at an example of this in action:
     @example preview
     Ext.define('ListItem', {
         extend: 'Ext.data.Model',
-        fields: ['text']
+        config: {
+            fields: ['text']
+        }
     });
 
     var treeStore = Ext.create('Ext.data.TreeStore', {

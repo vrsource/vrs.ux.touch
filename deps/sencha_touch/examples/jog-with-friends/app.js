@@ -78,7 +78,7 @@ Visit your live Heroku URL from your mobile device or Webkit based browser.
 Ext.application({
     name: 'JWF',
 
-    icon: 'resources/images/icon.png',
+    icon: 'resources/icons/icon.png',
     phoneStartupScreen:  'resources/images/phone_startup.png',
 
     models: [

@@ -1,14 +1,25 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This is a simple demo of the TabPanel component in Sencha Touch.
  *
  * This is similar to the other tabs example, only the tabbar is docked to the bottom.
  */
 Ext.application({
-    //setup the icon and startupscreen images for devices
-    icon: 'resources/images/icon.png',
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     //require any components we use in the application
     requires: [

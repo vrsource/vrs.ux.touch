@@ -1,10 +1,13 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src',
+    'Oreilly': 'app'
+});
+//</debug>
 
-Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('Oreilly', 'app');
 Ext.require('Oreilly.util.Proxy');
 
 Ext.application({
-
     // Change the values below to re-configure the app for a different conference.
 
     title:   'Web 2.0 Summit 2010',
@@ -46,8 +49,12 @@ Ext.application({
     phoneStartupScreen:  'resources/img/startup.png',
     tabletStartupScreen: 'resources/img/startup_640.png',
 
-    icon:        'resources/img/icon_114.png',
     glossOnIcon: false,
+    icon: {
+        57: 'resources/img/icon.png',
+        72: 'resources/img/icon-72.png',
+        114: 'resources/img/icon-114.png'
+    },
 
     // Dependencies
 

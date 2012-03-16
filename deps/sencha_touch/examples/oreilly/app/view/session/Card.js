@@ -1,21 +1,22 @@
 Ext.define('Oreilly.view.session.Card', {
 
-	extend: 'Ext.NavigationView',
-	xtype: 'sessionContainer',
+    extend: 'Ext.NavigationView',
+    xtype: 'sessionContainer',
 
-	config: {
+    config: {
 
-		title: 'Sessions',
+        title: 'Sessions',
         iconCls: 'time',
 
         autoDestroy: false,
 
-		items: [
-			{
-				xtype: 'sessions',
-				store: 'Sessions',
-		        grouped: true
-			}
-		]
-	}
+        items: [
+            {
+                xtype: 'sessions',
+                store: 'Sessions',
+                grouped: true,
+                pinHeaders: false
+            }
+        ]
+    }
 });

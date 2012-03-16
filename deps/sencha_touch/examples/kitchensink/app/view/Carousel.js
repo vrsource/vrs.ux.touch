@@ -20,32 +20,32 @@ Ext.define('Kitchensink.view.Carousel', {
         items: [{
             xtype: 'carousel',
             items: [{
-                html: '<p>Navigate the carousel on this page by swiping left/right.</p>',
-                cls: 'card card1'
+                html: '<p>Swipe left to show the next card&hellip;</p>',
+                cls: 'card'
             },
             {
-                html: '<p>Clicking on either side of the indicators below</p>',
-                cls: 'card card2'
+                html: '<p>You can also tap on either side of the indicators.</p>',
+                cls: 'card'
             },
             {
                 html: 'Card #3',
-                cls: 'card card3'
+                cls: 'card'
             }]
         }, {
             xtype: 'carousel',
             ui: 'light',
             direction: 'vertical',
             items: [{
-                html: '<p>Carousels can be vertical and given a <code>ui</code> of &#8216;light&#8217; or &#8216;dark.&#8217;</p>',
-                cls: 'card card4'
+                html: '<p>Carousels can also be vertical <em>(swipe up)&hellip;</p>',
+                cls: 'card dark'
             },
             {
-                html: 'Card #2',
-                cls: 'card card5'
+                html: 'And can also use <code>ui:light</code>.',
+                cls: 'card dark'
             },
             {
                 html: 'Card #3',
-                cls: 'card card6'
+                cls: 'card dark'
             }]
         }]
     }

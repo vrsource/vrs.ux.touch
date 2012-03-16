@@ -4,7 +4,7 @@
  */
 Ext.define('Kitchensink.view.RevealRight', {
     extend: 'Ext.Panel',
-    requires: ['Kitchensink.view.LoremIpsum'],
+    requires: ['Kitchensink.view.LoremIpsum2'],
     config: {
         cls: 'card card2',
         scrollable: true,
@@ -12,7 +12,7 @@ Ext.define('Kitchensink.view.RevealRight', {
             docked: 'top',
             html: 'Reveal Right Animation'
         }, {
-            xtype: 'loremipsum'
+            xtype: 'loremipsum2'
         }]
     }
 });

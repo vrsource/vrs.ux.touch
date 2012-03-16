@@ -44,7 +44,7 @@ Ext.require('Ext.data.JsonP', function() {
                                 tpl = new Ext.XTemplate([
                                     '<tpl for="item">',
                                         '<div class="blog-post">',
-                                            '<h3><a href="{link}" target="_blank">{title}</a><small> by {creator}</small></h3>',
+                                            '<h3><a href="{link}" target="_blank">{title}</a></h3>',
                                             '<p>{description}</p>',
                                         '</div>',
                                     '</tpl>'

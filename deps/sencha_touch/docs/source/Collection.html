@@ -646,7 +646,7 @@ Ext.define('Ext.util.Collection', {
             me.map[key] = item;
         }
 
-        if (filtered &amp;&amp; this.getAutoFilter() &amp;&amp; filterable.isFiltered.call(me, item)) {
+        if (filtered &amp;&amp; this.getAutoFilter() &amp;&amp; this.mixins.filterable.isFiltered.call(me, item)) {
             return null;
         }
 

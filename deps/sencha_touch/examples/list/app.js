@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This simple example shows the ability of the Ext.List component.
  *
@@ -6,27 +12,19 @@
  * it has a disclosure button so you can disclose more information for a list item.
  */
 
-Ext.define('Ext.dataview.Override', {
-    override: 'Ext.DataView',
-    deselectAll: function(supress) {
-        var me = this,
-            selections = me.getStore().getRange();
-
-        me.deselect(selections, supress);
-
-        me.selected.clear();
-        me.setLastSelected(null);
-        me.setLastFocused(null);
-    }
-});
-
 //define the application
 Ext.application({
     //define the startupscreens for tablet and phone, as well as the icon
-    tabletStartupScreen: 'tablet_startup.png',
-    phoneStartupScreen: 'phone_startup.png',
-    icon: 'icon.png',
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
+
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
 
     //require any components/classes what we will use in our example
     requires: [

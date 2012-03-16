@@ -3,11 +3,17 @@ Ext.define('Device.controller.Application', {
 
     config: {
         refs: {
-            viewport: 'viewport'
+            main: 'main'
+        },
+        control: {
+            tabbar: {
+                activetabchange: 'onActiveTabChange'
+            }
         }
     },
 
-    init: function() {
-
+    onActiveTabChange: function(tabBar, newTab, oldTab) {
+        var index = tabBar.indexOf(newTab);
+        this.getMain().setActiveItem(index + 1);
     }
 });

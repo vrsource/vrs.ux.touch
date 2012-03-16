@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This is a simple demontration of the Ext.List component with a binded Ext.data.Store.
  * It also included a search field which has functionality built in to filter the data in
@@ -7,10 +13,16 @@
 //define our application
 Ext.application({
     //setup the startup screens and icon for mobile devices
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen : 'resources/images/phone_startup.png',
-    icon: 'resources/images/icon.png',
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
+
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
 
     // require any components we are using in this example
     requires: [

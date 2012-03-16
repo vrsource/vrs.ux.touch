@@ -10,9 +10,6 @@ Ext.define('Device.view.Notification', {
     ],
 
     config: {
-        title  : 'Notifications',
-        iconCls: 'mail',
-
         scrollable: true,
         padding: '10 10 0 10',
 

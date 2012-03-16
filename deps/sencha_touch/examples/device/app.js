@@ -1,23 +1,22 @@
-// Ext.Loader.setConfig({
-//     enabled: true,
-//     paths: {
-//         Ext: 'touch/src'
-//     }
-// });
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
 
 Ext.application({
     name: 'Device',
-
-    requires: ['Ext.device.*'],
 
     stores: ['Images'],
 
     views: [
         'Main',
+        'Information',
         'Camera',
         'Connection',
         'Notification',
-        'Orientation'
+        'Orientation',
+        'Geolocation'
     ],
 
     controllers: [

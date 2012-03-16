@@ -85,6 +85,7 @@ Ext.define('Kitchensink.view.List', {
         activeItem: 2,
         tabBar: {
             docked: 'top',
+            ui: 'neutral',
             layout: {
                 pack: 'center'
             }

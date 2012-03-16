@@ -16,7 +16,9 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-Ajax'>/**
-</span> * A singleton instance of an {@link Ext.data.Connection}. This class
+</span> * @aside guide ajax
+ *
+ * A singleton instance of an {@link Ext.data.Connection}. This class
  * is used to communicate with your server side code. It can be used as follows:
  *
  *     Ext.Ajax.request({
@@ -37,7 +39,7 @@
  * Any options specified in the request method for the Ajax request will override any
  * defaults set on the Ext.Ajax class. In the code sample below, the timeout for the
  * request will be 60 seconds.
- *  
+ *
  *     Ext.Ajax.timeout = 120000; // 120 seconds
  *     Ext.Ajax.request({
  *         url: 'page.aspx',
@@ -48,8 +50,6 @@
  * The main reason for creating a separate {@link Ext.data.Connection} is for a
  * series of requests that share common settings that are different to all other
  * requests in the application.
- * 
- * @aside guide ajax
  */
 Ext.define('Ext.Ajax', {
     extend: 'Ext.data.Connection',
@@ -60,6 +60,7 @@ Ext.define('Ext.Ajax', {
      * Whether a new request should abort any pending requests.
      */
     autoAbort : false
-});</pre>
+});
+</pre>
 </body>
 </html>

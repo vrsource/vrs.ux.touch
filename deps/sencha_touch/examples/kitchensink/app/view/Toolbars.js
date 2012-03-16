@@ -10,12 +10,12 @@ Ext.define('Kitchensink.view.Toolbars', {
 
     config: {
         cls: 'card',
-        html: 'Pick a button, any button. <br /><small>By using SASS, all of the buttons on this screen can be restyled dynamically. The only images used are masks.</small>',
+        html: 'Toolbars automatically come with <code>light</code> and <code>dark</code> UIs, but you can also make your own with Sass.',
 
         items: !Ext.os.is.Phone ? [
             {
                 xtype: 'toolbar',
-                ui: 'light',
+                ui: 'neutral',
                 docked: 'top',
                 scrollable: {
                     direction: 'horizontal',
@@ -142,6 +142,6 @@ Ext.define('Kitchensink.view.Toolbars', {
      * Called when any button in these view is tapped
      */
     tapHandler: function(button) {
-        this.setHtml("User tapped the '" + button.getText() + "' button.");
+        this.setHtml("<span class=action>User tapped " + button.getText() + "</span>");
     }
 });

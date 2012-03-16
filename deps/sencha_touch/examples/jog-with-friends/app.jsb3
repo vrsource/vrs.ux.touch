@@ -170,11 +170,6 @@
                     "clsName": "Ext.fx.animation.PopOut"
                 },
                 {
-                    "path": "../../src/fx/animation/",
-                    "name": "Cube.js",
-                    "clsName": "Ext.fx.animation.Cube"
-                },
-                {
                     "path": "../../src/fx/",
                     "name": "Animation.js",
                     "clsName": "Ext.fx.Animation"
@@ -293,11 +288,6 @@
                     "path": "../../src/fx/layout/card/",
                     "name": "Pop.js",
                     "clsName": "Ext.fx.layout.card.Pop"
-                },
-                {
-                    "path": "../../src/fx/layout/card/",
-                    "name": "Cube.js",
-                    "clsName": "Ext.fx.layout.card.Cube"
                 },
                 {
                     "path": "../../src/fx/easing/",
@@ -793,6 +783,11 @@
                     "path": "../../src/dataview/element/",
                     "name": "Container.js",
                     "clsName": "Ext.dataview.element.Container"
+                },
+                {
+                    "path": "../../src/data/",
+                    "name": "Batch.js",
+                    "clsName": "Ext.data.Batch"
                 },
                 {
                     "path": "../../src/dataview/component/",

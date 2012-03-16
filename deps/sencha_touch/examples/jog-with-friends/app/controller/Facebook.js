@@ -72,7 +72,8 @@ Ext.define('JWF.controller.Facebook', {
                 message: [
                     'Facebook Authentication is not responding. ',
                     'Please check your Facebook app is correctly configured, ',
-                    'then check the network log for calls to Facebook for more information.'
+                    'then check the network log for calls to Facebook for more information.',
+                    'Restart the app to try again.'
                 ].join('')
             }).show();
 

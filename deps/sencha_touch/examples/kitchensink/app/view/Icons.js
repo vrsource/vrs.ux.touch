@@ -20,36 +20,39 @@ Ext.define('Kitchensink.view.Icons', {
             docked: 'bottom',
             scrollable: false
         },
+        defaults: {
+            scrollable: true
+        },
         items: [
             {
-                iconCls: 'bookmarks',
-                title  : 'Bookmarks',
-                cls    : 'card card3',
-                html   : 'Both toolbars and tabbars have built-in, ready to use icons. Styling custom icons is easy.'
+                iconCls: 'info',
+                title  : 'Info',
+                cls    : 'card',
+                html   : 'Both toolbars and tabbars have built-in, ready to use icons.<br><br><em>Sencha Touch comes with over 300 icons that can optionally be included in your app via Sass and Compass.</em>'
             },
             {
                 iconCls: 'download',
                 title  : 'Download',
-                cls    : 'card card3',
-                html   : 'Pressed Download'
+                cls    : 'card dark',
+                html   : '<span class="action">User tapped Download</span>'
             },
             {
                 iconCls: 'favorites',
                 title  : 'Favorites',
-                cls    : 'card card3',
-                html   : 'Pressed Favorites'
+                cls    : 'card',
+                html   : '<span class="action">User tapped Favorites</span>'
             },
             {
-                iconCls: 'info',
-                title  : 'Info',
-                cls    : 'card card3',
-                html   : 'Pressed Info'
+                iconCls: 'bookmarks',
+                title  : 'Bookmarks',
+                cls    : 'card dark',
+                html   : '<span class="action">User tapped Bookmarks</span>'
             },
             {
                 iconCls: 'more',
                 title  : 'More',
-                cls    : 'card card3',
-                html   : 'Pressed More'
+                cls    : 'card',
+                html   : '<span class="action">User tapped More</span>'
             },
 //            {
 //                iconCls: 'search',
@@ -83,7 +86,7 @@ Ext.define('Kitchensink.view.Icons', {
 //            },
             {
                 xtype : 'toolbar',
-                ui    : 'light',
+                ui: 'neutral',
                 docked: 'top',
                 scrollable: false,
                 defaults: {

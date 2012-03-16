@@ -29,16 +29,15 @@ Ext.define('Ext.Sheet', {
     requires: ['Ext.fx.Animation'],
 
     config: {
-        // @inherited
+<span id='Ext-Sheet-cfg-baseCls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         baseCls: Ext.baseCSSPrefix + 'sheet',
 
-<span id='Ext-Sheet-property-hidden'>        /**
-</span>         * @inherit
-         */
-        hidden: true,
-
-<span id='Ext-Sheet-property-modal'>        /**
-</span>         * @inherit
+<span id='Ext-Sheet-cfg-modal'>        /**
+</span>         * @cfg
+         * @inheritdoc
          */
         modal: true,
 
@@ -74,8 +73,9 @@ Ext.define('Ext.Sheet', {
          */
         exit: 'bottom',
 
-<span id='Ext-Sheet-property-showAnimation'>        /**
-</span>         * @inherit
+<span id='Ext-Sheet-cfg-showAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
          */
         showAnimation: !Ext.os.is.Android2 ? {
             type: 'slideIn',
@@ -83,8 +83,9 @@ Ext.define('Ext.Sheet', {
             easing: 'ease-out'
         } : null,
 
-<span id='Ext-Sheet-property-hideAnimation'>        /**
-</span>         * @inherit
+<span id='Ext-Sheet-cfg-hideAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
          */
         hideAnimation: !Ext.os.is.Android2 ? {
             type: 'slideOut',

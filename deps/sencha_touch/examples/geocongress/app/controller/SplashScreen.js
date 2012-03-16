@@ -1,7 +1,7 @@
 Ext.define('GeoCon.controller.SplashScreen', {
     extend: 'Ext.app.Controller',
 
-    requires: ['Ext.util.GeoLocation'],
+    requires: ['Ext.util.Geolocation'],
 
     config: {
         control: {
@@ -18,7 +18,7 @@ Ext.define('GeoCon.controller.SplashScreen', {
     },
 
     init: function() {
-        this.location = Ext.create('Ext.util.GeoLocation', {
+        this.location = Ext.create('Ext.util.Geolocation', {
             autoUpdate: false,
             listeners: {
                 locationupdate: 'onLocationUpdate',

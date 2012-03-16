@@ -2,6 +2,65 @@
 
 Most apps that require user input will make use of forms. Forms in Sencha Touch are a wrapper around normal HTML5 forms, with additional options for validating and submitting data, plus an easy way to lay fields out in a pleasing visual style.
 
+    @example preview
+    var formPanel = Ext.create('Ext.form.Panel', {
+        fullscreen: true,
+
+        items: [{
+            xtype: 'fieldset',
+            items: [
+                {
+                    xtype: 'textfield',
+                    name : 'name',
+                    label: 'Name'
+                },
+                {
+                    xtype: 'emailfield',
+                    name : 'email',
+                    label: 'Email'
+                },
+                {
+                    xtype: 'passwordfield',
+                    name : 'password',
+                    label: 'Password'
+                }
+            ]
+        }]
+    });
+
+    formPanel.add({
+        xtype: 'toolbar',
+        docked: 'bottom',
+        layout: { pack: 'center' },
+        items: [
+            {
+                xtype: 'button',
+                text: 'Set Data',
+                handler: function() {
+                    formPanel.setValues({
+                        name: 'Ed',
+                        email: 'ed@sencha.com',
+                        password: 'secret'
+                    })
+                }
+            },
+            {
+                xtype: 'button',
+                text: 'Get Data',
+                handler: function() {
+                    Ext.Msg.alert('Form Values', JSON.stringify(formPanel.getValues(), null, 2));
+                }
+            },
+            {
+                xtype: 'button',
+                text: 'Clear Data',
+                handler: function() {
+                    formPanel.reset();
+                }
+            }
+        ]
+    });
+
 ## Creating a form
 
 The Form panel presents a set of form fields and provides convenient ways to load and save data. Usually a form panel just contains the set of fields you want to display, ordered inside the items configuration like this:
@@ -44,7 +103,10 @@ Using the form we created above, we can load data into it in a few different way
 It's also easy to load {@link Ext.data.Model Model} instances into a form - let's say we have a User model and want to load a particular instance into our form:
 
     Ext.define('MyApp.model.User', {
-        fields: ['name', 'email', 'password']
+        extend: 'Ext.data.Model',
+        config: {
+            fields: ['name', 'email', 'password']
+        }
     });
 
     var ed = Ext.create('MyApp.model.User', {

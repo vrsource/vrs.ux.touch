@@ -1,5 +1,7 @@
 # Using TabPanels in Sencha Touch 2
 
+[Watch the Tabs and Toolbars video](#!/video/list)
+
 {@link Ext.tab.Panel Tab Panels} are a great way to allow the user to switch between several pages that are all full screen. Each Component in the Tab Panel gets its own Tab, which shows the Component when tapped on. Tabs can be positioned at the top or the bottom of the Tab Panel, and can optionally accept title and icon configurations.
 
 Here's how we can set up a simple Tab Panel with tabs at the bottom. Use the controls at the top left of the example to toggle between code mode and live preview mode (you can also edit the code and see your changes in the live preview):

@@ -1,14 +1,25 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This is a simple example that demonstrates the Ext.TabPanel component.
  *
  * It will simply create a Ext.tab.Panel component with three children and add it to the viewport.
  */
 Ext.application({
-    //first we define the icon and startup screens for mobile devices
-    icon: 'resources/images/icon.png',
     glossOnIcon: false,
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     //next we require any components we are using in our application.
     requires: [
@@ -37,7 +48,10 @@ Ext.application({
                     title: 'Tab 1',
 
                     //next we give it some simple html
-                    html: '1',
+                    items: {
+                        html: '1',
+                        centered: true
+                    },
 
                     //then a custom cls so we can style it
                     cls: 'card1'
@@ -47,7 +61,10 @@ Ext.application({
                     title: 'Tab 2',
 
                     //the items html
-                    html: '2',
+                    items: {
+                        html: '2',
+                        centered: true
+                    },
 
                     //custom cls
                     cls: 'card2'
@@ -57,7 +74,10 @@ Ext.application({
                     title: 'Tab 3',
 
                     //the items html
-                    html: '3',
+                    items: {
+                        html: '3',
+                        centered: true
+                    },
 
                     //custom cls
                     cls: 'card3'

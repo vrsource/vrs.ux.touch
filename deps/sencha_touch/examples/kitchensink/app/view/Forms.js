@@ -1,7 +1,7 @@
 /**
  * Demonstrates a tabbed form panel. This uses a tab panel with 3 tabs - Basic, Sliders and Toolbars - each of which is
  * defined below.
- * 
+ *
  * See this in action at http://dev.sencha.com/deploy/sencha-touch-2-b3/examples/kitchensink/index.html#demo/forms
  */
 Ext.define('Kitchensink.view.Forms', {
@@ -25,18 +25,20 @@ Ext.define('Kitchensink.view.Forms', {
     ],
 
     config: {
-        activeItem    : 0,
-        tabBarPosition: 'top',
+        activeItem: 0,
         tabBar: {
+            // docked: 'bottom',
+            ui: 'neutral',
             layout: {
-                pack: 'left'
+                pack: 'center'
             }
         },
         items: [
             {
                 title: 'Basic',
                 xtype: 'formpanel',
-                id   : 'basicform',
+                id: 'basicform',
+                iconCls: 'refresh',
                 items: [
                     {
                         xtype: 'fieldset',
@@ -90,6 +92,7 @@ Ext.define('Kitchensink.view.Forms', {
                             },
                             {
                                 xtype: 'datepickerfield',
+                                destroyPickerOnHide: true,
                                 name : 'date',
                                 label: 'Start Date',
                                 value: new Date(),
@@ -245,6 +248,7 @@ Ext.define('Kitchensink.view.Forms', {
                     },
                     {
                         docked: 'top',
+                        ui: 'light',
                         xtype: 'toolbar',
                         items: [
                             {

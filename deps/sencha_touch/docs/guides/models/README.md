@@ -8,13 +8,13 @@ Let's look at how we create a model now:
 
     Ext.define('User', {
         extend: 'Ext.data.Model',
-        fields: [
-            { name: 'id', type: 'int' },
-            { name: 'name', type: 'string' }
-        ]
+        config: {
+            fields: [
+                { name: 'id', type: 'int' },
+                { name: 'name', type: 'string' }
+            ]
+        }
     });
-
-
 
 ## Using Proxies
 
@@ -23,14 +23,18 @@ Proxies are used by stores to handle the loading and saving of model data. There
 Proxies can be defined directly on a model, like so:
 
     Ext.define('User', {
+
         extend: 'Ext.data.Model',
-        fields: ['id', 'name', 'age', 'gender'],
-        proxy: {
-            type: 'rest',
-            url : 'data/users',
-            reader: {
-                type: 'json',
-                root: 'users'
+
+        config: {
+            fields: ['id', 'name', 'age', 'gender'],
+            proxy: {
+                type: 'rest',
+                url : 'data/users',
+                reader: {
+                    type: 'json',
+                    root: 'users'
+                }
             }
         }
     });
@@ -70,45 +74,52 @@ There are also proxies that take advantage of the new capabilities of HTML5 - [L
 [Example of a Model that uses a Proxy directly](guides/data/examples/model_with_proxy/index.html)
 
 
-### Associations
+## Associations
 Models can be linked together with the Associations API. Most applications deal with many different models, and the models are almost always related. A blog authoring application might have models for User, Post, and Comment. Each user creates posts and each post receives comments. We can express those relationships like so:
 
     Ext.define('User', {
         extend: 'Ext.data.Model',
-        fields: ['id', 'name'],
-        proxy: {
-            type: 'rest',
-            url : 'data/users',
-            reader: {
-                type: 'json',
-                root: 'users'
-            }
-        },
+        config: {
+            fields: ['id', 'name'],
+            proxy: {
+                type: 'rest',
+                url : 'data/users',
+                reader: {
+                    type: 'json',
+                    root: 'users'
+                }
+            },
 
-        hasMany: 'Post' // shorthand for { model: 'Post', name: 'posts' }
+            hasMany: 'Post' // shorthand for { model: 'Post', name: 'posts' }
+        }
     });
 
     Ext.define('Post', {
         extend: 'Ext.data.Model',
-        fields: ['id', 'user_id', 'title', 'body'],
 
-        proxy: {
-            type: 'rest',
-            url : 'data/posts',
-            reader: {
-                type: 'json',
-                root: 'posts'
-            }
-        },
-        belongsTo: 'User',
-        hasMany: { model: 'Comment', name: 'comments' }
+        config: {
+            fields: ['id', 'user_id', 'title', 'body'],
+
+            proxy: {
+                type: 'rest',
+                url : 'data/posts',
+                reader: {
+                    type: 'json',
+                    root: 'posts'
+                }
+            },
+            belongsTo: 'User',
+            hasMany: { model: 'Comment', name: 'comments' }
+        }
     });
 
     Ext.define('Comment', {
         extend: 'Ext.data.Model',
-        fields: ['id', 'post_id', 'name', 'message'],
 
-        belongsTo: 'Post'
+        config: {
+            fields: ['id', 'post_id', 'name', 'message'],
+            belongsTo: 'Post'
+        }
     });
 
 It's easy to express rich relationships between different models in your application. Each model can have any number of associations with other models and your models can be defined in any order. Once we have a model instance we can easily traverse the associated data. For example, to log all comments made on each post for a given user, do something like this:
@@ -161,23 +172,26 @@ The belongsTo association also generates new methods on the model. Here's how to
 
 Once more, the loading function (`getUser`) is asynchronous and requires a callback function to get at the user instance. The `setUser` method simply updates the foreign_key (`user_id` in this case) to 100 and saves the Post model. As usual, callbacks can be passed in that will be triggered when the save operation has completed, whether successfully or not.
 
-### Validations
+## Validations
 
 Sencha Touch 2 Models have rich support for validating their data. To demonstrate this we're going to build upon the example we created that illustrated associations. First, let's add some validations to the `User` model:
 
     Ext.define('User', {
         extend: 'Ext.data.Model',
-        fields: ...,
 
-        validations: [
-            {type: 'presence', name: 'name'},
-            {type: 'length',   name: 'name', min: 5},
-            {type: 'format',   name: 'age', matcher: /\d+/},
-            {type: 'inclusion', name: 'gender', list: ['male', 'female']},
-            {type: 'exclusion', name: 'name', list: ['admin']}
-        ],
+        config: {
+            fields: ...,
 
-        proxy: ...
+            validations: [
+                { type: 'presence', name: 'name' },
+                { type: 'length',   name: 'name', min: 5 },
+                { type: 'format',   name: 'age', matcher: /\d+/ },
+                { type: 'inclusion', name: 'gender', list: ['male', 'female'] },
+                { type: 'exclusion', name: 'name', list: ['admin'] }
+            ],
+
+            proxy: ...
+        }
     });
 
 Validations follow the same format as field definitions. In each case, we specify a field and a type of validation. The validations in our example are expecting the name field to be present and to be at least five characters in length, the age field to be a number, the gender field to be either "male" or "female", and the username to be anything but "admin". Some validations take additional optional configuration - for example the length validation can take min and max properties, format can take a matcher, etc. There are five validations built into Sencha Touch 2, and adding custom rules is easy. First, let's look at the ones built right in:
@@ -200,10 +214,10 @@ Now that we have a grasp of what the different validations do, let's try using t
     // run some validation on the new user we just created
     var errors = newUser.validate();
 
-    console.log('Is User valid?', errors.isValid()); //returns 'false' as there were validation errors
-    console.log('All Errors:', errors.items); //returns the array of all errors found on this model instance
+    console.log('Is User valid?', errors.isValid()); // returns 'false' as there were validation errors
+    console.log('All Errors:', errors.items); // returns the array of all errors found on this model instance
 
-    console.log('Age Errors:', errors.getByField('age')); //returns the errors for the age field
+    console.log('Age Errors:', errors.getByField('age')); // returns the errors for the age field
 
 The key function here is `validate()`, which runs all of the configured validations and returns an [Errors](#/api/Ext.data.Errors) object. This simple object is just a collection of any errors that were found, plus some convenience methods such as `isValid()`, which returns true if there were no errors on any field, and `getByField()`, which returns all errors for a given field.
 

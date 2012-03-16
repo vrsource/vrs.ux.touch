@@ -43,10 +43,16 @@ Ext.define('Ext.MessageBox', {
     ],
 
     config: {
-        // @inherit
+<span id='Ext-MessageBox-cfg-ui'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         ui: 'dark',
 
-        // @inherit
+<span id='Ext-MessageBox-cfg-baseCls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         baseCls: Ext.baseCSSPrefix + 'msgbox',
 
 <span id='Ext-MessageBox-cfg-iconCls'>        /**
@@ -56,14 +62,20 @@ Ext.define('Ext.MessageBox', {
          */
         iconCls: null,
 
-        // @inherit
+<span id='Ext-MessageBox-cfg-showAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         showAnimation: {
             type: 'popIn',
             duration: 250,
             easing: 'ease-out'
         },
 
-        // @inherit
+<span id='Ext-MessageBox-cfg-hideAnimation'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         hideAnimation: {
             type: 'popOut',
             duration: 250,
@@ -126,7 +138,10 @@ Ext.define('Ext.MessageBox', {
          */
         prompt: null,
 
-        // @inherit
+<span id='Ext-MessageBox-cfg-layout'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         layout: {
             type: 'vbox',
             pack: 'center'
@@ -159,7 +174,6 @@ Ext.define('Ext.MessageBox', {
         ]
     },
 
-    // @inherit
     constructor: function(config) {
         config = config || {};
 
@@ -183,6 +197,16 @@ Ext.define('Ext.MessageBox', {
 
             delete config.multiline;
             delete config.multiLine;
+        }
+
+        this.defaultAllowedConfig = {};
+        var allowedConfigs = ['ui', 'showAnimation', 'hideAnimation', 'title', 'message', 'prompt', 'iconCls', 'buttons', 'defaultTextHeight'],
+            ln = allowedConfigs.length,
+            i, allowedConfig;
+
+        for (i = 0; i &lt; ln; i++) {
+            allowedConfig = allowedConfigs[i];
+            this.defaultAllowedConfig[allowedConfig] = this.defaultConfig[allowedConfig];
         }
 
         this.callParent([config]);
@@ -522,14 +546,7 @@ Ext.define('Ext.MessageBox', {
             delete config.multiLine;
         }
 
-        config = Ext.apply({
-            iconCls: null,
-            title: null,
-            buttons: null,
-            message: null,
-            prompt: null,
-            cls: null
-        }, config);
+        config = Ext.merge({}, this.defaultAllowedConfig, config);
 
         this.setConfig(config);
 

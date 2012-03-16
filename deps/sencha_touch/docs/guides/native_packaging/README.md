@@ -230,8 +230,18 @@ To package a signed application to run on the device, issue the following comman
 
     sencha package <configFile.json>
 
-Note: an `<AppName.app>` is created in the specified output location. This is the application that you can use to deploy
-to the iOS device.
+This will create a `<AppName.app>` file in the specified output location. This is the application that you can use to deploy
+to the iOS device. To do this, you drag the file onto the iTunes icon:
+
+{@img itunes1.png}
+
+Which will add your application into the Apps section of iTunes:
+
+{@img itunes2.png}
+
+Now you can select that application when syncing your device with iTunes:
+
+{@img itunes3.png}
 
 **See Also**
 

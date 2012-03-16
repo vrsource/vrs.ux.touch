@@ -44,7 +44,7 @@ $include-list-highlights: $include-highlights !default;
 </span> * @var {boolean} $list-zebrastripe
  * Optionally zebra-stripe the list (alternating background colors).
  */
-$list-zebrastripe: $include-list-highlights !default;
+$list-zebrastripe: false !default;
 
 <span id='Ext-dataview-List-css_var-S-list-pressed-color'>/**
 </span> * @var {color} $list-pressed-color
@@ -83,6 +83,12 @@ $list-header-gradient: $base-gradient !default;
  * Default size (width/height) for disclosure icons.
  */
 $list-disclosure-size: 1.7em;
+
+<span id='Ext-dataview-List-css_var-S-list-disclosure-round-size'>/**
+</span> * @var {measurement} $list-disclosure-round-size
+ * Default size (width/height) for disclosure icons in a list with a 'round' ui.
+ */
+$list-disclosure-round-size: 1.5em;
 
 <span id='Ext-dataview-List-css_mixin-sencha-list'>/**
 </span> * Includes default list styles.
@@ -205,7 +211,7 @@ $list-disclosure-size: 1.7em;
         }
 
         &amp;.x-item-selected .x-list-item-label {
-          border-top-color: lighten($list-active-color, 10%);
+          border-top-color: $list-active-color;
           border-bottom-color: darken($list-active-color, 15%);
         }
       }
@@ -220,8 +226,13 @@ $list-disclosure-size: 1.7em;
     }
 
     .x-list-disclosure {
-      -webkit-mask: 0 0 theme_image($theme-name, &quot;pictos/code3.png&quot;) no-repeat;
-      @include background-gradient(#777, 10%);
+      overflow: hidden;
+      -webkit-mask: 0 0 theme_image($theme-name, &quot;disclosure2.png&quot;) no-repeat;
+      -webkit-mask-size: $list-disclosure-round-size;
+      @include background-gradient(lighten(desaturate($base-color, 10), 10));
+      width: $list-disclosure-round-size;
+      height: $list-disclosure-round-size;
+      bottom: 0.5em;
     }
 
     .x-list-header {

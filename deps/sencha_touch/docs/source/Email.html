@@ -16,7 +16,9 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-field-Email'>/**
-</span> * The Email field creates an HTML5 email input and is usually created inside a form. Because it creates an HTML email
+</span> * @aside guide forms
+ *
+ * The Email field creates an HTML5 email input and is usually created inside a form. Because it creates an HTML email
  * input field, most browsers will show a specialized virtual keyboard for email address input. Aside from that, the
  * email field is just a normal text field. Here's an example of how to use it in a form:
  *
@@ -61,12 +63,18 @@ Ext.define('Ext.field.Email', {
     xtype: 'emailfield',
 
     config: {
-        // @inherit
+<span id='Ext-field-Email-cfg-component'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         component: {
 	        type: 'email'
 	    },
 
-        // @inherit
+<span id='Ext-field-Email-cfg-autoCapitalize'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         autoCapitalize: false
     }
 });

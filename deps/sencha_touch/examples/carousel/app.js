@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This example demonstrates the Carousel component in Sencha Touch 2.
  *
@@ -9,10 +15,16 @@
  */
 Ext.application({
     //first we define the tablet + phone startup screens and the applicaiton icon url
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
-    icon: 'resources/images/icon.png',
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
+
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
 
     //here we require any components we are using in our application
     requires: [
@@ -77,3 +89,4 @@ Ext.application({
         });
     }
 });
+

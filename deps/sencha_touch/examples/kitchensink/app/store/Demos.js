@@ -58,7 +58,8 @@
                 id: 'Fade',
                 card: false,
                 animation: {
-                    type: 'fade'
+                    type: 'fade',
+                    duration: 500
                 },
                 leaf: true
             }
@@ -238,12 +239,6 @@
                         id: 'bottom-tabs'
                     },
                     {
-                        text: 'Map',
-                        view: 'Map',
-                        leaf: true,
-                        id: 'map'
-                    },
-                    {
                         text: 'Overlays',
                         leaf: true,
                         id: 'overlays'
@@ -303,10 +298,6 @@
                 id: 'audio'
             }
         ]
-    }, {
-        text: 'Themes',
-        id: 'themes',
-        leaf: true
     });
 
     Ext.define('Kitchensink.store.Demos', {

@@ -6,6 +6,8 @@ In addition to the guide, Sencha Touch 2 comes with a backwards-compatibility bu
 
 As of Sencha Touch3 PR4 the backwards-compatibility support is baked into all builds, from beta 1 onwards you will need to use a different build to keep the compatibility intact while you migrate your app. Following the steps below and then correcting any warnings the compatibility layer informs you about should result in an application that will run on Sencha Touch 2.x.
 
+[See the Migrating from Touch 1.x to 2.0 Video from SenchaCon 2011](#!/video/migrating-from-1-to-2)
+
 ## Class System
 
 When it comes to migrating your app, the biggest change you'll need to make is how classes are defined. Sencha Touch 2 uses the upgraded class system from Ext JS 4, which brings powerful new capabilities like mixins, dynamic loading and the config system.
@@ -24,7 +26,7 @@ In Sencha Touch 1.x, there were 2 main ways of defining classes - using Ext.exte
         /**
          * Get the billSummary and update the contents of the panel.
          */
-        getBill: function(bill) {        
+        getBill: function(bill) {
             Geo.CongressService.getBillSummary({
                 bill: bill
             }, this.onBillSummaryResponse, this);
@@ -61,7 +63,7 @@ In 2.x, we would instead write this:
         /**
          * Get the billSummary and update the contents of the panel.
          */
-        getBill: function(bill) {        
+        getBill: function(bill) {
             Geo.CongressService.getBillSummary({
                 bill: bill
             }, this.onBillSummaryResponse, this);
@@ -87,7 +89,7 @@ Finally, we replaced initComponent with initialize. In 1.x, initComponent was on
 
 ## MVC Migration
 
-The MVC architecture in Sencha Touch 2 is a refinement on the approach from Sencha Touch 1. Most of the concepts are the same, but some of the syntax has been improved to make the API more expressive, and your code more readable and testable. 
+The MVC architecture in Sencha Touch 2 is a refinement on the approach from Sencha Touch 1. Most of the concepts are the same, but some of the syntax has been improved to make the API more expressive, and your code more readable and testable.
 
 ### Models
 
@@ -104,7 +106,7 @@ As with all of the other classes in Sencha Touch 2, Models and the rest of the d
             {type: 'presence', field: 'age'},
             {type: 'length',   field: 'name', min: 2}
         ],
-        
+
         sayName: function() {
             alert(this.get('name'));
         }
@@ -114,7 +116,7 @@ In Sencha Touch 2 the same Model would look like this:
 
     Ext.define('MyApp.model.User', {
         extend: 'Ext.data.Model',
-        
+
         config: {
             fields: [
                 {name: 'name',  type: 'string'},
@@ -127,7 +129,7 @@ In Sencha Touch 2 the same Model would look like this:
                 {type: 'length',   field: 'name', min: 2}
             ]
         },
-        
+
         sayName: function() {
             alert(this.get('name'));
         }
@@ -150,9 +152,9 @@ When it comes to the Ext.application definition, you can keep most of the syntax
 
     Ext.application({
         name: 'MyApp',
-        
+
         icon: 'resources/images/logo.png',
-        
+
         launch: function() {
             Ext.create('MyApp.view.Main');
         }
@@ -166,14 +168,14 @@ In Sencha Touch 2 we encourage you to define all of your application's dependenc
 
     Ext.application({
         name: 'MyApp',
-        
+
         icon: 'resources/images/logo.png',
-        
+
         models: ['User', 'Group'],
         controllers: ['Users', 'Login'],
         views: ['Main', 'Users'],
         stores: ['Users'],
-        
+
         launch: function() {
             Ext.create('MyApp.view.Main');
         }
@@ -193,7 +195,7 @@ Which in 2.x becomes:
 
     Ext.define('MyApp.controller.Searches', {
         extend: 'Ext.app.Controller',
-        
+
         showSomething: function() {
             alert('something');
         }
@@ -213,7 +215,7 @@ In 2.x, the Controller becomes a lot more proactive, actively registering routes
                 'search/:query': 'doSearch'
             }
         },
-        
+
         doSearch: function(query) {
             alert('searching for ' + query);
         }

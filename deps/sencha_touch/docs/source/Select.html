@@ -16,7 +16,9 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-field-Select'>/**
-</span> * Simple Select field wrapper. Example usage:
+</span> * @aside guide forms
+ *
+ * Simple Select field wrapper. Example usage:
  *
  *     @example
  *     Ext.create('Ext.form.Panel', {
@@ -62,7 +64,10 @@ Ext.define('Ext.field.Select', {
      */
 
     config: {
-        // @inherit
+<span id='Ext-field-Select-cfg-ui'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         ui: 'select',
 
 <span id='Ext-field-Select-cfg-useClearIcon'>        /**
@@ -149,8 +154,9 @@ Ext.define('Ext.field.Select', {
          */
         defaultTabletPickerConfig: null,
 
-<span id='Ext-field-Select-property-name'>        /**
-</span>         * @inherit
+<span id='Ext-field-Select-cfg-name'>        /**
+</span>         * @cfg
+         * @inheritdoc
          */
         name: 'picker'
     },

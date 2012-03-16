@@ -106,11 +106,11 @@ The sister config to {@link Ext.app.Controller#refs refs} is {@link Ext.app.Cont
         },
 
         doLogin: function() {
-            //called whenever the Login button is tapped
+            // called whenever the Login button is tapped
         },
 
         doLogout: function() {
-            //called whenever any Button with action=logout is tapped
+            // called whenever any Button with action=logout is tapped
         }
     });
 
@@ -138,15 +138,15 @@ For example, let's say we have a Controller responsible for logging in and viewi
             }
         },
 
-        //uses our 'main' ref above to add a loginpanel to our main TabPanel (note that
-        //'loginpanel' is a custom xtype created for this application)
+        // uses our 'main' ref above to add a loginpanel to our main TabPanel (note that
+        // 'loginpanel' is a custom xtype created for this application)
         showLogin: function() {
             this.getMain().add({
                 xtype: 'loginpanel'
             });
         },
 
-        //Loads the User then adds a 'userprofile' view to the main TabPanel
+        // Loads the User then adds a 'userprofile' view to the main TabPanel
         showUserById: function(id) {
             MyApp.model.User.load(id, {
                 scope: this,
@@ -179,12 +179,12 @@ The final thing that Controllers provide within the context of Routing is the ab
             }
         },
 
-        //this is not directly because our before filter is called first
+        // this is not directly because our before filter is called first
         editProduct: function() {
             //... performs the product editing logic
         },
 
-        //this is run before editProduct
+        // this is run before editProduct
         authenticate: function(action) {
             MyApp.authenticate({
                 success: function() {
@@ -216,12 +216,12 @@ Any number of before filters can be specified for each action, to use more than 
             }
         },
 
-        //this is not directly because our before filter is called first
+        // this is not directly because our before filter is called first
         editProduct: function() {
             //... performs the product editing logic
         },
 
-        //this is the first filter that is called 
+        // this is the first filter that is called
         authenticate: function(action) {
             MyApp.authenticate({
                 success: function() {
@@ -232,8 +232,8 @@ Any number of before filters can be specified for each action, to use more than 
                 }
             });
         },
-        
-        //this is the second filter that is called
+
+        // this is the second filter that is called
         ensureLoaded: function(action) {
             Ext.require(['MyApp.custom.Class', 'MyApp.another.Class'], function() {
                 action.resume();
@@ -271,7 +271,7 @@ Superclass, shared stuff:
 		},
 
 		logout: function() {
-			//code to close the user's session
+			// code to close the user's session
 		}
 	});
 
@@ -300,11 +300,3 @@ Tablet Controller:
 			this.getLoginPanel().show();
 		}
 	});
-
-
-
-
-
-
-
-

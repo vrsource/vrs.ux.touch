@@ -1,5 +1,7 @@
 # How to use classes in Sencha Touch 2
 
+[Watch the Class System video from SenchaCon 2011](#!/video/class-system)
+
 Sencha Touch 2 uses the state of the art class system developed for Ext JS 4. It makes it easy to create new classes in JavaScript, providing inheritance, dependency loading, mixins, powerful configuration options, and lots more.
 
 At its simplest, a class is just an object with some functions and properties attached to it. For instance, here's a class for an animal, recording its name and a function that makes it speak:
@@ -246,8 +248,11 @@ In Sencha Touch 2, we introduce a dedicated `config` property that is processed 
 
 Here's an example:
 
+    Ext.define('My.own.WindowBottomBar', {});
+
     Ext.define('My.own.Window', {
-       /** @readonly */
+
+        /** @readonly */
         isWindow: true,
 
         config: {
@@ -266,7 +271,7 @@ Here's an example:
 
         applyTitle: function(title) {
             if (!Ext.isString(title) || title.length === 0) {
-                alert('Error: Title must be a valid non-empty string');
+                console.log('Error: Title must be a valid non-empty string');
             }
             else {
                 return title;
@@ -285,6 +290,7 @@ Here's an example:
         }
     });
 
+
 And here's an example of how it can be used:
 
     var myWindow = Ext.create('My.own.Window', {
@@ -294,13 +300,12 @@ And here's an example of how it can be used:
         }
     });
 
-    alert(myWindow.getTitle()); // alerts "Hello World"
+    console.log(myWindow.getTitle()); // logs "Hello World"
 
     myWindow.setTitle('Something New');
+    console.log(myWindow.getTitle()); // logs "Something New"
 
-    alert(myWindow.getTitle()); // alerts "Something New"
-
-    myWindow.setTitle(null); // alerts "Error: Title must be a valid non-empty string"
+    myWindow.setTitle(null); // logs "Error: Title must be a valid non-empty string"
 
     myWindow.setBottomBar({ height: 100 }); // Bottom bar's height is changed to 100
 

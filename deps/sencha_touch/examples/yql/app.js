@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This application demonstrates using the YQL service.
  *
@@ -33,15 +39,19 @@ Ext.YQL = {
 
 //define our application
 Ext.application({
-    // setup the startup screen images and the icon
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
-    icon: 'resources/images/icon.png',
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
+
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     // specify the components and classes required for this example
     requires: [
-        'Ext.XTemplate',
         'Ext.Toolbar',
         'Ext.SegmentedButton',
         'Ext.data.JsonP'

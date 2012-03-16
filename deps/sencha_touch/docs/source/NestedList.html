@@ -113,7 +113,10 @@ Ext.define('Ext.dataview.NestedList', {
     ],
 
     config: {
-        // @inherit
+<span id='Ext-dataview-NestedList-cfg-cls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         cls: Ext.baseCSSPrefix + 'nested-list',
 
 <span id='Ext-dataview-NestedList-cfg-cardSwitchAnimation'>        /**
@@ -448,9 +451,10 @@ Ext.define('Ext.dataview.NestedList', {
         this.fireEvent('beforeload', [this, Array.prototype.slice.call(arguments)]);
     },
 
-    onStoreLoad: function() {
+    onStoreLoad: function(store) {
         this.setMasked(false);
         this.fireEvent('load', [this, Array.prototype.slice.call(arguments)]);
+        this.goToNode(store.getRoot());
     },
 
 <span id='Ext-dataview-NestedList-method-onBackTap'>    /**
@@ -495,15 +499,8 @@ Ext.define('Ext.dataview.NestedList', {
         if (store) {
             store = Ext.data.StoreManager.lookup(store);
 
-            if (store &amp;&amp; Ext.isObject(store) &amp;&amp; store.isStore) {
-                store.on({
-                    scope: this,
-                    load: 'onStoreLoad',
-                    beforeload: 'onStoreBeforeLoad'
-                });
-            }
-            //&lt;debug warn&gt;
-            else if (!store)  {
+            // &lt;debug&gt;
+            if (!store)  {
                 Ext.Logger.warn(&quot;The specified Store cannot be found&quot;, this);
             }
             //&lt;/debug&gt;
@@ -512,24 +509,28 @@ Ext.define('Ext.dataview.NestedList', {
         return store;
     },
 
+    storeListeners: {
+        rootchange: 'onStoreRootChange',
+        load: 'onStoreLoad',
+        beforeload: 'onStoreBeforeLoad'
+    },
+
     updateStore: function(newStore, oldStore) {
-        var me = this;
+        var me = this,
+            listeners = this.storeListeners;
+
+        listeners.scope = me;
+
         if (oldStore &amp;&amp; Ext.isObject(oldStore) &amp;&amp; oldStore.isStore) {
             if (oldStore.autoDestroy) {
                 oldStore.destroy();
             }
-            oldStore.un({
-                rootchange: 'onStoreRootChange',
-                scope: this
-            });
+            oldStore.un(listeners);
         }
 
         if (newStore) {
             me.goToNode(newStore.getRoot());
-            newStore.on({
-                rootchange: 'onStoreRootChange',
-                scope: this
-            });
+            newStore.on(listeners);
         }
     },
 

@@ -18,6 +18,7 @@ Ext.define('Oreilly.view.speaker.Card', {
 				xtype: 'speakers',
 				store: 'Speakers',
 				grouped: true,
+				pinHeaders: false,
 				indexBar: true
 			}
 		]

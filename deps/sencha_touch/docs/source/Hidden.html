@@ -16,7 +16,9 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-field-Hidden'>/**
-</span> * Hidden fields allow you to easily inject additional data into a {@link Ext.form.Panel form} without displaying
+</span> * @aside guide forms
+ *
+ * Hidden fields allow you to easily inject additional data into a {@link Ext.form.Panel form} without displaying
  * additional fields on the screen. This is often useful for sending dynamic or previously collected data back to the
  * server in the same request as the normal form submission. For example, here is how we might set up a form to send
  * back a hidden userId field:
@@ -60,13 +62,19 @@ Ext.define('Ext.field.Hidden', {
     xtype: 'hiddenfield',
 
     config: {
-        // @inherit
+<span id='Ext-field-Hidden-cfg-component'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         component: {
             xtype: 'input',
             type : 'hidden'
         },
 
-        // @inherit
+<span id='Ext-field-Hidden-cfg-ui'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         ui: 'hidden',
 
 <span id='Ext-field-Hidden-cfg-hidden'>        /**

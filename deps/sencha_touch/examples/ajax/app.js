@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This application demonstrates the simple AJAX abilities of Sencha Touch.
  *
@@ -9,10 +15,16 @@
 Ext.application({
     //now we define each of the startup screens for our devices and configurations for the application
     //icon when we are saved to homescreen on a device
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
-    icon: 'resources/images/icon.png',
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
+
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
 
     //requires defines the Components/Classes that our application requires.
     requires: [
@@ -249,3 +261,4 @@ Ext.application({
         ].join(''));
     }
 });
+

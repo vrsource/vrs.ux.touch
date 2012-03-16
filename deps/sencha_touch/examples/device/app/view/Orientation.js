@@ -44,6 +44,10 @@ Ext.define('Device.view.Orientation', {
             delegate: 'button',
             tap: 'onReset'
         });
+
+        if (!Ext.feature.has.Css3dTransforms) {
+            Ext.getCmp('cube').hide();
+        }
     },
 
     onReset: function() {
@@ -106,6 +110,8 @@ Ext.define('Device.view.Orientation', {
             gamma -= origin.beta;
         }
 
-        Ext.getCmp('cube').element.dom.style.webkitTransform = 'rotateX('+beta+'deg) rotateY('+alpha+'deg)';
+        if (Ext.feature.has.Css3dTransforms) {
+            Ext.getCmp('cube').element.dom.style.webkitTransform = 'rotateX('+beta+'deg) rotateY('+alpha+'deg)';
+        }
     }
 });

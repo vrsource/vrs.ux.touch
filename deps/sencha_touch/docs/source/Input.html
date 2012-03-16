@@ -121,7 +121,10 @@ Ext.define('Ext.field.Input', {
     },
 
     config: {
-        // @inherit
+<span id='Ext-field-Input-cfg-baseCls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         baseCls: Ext.baseCSSPrefix + 'field-input',
 
 <span id='Ext-field-Input-cfg-name'>        /**
@@ -260,7 +263,6 @@ Ext.define('Ext.field.Input', {
         return items;
     },
 
-    // @inherit
     initElement: function() {
         var me = this;
 
@@ -554,7 +556,6 @@ Ext.define('Ext.field.Input', {
         this.updateFieldAttribute('rows', newRows);
     },
 
-    // @inherit
     doSetDisabled: function(disabled) {
         this.callParent(arguments);
 

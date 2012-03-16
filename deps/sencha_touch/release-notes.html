@@ -13,6 +13,71 @@
         <div id="releases">
             <div class="release">
                 <h1>
+                    Release Notes for Sencha Touch 2.0 FINAL
+                </h1>
+                <p class="notes">
+                    Release Notes: Release Notes: March 6, 2012<br>
+                    Version Number: 2.0.0
+                </p>
+
+                <ul>
+                    <li>Enhancements/Changes
+                        <ul>
+                            <li>Disabled zebrastripes by default</li>
+                            <li>[TOUCH-2277] The Sheet/ActionSheet component no longer defaults to hidden: true</li>
+                            <li>[TOUCH-2287] Removed bad file from Carousel example</li>
+                            <li>[TOUCH-2290] Removed unnecessary call to hide a DatePicker before it is shown</li>
+                            <li>[TOUCH-2301] Added disclosureProperty configuration to List which allows per-record hiding of the disclosures</li>
+                            <li>[TOUCH-2315] Added background styling to fields and labels outside a fieldSet</li>
+                            <li>Added groupButtons config into spinner field which allows you to group the buttons to one side</li>
+                            <li>Added device.device API to receive information about the current device</li>
+                            <li>[TOUCH-2118] Add styling to horizontal list example and add it to the examples list</li>
+                            <li>Ext.app.Profile now uses the same dependency computation algorithm as Controller/Application</li>
+                            <li>[TOUCH-2310] Removed support for sending records over JSONP, as this should not be allowed</li>
+                            <li>Updated discloure icon in round ui lists</li>
+                            <li>Added device geolocation API</li>
+                            <li>Added neutral toolbar ui to touch</li>
+                            <li>Rename GeoLocation to Geolocation and adding alternate classname. adding frequency config to match W3C</li>
+                        </ul>
+                    </li>
+                    <li>Bug Fixes
+                        <ul>
+                            <li>[TOUCH-2279] Fixed issue with hideOnMaskTap: false not being respected for modals</li>
+                            <li>[TOUCH-2285] Fixed an issue in TreeStore that caused nodes with an empty children array to infinitely try and load those kids</li>
+                            <li>[TOUCH-2311] Fixed issue with itemConfig not being passed properly to DataItems in DataView with custom itemConfigs</li>
+                            <li>[TOUCH-2289] Fixed SliderField documentation error</li>
+                            <li>[TOUCH-2312] Fixed animation issue with NavigationView</li>
+                            <li>[TOUCH-2281] Fixed Proxy to properly require Batch, Operation and Model</li>
+                            <li>[TOUCH-2284] Fixed the load event to pass the operation as per the documentation</li>
+                            <li>[TOUCH-1224] Fixed issue with ToggleField returning an array</li>
+                            <li>[TOUCH-2325] Fixed field background color issue in toolbar fields</li>
+                            <li>[TOUCH-2332, TOUCH-2333] Fixed issue with destroyPickerOnHide and destroy method of DataPicker</li>
+                            <li>Fixed issues with the bodyPadding, bodyMargin and bodyBorder configs in panel, if the passed value is null</li>
+                            <li>[TOUCH-2319] Fixed Ext.Msg instance so it sets the configs back to original when #show'd</li>
+                            <li>[TOUCH-2261] Fixed some issues related to reloading a TreeStore that is being used by a NestedList</li>
+                            <li>[TOUCH-2321] Fixed a problem where some association types would not get included when retrieving the data for a record</li>
+                            <li>[TOUCH-2322] Fixed Number field to allow for setValue('')</li>
+                            <li>[TOUCH-2330] Fixed insertion of an item into a filtered Store Collection</li>
+                            <li>[TOUCH-2276] Fixed a problem where passing in record instances into the data property of a store would cause the field values to all be undefined</li>
+                            <li>[TOUCH-2224] Fixed an issue where the id was not properly sent along when setting writeAllFields to false on a Writer</li>
+                            <li>[TOUCH-2329] Fixed issue where Radio buttons were toggling incorrectly</li>
+                            <li>Fixed issue with number field not removing the clearIcon when used</li>
+                            <li>[TOUCH-2351] Fixed issue where a flyweight could cause an Ext.Element to get out of sync.  Calling a flyweight on an existing element will now clear it's sync flag</li>
+                            <li>[TOUCH-2356] Fixed issue with repainting of a NavigationView during an orientation change</li>
+                            <li>[TOUCH-2363] Fixed NavigationBar so it properly destroys it's proxy at the end of it's lifecycle</li>
+                            <li>[TOUCH-2362] Fixed issue with DataItem not updating it's record reference properly</li>
+                        </ul>
+                    </li>
+                    <li>Known Issues
+                        <ul>
+                            <li>Android 4 transitions are hampered by a <a href="http://code.google.com/p/android/issues/detail?id=25147" target="_blank">bug reported to the Android team</a>.  Help get its attention by starring the issue.</li>
+                            <li><a href="http://www.sencha.com/forum/showthread.php?173327-WebStorage-proxy-can-t-deal-with-associated-data&p=740031&viewfull=1#post740031" target="_blank">Dealing with localstorage and associations</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="release">
+                <h1>
                     Release Notes for Sencha Touch 2.0.RC2
                 </h1>
                 <p class="notes">

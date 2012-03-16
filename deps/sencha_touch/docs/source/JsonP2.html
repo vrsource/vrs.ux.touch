@@ -17,6 +17,7 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-data-proxy-JsonP'>/**
 </span> * @author Ed Spencer
+ * @aside guide proxies
  *
  * The JsonP proxy is useful when you need to load data from a domain other than the one your application is running on. If
  * your application is running on http://domainA.com it cannot use {@link Ext.data.proxy.Ajax Ajax} to load its data
@@ -185,15 +186,17 @@ Ext.define('Ext.data.proxy.JsonP', {
      * @protected
      */
     doRequest: function(operation, callback, scope) {
+        // &lt;debug&gt;
+        var action = operation.getAction();
+        if (action !== 'read') {
+            Ext.Logger.error('JsonP proxies can only be used to read data.');
+        }
+        // &lt;/debug&gt;
+
         //generate the unique IDs for this request
         var me      = this,
-            writer  = me.getWriter(),
             request = me.buildRequest(operation),
             params  = request.getParams();
-
-        if (operation.allowWrite()) {
-            request = writer.write(request);
-        }
 
         // apply JsonP proxy-specific attributes to the Request
         request.setConfig({
@@ -279,13 +282,6 @@ Ext.define('Ext.data.proxy.JsonP', {
             }
         }
 
-        //if there are any records present, append them to the url also
-        records = request.getRecords();
-
-        if (Ext.isArray(records) &amp;&amp; records.length &gt; 0) {
-            url = Ext.urlAppend(url, Ext.String.format(&quot;{0}={1}&quot;, me.getRecordParam(), me.encodeRecords(records)));
-        }
-
         return url;
     },
 
@@ -303,24 +299,6 @@ Ext.define('Ext.data.proxy.JsonP', {
         if (lastRequest) {
             Ext.data.JsonP.abort(lastRequest.getJsonP());
         }
-    },
-
-<span id='Ext-data-proxy-JsonP-method-encodeRecords'>    /**
-</span>     * Encodes an array of records into a string suitable to be appended to the script src url. This is broken out into
-     * its own function so that it can be easily overridden.
-     * @param {Ext.data.Model[]} records The records array
-     * @return {String} The encoded records string
-     */
-    encodeRecords: function(records) {
-        var encoded = &quot;&quot;,
-            i = 0,
-            len = records.length;
-
-        for (; i &lt; len; i++) {
-            encoded += Ext.Object.toQueryString(records[i].getData());
-        }
-
-        return encoded;
     }
 });
 </pre>

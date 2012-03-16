@@ -23,6 +23,7 @@ Ext.define('Kitchensink.view.EditorPanel', {
             title: 'Edit Item'
         }, {
             docked: 'bottom',
+            ui: 'light',
             xtype: 'toolbar',
             items: [{
                 text: 'Cancel',

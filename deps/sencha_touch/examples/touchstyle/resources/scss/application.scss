@@ -60,6 +60,11 @@ body,
 .categories-list {
     text-align: center;
 
+    .categories-list-container {
+        max-width: 1024px;
+        margin: 0 auto;
+    }
+
     .categories-list-item {
         background: rgba(38, 38, 38, .5);
         border: 1px solid rgba(67, 67, 67, .5);

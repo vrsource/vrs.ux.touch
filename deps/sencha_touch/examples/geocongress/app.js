@@ -1,7 +1,15 @@
-Ext.Loader.setConfig({ enabled: true });
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
 
 Ext.application({
     name: 'GeoCon',
+    icon: 'resources/icons/icon.png',
+    glossOnIcon: false,
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
 
     models: [
         'Bill',
@@ -33,3 +41,4 @@ Ext.application({
         Ext.create('GeoCon.view.Main');
     }
 });
+

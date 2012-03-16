@@ -10,13 +10,12 @@ Ext.define('Kitchensink.view.Overlays', {
         scrollable: true,
         layout: {
             type : 'vbox',
-            pack : 'center',
+            pack : 'top',
             align: 'stretch'
         },
         defaults: {
             xtype : 'button',
             cls   : 'demobtn',
-            ui    : 'round',
             margin: '10 0'
         },
         items: [

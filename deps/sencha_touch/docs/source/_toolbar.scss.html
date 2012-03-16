@@ -21,6 +21,12 @@
 </span> * @class Ext.Toolbar
  */
 
+<span id='Ext-Toolbar-css_var-S-toolbar-base-color'>/**
+</span> * @var {color} $toolbar-base-color
+ * The primary color variable from which toolbars derive their light and dark UIs.
+ */
+$toolbar-base-color: $base-color !default;
+
 <span id='Ext-Toolbar-css_var-S-toolbar-spacing'>/**
 </span> * @var {measurement} $toolbar-spacing
  * Space between items in a toolbar (like buttons and fields)
@@ -97,8 +103,9 @@ $include-toolbar-uis: $include-default-uis !default;
   }
 
   @if $include-toolbar-uis {
-    @include sencha-toolbar-ui('dark', darken($base-color, 10%));
-    @include sencha-toolbar-ui('light', $base-color);
+    @include sencha-toolbar-ui('dark', darken($toolbar-base-color, 10%));
+    @include sencha-toolbar-ui('light', $toolbar-base-color);
+    @include sencha-toolbar-ui('neutral', $neutral-color);
   }
 
   .x-navigation-bar {
@@ -125,7 +132,7 @@ $include-toolbar-uis: $include-default-uis !default;
 @mixin sencha-toolbar-ui($ui-label, $color, $gradient: $toolbar-gradient) {
 
   $toolbar-border-color: darken($color, 50%);
-  $toolbar-button-color: darken($color, 10%);
+  $toolbar-button-color: darken($color, 5%);
 
   .x-toolbar-#{$ui-label} {
     @include background-gradient($color, $gradient);

@@ -1,6 +1,8 @@
+//<debug>
 Ext.Loader.setPath({
-    'Twitter': 'app'
+    'Ext': '../../src'
 });
+//</debug>
 
 Ext.application({
     name: 'Twitter',
@@ -10,9 +12,17 @@ Ext.application({
     models: ['Search', 'Tweet'],
     stores: ['Searches'],
 
+    tabletStartupScreen: 'resources/loading/tablet_startup.png',
+    phoneStartupScreen: 'resources/loading/phone_startup.png',
+
     icon: {
-        54: 'resources/images/icon.png',
-        72: 'resources/images/icon-72.png',
-        114: 'resources/images/icon-114.png'
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon-72.png',
+        114: 'resources/icons/icon-114.png'
+    },
+
+    launch: function() {
+        Ext.getBody().removeCls('loading');
     }
 });
+

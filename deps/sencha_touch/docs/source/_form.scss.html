@@ -161,6 +161,7 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     padding: $form-spacing;
     display: none !important;
     @include ellipsis;
+    background-color: $form-label-background-color;
 
     span {
       font-size: .8em;
@@ -171,6 +172,7 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
   //  Ext.field.Field
   .x-field {
     min-height: $form-field-height;
+    background: #fff;
 
     .x-field-input {
       position: relative;
@@ -349,7 +351,6 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
 
       .x-input-el {
         -webkit-text-fill-color: #000;
-        padding: 0;
         width: 100%;
         text-align: center;
       }
@@ -373,21 +374,40 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
       }
     }
 
-  .x-spinner-button {
-    width: $form-spinner-button-width;
-    padding: .65em 0;
-    font-weight: bold;
-    @include toolbar-button($form-light);
-    text-align: center;
+    .x-spinner-button {
+      margin-top: .25em;
+      margin-bottom: .25em;
+      width: 2em;
+      padding: .23em 0 .27em;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid $form-light !important;
+      @include border-radius(1em);
+      @include toolbar-button(lighten($form-light, 5), matte);
+    }
+
+    .x-spinner-button-down {
+      margin-left: .25em;
+    }
+    .x-spinner-button-up {
+      margin-right: .25em;
+    }
+
+    &amp;.x-field-grouped-buttons {
+      .x-input-el {
+        text-align: left;
+      }
+
+      .x-spinner-button-down {
+        margin-right: .5em;
+      }
+    }
   }
-  .x-spinner-button-down {
-    border: 0 !important;
-    border-right: 1px solid $form-light !important;
-  }
-  .x-spinner-button-up {
-    border: 0 !important;
-    border-left: 1px solid $form-light !important;
-  }
+
+  .x-android {
+    .x-spinner-button {
+      padding: .40em 0 .11em !important;
+    }
   }
 
   .x-phone .x-select-overlay {
@@ -517,7 +537,6 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     margin: 0 0 1.5em;
 
     .x-form-label {
-      background-color: $form-label-background-color;
       border-top: 1px solid lighten($form-light, 20%);
     }
 
@@ -532,6 +551,7 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     //Ext.field.Field
     .x-field {
       border-bottom: 1px solid $form-light;
+      background: transparent;
 
       &amp;:first-child {
         @if $include-border-radius {

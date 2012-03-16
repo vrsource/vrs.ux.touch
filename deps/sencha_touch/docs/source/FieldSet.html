@@ -16,7 +16,9 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-form-FieldSet'>/**
-</span> * A FieldSet is a great way to visually separate elements of a form. It's normally used when you have a form with
+</span> * @aside guide forms
+ *
+ * A FieldSet is a great way to visually separate elements of a form. It's normally used when you have a form with
  * fields that can be divided into groups - for example a customer's billing details in one fieldset and their shipping
  * address in another. A fieldset can be used inside a form or on its own elsewhere in your app. Fieldsets can
  * optionally have a title at the top and instructions at the bottom. Here's how we might create a FieldSet inside a
@@ -57,7 +59,10 @@ Ext.define('Ext.form.FieldSet', {
     requires: ['Ext.Title'],
 
     config: {
-        // @inherit
+<span id='Ext-form-FieldSet-cfg-baseCls'>        /**
+</span>         * @cfg
+         * @inheritdoc
+         */
         baseCls: Ext.baseCSSPrefix + 'form-fieldset',
 
 <span id='Ext-form-FieldSet-cfg-title'>        /**

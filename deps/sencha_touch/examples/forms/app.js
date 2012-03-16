@@ -1,3 +1,9 @@
+//<debug>
+Ext.Loader.setPath({
+    'Ext': '../../src'
+});
+//</debug>
+
 /**
  * This example is a simple demo of some of the form and field components in Sencha Touch.
  * It also shows how you can bind a Model instance to a form, and then update that instance with values
@@ -39,10 +45,16 @@ Ext.define('User', {
 // Define our simple application
 Ext.application({
     // Setup the icons and startup screens for phones and tablets.
-    icon: 'resources/images/icon.png',
-    tabletStartupScreen: 'resources/images/tablet_startup.png',
-    phoneStartupScreen: 'resources/images/phone_startup.png',
+    phoneStartupScreen: 'resources/loading/Homescreen.jpg',
+    tabletStartupScreen: 'resources/loading/Homescreen~ipad.jpg',
+
     glossOnIcon: false,
+    icon: {
+        57: 'resources/icons/icon.png',
+        72: 'resources/icons/icon@72.png',
+        114: 'resources/icons/icon@2x.png',
+        144: 'resources/icons/icon@114.png'
+    },
 
     // Require the components we will be using in this example
     requires: [
@@ -397,3 +409,4 @@ Ext.application({
         ];
     }
 });
+

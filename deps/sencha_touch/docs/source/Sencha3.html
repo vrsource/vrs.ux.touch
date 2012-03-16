@@ -15,34 +15,16 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='Ext-device-notification-Sencha'>/**
+  <pre class="prettyprint lang-js"><span id='Ext-device-device-Sencha'>/**
 </span> * @private
  */
-Ext.define('Ext.device.notification.Sencha', {
-    extend: 'Ext.device.notification.Abstract',
-    requires: ['Ext.device.Communicator'],
+Ext.define('Ext.device.device.Sencha', {
+    extend: 'Ext.device.device.Abstract',
 
-    // @inherit
-    show: function() {
-        var config = this.callParent(arguments);
-
-        Ext.device.Communicator.send({
-            command: 'Notification#show',
-            callbacks: {
-                callback: config.callback
-            },
-            scope  : config.scope,
-            title  : config.title,
-            message: config.message,
-            buttons: config.buttons.join(',') //@todo fix this
-        });
-    },
-
-    // @inherit
-    vibrate: function() {
-        Ext.device.Communicator.send({
-            command: 'Notification#vibrate'
-        });
+    constructor: function() {
+        this.name = device.name;
+        this.uuid = device.uuid;
+        this.platform = device.platformName || Ext.os.name;
     }
 });
 </pre>

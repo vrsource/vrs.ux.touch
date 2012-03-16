@@ -16,6 +16,7 @@
 Ext.define('Ext.data.proxy.Kiva', {
     extend: 'Ext.data.proxy.JsonP',
     requires: ['Ext.XTemplate'],
+    alias: 'proxy.kiva',
     autoAppendParams: false,
 
     /**

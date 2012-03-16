@@ -16,8 +16,8 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js"><span id='Ext-data-Validations'>/**
-</span> * @extends Object
- * @author Ed Spencer
+</span> * @author Ed Spencer
+ * @aside guide models
  *
  * This singleton contains a set of validation functions that can be used to validate any type of data. They are most
  * often used in {@link Ext.data.Model Models}, where they are automatically set up and executed.
@@ -184,6 +184,7 @@ Ext.define('Ext.data.Validations', {
     exclusion: function(config, value) {
         return config.list &amp;&amp; Ext.Array.indexOf(config.list,value) == -1;
     }
-});</pre>
+});
+</pre>
 </body>
 </html>

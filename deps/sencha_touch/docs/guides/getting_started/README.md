@@ -1,5 +1,9 @@
 # Getting Started with Sencha Touch 2
 
+{@video vimeo 37974749}
+
+**Note:** This guide will be updated to reflect the content of the video shortly.
+
 ## What is Sencha Touch?
 
 Sencha Touch enables you to quickly and easily create HTML5 based mobile apps that work on Android, iOS and Blackberry devices and produce a native-app-like experience inside a browser.
