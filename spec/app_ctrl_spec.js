@@ -36,7 +36,12 @@ Ext.define('test.ViewPanel1', {
             docked : 'top',
             xtype  : 'toolbar',
             title  : 'App',
-            itemId : 'top_bar'
+            itemId : 'top_bar',
+            items: [{
+               xtype  : 'button',
+               itemId : 'back_button',
+               text   : 'Back'
+            }]
          },
          {
             itemId : 'panel_content',
@@ -70,6 +75,21 @@ Ext.define('test.ViewPanel2', {
       ]
    }
 });
+
+
+Ext.define('test.Panel1Controller', {
+   extend: 'vrs.PanelController',
+
+   constructor: function(config) {
+      this.callParent(arguments);
+      this.callCount = 0;
+   },
+
+   callback: function() {
+      this.callCount += 1;
+   }
+});
+
 
 /**
 * Panel that registers events.
@@ -164,6 +184,54 @@ component('PanelController', function() {
          // then: should have setup the refs
          expect(obj.getTopBar().getTitle().getTitle()).toEqual('App');
          expect(obj.getContents().getHtml()).toEqual('Stuff Here');
+      });
+   });
+
+   feature('Control initialization', function() {
+      it('should allow adding selectors based upon refs', function() {
+         // given: ctrl constructed with controll callback based upon refs
+         var obj = test.Panel1Controller.create({
+            panelHolder: {},
+            panel: 'test_viewpanel1',
+            refs: {
+               backBtn : '#back_button'
+            },
+            control: {
+               backBtn: {
+                  tap: 'callback'
+               }
+            }
+         });
+         expect(obj.callCount).toEqual(0);
+
+         // when: trigger button
+         obj.getBackBtn().onTap();
+
+         // then: should have called
+         expect(obj.callCount).toEqual(1);
+      });
+
+      it('should allow adding listeners based upon selectors', function() {
+         // given: ctrl constructed with controll callback based upon refs
+         var obj = test.Panel1Controller.create({
+            panelHolder: {},
+            panel: 'test_viewpanel1',
+            refs: {
+               backBtn : '#back_button'
+            },
+            control: {
+               '#back_button': {
+                  tap: 'callback'
+               }
+            }
+         });
+         expect(obj.callCount).toEqual(0);
+
+         // when: trigger button
+         obj.getBackBtn().onTap();
+
+         // then: should have called
+         expect(obj.callCount).toEqual(1);
       });
    });
 

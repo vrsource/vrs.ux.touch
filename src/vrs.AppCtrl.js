@@ -117,6 +117,7 @@ Ext.define('vrs.PanelController', {
    * Turn the passed value into a panel object.
    */
    applyPanel: function(panel) {
+      console.log('applyPanel');
       // If we don't have panel set yet, then skip the creation.
       if(null === panel) {
          return panel;
@@ -128,6 +129,7 @@ Ext.define('vrs.PanelController', {
    * Turn refs into local object references.
    */
    applyRefs: function(refs) {
+      console.log('applyRefs');
       var refName, getterName, selector;
 
       // For each ref, add a getter that will call to get the ref dynamically
@@ -139,7 +141,7 @@ Ext.define('vrs.PanelController', {
             this[getterName] = Ext.Function.pass(this.getRef, [refName, selector], this);
          }
       }
-
+      return refs;
    },
 
    /** Helper method to return the given ref (potentially cached).
@@ -163,6 +165,62 @@ Ext.define('vrs.PanelController', {
       return cached;
    },
 
+
+   applyControl: function(selectors) {
+      console.log('applyControl');
+      // TODO: Look into using Ext.event.Dispatcher.addListener
+      //       instead to add the listeners to multiple items.
+
+      var me = this,
+          panel = this.getPanel(),
+          selector, getterName,
+          listener, listeners,
+          event_name,
+          has_ref = false,
+          components = [];
+
+      function add_listener(comp) {
+         comp.on(event_name, listener, me);
+      }
+
+      if(panel) {
+         // For each selector find components and add events to them.
+         for (selector in selectors) {
+            listeners = selectors[selector];
+            has_ref   = (selector in this.getRefs());
+
+            // If selector is a reference name, then lookup that component else query
+            if(has_ref) {
+               getterName = "get" + Ext.String.capitalize(selector);
+               components = [this[getterName].call(this)];
+            } else {
+               components = panel.query(selector);
+            }
+
+            // warn if we didn't find any components
+            if(components.length === 0) {
+               console.warn('Did not find control for selector: ' + selector);
+            }
+
+            // Add listeners for each event.
+            for (event_name in listeners) {
+               if(listeners.hasOwnProperty(event_name)) {
+                  listener = listeners[event_name];
+
+                  // If is string, then lookup as function on the controller.
+                  if(Ext.isString(listener)) {
+                     listener = me[listener];
+                  }
+
+                  // Register the event listener
+                  Ext.each(components, add_listener);
+               }
+            }
+         }
+      }
+
+      return selectors;
+   },
 
    // ----- STATE CHANGE/UPDATE CALLBACKS ---- //
    // note: these could be done as events, but the local object
