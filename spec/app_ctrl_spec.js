@@ -53,30 +53,6 @@ Ext.define('test.ViewPanel1', {
    }
 });
 
-Ext.define('test.ViewPanel2', {
-   extend : 'Ext.Panel',
-   xtype  : 'test_viewpanel2',
-
-   config: {
-      cls: 'view_panel',
-      layout: 'vbox',
-
-      items: [
-         {
-            xtype : 'panel',
-            cls   : 'stuff_area',
-            html  : 'Stuff Here'
-         },
-         {
-            xtype : 'panel',
-            cls   : 'stuff_area2',
-            html  : 'Stuff Here'
-         }
-      ]
-   }
-});
-
-
 Ext.define('test.Panel1Controller', {
    extend: 'vrs.PanelController',
 
@@ -87,6 +63,52 @@ Ext.define('test.Panel1Controller', {
 
    callback: function() {
       this.callCount += 1;
+   }
+});
+
+// Helpers for testing component replacement
+Ext.define('test.BtnReplacePanel', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_btnreplacepanel',
+
+   config: {
+      layout : 'vbox',
+      items: [
+         {
+            xtype : 'toolbar',
+            docked: 'top',
+            title : 'Panel 1',
+            items : [
+               vrs.createBackBtnPlaceholder(),
+               { xtype: 'spacer' },
+               vrs.createHomeBtnPlaceholder()
+            ]
+         },
+         {
+            xtype : 'panel',
+            html  : 'Stuff Here'
+         }
+      ]
+   }
+});
+
+
+Ext.define('test.ToolbarReplacePanel', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_toolbarreplacepanel',
+
+   config: {
+      layout : 'vbox',
+      items: [
+         vrs.createNavToolbarPlaceholder({
+            docked  : 'top',
+            title   : 'Title'
+         }),
+         {
+            xtype : 'panel',
+            html  : 'Stuff Here'
+         }
+      ]
    }
 });
 
@@ -173,7 +195,7 @@ component('PanelController', function() {
          var obj = vrs.PanelController.create({
             panelHolder: {},
             panel: {
-               xtype: 'test_viewpanel1',
+               xtype: 'test_viewpanel1'
             },
             refs: {
                topBar   : '.toolbar',
@@ -232,6 +254,61 @@ component('PanelController', function() {
 
          // then: should have called
          expect(obj.callCount).toEqual(1);
+      });
+   });
+
+   feature('Component replacement', function() {
+
+      it('should allow replacement of back and home buttons', function() {
+         // given: ctrl contructed with a panel with button placeholders
+         var obj = vrs.PanelController.create({
+            panelHolder: test.helpers.createPanelHolderSpy(),
+            panel: 'test_btnreplacepanel',
+            refs: {
+               backBtn: '#backBtn',
+               homeBtn: '#homeBtn'
+            }
+         });
+         expect(obj.getBackBtn().getText()).toEqual('Back');
+
+         // when: hit back button
+         obj.getBackBtn().onTap();
+
+         // then: should have popped controller
+         expect(obj.getPanelHolder().popFocusCtrl).toHaveBeenCalled();
+
+         // when: tap home button
+         obj.getHomeBtn().onTap();
+
+         // then: should pop to home
+         expect(obj.getPanelHolder().gotoBaseController).toHaveBeenCalled();
+      });
+
+      it('should allow replacement of nav toolbar', function() {
+         // given: ctrl contructed with a panel with button placeholders
+         var obj = vrs.PanelController.create({
+            panelHolder: test.helpers.createPanelHolderSpy(),
+            panel: 'test_toolbarreplacepanel',
+            refs: {
+               backBtn: '#backBtn',
+               homeBtn: '#homeBtn',
+               navToolbar: '#navToolbar'
+            }
+         });
+         expect(obj.getBackBtn().getText()).toEqual('Back');
+         expect(obj.getNavToolbar().getTitle().getTitle()).toEqual('Title');
+
+         // when: hit back button
+         obj.getBackBtn().onTap();
+
+         // then: should have popped controller
+         expect(obj.getPanelHolder().popFocusCtrl).toHaveBeenCalled();
+
+         // when: tap home button
+         obj.getHomeBtn().onTap();
+
+         // then: should pop to home
+         expect(obj.getPanelHolder().gotoBaseController).toHaveBeenCalled();
       });
    });
 

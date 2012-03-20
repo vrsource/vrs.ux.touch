@@ -35,6 +35,28 @@ Ext.define('vrs.PanelController', {
 
    config: {
       /**
+      * If set, this is the text that should be displayed in the back button
+      * of any panels we push onto the stack.  (ie. buttons that come back to us)
+      */
+      backName: null,
+
+      /** Our current panel holder.
+      * Should call to this to push, pop, and clear the stack and do any other holder ops.
+      * (this is set by the controller stack that we get pushed onto)
+      */
+      panelHolder: null,
+
+      /**
+      * If set true, then as part of construction, will set the
+      * controller as base on the holder.  (can only happen for one controller in holder)
+      *
+      * note: we do it this way to make sure the panel construction code knows
+      *       if we are the base controller or not and what our holderPanel is.
+      */
+      isBaseController: false,
+
+
+      /**
       * @cfg {Object} panel The view panel that this controller holds/uses.
       *
       * Initial settings or value for the panel that we manage.  This may be one of:
@@ -83,28 +105,7 @@ Ext.define('vrs.PanelController', {
       *         }
       *     }
       */
-      control: {},
-
-
-      /** If set, this is the text that should be displayed in the back button
-      * of any panels we push onto the stack.  (ie. buttons that come back to us)
-      */
-      backName: null,
-
-      /** Our current panel holder.
-      * Should call to this to push, pop, and clear the stack and do any other holder ops.
-      * (this is set by the controller stack that we get pushed onto)
-      */
-      panelHolder: null,
-
-      /**
-      * If set true, then as part of construction, will set the
-      * controller as base on the holder.  (can only happen for one controller in holder)
-      *
-      * note: we do it this way to make sure the panel construction code knows
-      *       if we are the base controller or not and what our holderPanel is.
-      */
-      isBaseController: false
+      control: {}
    },
 
    constructor: function(config) {
@@ -122,7 +123,19 @@ Ext.define('vrs.PanelController', {
       if(null === panel) {
          return panel;
       }
-      return Ext.ComponentManager.create(panel, 'component');
+      panel = Ext.ComponentManager.create(panel, 'component');
+
+      return panel;
+   },
+
+   /**
+   * When panel changes, check for placeholders to override.
+   */
+   updatePanel: function(panel, oldPanel) {
+      // Look for and replace any placeholders
+      if(panel) {
+         this.replacePlaceholders();
+      }
    },
 
    /**
@@ -272,81 +285,85 @@ Ext.define('vrs.PanelController', {
 
    // ---- CONTROLLER HELPERS ---- //
    /**
-   * Return a new back button with the correct behavior and label
-   * to use on a newly created panel.
-   *
-   * @param btnConfig: Config to apply to the back button as overrides.
-   * @param numBack:   Number of spots back in the stack to look for button text.
-   *                       [defaults to 0]
+   * Search for placeholders on the panel and replace them as needed.
    */
-   createBackButton: function(btnConfig, numBack) {
-      numBack = numBack || 0;
+   replacePlaceholders: function() {
       var me = this,
-          back_btn,
+          panel = this.getPanel(),
+          found;
+
+      // Find back button
+      found = panel.query('#backBtn');
+      if(found.length > 1) {
+         console.warn('Found multiple back buttons');
+      }
+      if(found.length > 0) {
+         this.overrideBackBtn(found[0]);
+      }
+
+      // Find home button
+      found = panel.query('#homeBtn');
+      if(found.length > 1) {
+         console.warn('Found multiple home buttons');
+      }
+      if(found.length > 0) {
+         this.overrideHomeBtn(found[0]);
+      }
+
+      // Find toolbar
+      found = panel.query('#navToolbar');
+      if(found.length > 1) {
+         console.warn('Found multiple nav toolbars');
+      }
+      if(found.length > 0) {
+         this.overrideNavToolbar(found[0]);
+      }
+   },
+
+   overrideBackBtn: function(btn) {
+      var me = this,
           back_txt,
-          prev_ctrl = this.getPanelHolder().getPrevCtrl(numBack);
+          prev_ctrl = this.getPanelHolder().getPrevCtrl();
 
       back_txt = (prev_ctrl && prev_ctrl.getBackName()) || 'Back';
 
-      back_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
-         text    : back_txt,
-         ui      : 'back',
-         handler : function() { me.getPanelHolder().popFocusCtrl(); }
-      }));
-      return back_btn;
+      if(Ext.isEmpty(btn.getText())) {
+         btn.setText(back_txt);
+      }
+      btn.setUi('back');
+      btn.on('tap', function() { me.getPanelHolder().popFocusCtrl(); });
    },
 
-   createHomeButton: function(btnConfig) {
+   overrideHomeBtn: function(btn) {
+      var me = this;
+
+      btn.setIconMask(true);
+      btn.setUi('action');
+      btn.setIconCls('home');
+      btn.on('tap', function() { me.getPanelHolder().gotoBaseController(); });
+   },
+
+   overrideNavToolbar: function(toolbar) {
       var me = this,
-
-        home_btn = Ext.Button.create(Ext.apply({}, btnConfig, {
-         iconMask : true,
-         ui       : 'action',
-         iconCls : 'home',
-         handler : function() { me.getPanelHolder().gotoBaseController(); }
-      }));
-      return home_btn;
-   },
-
-   /**
-   * Return a new top toolbar with the correct buttons and
-   * settings for the type of holder we are within.
-   *
-   * This brings together quite a bit of repeated code for creating
-   * navigation controls.
-   *
-   * @param panelCtrl: the panel controller we are building the toolbar for.
-   * @param toolbarConfig: config object to use for the toolbar.
-   *                       (note: can not override the items settings, use for title, ui, etc.)
-   * @param backBtnConfig: config to add if back button is used.
-   * @note If toolbar will have backBtn and homeBtn attributes added iff
-   *       those buttons are created.
-   */
-   createTopToolbar: function(toolbarConfig, backBtnConfig) {
-      var toolbar, back_btn, home_btn,
+          back_btn, home_btn,
           toolbar_items = [],
-          me = this,
           holder = this.getPanelHolder();
 
       // If in stack and not base controller, need navigation
       if(holder.getUseStack() && !this.isBaseController()) {
          // - Create back buttn
-         back_btn = new Ext.Button(Ext.apply({}, backBtnConfig,
-         {
-            text: 'Back',
-            ui: 'back',
-            handler: function() { me.getPanelHolder().popFocusCtrl(); }
-         }));
+         back_btn = new Ext.Button({
+            itemId: 'backBtn'
+         });
+         this.overrideBackBtn(back_btn);
 
          // - If not in side panel and not in popup, then need home button
          if(!holder.getInSidePanel()  && !holder.getInPopupPanel()) {
             // create home button
             home_btn = new Ext.Button({
-               iconMask: true,
-               ui: 'action',
-               iconCls: 'home',
-               handler: function() { me.getPanelHolder().gotoBaseController(); }
+               itemId: 'homeBtn'
             });
+            this.overrideHomeBtn(home_btn);
          }
       }
       if(back_btn) {
@@ -357,26 +374,30 @@ Ext.define('vrs.PanelController', {
          toolbar_items.push(home_btn);
       }
 
-      // Create toolbar
-      toolbar = new Ext.Toolbar(Ext.apply({}, {
-         items: toolbar_items
-      }, toolbarConfig));
-
-      // have the back and home buttons
-      toolbar.backBtn = back_btn;
-      toolbar.homeBtn = home_btn;
-
-      // add test helpers
-      toolbar.tapBackBtn = function() {
-         this.backBtn.callHandler(null);
-      };
-      toolbar.tapHomeBtn = function() {
-         this.homeBtn.callHandler(null);
-      };
-
-      return toolbar;
+      toolbar.setItems(toolbar_items);
    }
 });
+
+/**
+* Helpers for creating placeholders in view panels.
+*/
+vrs.createBackBtnPlaceholder = function(btnConfig) {
+   return Ext.Button.create(Ext.apply({}, btnConfig, {
+      itemId: 'backBtn'
+   }));
+};
+
+vrs.createHomeBtnPlaceholder = function(btnConfig) {
+   return Ext.Button.create(Ext.apply({}, btnConfig, {
+      itemId: 'homeBtn'
+   }));
+};
+
+vrs.createNavToolbarPlaceholder = function(config) {
+   return Ext.Toolbar.create(Ext.apply({}, config, {
+      itemId: 'navToolbar'
+   }));
+};
 
 /**
 * Used for testing when we need a panel controller
