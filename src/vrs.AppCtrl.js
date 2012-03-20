@@ -34,39 +34,26 @@ Ext.define('vrs.PanelController', {
    },
 
    config: {
-
       /**
-      * @cfg {Object} panel The view pnael that this controller holds/uses.
+      * @cfg {Object} panel The view panel that this controller holds/uses.
+      *
+      * Initial settings or value for the panel that we manage.  This may be one of:
+      *    * A component class instance
+      *    * A string xtype
+      *    * A config object specifying the component details to instantiate.
+      *
+      *  Ex:
+      *    panel: 'mypaneltype',
+      *
+      *    panel: panelObject,
+      *
+      *    panel: {
+      *          xtype:
+      *          ...
+      *       }
       */
       panel: null,
 
-      /** If set, this is the text that should be displayed in the back button
-      * of any panels we push onto the stack.  (ie. buttons that come back to us)
-      */
-      backName: null,
-
-      /** Our current panel holder.
-      * Should call to this to push, pop, and clear the stack and do any other holder ops.
-      * (this is set by the controller stack that we get pushed onto)
-      */
-      panelHolder: null,
-
-      /**
-      * If set true, then as part of construction, will set the
-      * controller as base on the holder.  (can only happen for one controller in holder)
-      *
-      * note: we do it this way to make sure the panel construction code knows
-      *       if we are the base controller or not and what our holderPanel is.
-      */
-      isBaseController: false,
-
-      /**
-      * @cfg {String} panelType
-      *
-      * The class type or xtype of the panel to create when instantiating this
-      * controller class.  If set, will automatically instantiate the panel.
-      */
-      panelType: null,
 
       /**
       * @cfg {Object} refs A collection of named ComponentQuery selectors to apply
@@ -87,7 +74,28 @@ Ext.define('vrs.PanelController', {
       *         }
       *     }
       */
-      control: {}
+      control: {},
+
+
+      /** If set, this is the text that should be displayed in the back button
+      * of any panels we push onto the stack.  (ie. buttons that come back to us)
+      */
+      backName: null,
+
+      /** Our current panel holder.
+      * Should call to this to push, pop, and clear the stack and do any other holder ops.
+      * (this is set by the controller stack that we get pushed onto)
+      */
+      panelHolder: null,
+
+      /**
+      * If set true, then as part of construction, will set the
+      * controller as base on the holder.  (can only happen for one controller in holder)
+      *
+      * note: we do it this way to make sure the panel construction code knows
+      *       if we are the base controller or not and what our holderPanel is.
+      */
+      isBaseController: false
    },
 
    constructor: function(config) {
@@ -95,6 +103,18 @@ Ext.define('vrs.PanelController', {
       this.callParent(arguments);
       assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
    },
+
+   /**
+   * Turn the passed value into a panel object.
+   */
+   applyPanel: function(panel) {
+      // If we don't have panel set yet, then skip the creation.
+      if(null === panel) {
+         return panel;
+      }
+      return Ext.ComponentManager.create(panel, 'component');
+   },
+
 
    // ----- STATE CHANGE/UPDATE CALLBACKS ---- //
    // note: these could be done as events, but the local object

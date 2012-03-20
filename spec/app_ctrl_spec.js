@@ -39,7 +39,7 @@ Ext.define('test.ViewPanel1', {
          },
          {
             xtype : 'panel',
-            cls   : 'stuff_area'
+            cls   : 'stuff_area',
             html  : 'Stuff Here'
          }
       ]
@@ -57,12 +57,12 @@ Ext.define('test.ViewPanel2', {
       items: [
          {
             xtype : 'panel',
-            cls   : 'stuff_area'
+            cls   : 'stuff_area',
             html  : 'Stuff Here'
          },
          {
             xtype : 'panel',
-            cls   : 'stuff_area2'
+            cls   : 'stuff_area2',
             html  : 'Stuff Here'
          }
       ]
@@ -106,25 +106,42 @@ component('PanelController', function() {
       expect(obj.getPanel()).toEqual(null);
    });
 
-   feature('panel auto initialization', function() {
+   feature('panel initialization', function() {
+
+      it('should support initialization with object', function() {
+         var panel_obj = test.ViewPanel1.create(),
+             obj;
+         // given: an object constructed with a panel object
+         obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: panel_obj
+         });
+         // then: should have stored it
+         expect(obj.getPanel()).toEqual(panel_obj);
+      });
 
       it('should support initialization from xtype', function() {
          // given: an object constructed with a panel xtype
          var obj = vrs.PanelController.create({
-            panelConfig: { xtype: 'test_viewpanel1' }
+            panelHolder: {},
+            panel: { xtype: 'test_viewpanel1' }
          });
          // then: Should have created panel object
          expect(obj.getPanel()).not.toEqual(null);
       });
 
-      it('should support initialization from class reference', function() {
-         // given: an object constructed with a component class
-         // XXX: How to get configuration parameters into this one?
+      it('should support initialization from config', function() {
+         // given: an object constructed with a panel xtype
          var obj = vrs.PanelController.create({
-            panelConfig: test.ViewPanel1
+            panelHolder: {},
+            panel: {
+               xtype: 'test_viewpanel1',
+               ui: 'test_ui'
+            }
          });
          // then: Should have created panel object
          expect(obj.getPanel()).not.toEqual(null);
+         expect(obj.getPanel().getUi()).toEqual('test_ui');
       });
    });
 
