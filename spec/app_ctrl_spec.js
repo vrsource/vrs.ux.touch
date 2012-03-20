@@ -35,12 +35,14 @@ Ext.define('test.ViewPanel1', {
          {
             docked : 'top',
             xtype  : 'toolbar',
-            title  : 'App'
+            title  : 'App',
+            itemId : 'top_bar'
          },
          {
-            xtype : 'panel',
-            cls   : 'stuff_area',
-            html  : 'Stuff Here'
+            itemId : 'panel_content',
+            xtype  : 'panel',
+            cls    : 'stuff_area',
+            html   : 'Stuff Here'
          }
       ]
    }
@@ -145,7 +147,24 @@ component('PanelController', function() {
       });
    });
 
-   it('Should support ref initialization for panel', function() {
+   feature('Ref Initialization', function() {
+      it('Should support ref initialization for panel', function() {
+         // given: ctrl constructed with a panel
+         var obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: {
+               xtype: 'test_viewpanel1',
+            },
+            refs: {
+               topBar   : '.toolbar',
+               contents : '#panel_content'
+            }
+         });
+
+         // then: should have setup the refs
+         expect(obj.getTopBar().getTitle().getTitle()).toEqual('App');
+         expect(obj.getContents().getHtml()).toEqual('Stuff Here');
+      });
    });
 
 

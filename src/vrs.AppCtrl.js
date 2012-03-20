@@ -58,6 +58,12 @@ Ext.define('vrs.PanelController', {
       /**
       * @cfg {Object} refs A collection of named ComponentQuery selectors to apply
       *                    to create getters for getting access to key components on the panel.
+      *                    The component query used is rooted at the managed panel.
+      *
+      *  Ex:
+      *    refs: {
+      *       backBtn: '.backBtn'
+      *    }
       */
       refs: {},
 
@@ -65,11 +71,14 @@ Ext.define('vrs.PanelController', {
       * @cfg {Object} control Provides mapping of Controller functions that should be called
       *                       when the given component fires an event.  Callback can be
       *                       a string to a name of a controller method or a function object.
+      *                       The key can be a component query selector or the name of a
+      *                       ref object from above.
+      *
       *    control: {
       *         myButton: {
       *            tap: 'onTap'
       *         },
-      *         otherButton: {
+      *         '.otherBtn': {
       *            tap: function() { callBlah(); }
       *         }
       *     }
@@ -113,6 +122,45 @@ Ext.define('vrs.PanelController', {
          return panel;
       }
       return Ext.ComponentManager.create(panel, 'component');
+   },
+
+   /**
+   * Turn refs into local object references.
+   */
+   applyRefs: function(refs) {
+      var refName, getterName, selector;
+
+      // For each ref, add a getter that will call to get the ref dynamically
+      for (refName in refs) {
+         selector = refs[refName];
+         getterName = "get" + Ext.String.capitalize(refName);
+
+         if(!this[getterName]) {
+            this[getterName] = Ext.Function.pass(this.getRef, [refName, selector], this);
+         }
+      }
+
+   },
+
+   /** Helper method to return the given ref (potentially cached).
+   * @private
+   */
+   getRef: function(refName, selector) {
+      this.refCache = this.refCache || {};
+      var me = this,
+          cached = this.refCache[refName];
+
+      if(!cached) {
+         cached = this.getPanel().query(selector)[0];
+         me.refCache[refName] = cached;
+         if(cached) {
+            cached.on('destroy', function() {
+               me.refCache[refName] = null;
+            });
+         }
+      }
+
+      return cached;
    },
 
 
