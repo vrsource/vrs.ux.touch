@@ -1,0 +1,88 @@
+<!-- See: http://www.sencha.com/forum/showthread.php?182854-Ext.Map-mapOptions-don-t-work-when-passed-in-config -->
+<!doctype html>
+<html>
+  <head>
+    <title>Config (look at console)</title>
+    <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <script type="text/javascript">
+
+// Define classes for testing
+Ext.define('MyClass', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
+   config: {
+      panel: true,
+      ref: false,
+      control: true
+   },
+
+   constructor: function(config) {
+      this.initConfig(config);
+      this.callParent(arguments);
+   },
+
+   applyPanel: function(val) {
+      console.log('apply Panel');
+      return val;
+   },
+
+   applyRef: function(val) {
+      console.log('apply Ref');
+      return val;
+   },
+
+   applyControl: function(val) {
+      console.log('apply Control');
+      return val;
+   }
+});
+
+Ext.define('MyChild', {
+   extend: 'MyClass',
+
+   config: {
+      panel: false,
+      ref: true,
+      control: false
+   },
+
+   constructor: function(config) {
+      this.callParent(arguments);
+   }
+});
+
+
+Ext.setup({
+   onReady: function() {
+      console.log('Touch version: ' + Ext.versions.touch);
+      console.log('OS: ' + Ext.os.name + ' ' + Ext.os.version);
+      console.log('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+
+      console.log('create base with no overrides');
+      obj = MyClass.create();
+
+      console.log('create base with single override');
+      obj = MyClass.create({ ref: true });
+
+      console.log('create base with multiple override2');
+      obj = MyClass.create({ ref: true, control: false });
+
+      // ------------------- //
+      console.log('create child with no overrides');
+      obj = MyChild.create();
+
+      console.log('create child with single override');
+      obj = MyChild.create({ panel: true });
+
+      console.log('create child with multiple override2');
+      obj = MyChild.create({ control: true, ref: false });
+   }
+});
+    </script>
+</head>
+<body>
+</body>
+</html>
