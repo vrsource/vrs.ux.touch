@@ -586,6 +586,66 @@ vrs.st1_code = function() {
 
 
 
+   /**
+   * Customized Nested List that always shows the back button
+   * even on the base level.
+   * Provides a handler hook to get called when the base back button
+   * is pressed.
+   *
+   * This is useful for panels where we want a nested list but need a way
+   * to exit the list and go to the previous panel.
+   */
+   vrs.BackedNestedList = Ext.extend(Ext.NestedList, {
+
+      /** Handler function to call if/when the back back button is pressed. */
+      baseBackButtonHandler: null,
+
+      initComponent: function() {
+         vrs.BackedNestedList.superclass.initComponent.call(this);
+
+         if(this.backButton) {
+            this.backButton.show();
+         }
+      },
+
+      /**
+      * Override the back tap to tell us when the back button has been pressed at
+      * the lowest level.
+      */
+      onBackTap: function() {
+         // Get index before the superclass changes it
+         var currList = this.getActiveItem(),
+              currIdx = this.items.indexOf(currList);
+
+         // Do the standard updates
+         vrs.BackedNestedList.superclass.onBackTap.call(this);
+
+         // If at base level, call to the handler
+         if(currIdx === 0)
+         {
+            console.log('back pressed at lowest level');
+            if(this.baseBackButtonHandler) {
+               this.baseBackButtonHandler();
+           }
+         }
+      },
+
+      syncToolbar: function(card) {
+         vrs.BackedNestedList.superclass.syncToolbar.call(this, card);
+
+         var list  = card || this.getActiveItem(),
+             depth = this.items.indexOf(list);
+
+         if((0 === depth) && (this.backButton)) {
+            this.backButton.setText(this.backText);
+            this.backButton.show();
+         }
+      }
+
+   });
+
+
+
    /*Copyright (C) 2011 by WhiteFox AS
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
