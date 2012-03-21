@@ -205,6 +205,11 @@ Ext.define('vrs.PanelController', {
             listeners = selectors[selector];
             has_ref   = (selector in refs);
 
+            if(!Ext.isObject(listeners)) {
+               console.error('Control selector: [' + selector + '] configured with non-object');
+               break;
+            }
+
             // If selector is a reference name, then lookup that component else query
             if(has_ref) {
                getterName = "get" + Ext.String.capitalize(selector);
@@ -220,17 +225,20 @@ Ext.define('vrs.PanelController', {
 
             // Add listeners for each event.
             for (event_name in listeners) {
-               //if(listeners.hasOwnProperty(event_name)) {
-                  listener = listeners[event_name];
+               listener = listeners[event_name];
 
-                  // If is string, then lookup as function on the controller.
-                  if(Ext.isString(listener)) {
-                     listener = me[listener];
-                  }
+               // If is string, then lookup as function on the controller.
+               if(Ext.isString(listener)) {
+                  listener = me[listener];
+               }
 
-                  // Register the event listener
+               // Register the event listener
+               if(Ext.isFunction(listener)) {
                   Ext.each(components, add_listener);
-               //}
+               } else {
+                  console.error('Control selector: [' + selector + '] event: [' + event_name +
+                                '] has invalid non-function listener');
+               }
             }
          }
       }
