@@ -21,6 +21,30 @@ vrs.containerWrapButton = function(btnItem) {
 };
 
 
+/**
+* Returns the current text value of the given selection field.
+* requires that the data for selection use the fields 'text' and 'value'.
+* @returns undefined if it is not found.
+*/
+vrs.getSelectFieldTextValue = function(selectField) {
+   // Find the record for the current value.
+   var record,
+       cur_value = selectField.getValue();
+
+   if(cur_value === undefined) {
+      return undefined;
+   }
+
+   record = selectField.store.findRecord('value', cur_value);
+   if(null === record) {
+      return undefined;
+   }
+
+   return record.get('text');
+};
+
+
+
 vrs.st1_code = function() {
 
    /**
