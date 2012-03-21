@@ -89,7 +89,7 @@ Ext.define('vrs.PanelController', {
       */
       refs: {},
 
-      /*
+      /**
       * @cfg {Object} control Provides mapping of Controller functions that should be called
       *                       when the given component fires an event.  Callback can be
       *                       a string to a name of a controller method or a function object.
@@ -135,7 +135,7 @@ Ext.define('vrs.PanelController', {
    updatePanel: function(panel, oldPanel) {
       // Look for and replace any placeholders
       if(panel) {
-         this.replacePlaceholders();
+         this._replacePlaceholders();
       }
    },
 
@@ -299,8 +299,9 @@ Ext.define('vrs.PanelController', {
    // ---- CONTROLLER HELPERS ---- //
    /**
    * Search for placeholders on the panel and replace them as needed.
+   * @private
    */
-   replacePlaceholders: function() {
+   _replacePlaceholders: function() {
       var me = this,
           panel = this.getPanel(),
           found;
@@ -311,7 +312,7 @@ Ext.define('vrs.PanelController', {
          console.warn('Found multiple back buttons');
       }
       if(found.length > 0) {
-         this.overrideBackBtn(found[0]);
+         this._overrideBackBtn(found[0]);
       }
 
       // Find home button
@@ -320,7 +321,7 @@ Ext.define('vrs.PanelController', {
          console.warn('Found multiple home buttons');
       }
       if(found.length > 0) {
-         this.overrideHomeBtn(found[0]);
+         this._overrideHomeBtn(found[0]);
       }
 
       // Find toolbar
@@ -329,11 +330,12 @@ Ext.define('vrs.PanelController', {
          console.warn('Found multiple nav toolbars');
       }
       if(found.length > 0) {
-         this.overrideNavToolbar(found[0]);
+         this._overrideNavToolbar(found[0]);
       }
    },
 
-   overrideBackBtn: function(btn) {
+   /** @private */
+   _overrideBackBtn: function(btn) {
       var me = this,
           back_txt,
           prev_ctrl = this.getPanelHolder().getPrevCtrl();
@@ -347,7 +349,8 @@ Ext.define('vrs.PanelController', {
       btn.on('tap', function() { me.getPanelHolder().popFocusCtrl(); });
    },
 
-   overrideHomeBtn: function(btn) {
+   /** @private */
+   _overrideHomeBtn: function(btn) {
       var me = this;
 
       btn.setIconMask(true);
@@ -356,7 +359,8 @@ Ext.define('vrs.PanelController', {
       btn.on('tap', function() { me.getPanelHolder().gotoBaseController(); });
    },
 
-   overrideNavToolbar: function(toolbar) {
+   /** @private */
+   _overrideNavToolbar: function(toolbar) {
       var me = this,
           back_btn, home_btn,
           toolbar_items = [],
@@ -368,7 +372,7 @@ Ext.define('vrs.PanelController', {
          back_btn = new Ext.Button({
             itemId: 'backBtn'
          });
-         this.overrideBackBtn(back_btn);
+         this._overrideBackBtn(back_btn);
 
          // - If not in side panel and not in popup, then need home button
          if(!holder.getInSidePanel()  && !holder.getInPopupPanel()) {
@@ -376,7 +380,7 @@ Ext.define('vrs.PanelController', {
             home_btn = new Ext.Button({
                itemId: 'homeBtn'
             });
-            this.overrideHomeBtn(home_btn);
+            this._overrideHomeBtn(home_btn);
          }
       }
       if(back_btn) {

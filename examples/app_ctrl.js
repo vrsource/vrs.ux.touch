@@ -48,10 +48,6 @@ Ext.define('vrs.MainMenuController', {
       }
    },
 
-   constructor: function(config) {
-      this.callParent(arguments);
-   },
-
    onButtonTap: function() {
       var panel1_ctrl = vrs.Panel1Controller.create({panelHolder: this.getPanelHolder()});
       this.getPanelHolder().pushFocusCtrl(panel1_ctrl);
