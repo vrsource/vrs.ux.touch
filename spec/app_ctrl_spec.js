@@ -23,6 +23,96 @@ test.ExtPanel2 = Ext.extend(vrs.PanelController, {
    }
 });
 
+
+Ext.define('test.ViewPanel1', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_viewpanel1',
+
+   config: {
+      cls: 'view_panel',
+
+      items: [
+         {
+            docked : 'top',
+            xtype  : 'toolbar',
+            title  : 'App',
+            itemId : 'top_bar',
+            items: [{
+               xtype  : 'button',
+               itemId : 'back_button',
+               text   : 'Back'
+            }]
+         },
+         {
+            itemId : 'panel_content',
+            xtype  : 'panel',
+            cls    : 'stuff_area',
+            html   : 'Stuff Here'
+         }
+      ]
+   }
+});
+
+Ext.define('test.Panel1Controller', {
+   extend: 'vrs.PanelController',
+
+   constructor: function(config) {
+      this.callParent(arguments);
+      this.callCount = 0;
+   },
+
+   callback: function() {
+      this.callCount += 1;
+   }
+});
+
+// Helpers for testing component replacement
+Ext.define('test.BtnReplacePanel', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_btnreplacepanel',
+
+   config: {
+      layout : 'vbox',
+      items: [
+         {
+            xtype : 'toolbar',
+            docked: 'top',
+            title : 'Panel 1',
+            items : [
+               vrs.createBackBtnPlaceholder(),
+               { xtype: 'spacer' },
+               vrs.createHomeBtnPlaceholder()
+            ]
+         },
+         {
+            xtype : 'panel',
+            html  : 'Stuff Here'
+         }
+      ]
+   }
+});
+
+
+Ext.define('test.ToolbarReplacePanel', {
+   extend : 'Ext.Panel',
+   xtype  : 'test_toolbarreplacepanel',
+
+   config: {
+      layout : 'vbox',
+      items: [
+         vrs.createNavToolbarPlaceholder({
+            docked  : 'top',
+            title   : 'Title'
+         }),
+         {
+            xtype : 'panel',
+            html  : 'Stuff Here'
+         }
+      ]
+   }
+});
+
+
 /**
 * Panel that registers events.
 */
@@ -59,6 +149,169 @@ component('PanelController', function() {
       // and: default panel is null
       expect(obj.getPanel()).toEqual(null);
    });
+
+   feature('panel initialization', function() {
+
+      it('should support initialization with object', function() {
+         var panel_obj = test.ViewPanel1.create(),
+             obj;
+         // given: an object constructed with a panel object
+         obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: panel_obj
+         });
+         // then: should have stored it
+         expect(obj.getPanel()).toEqual(panel_obj);
+      });
+
+      it('should support initialization from xtype', function() {
+         // given: an object constructed with a panel xtype
+         var obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: { xtype: 'test_viewpanel1' }
+         });
+         // then: Should have created panel object
+         expect(obj.getPanel()).not.toEqual(null);
+      });
+
+      it('should support initialization from config', function() {
+         // given: an object constructed with a panel xtype
+         var obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: {
+               xtype: 'test_viewpanel1',
+               ui: 'test_ui'
+            }
+         });
+         // then: Should have created panel object
+         expect(obj.getPanel()).not.toEqual(null);
+         expect(obj.getPanel().getUi()).toEqual('test_ui');
+      });
+   });
+
+   feature('Ref Initialization', function() {
+      it('Should support ref initialization for panel', function() {
+         // given: ctrl constructed with a panel
+         var obj = vrs.PanelController.create({
+            panelHolder: {},
+            panel: {
+               xtype: 'test_viewpanel1'
+            },
+            refs: {
+               topBar   : '.toolbar',
+               contents : '#panel_content'
+            }
+         });
+
+         // then: should have setup the refs
+         expect(obj.getTopBar().getTitle().getTitle()).toEqual('App');
+         expect(obj.getContents().getHtml()).toEqual('Stuff Here');
+      });
+   });
+
+   feature('Control initialization', function() {
+      it('should allow adding selectors based upon refs', function() {
+         // given: ctrl constructed with controll callback based upon refs
+         var obj = test.Panel1Controller.create({
+            panelHolder: {},
+            panel: 'test_viewpanel1',
+            refs: {
+               backBtn : '#back_button'
+            },
+            control: {
+               backBtn: {
+                  tap: 'callback'
+               }
+            }
+         });
+         expect(obj.callCount).toEqual(0);
+
+         // when: trigger button
+         obj.getBackBtn().onTap();
+
+         // then: should have called
+         expect(obj.callCount).toEqual(1);
+      });
+
+      it('should allow adding listeners based upon selectors', function() {
+         // given: ctrl constructed with controll callback based upon refs
+         var obj = test.Panel1Controller.create({
+            panelHolder: {},
+            panel: 'test_viewpanel1',
+            refs: {
+               backBtn : '#back_button'
+            },
+            control: {
+               '#back_button': {
+                  tap: 'callback'
+               }
+            }
+         });
+         expect(obj.callCount).toEqual(0);
+
+         // when: trigger button
+         obj.getBackBtn().onTap();
+
+         // then: should have called
+         expect(obj.callCount).toEqual(1);
+      });
+   });
+
+   feature('Component replacement', function() {
+
+      it('should allow replacement of back and home buttons', function() {
+         // given: ctrl contructed with a panel with button placeholders
+         var obj = vrs.PanelController.create({
+            panelHolder: test.helpers.createPanelHolderSpy(),
+            panel: 'test_btnreplacepanel',
+            refs: {
+               backBtn: '#backBtn',
+               homeBtn: '#homeBtn'
+            }
+         });
+         expect(obj.getBackBtn().getText()).toEqual('Back');
+
+         // when: hit back button
+         obj.getBackBtn().onTap();
+
+         // then: should have popped controller
+         expect(obj.getPanelHolder().popFocusCtrl).toHaveBeenCalled();
+
+         // when: tap home button
+         obj.getHomeBtn().onTap();
+
+         // then: should pop to home
+         expect(obj.getPanelHolder().gotoBaseController).toHaveBeenCalled();
+      });
+
+      it('should allow replacement of nav toolbar', function() {
+         // given: ctrl contructed with a panel with button placeholders
+         var obj = vrs.PanelController.create({
+            panelHolder: test.helpers.createPanelHolderSpy(),
+            panel: 'test_toolbarreplacepanel',
+            refs: {
+               backBtn: '#backBtn',
+               homeBtn: '#homeBtn',
+               navToolbar: '#navToolbar'
+            }
+         });
+         expect(obj.getBackBtn().getText()).toEqual('Back');
+         expect(obj.getNavToolbar().getTitle().getTitle()).toEqual('Title');
+
+         // when: hit back button
+         obj.getBackBtn().onTap();
+
+         // then: should have popped controller
+         expect(obj.getPanelHolder().popFocusCtrl).toHaveBeenCalled();
+
+         // when: tap home button
+         obj.getHomeBtn().onTap();
+
+         // then: should pop to home
+         expect(obj.getPanelHolder().gotoBaseController).toHaveBeenCalled();
+      });
+   });
+
 
    it('Should require panelHolder to be set', function() {
       // If panel holder is not set, it should throw an assertion exception.

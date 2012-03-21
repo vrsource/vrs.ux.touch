@@ -1,0 +1,103 @@
+<!-- See: http://www.sencha.com/forum/showthread.php?182854-Ext.Map-mapOptions-don-t-work-when-passed-in-config -->
+<!doctype html>
+<html>
+  <head>
+    <title>Config (look at console)</title>
+    <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <script type="text/javascript">
+
+// Define classes for testing
+Ext.define('MyClass', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
+   config: {
+      backName    : null,
+      panelHolder : null,
+      isBaseController: false,
+
+      panel   : null,
+      refs    : {},
+      control : {}
+   },
+
+   constructor: function(config) {
+      this.initConfig(config);
+      this.callParent(arguments);
+   },
+
+   applyPanel: function(val) {
+      console.log('apply Panel');
+      return val;
+   },
+
+   applyRefs: function(val) {
+      console.log('apply Refs');
+      return val;
+   },
+
+   applyControl: function(val) {
+      console.log('apply Control');
+      return val;
+   }
+});
+
+Ext.define('MyChild', {
+   extend: 'MyClass',
+
+   config: {
+      backName : 'Main',
+      panel    : 'blahpanel',
+      refs: {
+         nextPanelBtn: '#nextPanelBtn'
+      },
+      control: {
+         nextPanelBtn : {
+            tap: 'onButtonTap'
+         }
+      }
+   },
+
+   constructor: function(config) {
+      this.callParent(arguments);
+   }
+});
+
+
+Ext.setup({
+   onReady: function() {
+      console.log('Touch version: ' + Ext.versions.touch);
+      console.log('OS: ' + Ext.os.name + ' ' + Ext.os.version);
+      console.log('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+
+      console.log('create base with no overrides');
+      obj = MyClass.create();
+
+      console.log('create base with single override');
+      obj = MyClass.create({ ref: true });
+
+      console.log('create base with multiple override2');
+      obj = MyClass.create({ ref: true, control: false });
+
+      // ------------------- //
+      console.log('create child with no overrides');
+      obj = MyChild.create();
+
+      console.log('create child with single override');
+      obj = MyChild.create({ panel: true });
+
+      console.log('create child with multiple override2');
+      obj = MyChild.create({ control: true, ref: false });
+
+
+      console.log('Try partial override');
+      obj2 = new MyChild({panelHolder: obj, isBaseController: true});
+   }
+});
+    </script>
+</head>
+<body>
+</body>
+</html>

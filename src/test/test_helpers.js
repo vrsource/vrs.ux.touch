@@ -29,14 +29,19 @@ test.helpers = {
       var panel_holder_spy = jasmine.createSpyObj('panelHolder',
                                                   ['pushFocusCtrl', 'popFocusCtrl',
                                                    'gotoBaseController', 'getFocusCtrl',
-                                                   'getPrevCtrl']);
+                                                   'getPrevCtrl',
+                                                   'getUseStack', 'getInSidePanel',
+                                                   'getInPopupPanel']);
 
       // Apply options directly to the spy object
-      Ext.apply(panel_holder_spy, options, {
-         useStack: true,
-         inSidePanel: false,
-         inPopupPanel: false
+      options = Ext.apply({}, options, {
+         useStack     : true,
+         inSidePanel  : false,
+         inPopupPanel : false
       });
+      panel_holder_spy.getUseStack.andReturn(options.useStack);
+      panel_holder_spy.getInSidePanel.andReturn(options.inSidePanel);
+      panel_holder_spy.getInPopupPanel.andReturn(options.inPopupPanel);
 
       return panel_holder_spy;
    },

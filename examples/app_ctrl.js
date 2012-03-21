@@ -16,15 +16,13 @@ vrs.AppObject = {
 
    launch: function() {
       // Create the core panel stack to slide items onto
-      this.baseStack = new vrs.PanelHolder({
+      this.baseStack = vrs.PanelHolder.create({
          id: 'base_stack',
          fullscreen: true
       });
 
-      //vrs.dumpEvents(this.baseStack, 'PanelHolder');
-
       // Create main controller
-      this.mainCtrl = new vrs.MainMenuController({
+      this.mainCtrl = vrs.MainMenuController.create({
          panelHolder : this.baseStack,
          isBaseController : true
       });
@@ -37,13 +35,17 @@ vrs.AppObject = {
 Ext.define('vrs.MainMenuController', {
    extend: 'vrs.PanelController',
    config: {
-      backName : 'Main'
-   },
+      backName : 'Main',
+      panel    : 'vrs_mainmenupanel',
 
-   constructor: function(config) {
-      this.callParent(arguments);
-      this.setPanel(vrs.MainMenuPanel.create({controller: this}));
-      //vrs.dumpEvents(this.getPanel(), 'MainPanel');
+      refs : {
+         nextPanelBtn: '#nextPanelBtn'
+      },
+      control : {
+         nextPanelBtn : {
+            tap: 'onButtonTap'
+         }
+      }
    },
 
    onButtonTap: function() {
@@ -54,6 +56,7 @@ Ext.define('vrs.MainMenuController', {
 
 Ext.define('vrs.MainMenuPanel', {
    extend: 'Ext.Panel',
+   xtype: 'vrs_mainmenupanel',
 
    config: {
       controller : null,
@@ -67,24 +70,22 @@ Ext.define('vrs.MainMenuPanel', {
    },
 
    initialize: function() {
-      assert(this.getController(), "Must have a valid controller");
-      this.callParent();
+      var me = this;
 
-      var me = this,
-          ctrl = this.getController();
-
-      this.add([
+      this.setItems([
          {
-            xtype : 'toolbar',
+            xtype   : 'toolbar',
             docked  : 'top',
-            title : 'Main Menu'
+            title   : 'Main Menu'
          },
          vrs.containerWrapButton({
-            xtype: 'button',
-            text: 'Next Panel',
-            handler: function() { ctrl.onButtonTap(); }
+            xtype   : 'button',
+            text    : 'Next Panel',
+            itemId  : 'nextPanelBtn'
          })
       ]);
+
+      me.callParent(arguments);
    }
 
 });
@@ -94,13 +95,13 @@ Ext.define('vrs.MainMenuPanel', {
 Ext.define('vrs.Panel1Controller', {
    extend: 'vrs.PanelController',
    config: {
-      backName : 'Panel1'
-   },
-
-   constructor: function(config) {
-      this.callParent(arguments);
-      this.setPanel(vrs.Panel1.create({controller: this}));
-      //vrs.dumpEvents(this.getPanel(), 'Panel1');
+      backName : 'Panel1',
+      panel    : 'vrs_panel1',
+      control : {
+         '#nextPanelBtn': {
+            tap: 'onButtonTap'
+         }
+      }
    },
 
    onButtonTap: function() {
@@ -109,8 +110,10 @@ Ext.define('vrs.Panel1Controller', {
    }
 });
 
+
 Ext.define('vrs.Panel1', {
-   extend: 'Ext.Panel',
+   extend : 'Ext.Panel',
+   xtype  : 'vrs_panel1',
    config: {
       controller : null,
       cls : 'panel1',
@@ -123,49 +126,42 @@ Ext.define('vrs.Panel1', {
    },
 
    initialize: function() {
-      this.callParent();
-      assert(this.getController(), "Must have a valid controller");
+      var me   = this;
 
-      var me = this,
-          ctrl = this.getController();
-
-      this.add([
+      this.setItems([
          {
             xtype : 'toolbar',
             docked: 'top',
             title : 'Panel 1',
             items : [
-               ctrl.createBackButton(),
+               vrs.createBackBtnPlaceholder(),
                { xtype: 'spacer' },
-               ctrl.createHomeButton()
+               vrs.createHomeBtnPlaceholder()
             ]
          },
          vrs.containerWrapButton({
-            xtype: 'button',
-            text: 'Next Panel',
-            handler: function() { ctrl.onButtonTap(); }
+            xtype   : 'button',
+            itemId  : 'nextPanelBtn',
+            text    : 'Next Panel'
          })
       ]);
    }
 });
 
 
+
 // ---- Panel2 Controller and Panel ---- //
 Ext.define('vrs.Panel2Controller', {
    extend: 'vrs.PanelController',
    config: {
-      backName : 'Panel2'
-   },
-
-   constructor: function(config) {
-      this.callParent(arguments);
-      this.setPanel(vrs.Panel2.create({controller: this}));
-      //vrs.dumpEvents(this.getPanel(), 'Panel2');
+      backName : 'Panel2',
+      panel    : 'vrs_panel2'
    }
 });
 
 Ext.define('vrs.Panel2', {
    extend: 'Ext.Panel',
+   xtype : 'vrs_panel2',
    config: {
       controller : null,
       cls : 'panel2',
@@ -178,26 +174,17 @@ Ext.define('vrs.Panel2', {
    },
 
    initialize: function() {
-      this.callParent();
-      assert(this.getController(), "Must have a valid controller");
+      var me = this;
 
-      var me = this,
-          ctrl = this.getController();
-
-      this.add([
-         {
-            xtype : 'toolbar',
-            docked  : 'top',
-            title : 'Panel 2',
-            items: [
-               ctrl.createBackButton(),
-               { xtype: 'spacer' },
-               ctrl.createHomeButton()
-            ]
-         },
+      this.setItems([
+         vrs.createNavToolbarPlaceholder({
+            docked : 'top',
+            title  : 'Panel 2'
+         }),
          {
             html: 'This is Panel 2'
          }
       ]);
+      me.callParent(arguments);
    }
 });

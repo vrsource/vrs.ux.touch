@@ -17,7 +17,7 @@ Map component for OpenLayers.  Includes custom popup window that allows display 
 
  * App Controller Framework
 
-A framework we put together for ST1 to allow management of hub-and-spoke model navigation stacks with dynamically created PanelControllers.  (view controllers)
+A framework we put together for ST1 to allow management of hub-and-spoke model navigation stacks with dynamically created PanelControllers.  (view controllers)  Now extended to ST2 to add sugar similar to the ST2 controllers and views.  All the fun but less of the pain.
 
  * Utility Code
 
