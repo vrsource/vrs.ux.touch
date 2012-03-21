@@ -45,6 +45,46 @@ Ext.override(Ext.util.GeoLocation, {
    }
 });
 
+/** Fix bug where iOS 5 hates watchPosition for getting updates of users position.
+*
+* See: http://www.sencha.com/forum/showthread.php?150932
+*
+* This basically switches to polling system using the getCurrentPosition method
+* which iOS 5 does not appear to have an issue with.
+*/
+Ext.override(Ext.util.GeoLocation, {
+   setAutoUpdate : function(autoUpdate) {
+      // Cancel the old one if it is running
+      if (this.watchOperation !== null) {
+         clearInterval(this.watchOperation);
+         this.watchOperation = null;
+      }
+      // Early out if we are not updating anymore
+      if (!autoUpdate) {
+         return true;
+      }
+      // Oops, no geo support
+      if (!Ext.supports.GeoLocation) {
+         this.fireEvent('locationerror', this, false, false, true, null);
+         return false;
+      }
+      // Start looping interval for getting the current location.
+      try{
+         this.watchOperation = setInterval(Ext.createDelegate(function() {
+            this.updateLocation();
+         }, this),
+         3000); // 3 second frequency is phonegaps setting the spec is not clear on this point.
+      }
+      catch(e){
+         this.autoUpdate = false;
+         this.fireEvent('locationerror', this, false, false, true, e.message);
+         return false;
+      }
+      return true;
+   }
+});
+
+
 /**
 * Fix for bug in abort method.
 *
