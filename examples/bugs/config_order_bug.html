@@ -14,9 +14,13 @@ Ext.define('MyClass', {
    },
 
    config: {
-      panel: true,
-      ref: false,
-      control: true
+      backName    : null,
+      panelHolder : null,
+      isBaseController: false,
+
+      panel   : null,
+      refs    : {},
+      control : {}
    },
 
    constructor: function(config) {
@@ -29,8 +33,8 @@ Ext.define('MyClass', {
       return val;
    },
 
-   applyRef: function(val) {
-      console.log('apply Ref');
+   applyRefs: function(val) {
+      console.log('apply Refs');
       return val;
    },
 
@@ -44,9 +48,16 @@ Ext.define('MyChild', {
    extend: 'MyClass',
 
    config: {
-      panel: false,
-      ref: true,
-      control: false
+      backName : 'Main',
+      panel    : 'blahpanel',
+      refs: {
+         nextPanelBtn: '#nextPanelBtn'
+      },
+      control: {
+         nextPanelBtn : {
+            tap: 'onButtonTap'
+         }
+      }
    },
 
    constructor: function(config) {
@@ -79,6 +90,10 @@ Ext.setup({
 
       console.log('create child with multiple override2');
       obj = MyChild.create({ control: true, ref: false });
+
+
+      console.log('Try partial override');
+      obj2 = new MyChild({panelHolder: obj, isBaseController: true});
    }
 });
     </script>
