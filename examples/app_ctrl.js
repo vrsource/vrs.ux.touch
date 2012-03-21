@@ -102,7 +102,9 @@ Ext.define('vrs.Panel1Controller', {
       backName : 'Panel1',
       panel    : 'vrs_panel1',
       control : {
-         '#nextPanelBtn': 'onButtonTap'
+         '#nextPanelBtn': {
+            tap: 'onButtonTap'
+         }
       }
    },
 
