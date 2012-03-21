@@ -125,6 +125,7 @@ Ext.define('vrs.PanelController', {
       }
       panel = Ext.ComponentManager.create(panel, 'component');
 
+      console.log('exit applyPanel');
       return panel;
    },
 
@@ -154,6 +155,7 @@ Ext.define('vrs.PanelController', {
             this[getterName] = Ext.Function.pass(this.getRef, [refName, selector], this);
          }
       }
+      console.log('exit applyRefs');
       return refs;
    },
 
@@ -186,6 +188,7 @@ Ext.define('vrs.PanelController', {
 
       var me = this,
           panel = this.getPanel(),
+          refs  = this.getRefs(),
           selector, getterName,
           listener, listeners,
           event_name,
@@ -200,7 +203,7 @@ Ext.define('vrs.PanelController', {
          // For each selector find components and add events to them.
          for (selector in selectors) {
             listeners = selectors[selector];
-            has_ref   = (selector in this.getRefs());
+            has_ref   = (selector in refs);
 
             // If selector is a reference name, then lookup that component else query
             if(has_ref) {
@@ -217,7 +220,7 @@ Ext.define('vrs.PanelController', {
 
             // Add listeners for each event.
             for (event_name in listeners) {
-               if(listeners.hasOwnProperty(event_name)) {
+               //if(listeners.hasOwnProperty(event_name)) {
                   listener = listeners[event_name];
 
                   // If is string, then lookup as function on the controller.
@@ -227,10 +230,12 @@ Ext.define('vrs.PanelController', {
 
                   // Register the event listener
                   Ext.each(components, add_listener);
-               }
+               //}
             }
          }
       }
+
+      console.log('exit applyControl');
 
       return selectors;
    },
