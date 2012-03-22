@@ -6,29 +6,41 @@
     <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
     <script type="text/javascript">
 
+function log_msg(msg) {
+   console.log(msg);
+   Ext.getBody().createChild({tag: 'p', html: msg}, Ext.get('ext-viewport'));
+}
+
+
 Ext.setup({
    onReady: function() {
-      console.log('Touch version: ' + Ext.versions.touch);
-      console.log('OS: ' + Ext.os.name + ' ' + Ext.os.version);
-      console.log('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+      log_msg('Touch version: ' + Ext.versions.touch);
+      log_msg('OS: ' + Ext.os.name + ' ' + Ext.os.version);
+      log_msg('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
 
-      urls = ['/../../resources/css/app.css', '/not_there',
-              'http://www.google.com', 'http://www.google.com/not_there']
+      urls = [['../../resources/css/app.css', 'should pass'],
+              ['/not_there', 'file not found'],
+              ['http://localhost/blah', 'server not responding'],
+              ['http://servernotthere.com', 'server does not exist'],
+              ['http://www.google.com', 'Cross site failure'],
+              ['http://www.google.com/not_there', 'cross site with bad url']]
 
-      Ext.each(urls, function(url) {
-         console.log('trying url: ' + url);
+      Ext.each(urls, function(info) {
+         var url = info[0],
+             msg = info[1];
+         log_msg('spawning url: ' + url);
 
          Ext.Ajax.request({
             url: url,
             success: function(response, opts) {
-               console.log('URL: ' + opts.url);
-               console.log('success');
-               console.log('status: ' + response.status);
+               log_msg('URL: ' + opts.url + ' expecting: ' + msg);
+               log_msg('success');
+               log_msg('status: ' + response.status);
             },
             failure: function(response, opts) {
-               console.log('URL: ' + opts.url);
-               console.log('failure');
-               console.log('status: ' + response.status);
+               log_msg('URL: ' + opts.url + ' expecting: ' + msg);
+               log_msg('failure');
+               log_msg('status: ' + response.status);
             }
          });
       });
