@@ -9,11 +9,13 @@
 //
 Ext.ns('test');
 
+test.helpers = test.helpers || {};
+
 /**
  * IDEA: Consider using Ext.override to add these
  * as methods to jasmine.Spec so we can just call "this.blah()" locally in test.
  */
-test.helpers = {
+Ext.merge(test.helpers, {
    /**
     * Create a panel holder with the spies needed to intercept calls
     * to the panel holder.
@@ -240,7 +242,7 @@ test.helpers = {
 
       });
    }
-};
+});
 
 
 // ------ JASMINE EXTENTIONS -------------- //
