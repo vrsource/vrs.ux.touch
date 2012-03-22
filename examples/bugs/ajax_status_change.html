@@ -6,14 +6,20 @@
     <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
     <script type="text/javascript">
 
-function log_msg(msg) {
-   console.log(msg);
-   Ext.getBody().createChild({tag: 'p', html: msg}, Ext.get('ext-viewport'));
-}
-
 
 Ext.setup({
    onReady: function() {
+      var log_cmp = Ext.Panel.create({
+         scrollable: 'vertical',
+         html  : 'Log:<br/>'
+      });
+      Ext.Viewport.add(log_cmp);
+
+      function log_msg(msg) {
+         console.log(msg);
+         log_cmp.setHtml(log_cmp.getHtml() + msg + '<br/>');
+      }
+
       log_msg('Touch version: ' + Ext.versions.touch);
       log_msg('OS: ' + Ext.os.name + ' ' + Ext.os.version);
       log_msg('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
@@ -28,7 +34,7 @@ Ext.setup({
       Ext.each(urls, function(info) {
          var url = info[0],
              msg = info[1];
-         log_msg('spawning url: ' + url);
+         //log_msg('spawning url: ' + url);
 
          Ext.Ajax.request({
             url: url,
