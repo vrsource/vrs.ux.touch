@@ -4,6 +4,7 @@
     <title>ajax (look at console)</title>
     <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
     <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <!-- <script type="text/javascript" src="../../src/vrs.bug_fixes.js"></script> -->
     <script type="text/javascript">
 
 
@@ -23,6 +24,7 @@ Ext.setup({
       log_msg('Touch version: ' + Ext.versions.touch);
       log_msg('OS: ' + Ext.os.name + ' ' + Ext.os.version);
       log_msg('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+      log_msg('--------------');
 
       urls = [['../../resources/css/app.css', 'should pass'],
               ['/not_there', 'file not found'],
@@ -30,6 +32,13 @@ Ext.setup({
               ['http://servernotthere.com', 'server does not exist'],
               ['http://www.google.com', 'Cross site failure'],
               ['http://www.google.com/not_there', 'cross site with bad url']]
+
+      Ext.Ajax.on('requestexception', function(conn, resp, options, eOpt) {
+         log_msg('requestexception fired');
+      });
+      Ext.Ajax.on('requestcomplete', function(conn, resp, options, eOpt) {
+         log_msg('requestcomplete fired');
+      });
 
       Ext.each(urls, function(info) {
          var url = info[0],
@@ -42,11 +51,13 @@ Ext.setup({
                log_msg('URL: ' + opts.url + ' expecting: ' + msg);
                log_msg('success');
                log_msg('status: ' + response.status);
+               log_msg('--------------');
             },
             failure: function(response, opts) {
                log_msg('URL: ' + opts.url + ' expecting: ' + msg);
                log_msg('failure');
                log_msg('status: ' + response.status);
+               log_msg('--------------');
             }
          });
       });
