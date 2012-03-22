@@ -36,7 +36,7 @@ Ext.define('Ext.overrides.Connection', {
    parseStatus: function(status) {
       var ret_val = this.callParent(arguments);
 
-      if((0 === status) && (this.getZeroIsFailure())) {
+      if(0 === status) {
          ret_val.success = false;
          //console.log('set to fail');
       }
