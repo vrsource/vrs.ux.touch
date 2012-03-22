@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ajax (look at console)</title>
+    <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <script type="text/javascript">
+
+Ext.setup({
+   onReady: function() {
+      console.log('Touch version: ' + Ext.versions.touch);
+      console.log('OS: ' + Ext.os.name + ' ' + Ext.os.version);
+      console.log('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+
+      urls = ['/../../resources/css/app.css', '/not_there',
+              'http://www.google.com', 'http://www.google.com/not_there']
+
+      Ext.each(urls, function(url) {
+         console.log('trying url: ' + url);
+
+         Ext.Ajax.request({
+            url: url,
+            success: function(response, opts) {
+               console.log('URL: ' + opts.url);
+               console.log('success');
+               console.log('status: ' + response.status);
+            },
+            failure: function(response, opts) {
+               console.log('URL: ' + opts.url);
+               console.log('failure');
+               console.log('status: ' + response.status);
+            }
+         });
+      });
+
+   }
+});
+    </script>
+</head>
+<body>
+</body>
+</html>
