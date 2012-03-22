@@ -30,14 +30,17 @@ Ext.override('Ext.overrides.Map', {
 /*
 * Override the parseStatus method to consider 0 as a failure.
 */
-Ext.override('Ext.overrides.Connection', {
+Ext.define('Ext.overrides.Connection', {
    override: 'Ext.data.Connection',
 
    parseStatus: function(status) {
-      var ret_val = this.callParent(status);
-      if(0 === status) {
+      var ret_val = this.callParent(arguments);
+
+      if((0 === status) && (this.getZeroIsFailure())) {
          ret_val.success = false;
+         //console.log('set to fail');
       }
+
       return ret_val;
    }
 });
