@@ -20,10 +20,26 @@
 * bug: TOUCH-2223
 */
 Ext.override('Ext.overrides.Map', {
-    override: 'Ext.Map',
-    getMapOptions: function() {
-        return Ext.merge({}, this.options || this.getInitialConfig('mapOptions'));
-    }
+   override: 'Ext.Map',
+   getMapOptions: function() {
+      return Ext.merge({}, this.options || this.getInitialConfig('mapOptions'));
+   }
+});
+
+
+/*
+* Override the parseStatus method to consider 0 as a failure.
+*/
+Ext.override('Ext.overrides.Connection', {
+   override: 'Ext.data.Connection',
+
+   parseStatus: function(status) {
+      var ret_val = this.callParent(status);
+      if(0 === status) {
+         ret_val.success = false;
+      }
+      return ret_val;
+   }
 });
 
 
