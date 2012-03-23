@@ -245,7 +245,7 @@ component('Requesting Input, vrs.requestFormData', function() {
       // WHEN they try to submit the form
       submitForm();
       waitsFor(function() {
-         return form.el.dom && form.el.hasCls('form-invalid');
+         return form.element.dom && form.el.hasCls('form-invalid');
       });
 
       // THEN the error is shown

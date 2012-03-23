@@ -17,7 +17,7 @@ component('Ext.ex.OpenlayersMap', function() {
             items: [map_layer]
          });
          expect(map_layer.rendered).toBeTruthy();         // should have rendered.
-         expect(map_layer.el.is('.olMap')).toBeTruthy();  // Make sure it was created
+         expect(map_layer.element.is('.olMap')).toBeTruthy();  // Make sure it was created
          panel.destroy();
       });
 
