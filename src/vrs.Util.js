@@ -31,10 +31,10 @@ Ext.format = Ext.util.Format.format;
 *
 * Just write as one json object or a list of json objects.
 */
-vrs.FlatJsonWriter = Ext.extend(Ext.data.JsonWriter, {
-   constructor: function(config) {
-      vrs.FlatJsonWriter.superclass.constructor.call(this, config);
-   },
+Ext.define('vrs.FlatJsonWriter', {
+   extend: 'Ext.data.writer.Json',
+
+   alias: 'writer.json_flat',  // Register the writer.
 
    writeRecords: function(request, data) {
       var local_data = data;
