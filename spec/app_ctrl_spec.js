@@ -365,7 +365,7 @@ component('Panel Holder', function() {
 
    feature('base controller support', function() {
       beforeEach(function() {
-         panel_holder = new vrs.PanelHolder({
+         panel_holder = vrs.PanelHolder.create({
             animConfig: false
          });
       });
@@ -396,7 +396,7 @@ component('Panel Holder', function() {
 
       it('should require that base controller is marked as base controller', function() {
          // given: panel holder
-         panel_holder = new vrs.PanelHolder({
+         panel_holder = vrs.PanelHolder.create({
             animConfig: false
          });
 
@@ -428,7 +428,7 @@ component('Panel Holder', function() {
 
    feature('stack support', function() {
       beforeEach(function() {
-         panel_holder = new vrs.PanelHolder({
+         panel_holder = vrs.PanelHolder.create({
             animConfig: false
          });
 
