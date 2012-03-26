@@ -20,7 +20,8 @@ vrs.ux.touch.BLANK_IMAGE_URL =
 */
 
 Ext.define('vrs.ux.touch.MenuPanel', {
-   extend: 'Ext.Component',
+   extend : 'Ext.Component',
+   xtype  : 'vrs_menupanel',
 
    config: {
       cls: 'x-menu-panel',
