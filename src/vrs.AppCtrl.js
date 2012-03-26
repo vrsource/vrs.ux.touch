@@ -25,8 +25,9 @@ Ext.ns('vrs');
 *     remove the use of resources for UIs that are not on screen and
 *     delay construction of UI/panel until it is needed.
 *
-* TODO: XXX: See if we can remove the timing issue using apply/update/initialConfig
-*            support in ST2.
+* TODO:
+*   - See if we can remove the timing issue using apply/update/initialConfig support in ST2.
+*   - Allow panel to be set to a class (instantiate the class for the panel value)
 */
 Ext.define('vrs.PanelController', {
    mixins: {
@@ -55,7 +56,6 @@ Ext.define('vrs.PanelController', {
       */
       isBaseController: false,
 
-
       /**
       * @cfg {Object} panel The view panel that this controller holds/uses.
       *
@@ -75,7 +75,6 @@ Ext.define('vrs.PanelController', {
       *       }
       */
       panel: null,
-
 
       /**
       * @cfg {Object} refs A collection of named ComponentQuery selectors to apply
