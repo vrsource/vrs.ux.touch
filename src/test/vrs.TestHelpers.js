@@ -332,6 +332,12 @@ jasmine.createSpyClass = function(namespace, class_name, methods) {
       });
    };
 
+   // Add sencha touch create method on
+   // note: this may not be calling the constructor correctly.
+   fn.create = function() {
+      return new fn(arguments);
+   };
+
    // Graft it onto the test area and restore it when
    // done with the current spec
    //spyOn(namespace, class_name).andReturn(fn);
