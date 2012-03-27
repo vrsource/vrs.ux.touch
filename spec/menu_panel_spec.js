@@ -45,6 +45,18 @@ component('MenuPanel', function() {
 
 
    feature('menu item configuration', function() {
+      it('should give new list of items to each object', function() {
+         var menu, menu2;
+         // given: a menu that has been created and added an item
+         menu = vrs.ux.touch.MenuPanel.create();
+         menu.getMenuItems().push({content: 'item1'});
+         expect(menu.getMenuItems().length).toEqual(1);
+
+         // when: another menu is created, it should not have any items
+         menu2 = vrs.ux.touch.MenuPanel.create();
+         expect(menu2.getMenuItems().length).toEqual(0);
+      });
+
       it('Should support rendering', function() {
          var menu = new vrs.ux.touch.MenuPanel({
             menuItems: [ {content: 'item1'}]

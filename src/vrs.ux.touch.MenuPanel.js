@@ -51,7 +51,6 @@ Ext.define('vrs.ux.touch.MenuPanel', {
       leftItemCls: 'x-menupanel-leftitem',
       rightItemCls: 'x-menupanel-rightitem',
 
-
       /**
       * List of configurations for each row in the menu panel.
       * Each row item supports the following properties:
@@ -110,6 +109,7 @@ Ext.define('vrs.ux.touch.MenuPanel', {
    * @param {Number} index The index of the row that was tapped
    */
 
+
    /**
    * Initialize the component.
    */
@@ -136,6 +136,18 @@ Ext.define('vrs.ux.touch.MenuPanel', {
       this.refresh();
    },
 
+
+   applyMenuItems: function(val) {
+      // initialize with empty array if not set
+      var ret_val = (val.length === 0) ? [] : val;
+      return ret_val;
+   },
+
+   applyMenuItemDefaults: function(val) {
+      // initialize with empty array if not set
+      var ret_val = (val.length === 0) ? [] : val;
+      return ret_val;
+   },
 
    /**
    * Update an item in the menu based upon the itemObj properties passed.
