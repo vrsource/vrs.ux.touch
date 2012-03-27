@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Empty List Init (look at console)</title>
+    <link rel="stylesheet" href="../../resources/css/app.css" type="text/css"/>
+    <script type="text/javascript" src="../../deps/sencha_touch/builds/sencha-touch-all-compat.js"></script>
+    <script type="text/javascript">
+
+Ext.define('MyComp', {
+   extend: 'Ext.Component',
+
+   config: {
+      arrayVal: null,
+      boolVal:  true,
+      sharedArray: []    // Same array goes to all objects
+   },
+
+   applyArrayVal: function(val) {
+      console.log('applyArrayVal called: value: ' + val);
+      return (null === val) ? [] : val;
+   },
+
+   applyBoolVal: function(val) {
+      console.log('applyBoolVal called: value: ' + val);
+      return val;
+   }
+});
+
+Ext.setup({
+   onReady: function() {
+      console.log('Touch version: ' + Ext.versions.touch);
+      console.log('OS: ' + Ext.os.name + ' ' + Ext.os.version);
+      console.log('Browser: ' + Ext.browser.name + ' ' + Ext.browser.version);
+
+      console.log('-----------------------------');
+      console.log('create with no config options');
+      obj = MyComp.create();
+      console.log('array Value: ' + obj.getArrayVal());
+
+      console.log('-----------------------------');
+      console.log('create with values for both.');
+      obj = MyComp.create({arrayVal: [1,2], boolVal: false});
+      console.log('Array Value: ' + obj.getArrayVal());
+
+      console.log('---------[ Demonstrate Shared ]-----------');
+      obj1 = MyComp.create();
+      console.log('Obj1 Initial Value: ' + obj1.getSharedArray());
+
+      obj1.getSharedArray().push('A');
+
+      obj2 = MyComp.create();
+      console.log('Obj2 Initial Value: ' + obj2.getSharedArray());
+   }
+});
+    </script>
+</head>
+<body>
+</body>
+</html>
