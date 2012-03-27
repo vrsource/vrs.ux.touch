@@ -2,24 +2,14 @@
 
 /** Test classes */
 test.ExtPanel1 = Ext.extend(vrs.PanelController, {
-   constructor: function(config) {
-      test.ExtPanel1.superclass.constructor.call(this, config);
-   },
-   getPanel: function() {
-      if(Ext.isEmpty(this._panel))
-      { this.setPanel(new Ext.Panel({}));}
-      return this._panel;
+   config: {
+      panel: 'panel'
    }
 });
 
 test.ExtPanel2 = Ext.extend(vrs.PanelController, {
-   constructor: function(config) {
-      test.ExtPanel2.superclass.constructor.call(this, config);
-   },
-   getPanel: function() {
-      if(Ext.isEmpty(this._panel))
-      { this.setPanel(new Ext.Panel({}));}
-      return this._panel;
+   config: {
+      panel: 'panel'
    }
 });
 
@@ -379,7 +369,7 @@ component('Panel Holder', function() {
          // given: holder with no base controller set
 
          // when: set a base controller
-         base_ctrl = new test.ExtPanel1({
+         base_ctrl = test.ExtPanel1.create({
             panelHolder: panel_holder,
             isBaseController: true
          });
@@ -402,13 +392,13 @@ component('Panel Holder', function() {
 
          // when: set with a controller not marked base, it should throw
          expect(function() {
-            panel_holder.setBaseController(new test.ExtPanel1({panelHolder: panel_holder}));
+            panel_holder.setBaseController(test.ExtPanel1.create({panelHolder: panel_holder}));
          }).toThrow();
       });
 
       it('should deactivate the base controller upon destruction', function() {
          // given holder with no base controller
-         base_ctrl = new test.ExtPanel1({
+         base_ctrl = test.ExtPanel1.create({
             panelHolder: panel_holder,
             isBaseController: true
          });
@@ -432,13 +422,13 @@ component('Panel Holder', function() {
             animConfig: false
          });
 
-         base_ctrl = new test.ExtPanel1({
+         base_ctrl = test.ExtPanel1.create({
             panelHolder: panel_holder,
             isBaseController: true
          });
-         ctrl1 = new test.ExtPanel1({panelHolder: panel_holder});
-         ctrl2 = new test.ExtPanel2({panelHolder: panel_holder});
-         ctrl3 = new test.ExtPanel2({panelHolder: panel_holder});
+         ctrl1 = test.ExtPanel1.create({panelHolder: panel_holder});
+         ctrl2 = test.ExtPanel2.create({panelHolder: panel_holder});
+         ctrl3 = test.ExtPanel2.create({panelHolder: panel_holder});
 
          spyOn(ctrl1, 'destroy').andCallThrough();
          spyOn(ctrl2, 'destroy').andCallThrough();
