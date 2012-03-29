@@ -142,7 +142,6 @@ Ext.define('vrs.PanelController', {
    * Turn refs into local object references.
    */
    applyRefs: function(refs) {
-      console.log('applyRefs');
       var refName, getterName, selector;
 
       // For each ref, add a getter that will call to get the ref dynamically
@@ -154,7 +153,6 @@ Ext.define('vrs.PanelController', {
             this[getterName] = Ext.Function.pass(this.getRef, [refName, selector], this);
          }
       }
-      console.log('exit applyRefs');
       return refs;
    },
 
@@ -181,7 +179,6 @@ Ext.define('vrs.PanelController', {
 
 
    applyControl: function(selectors) {
-      console.log('applyControl');
       // TODO: Look into using Ext.event.Dispatcher.addListener
       //       instead to add the listeners to multiple items.
 
@@ -241,8 +238,6 @@ Ext.define('vrs.PanelController', {
             }
          }
       }
-
-      console.log('exit applyControl');
 
       return selectors;
    },
