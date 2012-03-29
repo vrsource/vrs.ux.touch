@@ -171,6 +171,8 @@ Ext.define('vrs.PanelController', {
             cached.on('destroy', function() {
                me.refCache[refName] = null;
             });
+         } else {
+            this._logError('Bad ref lookup [' + refName + ']. not found');
          }
       }
 
@@ -202,7 +204,7 @@ Ext.define('vrs.PanelController', {
             has_ref   = (selector in refs);
 
             if(!Ext.isObject(listeners)) {
-               console.error('Control selector: [' + selector + '] configured with non-object');
+               this._logError('Control selector: [' + selector + '] configured with non-object');
                break;
             }
 
@@ -210,13 +212,17 @@ Ext.define('vrs.PanelController', {
             if(has_ref) {
                getterName = "get" + Ext.String.capitalize(selector);
                components = [this[getterName].call(this)];
+               if(Ext.isEmpty(components[0])) {
+                  this._logError('Control selector: [' + selector + '] has ref to ' +components[0]);
+                  break;
+               }
             } else {
                components = panel.query(selector);
             }
 
             // warn if we didn't find any components
             if(components.length === 0) {
-               console.warn('Did not find control for selector: ' + selector);
+               this._logError('Did not find control for selector: ' + selector);
             }
 
             // Add listeners for each event.
@@ -232,7 +238,7 @@ Ext.define('vrs.PanelController', {
                if(Ext.isFunction(listener)) {
                   Ext.each(components, add_listener);
                } else {
-                  console.error('Control selector: [' + selector + '] event: [' + event_name +
+                  this._logError('Control selector: [' + selector + '] event: [' + event_name +
                                 '] has invalid non-function listener');
                }
             }
@@ -240,6 +246,10 @@ Ext.define('vrs.PanelController', {
       }
 
       return selectors;
+   },
+
+   _logError: function(msg) {
+      console.error(Ext.getClassName(this) + ': ' + msg);
    },
 
    // ----- STATE CHANGE/UPDATE CALLBACKS ---- //
