@@ -91,7 +91,7 @@ vrs.st1_code = function() {
       */
       url: null,
 
-      scroll: false,
+      scrollable: false,
 
       initComponent: function() {
          this.html = Ext.format('<iframe src="{0}" '+

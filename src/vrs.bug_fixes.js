@@ -702,7 +702,7 @@ if(0) {
                         xtype: 'list',
                         store: this.store,
                         itemId: 'list',
-                        scroll: false,
+                        scrollable: false,
                         // Here is the change to tell the list widget to not allow deselect
                         allowDeselect: false,
                         itemTpl : [

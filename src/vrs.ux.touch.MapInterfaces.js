@@ -229,7 +229,7 @@ Ext.define('vrs.ux.touch.IMapPopupPanel', {
       /** {bool} True if the popup should be anchored to it's location. */
       anchored: true,
 
-      scroll: true,
+      scrollable: true,
 
       /** {bool} True if we should pan the map so the popup is in view. */
       panIn: true,
