@@ -94,13 +94,18 @@ Ext.define('vrs.PanelController', {
       *                       a string to a name of a controller method or a function object.
       *                       The key can be a component query selector or the name of a
       *                       ref object from above.
+      *                       If an object named 'option' is passed it is used as options
+      *                       for all the listeners.
       *
       *    control: {
       *         myButton: {
       *            tap: 'onTap'
       *         },
       *         '.otherBtn': {
-      *            tap: function() { callBlah(); }
+      *            tap: function() { callBlah(); },
+      *            options: {
+      *               buffer: 10
+      *            }
       *         }
       *     }
       */
@@ -194,7 +199,7 @@ Ext.define('vrs.PanelController', {
           components = [];
 
       function add_listener(comp) {
-         comp.on(event_name, listener, me);
+         comp.on(event_name, listener, me, listeners[options]);
       }
 
       if(panel) {
@@ -227,6 +232,10 @@ Ext.define('vrs.PanelController', {
 
             // Add listeners for each event.
             for (event_name in listeners) {
+               if('options' === event_name) {
+                  continue;
+               }
+
                listener = listeners[event_name];
 
                // If is string, then lookup as function on the controller.
