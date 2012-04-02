@@ -122,14 +122,12 @@ Ext.define('vrs.PanelController', {
    * Turn the passed value into a panel object.
    */
    applyPanel: function(panel) {
-      console.log('applyPanel');
       // If we don't have panel set yet, then skip the creation.
       if(null === panel) {
          return panel;
       }
       panel = Ext.ComponentManager.create(panel, 'component');
 
-      console.log('exit applyPanel');
       return panel;
    },
 
