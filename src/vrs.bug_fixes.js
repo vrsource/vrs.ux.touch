@@ -214,7 +214,7 @@ if(0) {
 
                 for(x = 0; x < this.items.getCount(); x++) {
                     item = this.items.getAt(x);
-                    if((comp === item.itemId) || (comp === item.id)) {
+                    if((comp === item.getItemId()) || (comp === item.getId())) {
                         return item;
                     }
                 }
