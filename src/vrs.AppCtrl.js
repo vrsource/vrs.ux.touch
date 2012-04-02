@@ -198,8 +198,9 @@ Ext.define('vrs.PanelController', {
           has_ref = false,
           components = [];
 
+      // Helper to add listener to the given component.
       function add_listener(comp) {
-         comp.on(event_name, listener, me, listeners[options]);
+         comp.on(event_name, listener, me, listeners.options);
       }
 
       if(panel) {
@@ -232,6 +233,8 @@ Ext.define('vrs.PanelController', {
 
             // Add listeners for each event.
             for (event_name in listeners) {
+               // if the 'event' is named options, skip it because that is
+               // simply our options object for each event registered.
                if('options' === event_name) {
                   continue;
                }
