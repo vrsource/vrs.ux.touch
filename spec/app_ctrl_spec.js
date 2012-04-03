@@ -90,7 +90,7 @@ Ext.define('test.ToolbarReplacePanel', {
    config: {
       layout : 'vbox',
       items: [
-         vrs.createNavToolbarPlaceholder({
+         vrs.createNavTitleBarPlaceholder({
             docked  : 'top',
             title   : 'Title'
          }),
@@ -282,11 +282,11 @@ component('PanelController', function() {
             refs: {
                backBtn: '#backBtn',
                homeBtn: '#homeBtn',
-               navToolbar: '#navToolbar'
+               navTitleBar: '#navTitleBar'
             }
          });
          expect(obj.getBackBtn().getText()).toEqual('Back');
-         expect(obj.getNavToolbar().getTitle().getTitle()).toEqual('Title');
+         expect(obj.getNavTitleBar().getTitle().getTitle()).toEqual('Title');
 
          // when: hit back button
          obj.getBackBtn().onTap();

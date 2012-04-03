@@ -339,12 +339,12 @@ Ext.define('vrs.PanelController', {
       }
 
       // Find toolbar
-      found = panel.query('#navToolbar');
+      found = panel.query('#navTitleBar');
       if(found.length > 1) {
          console.warn('Found multiple nav toolbars');
       }
       if(found.length > 0) {
-         this._overrideNavToolbar(found[0]);
+         this._overrideNavTitleBar(found[0]);
       }
    },
 
@@ -374,17 +374,18 @@ Ext.define('vrs.PanelController', {
    },
 
    /** @private */
-   _overrideNavToolbar: function(toolbar) {
+   _overrideNavTitleBar: function(titlebar) {
       var me = this,
           back_btn, home_btn,
-          toolbar_items = [],
+          titlebar_items = [],
           holder = this.getPanelHolder();
 
       // If in stack and not base controller, need navigation
       if(holder.getUseStack() && !this.isBaseController()) {
          // - Create back buttn
          back_btn = new Ext.Button({
-            itemId: 'backBtn'
+            itemId: 'backBtn',
+            //align: 'left'
          });
          this._overrideBackBtn(back_btn);
 
@@ -392,20 +393,20 @@ Ext.define('vrs.PanelController', {
          if(!holder.getInSidePanel()  && !holder.getInPopupPanel()) {
             // create home button
             home_btn = new Ext.Button({
-               itemId: 'homeBtn'
+               itemId: 'homeBtn',
+               //align: 'right'
             });
             this._overrideHomeBtn(home_btn);
          }
       }
       if(back_btn) {
-         toolbar_items.push(back_btn);
+         titlebar_items.push(back_btn);
       }
-      toolbar_items.push({xtype: 'spacer'});
       if(home_btn) {
-         toolbar_items.push(home_btn);
+         titlebar_items.push(home_btn);
       }
 
-      toolbar.setItems(toolbar_items);
+      //titlebar.setItems(titlebar_items);
    }
 });
 
@@ -424,9 +425,9 @@ vrs.createHomeBtnPlaceholder = function(btnConfig) {
    }));
 };
 
-vrs.createNavToolbarPlaceholder = function(config) {
-   return Ext.Toolbar.create(Ext.apply({}, config, {
-      itemId: 'navToolbar'
+vrs.createNavTitleBarPlaceholder = function(config) {
+   return Ext.TitleBar.create(Ext.apply({}, config, {
+      itemId: 'navTitleBar'
    }));
 };
 
