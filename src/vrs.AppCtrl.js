@@ -426,7 +426,8 @@ vrs.createHomeBtnPlaceholder = function(btnConfig) {
 
 vrs.createNavToolbarPlaceholder = function(config) {
    return Ext.Toolbar.create(Ext.apply({}, config, {
-      itemId: 'navToolbar'
+      itemId: 'navToolbar',
+      docked: 'top'
    }));
 };
 
