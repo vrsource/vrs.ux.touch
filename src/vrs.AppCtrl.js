@@ -370,6 +370,7 @@ Ext.define('vrs.PanelController', {
       btn.setIconMask(true);
       btn.setUi('action');
       btn.setIconCls('home');
+      btn.setIconMask(true);
       btn.on('tap', function() { me.getPanelHolder().gotoBaseController(); });
    },
 
