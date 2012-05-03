@@ -2457,39 +2457,43 @@ var ExtObject = Ext.Object = {
     /**
      * Convert a `name` - `value` pair to an array of objects with support for nested structures; useful to construct
      * query strings. For example:
-
-    var objects = Ext.Object.toQueryObjects('hobbies', ['reading', 'cooking', 'swimming']);
-
-    // objects then equals:
-    [
-        { name: 'hobbies', value: 'reading' },
-        { name: 'hobbies', value: 'cooking' },
-        { name: 'hobbies', value: 'swimming' },
-    ];
-
-    var objects = Ext.Object.toQueryObjects('dateOfBirth', {
-        day: 3,
-        month: 8,
-        year: 1987,
-        extra: {
-            hour: 4
-            minute: 30
-        }
-    }, true); // Recursive
-
-    // objects then equals:
-    [
-        { name: 'dateOfBirth[day]', value: 3 },
-        { name: 'dateOfBirth[month]', value: 8 },
-        { name: 'dateOfBirth[year]', value: 1987 },
-        { name: 'dateOfBirth[extra][hour]', value: 4 },
-        { name: 'dateOfBirth[extra][minute]', value: 30 },
-    ];
-
+     *
+     * Non-recursive:
+     * 
+     *     var objects = Ext.Object.toQueryObjects('hobbies', ['reading', 'cooking', 'swimming']);
+     *
+     *     // objects then equals:
+     *     [
+     *         { name: 'hobbies', value: 'reading' },
+     *         { name: 'hobbies', value: 'cooking' },
+     *         { name: 'hobbies', value: 'swimming' },
+     *     ];
+     *
+     * Recursive:
+     *
+     *     var objects = Ext.Object.toQueryObjects('dateOfBirth', {
+     *         day: 3,
+     *         month: 8,
+     *         year: 1987,
+     *         extra: {
+     *             hour: 4
+     *             minute: 30
+     *         }
+     *     }, true);
+     *
+     *     // objects then equals:
+     *     [
+     *         { name: 'dateOfBirth[day]', value: 3 },
+     *         { name: 'dateOfBirth[month]', value: 8 },
+     *         { name: 'dateOfBirth[year]', value: 1987 },
+     *         { name: 'dateOfBirth[extra][hour]', value: 4 },
+     *         { name: 'dateOfBirth[extra][minute]', value: 30 },
+     *     ];
+     *
      * @param {String} name
      * @param {Object} value
-     * @param {Boolean} recursive
-     * @markdown
+     * @param {Boolean} [recursive=false] True to recursively encode any sub-objects.
+     * @return {Object[]} Array of objects with `name` and `value` fields.
      */
     toQueryObjects: function(name, value, recursive) {
         var self = ExtObject.toQueryObjects,
@@ -2536,36 +2540,36 @@ var ExtObject = Ext.Object = {
 
     /**
      * Takes an object and converts it to an encoded query string
-
-- Non-recursive:
-
-    Ext.Object.toQueryString({foo: 1, bar: 2}); // returns "foo=1&bar=2"
-    Ext.Object.toQueryString({foo: null, bar: 2}); // returns "foo=&bar=2"
-    Ext.Object.toQueryString({'some price': '$300'}); // returns "some%20price=%24300"
-    Ext.Object.toQueryString({date: new Date(2011, 0, 1)}); // returns "date=%222011-01-01T00%3A00%3A00%22"
-    Ext.Object.toQueryString({colors: ['red', 'green', 'blue']}); // returns "colors=red&colors=green&colors=blue"
-
-- Recursive:
-
-    Ext.Object.toQueryString({
-        username: 'Jacky',
-        dateOfBirth: {
-            day: 1,
-            month: 2,
-            year: 1911
-        },
-        hobbies: ['coding', 'eating', 'sleeping', ['nested', 'stuff']]
-    }, true); // returns the following string (broken down and url-decoded for ease of reading purpose):
-              // username=Jacky
-              //    &dateOfBirth[day]=1&dateOfBirth[month]=2&dateOfBirth[year]=1911
-              //    &hobbies[0]=coding&hobbies[1]=eating&hobbies[2]=sleeping&hobbies[3][0]=nested&hobbies[3][1]=stuff
-
+     *
+     * Non-recursive:
+     *
+     *     Ext.Object.toQueryString({foo: 1, bar: 2}); // returns "foo=1&bar=2"
+     *     Ext.Object.toQueryString({foo: null, bar: 2}); // returns "foo=&bar=2"
+     *     Ext.Object.toQueryString({'some price': '$300'}); // returns "some%20price=%24300"
+     *     Ext.Object.toQueryString({date: new Date(2011, 0, 1)}); // returns "date=%222011-01-01T00%3A00%3A00%22"
+     *     Ext.Object.toQueryString({colors: ['red', 'green', 'blue']}); // returns "colors=red&colors=green&colors=blue"
+     *
+     * Recursive:
+     *
+     *     Ext.Object.toQueryString({
+     *         username: 'Jacky',
+     *         dateOfBirth: {
+     *             day: 1,
+     *             month: 2,
+     *             year: 1911
+     *         },
+     *         hobbies: ['coding', 'eating', 'sleeping', ['nested', 'stuff']]
+     *     }, true);
+     *
+     *     // returns the following string (broken down and url-decoded for ease of reading purpose):
+     *     // username=Jacky
+     *     //    &dateOfBirth[day]=1&dateOfBirth[month]=2&dateOfBirth[year]=1911
+     *     //    &hobbies[0]=coding&hobbies[1]=eating&hobbies[2]=sleeping&hobbies[3][0]=nested&hobbies[3][1]=stuff
      *
      * @param {Object} object The object to encode
-     * @param {Boolean} recursive (optional) Whether or not to interpret the object in recursive format.
+     * @param {Boolean} [recursive=false] Whether or not to interpret the object in recursive format.
      * (PHP / Ruby on Rails servers and similar). Defaults to false
      * @return {String} queryString
-     * @markdown
      */
     toQueryString: function(object, recursive) {
         var paramObjects = [],
@@ -2598,30 +2602,30 @@ var ExtObject = Ext.Object = {
     /**
      * Converts a query string back into an object.
      *
-- Non-recursive:
-
-    Ext.Object.fromQueryString(foo=1&bar=2); // returns {foo: 1, bar: 2}
-    Ext.Object.fromQueryString(foo=&bar=2); // returns {foo: null, bar: 2}
-    Ext.Object.fromQueryString(some%20price=%24300); // returns {'some price': '$300'}
-    Ext.Object.fromQueryString(colors=red&colors=green&colors=blue); // returns {colors: ['red', 'green', 'blue']}
-
-- Recursive:
-
-    Ext.Object.fromQueryString("username=Jacky&dateOfBirth[day]=1&dateOfBirth[month]=2&dateOfBirth[year]=1911&hobbies[0]=coding&hobbies[1]=eating&hobbies[2]=sleeping&hobbies[3][0]=nested&hobbies[3][1]=stuff", true);
-
-    // returns
-    {
-        username: 'Jacky',
-        dateOfBirth: {
-            day: '1',
-            month: '2',
-            year: '1911'
-        },
-        hobbies: ['coding', 'eating', 'sleeping', ['nested', 'stuff']]
-    }
-
+     * Non-recursive:
+     *
+     *     Ext.Object.fromQueryString("foo=1&bar=2"); // returns {foo: 1, bar: 2}
+     *     Ext.Object.fromQueryString("foo=&bar=2"); // returns {foo: null, bar: 2}
+     *     Ext.Object.fromQueryString("some%20price=%24300"); // returns {'some price': '$300'}
+     *     Ext.Object.fromQueryString("colors=red&colors=green&colors=blue"); // returns {colors: ['red', 'green', 'blue']}
+     *
+     * Recursive:
+     *
+     *     Ext.Object.fromQueryString("username=Jacky&dateOfBirth[day]=1&dateOfBirth[month]=2&dateOfBirth[year]=1911&hobbies[0]=coding&hobbies[1]=eating&hobbies[2]=sleeping&hobbies[3][0]=nested&hobbies[3][1]=stuff", true);
+     *
+     *     // returns
+     *     {
+     *         username: 'Jacky',
+     *         dateOfBirth: {
+     *             day: '1',
+     *             month: '2',
+     *             year: '1911'
+     *         },
+     *         hobbies: ['coding', 'eating', 'sleeping', ['nested', 'stuff']]
+     *     }
+     *
      * @param {String} queryString The query string to decode
-     * @param {Boolean} recursive (Optional) Whether or not to recursively decode the string. This format is supported by
+     * @param {Boolean} [recursive=false] Whether or not to recursively decode the string. This format is supported by
      * PHP / Ruby on Rails servers and similar. Defaults to false
      * @return {Object}
      */
@@ -2711,30 +2715,27 @@ var ExtObject = Ext.Object = {
     /**
      * Iterate through an object and invoke the given callback function for each iteration. The iteration can be stop
      * by returning `false` in the callback function. For example:
-
-    var person = {
-        name: 'Jacky'
-        hairColor: 'black'
-        loves: ['food', 'sleeping', 'wife']
-    };
-
-    Ext.Object.each(person, function(key, value, myself) {
-        console.log(key + ":" + value);
-
-        if (key === 'hairColor') {
-            return false; // stop the iteration
-        }
-    });
-
+     *
+     *     var person = {
+     *         name: 'Jacky'
+     *         hairColor: 'black'
+     *         loves: ['food', 'sleeping', 'wife']
+     *     };
+     *
+     *     Ext.Object.each(person, function(key, value, myself) {
+     *         console.log(key + ":" + value);
+     *
+     *         if (key === 'hairColor') {
+     *             return false; // stop the iteration
+     *         }
+     *     });
+     *
      * @param {Object} object The object to iterate
-     * @param {Function} fn The callback function. Passed arguments for each iteration are:
-
-- {String} `key`
-- {Mixed} `value`
-- {Object} `object` The object itself
-
-     * @param {Object} scope (Optional) The execution scope (`this`) of the callback function
-     * @markdown
+     * @param {Function} fn The callback function.
+     *   @param {String} fn.key
+     *   @param {Mixed} fn.value
+     *   @param {Object} fn.object The object itself
+     * @param {Object} [scope] The execution scope (`this`) of the callback function
      */
     each: function(object, fn, scope) {
         for (var property in object) {
@@ -2748,44 +2749,44 @@ var ExtObject = Ext.Object = {
 
     /**
      * Merges any number of objects recursively without referencing them or their children.
-
-    var extjs = {
-        companyName: 'Ext JS',
-        products: ['Ext JS', 'Ext GWT', 'Ext Designer'],
-        isSuperCool: true
-        office: {
-            size: 2000,
-            location: 'Palo Alto',
-            isFun: true
-        }
-    };
-
-    var newStuff = {
-        companyName: 'Sencha Inc.',
-        products: ['Ext JS', 'Ext GWT', 'Ext Designer', 'Sencha Touch', 'Sencha Animator'],
-        office: {
-            size: 40000,
-            location: 'Redwood City'
-        }
-    };
-
-    var sencha = Ext.Object.merge({}, extjs, newStuff);
-
-    // sencha then equals to
-    {
-        companyName: 'Sencha Inc.',
-        products: ['Ext JS', 'Ext GWT', 'Ext Designer', 'Sencha Touch', 'Sencha Animator'],
-        isSuperCool: true
-        office: {
-            size: 30000,
-            location: 'Redwood City'
-            isFun: true
-        }
-    }
-
-     * @param {Object} source ...
-     * @return {Object} merged The object that is created as a result of merging all the objects passed in.
-     * @markdown
+     *
+     *     var extjs = {
+     *         companyName: 'Ext JS',
+     *         products: ['Ext JS', 'Ext GWT', 'Ext Designer'],
+     *         isSuperCool: true
+     *         office: {
+     *             size: 2000,
+     *             location: 'Palo Alto',
+     *             isFun: true
+     *         }
+     *     };
+     *
+     *     var newStuff = {
+     *         companyName: 'Sencha Inc.',
+     *         products: ['Ext JS', 'Ext GWT', 'Ext Designer', 'Sencha Touch', 'Sencha Animator'],
+     *         office: {
+     *             size: 40000,
+     *             location: 'Redwood City'
+     *         }
+     *     };
+     *
+     *     var sencha = Ext.Object.merge({}, extjs, newStuff);
+     *
+     *     // sencha then equals to
+     *     {
+     *         companyName: 'Sencha Inc.',
+     *         products: ['Ext JS', 'Ext GWT', 'Ext Designer', 'Sencha Touch', 'Sencha Animator'],
+     *         isSuperCool: true
+     *         office: {
+     *             size: 30000,
+     *             location: 'Redwood City'
+     *             isFun: true
+     *         }
+     *     }
+     *
+     * @param {Object} source The first object into which to merge the others.
+     * @param {Object...} objs One or more objects to be merged into the first.
+     * @return {Object} The object that is created as a result of merging all the objects passed in.
      */
     merge: function(source) {
         var i = 1,
@@ -2850,17 +2851,16 @@ var ExtObject = Ext.Object = {
     /**
      * Returns the first matching key corresponding to the given value.
      * If no matching value is found, null is returned.
-
-    var person = {
-        name: 'Jacky',
-        loves: 'food'
-    };
-
-    alert(Ext.Object.getKey(sencha, 'food')); // alerts 'loves'
-
+     *
+     *     var person = {
+     *         name: 'Jacky',
+     *         loves: 'food'
+     *     };
+     *
+     *     alert(Ext.Object.getKey(sencha, 'food')); // alerts 'loves'
+     *
      * @param {Object} object
      * @param {Object} value The value to find
-     * @markdown
      */
     getKey: function(object, value) {
         for (var property in object) {
@@ -2874,15 +2874,14 @@ var ExtObject = Ext.Object = {
 
     /**
      * Gets all values of the given object as an array.
-
-    var values = Ext.Object.getValues({
-        name: 'Jacky',
-        loves: 'food'
-    }); // ['Jacky', 'food']
-
+     *
+     *     var values = Ext.Object.getValues({
+     *         name: 'Jacky',
+     *         loves: 'food'
+     *     }); // ['Jacky', 'food']
+     *
      * @param {Object} object
      * @return {Array} An array of values from the object
-     * @markdown
      */
     getValues: function(object) {
         var values = [],
@@ -2899,12 +2898,12 @@ var ExtObject = Ext.Object = {
 
     /**
      * Gets all keys of the given object as an array.
-
-    var values = Ext.Object.getKeys({
-        name: 'Jacky',
-        loves: 'food'
-    }); // ['name', 'loves']
-
+     *
+     *     var values = Ext.Object.getKeys({
+     *         name: 'Jacky',
+     *         loves: 'food'
+     *     }); // ['name', 'loves']
+     *
      * @param {Object} object
      * @return {String[]} An array of keys from the object
      * @method
@@ -2924,15 +2923,14 @@ var ExtObject = Ext.Object = {
 
     /**
      * Gets the total number of this object's own properties
-
-    var size = Ext.Object.getSize({
-        name: 'Jacky',
-        loves: 'food'
-    }); // size equals 2
-
+     *
+     *     var size = Ext.Object.getSize({
+     *         name: 'Jacky',
+     *         loves: 'food'
+     *     }); // size equals 2
+     *
      * @param {Object} object
      * @return {Number} size
-     * @markdown
      */
     getSize: function(object) {
         var size = 0,
@@ -3582,6 +3580,7 @@ Ext.JSON.encodeDate = function(d) {
      * Encodes an Object, Array or other value
      * @param {Object} o The variable to encode
      * @return {String} The JSON string
+     * @method
      */
     this.encode = function() {
         var ec;
@@ -3600,6 +3599,7 @@ Ext.JSON.encodeDate = function(d) {
      * @param {String} json The JSON string
      * @param {Boolean} safe (optional) Whether to return null or throw an exception if the JSON is invalid.
      * @return {Object} The resulting object
+     * @method
      */
     this.decode = function() {
         var dc;
@@ -3734,7 +3734,7 @@ var noArgs = [],
          */
         extend: function(parent) {
             var parentPrototype = parent.prototype,
-                basePrototype, prototype, i, ln, name, statics;
+                prototype, i, ln, name, statics;
 
             prototype = this.prototype = Ext.Object.chain(parentPrototype);
             prototype.self = this;
@@ -3742,13 +3742,10 @@ var noArgs = [],
             this.superclass = prototype.superclass = parentPrototype;
 
             if (!parent.$isClass) {
-                basePrototype = Ext.Base.prototype;
-
-                for (i in basePrototype) {
-                    if (i in prototype) {
-                        prototype[i] = basePrototype[i];
-                    }
-                }
+                Ext.apply(prototype, Ext.Base.prototype);
+                prototype.constructor = function() {
+                    parentPrototype.constructor.apply(this, arguments);
+                };
             }
 
             //<feature classSystem.inheritableStatics>
@@ -5292,9 +5289,8 @@ var noArgs = [],
      */
     ExtClass.registerPreprocessor('extend', function(Class, data) {
         var Base = Ext.Base,
-            basePrototype = Base.prototype,
             extend = data.extend,
-            Parent, parentPrototype, name;
+            Parent;
 
         delete data.extend;
 
@@ -5303,16 +5299,6 @@ var noArgs = [],
         }
         else {
             Parent = Base;
-        }
-
-        parentPrototype = Parent.prototype;
-
-        if (!Parent.$isClass) {
-            for (name in basePrototype) {
-                if (!parentPrototype[name]) {
-                    parentPrototype[name] = basePrototype[name];
-                }
-            }
         }
 
         Class.extend(Parent);
@@ -6327,24 +6313,29 @@ var noArgs = [],
         },
 
         createOverride: function(className, data) {
-            var overriddenClassName = data.override;
+            var overriddenClassName = data.override,
+                requires = Ext.Array.from(data.requires);
 
             delete data.override;
+            delete data.requires;
 
             this.existCache[className] = true;
 
-            // Override the target class right after it's created
-            this.onCreated(function() {
-                this.get(overriddenClassName).override(data);
+            Ext.require(requires, function() {
+                // Override the target class right after it's created
+                this.onCreated(function() {
+                    this.get(overriddenClassName).override(data);
 
-                // This push the overridding file itself into Ext.Loader.history
-                // Hence if the target class never exists, the overriding file will
-                // never be included in the build
-                this.triggerCreated(className);
-            }, this, overriddenClassName);
+                    // This push the overridding file itself into Ext.Loader.history
+                    // Hence if the target class never exists, the overriding file will
+                    // never be included in the build
+                    this.triggerCreated(className);
+                }, this, overriddenClassName);
+            }, this);
 
             return this;
         },
+
         /**
          * Instantiate a class by its alias; usually invoked by the convenient shorthand {@link Ext#createByAlias Ext.createByAlias}
          * If {@link Ext.Loader} is {@link Ext.Loader#setConfig enabled} and the class has not been defined yet, it will
@@ -7727,8 +7718,7 @@ var noArgs = [],
                 isFileLoaded = this.isFileLoaded,
                 scriptElements = this.scriptElements,
                 noCacheUrl = url + (this.getConfig('disableCaching') ? ('?' + this.getConfig('disableCachingParam') + '=' + Ext.Date.now()) : ''),
-                isCrossOriginRestricted = false,
-                xhr, status, onScriptError;
+                xhr, status, content, onScriptError;
 
             if (isFileLoaded[url]) {
                 return this;
@@ -7764,7 +7754,7 @@ var noArgs = [],
                 }
 
                 try {
-                    xhr.open('GET', url, false);
+                    xhr.open('GET', noCacheUrl, false);
                     xhr.send(null);
                 }
                 catch (e) {
@@ -7776,13 +7766,13 @@ var noArgs = [],
                     //</debug>
                 }
 
-                status = (xhr.status === 1223) ? 204 : xhr.status;
+                status = (xhr.status == 1223) ? 204 : xhr.status;
+                content = xhr.responseText;
 
-                if (status === 0 || (status >= 200 && status < 300)) {
+                if ((status >= 200 && status < 300) || status == 304 || (status == 0 && content.length > 0)) {
                     // Debugger friendly, file names are still shown even though they're eval'ed code
                     // Breakpoints work on both Firebug and Chrome's Web Inspector
-                    Ext.globalEval(xhr.responseText + "\n//@ sourceURL=" + url);
-
+                    Ext.globalEval(content + "\n//@ sourceURL=" + url);
                     onLoad.call(scope);
                 }
                 else {
@@ -8178,8 +8168,7 @@ var noArgs = [],
     Ext.exclude = alias(Loader, 'exclude');
 
     /**
-     * Adds a listener to be notified when the document is ready (before onload and before images are loaded).
-     * Shorthand of {@link Ext.Loader#onReady}(fn, scope, true, options).
+     * Adds a listener to be notified when the document is ready and all dependencies are loaded.
      *
      * @param {Function} fn The method the event invokes.
      * @param {Object} [scope] The scope in which the handler function executes. Defaults to the browser window.

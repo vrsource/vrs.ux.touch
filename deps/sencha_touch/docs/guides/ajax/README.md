@@ -180,7 +180,7 @@ Another way requests can fail is if the server took too long to respond and the 
         url: 'myUrl',
 
         failure: function(response) {
-            alert.log(response.timedout); //alerts true
+            console.log(response.timedout); // logs true
         }
     });
 
@@ -192,7 +192,7 @@ millisecond. In this case our request will give up after 5 seconds:
         timeout: 5000,
 
         failure: function(response) {
-            alert.log(response.timedout); //alerts true
+            console.log(response.timedout); // logs true
         }
     });
 
@@ -203,7 +203,7 @@ request object that Ext.Ajax.request gives you:
         url: 'myUrl',
 
         failure: function(response) {
-            alert.log(response.aborted); //alerts true
+            console.log(response.aborted); // logs true
         }
     });
 

@@ -1,5 +1,7 @@
 # Using Layouts in Sencha Touch 2
 
+{@video vimeo 38128757}
+
 ## Intro and HBox
 
 Layouts describe the sizing and positioning on [Components](#!/guide/components) in your app. For example, an email client might have a list of messages pinned to the left, taking say one third of the available width, and a message viewing panel in the rest of the screen.
@@ -176,6 +178,148 @@ We can achieve it by specifying *dock: 'left'*:
 	});
 
 You can add multiple docked items on each side (for example docking several items in the 'bottom' position).
+
+## Pack and Align (HBox)
+
+Pack and Align control how your child elements are aligned in your layout. 'Pack' refers to the axis of your current
+layout, while 'Align' is the opposite. So in an HBox layout, Pack refers to the horizontal axis, and Align the vertical
+axis. The example below illustrates the difference.
+
+    @example miniphone preview
+    var container = Ext.create('Ext.Container', {
+        fullscreen: true,
+
+        layout: {
+            type: 'hbox',
+            align: 'start',
+            pack: 'start'
+        },
+
+        items: [
+            {
+                docked: 'top',
+                xtype: 'titlebar',
+                title: 'HBox Layout'
+            },
+
+            {
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Pack: ',
+                        style: 'color: #fff; padding: 0 10px; width: 85px;'
+                    },
+                    {
+                        xtype: 'segmentedbutton',
+                        allowDepress: false,
+                        items: [
+                            { text: 'Start',  handler: function() { layout.setPack('start') }, pressed: true },
+                            { text: 'Center', handler: function() { layout.setPack('center') } },
+                            { text: 'End',    handler: function() { layout.setPack('end') } }
+                        ]
+                    }
+                ]
+            },
+            {
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Align: ',
+                        style: 'color: #fff; padding: 0 10px; width: 85px;'
+                    },
+                    {
+                        xtype: 'segmentedbutton',
+                        allowDepress: false,
+                        items: [
+                            { text: 'Start',   handler: function() { layout.setAlign('start'); }, pressed: true },
+                            { text: 'Center',  handler: function() { layout.setAlign('center'); } },
+                            { text: 'End',     handler: function() { layout.setAlign('end'); } },
+                            { text: 'Stretch', handler: function() { layout.setAlign('stretch'); } }
+                        ]
+                    }
+                ]
+            },
+
+            { xtype: 'button', text: 'Btn 1', margin: 2 },
+            { xtype: 'button', text: 'Btn 2', margin: 2 },
+            { xtype: 'button', text: 'Btn 3', margin: 2 }
+        ]
+    });
+
+    var layout = container.getLayout();
+
+## Pack and Align (VBox)
+
+    @example phone preview
+    var container = Ext.create('Ext.Container', {
+        fullscreen: true,
+
+        layout: {
+            type: 'vbox',
+            align: 'start',
+            pack: 'start'
+        },
+
+        items: [
+            {
+                docked: 'top',
+                xtype: 'titlebar',
+                title: 'VBox Layout'
+            },
+
+            {
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Pack: ',
+                        style: 'color: #fff; padding: 0 10px; width: 85px;'
+                    },
+                    {
+                        xtype: 'segmentedbutton',
+                        allowDepress: false,
+                        items: [
+                            { text: 'Start',  handler: function() { layout.setPack('start') }, pressed: true },
+                            { text: 'Center', handler: function() { layout.setPack('center') } },
+                            { text: 'End',    handler: function() { layout.setPack('end') } }
+                        ]
+                    }
+                ]
+            },
+            {
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Align: ',
+                        style: 'color: #fff; padding: 0 10px; width: 85px;'
+                    },
+                    {
+                        xtype: 'segmentedbutton',
+                        allowDepress: false,
+                        items: [
+                            { text: 'Start',   handler: function() { layout.setAlign('start'); }, pressed: true },
+                            { text: 'Center',  handler: function() { layout.setAlign('center'); } },
+                            { text: 'End',     handler: function() { layout.setAlign('end'); } },
+                            { text: 'Stretch', handler: function() { layout.setAlign('stretch'); } }
+                        ]
+                    }
+                ]
+            },
+
+            { xtype: 'button', text: 'Btn 1', margin: 2 },
+            { xtype: 'button', text: 'Btn 2', margin: 2 },
+            { xtype: 'button', text: 'Btn 3', margin: 2 }
+        ]
+    });
+
+    var layout = container.getLayout();
 
 ## Further Reading
 

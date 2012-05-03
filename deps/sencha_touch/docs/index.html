@@ -9,28 +9,27 @@
   <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
   <link rel="stylesheet" href="resources/css/app.css" type="text/css" />
   <link rel="stylesheet" href="resources/prettify/prettify.css" type="text/css" />
-  <!--[if IE]>
-    <link rel="stylesheet" href="resources/css/ie.css" type="text/css" />
-    <link rel="stylesheet" href="resources/css/welcome_ie6.css" type="text/css" />
-  <![endif]-->
 
   <!-- Async script to not block while loading TypeKit fonts -->
+  <!-- TypeKit font-set is only registered for sencha.com and localhost -->
   <script type="text/javascript">
   (function() {
-    var TypekitConfig = {
-      kitId: 'uxj6dew'
-    };
-    var tk = document.createElement('script');
-    tk.src = '//use.typekit.com/' + TypekitConfig.kitId + '.js';
-    tk.type = 'text/javascript';
-    tk.async = 'true';
-    tk.onload = tk.onreadystatechange = function() {
-      var rs = this.readyState;
-      if (rs && rs != 'complete' && rs != 'loaded') return;
-      try { Typekit.load(TypekitConfig); } catch (e) {}
-    };
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(tk, s);
+    if (/sencha.com$|localhost$/.test(window.location.hostname)) {
+      var TypekitConfig = {
+        kitId: 'uxj6dew'
+      };
+      var tk = document.createElement('script');
+      tk.src = '//use.typekit.com/' + TypekitConfig.kitId + '.js';
+      tk.type = 'text/javascript';
+      tk.async = 'true';
+      tk.onload = tk.onreadystatechange = function() {
+        var rs = this.readyState;
+        if (rs && rs != 'complete' && rs != 'loaded') return;
+        try { Typekit.load(TypekitConfig); } catch (e) {}
+      };
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(tk, s);
+    }
   })();
   </script>
 
@@ -496,6 +495,7 @@
 <a href="#!/api/Ext.device.Geolocation" rel="Ext.device.Geolocation" class="docClass">Ext.device.Geolocation</a>
 <a href="#!/api/Ext.device.Notification" rel="Ext.device.Notification" class="docClass">Ext.device.Notification</a>
 <a href="#!/api/Ext.device.Orientation" rel="Ext.device.Orientation" class="docClass">Ext.device.Orientation</a>
+<a href="#!/api/Ext.device.Push" rel="Ext.device.Push" class="docClass">Ext.device.Push</a>
 </div>
 </div>
 <div class='middle-column'>
@@ -534,6 +534,7 @@
 <li><a href='#!/guide/floating_components'>Floating Components</a></li>
 <li><a href='#!/guide/environment_package'>Environment Detection</a></li>
 <li><a href='#!/guide/ajax'>Using AJAX</a></li>
+<li><a href='#!/guide/theming'>Theming</a></li>
 </ul>
 <h3>Components</h3>
 <ul>
@@ -544,7 +545,6 @@
 <li><a href='#!/guide/tabs'>Using TabPanel</a></li>
 <li><a href='#!/guide/nested_list'>Using Nested List</a></li>
 <li><a href='#!/guide/navigation_view'>Using Navigation View</a></li>
-<li><a href='#!/guide/theming'>Theming Sencha Touch</a></li>
 </ul>
 <h3>Data</h3>
 <ul>
@@ -562,7 +562,7 @@
 </ul>
         </div>
 
-  <div id='footer-content' style='display: none'>Sencha Touch 2.0 Docs - Generated with <a href='https://github.com/senchalabs/jsduck'>JSDuck</a> 3.7.0. <a href='http://www.sencha.com/legal/terms-of-use/'>Terms of Use</a></div>
+  <div id='footer-content' style='display: none'>Sencha Touch 2.0 Docs - Generated with <a href='https://github.com/senchalabs/jsduck'>JSDuck</a> 3.9.0. <a href='http://www.sencha.com/legal/terms-of-use/'>Terms of Use</a></div>
 
         <div id="notice-text" style="display: none">
         Use <a href="http://docs.sencha.com/touch/2-0">http://docs.sencha.com/touch/2-0</a> for up to date documentation and features

@@ -135,6 +135,13 @@ $tabs-top-height: $global-row-height - .8em;
   .x-tab {
     -webkit-user-select: none;
     overflow: visible !important;
+
+    .x-button-label {
+      overflow: visible !important;
+    }
+  }
+  .x-tabbar &gt; * {
+    z-index: 1;
   }
 }
 
@@ -147,6 +154,7 @@ $tabs-top-height: $global-row-height - .8em;
     padding: 0 .8em;
 
     .x-tab {
+      position: relative;
       padding: (($tabs-top-height - 1em) / 2) .8em;
       height: $tabs-top-height;
       @if $include-border-radius { @include border-radius($tabs-top-height / 2); }
@@ -157,6 +165,11 @@ $tabs-top-height: $global-row-height - .8em;
       line-height: 1.2em;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
+    }
+
+    .x-badge {
+      font-size: .6em !important;
+      top: -0.5em;
     }
   }
 }

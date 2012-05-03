@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Builds the Sencah Touch app to one minimized file and copies the neccessary resources
+# Builds the Sencha Touch app to one minimized file and copies the necessary resources
 
 rm -rf server-side/public/resources
 cp -r resources server-side/public

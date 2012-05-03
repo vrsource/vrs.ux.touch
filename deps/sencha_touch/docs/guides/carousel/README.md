@@ -70,7 +70,7 @@ You can put anything in a Carousel, for example here we place a list and a form 
 
                 items: {
                     xtype: 'toolbar',
-                    dock: 'top',
+                    docked: 'top',
                     title: 'Sencha Touch Team'
                 },
 
@@ -93,7 +93,7 @@ You can put anything in a Carousel, for example here we place a list and a form 
                 items: [
                     {
                         xtype: 'toolbar',
-                        dock: 'top',
+                        docked: 'top',
                         title: 'Login'
                     },
                     {

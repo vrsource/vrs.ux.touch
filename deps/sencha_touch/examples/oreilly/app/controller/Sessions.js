@@ -63,7 +63,7 @@ Ext.define('Oreilly.controller.Sessions', {
 			this.session = Ext.widget('session');
 		}
 
-		this.session.config.title = record.get('title');
+		this.session.setTitle(record.get('title'));
 		this.getSessionContainer().push(this.session);
 		this.getSessionInfo().setRecord(record);
 	},

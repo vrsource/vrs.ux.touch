@@ -51,6 +51,7 @@ We used a magical function when adding the Human subclass. You'll notice that we
 * a getter function that returns the current value, in this case `getName()`.
 * a setter function that sets a new value, in this case `setName()`.
 * an applier function called by the setter that lets you run a function when a configuration changes, in this case `applyName()`.
+* a updater funciton called by the setter than run when the value for a configuration changes, in this case `updateName()`.
 
 The getter and setter functions are generated for free and are the recommended way to store data in a class. Every component in Sencha Touch uses the class system and the generated functions always follow the same pattern so if you know a config you already know how to get and set its value.
 
@@ -76,6 +77,44 @@ If we make a new Bob and try to change his name, but then click No when prompted
 
     bob.speak(); //still alerts 'Bob'
 
+The apply function is also a great place where you should *transform* your value. Remember whatever this returns with will be the new value for this configuration. A good example of this would be to prepend a title to the name:
+
+    Ext.define('Human', {
+        extend: 'Animal',
+
+        applyName: function(newName, oldName) {
+            return 'Mr. ' + newName;
+        }
+    });
+
+The other config method is update. The update method (`updateName()` in this case) is only called when the value of the config **changes**. So in the following case, `updateName()` would *not* be called:
+
+    var bob = Ext.create('Person', {
+        name: 'Bob'
+    });
+
+    bob.setName('Bob'); // The name is the same, so update is not called
+
+So when we use the update method, the config is changing. This should be the place where you update your component, or do whatever you need to do when the value of your config changes. In this example, we will show an `alert`:
+
+    Ext.define('Human', {
+        extend: 'Animal',
+
+        updateName: function(newName, oldName) {
+            alert('Name changed. New name is: ' + newName);
+        }
+    });
+
+Bare in mind that the update and apply methods get called on component instantiation too, so in the following example, we would get 2 alerts:
+
+    // creating this will cause the name config to update, therefor causing the alert
+    var bob = Ext.create('Person', {
+        name: 'Bob'
+    });
+
+    // changing it will cause the alert to show again
+    bob.setName('Ed');
+
 We've basically already learned the important parts of classes, as follows:
 
 * All classes are defined using `Ext.define`, including your own classes
@@ -83,7 +122,7 @@ We've basically already learned the important parts of classes, as follows:
 * Classes are created using `Ext.create`, for example `Ext.create('SomeClass', {some: 'configuration'})`
 * Always usine the `config` syntax to get automatic getters and setters and have a much cleaner codebase
 
-At this point you can already go about creating classes in your app, but the class system takes care of a few more things that will be helpful to lear are a few other things the class system does.
+At this point you can already go about creating classes in your app, but the class system takes care of a few more things that will be helpful to learn are a few other things the class system does.
 
 ## Dependencies and Dynamic Loading
 

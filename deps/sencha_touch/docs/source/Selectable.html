@@ -204,48 +204,27 @@ Ext.define('Ext.mixin.Selectable', {
      * @param {Number} endRow The index of the last row in the range
      * @param {Boolean} keepExisting (optional) True to retain existing selections
      */
-    selectRange: function(startRecord, endRecord, keepExisting, dir) {
+    selectRange: function(startRecord, endRecord, keepExisting) {
         var me = this,
             store = me.getStore(),
-            startRow = store.indexOf(startRecord),
-            endRow = store.indexOf(endRecord),
-            selectedCount = 0,
-            tmp, dontDeselect, i;
+            records = [],
+            tmp, i;
 
         if (me.getDisableSelection()) {
             return;
         }
 
         // swap values
-        if (startRow &gt; endRow) {
-            tmp = endRow;
-            endRow = startRow;
-            startRow = tmp;
+        if (startRecord &gt; endRecord) {
+            tmp = endRecord;
+            endRecord = startRecord;
+            startRecord = tmp;
         }
 
-        for (i = startRow; i &lt;= endRow; i++) {
-            if (me.isSelected(store.getAt(i))) {
-                selectedCount++;
-            }
+        for (i = startRecord; i &lt;= endRecord; i++) {
+            records.push(store.getAt(i));
         }
-
-        if (!dir) {
-            dontDeselect = -1;
-        }
-        else {
-            dontDeselect = (dir == 'up') ? startRow : endRow;
-        }
-
-        for (i = startRow; i &lt;= endRow; i++) {
-            if (selectedCount == (endRow - startRow + 1)) {
-                if (i != dontDeselect) {
-                    me.deselect(i, true);
-                }
-            } else {
-                me.select(i, true);
-            }
-
-        }
+        this.doMultiSelect(records, keepExisting);
     },
 
 <span id='Ext-mixin-Selectable-method-select'>    /**
@@ -304,7 +283,10 @@ Ext.define('Ext.mixin.Selectable', {
         me.setLastSelected(record);
         me.onItemSelect(record, suppressEvent);
         me.setLastFocused(record);
-        me.fireSelectionChange(!suppressEvent);
+
+        if (!suppressEvent) {
+            me.fireSelectionChange([record]);
+        }
     },
 
 <span id='Ext-mixin-Selectable-method-doMultiSelect'>    /**
@@ -342,7 +324,9 @@ Ext.define('Ext.mixin.Selectable', {
 
             me.onItemSelect(record, suppressEvent);
         }
-        this.fireSelectionChange(change &amp;&amp; !suppressEvent);
+        if (change &amp;&amp; !suppressEvent) {
+            this.fireSelectionChange(records);
+        }
     },
 
 <span id='Ext-mixin-Selectable-method-deselect'>    /**
@@ -383,7 +367,10 @@ Ext.define('Ext.mixin.Selectable', {
                 me.onItemDeselect(record, suppressEvent);
             }
         }
-        me.fireSelectionChange(change &amp;&amp; !suppressEvent);
+
+        if (change &amp;&amp; !suppressEvent) {
+            me.fireSelectionChange(records);
+        }
     },
 
 <span id='Ext-mixin-Selectable-method-updateLastFocused'>    /**
@@ -396,17 +383,15 @@ Ext.define('Ext.mixin.Selectable', {
         this.onLastFocusChanged(oldRecord, newRecord);
     },
 
-    fireSelectionChange: function(fireEvent) {
+    fireSelectionChange: function(records) {
         var me = this;
-        if (fireEvent) {
-            //&lt;deprecated product=touch since=2.0&gt;
-            me.fireAction('beforeselectionchange', [me], function() {
-            //&lt;/deprecated&gt;
-                me.fireEvent('selectionchange', me, me.getSelection());
-            //&lt;deprecated product=touch since=2.0&gt;
-            });
-            //&lt;/deprecated&gt;
-        }
+        //&lt;deprecated product=touch since=2.0&gt;
+        me.fireAction('beforeselectionchange', [me], function() {
+        //&lt;/deprecated&gt;
+            me.fireAction('selectionchange', [me, records], 'getSelection');
+        //&lt;deprecated product=touch since=2.0&gt;
+        });
+        //&lt;/deprecated&gt;
     },
 
 <span id='Ext-mixin-Selectable-method-getSelection'>    /**
@@ -448,38 +433,30 @@ Ext.define('Ext.mixin.Selectable', {
         }
     },
 
-    // when a store is cleared remove all selections
-    // (if there were any)
-    onSelectionStoreClear: function() {
-        var me = this,
-            selected = me.selected;
-        if (selected.getCount() &gt; 0) {
-            selected.clear();
-            me.setLastSelected(null);
-            me.setLastFocused(null);
-            me.fireSelectionChange(true);
-        }
-    },
-
     // prune records from the SelectionModel if
     // they were selected at the time they were
     // removed.
-    onSelectionStoreRemove: function(store, record) {
+    onSelectionStoreRemove: function(store, records) {
         var me = this,
-            selected = me.selected;
+            selected = me.selected,
+            ln = records.length,
+            record, i;
 
         if (me.getDisableSelection()) {
             return;
         }
 
-        if (selected.remove(record)) {
-            if (me.getLastSelected() == record) {
-                me.setLastSelected(null);
+        for (i = 0; i &lt; ln; i++) {
+            record = records[i];
+            if (selected.remove(record)) {
+                if (me.getLastSelected() == record) {
+                    me.setLastSelected(null);
+                }
+                if (me.getLastFocused() == record) {
+                    me.setLastFocused(null);
+                }
+                me.fireSelectionChange([record]);
             }
-            if (me.getLastFocused() == record) {
-                me.setLastFocused(null);
-            }
-            me.fireSelectionChange(true);
         }
     },
 

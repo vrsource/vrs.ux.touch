@@ -86,14 +86,14 @@ Ext.define('Ext.tab.Bar', {
 <span id='Ext-tab-Bar-method-applyActiveTab'>    /**
 </span>     * @private
      */
-    applyActiveTab: function(activeTab, oldActiveTab) {
-        if (!activeTab &amp;&amp; activeTab !== 0) {
+    applyActiveTab: function(newActiveTab, oldActiveTab) {
+        if (!newActiveTab &amp;&amp; newActiveTab !== 0) {
             return;
         }
 
-        var activeTabInstance = this.parseActiveTab(activeTab);
+        var newTabInstance = this.parseActiveTab(newActiveTab);
 
-        if (!activeTabInstance) {
+        if (!newTabInstance) {
             // &lt;debug warn&gt;
             if (oldActiveTab) {
                 Ext.Logger.warn('Trying to set a non-existent activeTab');
@@ -101,7 +101,7 @@ Ext.define('Ext.tab.Bar', {
             // &lt;/debug&gt;
             return;
         }
-        return activeTabInstance;
+        return newTabInstance;
     },
 
 <span id='Ext-tab-Bar-method-doSetDocked'>    /**

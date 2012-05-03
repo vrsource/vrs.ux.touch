@@ -94,6 +94,15 @@ Models can be linked together with the Associations API. Most applications deal 
         }
     });
 
+    Ext.define('Comment', {
+        extend: 'Ext.data.Model',
+
+        config: {
+            fields: ['id', 'post_id', 'name', 'message'],
+            belongsTo: 'Post'
+        }
+    });
+
     Ext.define('Post', {
         extend: 'Ext.data.Model',
 
@@ -113,14 +122,6 @@ Models can be linked together with the Associations API. Most applications deal 
         }
     });
 
-    Ext.define('Comment', {
-        extend: 'Ext.data.Model',
-
-        config: {
-            fields: ['id', 'post_id', 'name', 'message'],
-            belongsTo: 'Post'
-        }
-    });
 
 It's easy to express rich relationships between different models in your application. Each model can have any number of associations with other models and your models can be defined in any order. Once we have a model instance we can easily traverse the associated data. For example, to log all comments made on each post for a given user, do something like this:
 
@@ -174,7 +175,7 @@ Once more, the loading function (`getUser`) is asynchronous and requires a callb
 
 ## Validations
 
-Sencha Touch 2 Models have rich support for validating their data. To demonstrate this we're going to build upon the example we created that illustrated associations. First, let's add some validations to the `User` model:
+Models have rich support for validating their data. To demonstrate this we're going to build upon the example we created that illustrated associations. First, let's add some validations to the `User` model:
 
     Ext.define('User', {
         extend: 'Ext.data.Model',
@@ -183,11 +184,11 @@ Sencha Touch 2 Models have rich support for validating their data. To demonstrat
             fields: ...,
 
             validations: [
-                { type: 'presence', name: 'name' },
-                { type: 'length',   name: 'name', min: 5 },
-                { type: 'format',   name: 'age', matcher: /\d+/ },
-                { type: 'inclusion', name: 'gender', list: ['male', 'female'] },
-                { type: 'exclusion', name: 'name', list: ['admin'] }
+                { type: 'presence',  field: 'name' },
+                { type: 'length',    field: 'name', min: 5 },
+                { type: 'format',    field: 'age', matcher: /\d+/ },
+                { type: 'inclusion', field: 'gender', list: ['male', 'female'] },
+                { type: 'exclusion', field: 'name', list: ['admin'] }
             ],
 
             proxy: ...

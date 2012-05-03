@@ -2,81 +2,109 @@
 
 {@video vimeo 37974749}
 
-**Note:** This guide will be updated to reflect the content of the video shortly.
-
 ## What is Sencha Touch?
 
 Sencha Touch enables you to quickly and easily create HTML5 based mobile apps that work on Android, iOS and Blackberry devices and produce a native-app-like experience inside a browser.
 
 ## Things you'll need
 
-Here's what you need to get started:
+First, you'll need to download the free [Sencha Touch 2 SDK](http://www.sencha.com/products/touch/download/) and
+[SDK Tools](http://www.sencha.com/products/sdk-tools/download) from the Sencha website. You'll also need:
 
- - The free [Sencha Touch 2.0 SDK](http://www.sencha.com/products/touch/download/)
  - A web server running locally on your computer
- - A modern web browser; Chrome and Safari are recommended
+ - A modern web browser; [Chrome](https://www.google.com/chrome) and [Safari](http://www.apple.com/safari/download/) are recommended
 
-Download and unzip the latest version of the SDK. Place the unzipped folder into your web server's document root. If you don't have a web server or aren't sure, we recommend using a simple one-click installer like [WAMP](http://www.wampserver.com/en/) or [MAMP](http://www.mamp.info/en/index.html).
+## Installation
 
-Once you have the folder in the right place, open your web browser and point it to http://localhost/sencha-touch-folder (or wherever your web server is configured to serve from) and you should see the Sencha Touch Welcome page. If that's all working you're ready to start your first app.
+First, extract your SDK zip file to your projects directory. Ideally, this folder will be accessible by your HTTP server.
+For example, you should be able to navigate to http://localhost/sencha-touch-2.0.0-gpl from your web browser and see the
+Sencha Touch documentation.
 
-## Starting your app
+You'll also need to run the SDK Tools installer. The SDK Tools will add the **`sencha`** command line tool to your path
+so that you can generate a fresh application template among other things. To check you have installed the SDK tools,
+change to your Sencha Touch directory and type the `sencha` command. For example:
 
-Sencha Touch apps work best when they follow the simple application structure guidelines we provide. This is a small set of conventions and classes that make writing maintainable apps simpler, especially when you work as part of a team.
+    $ cd ~/webroot/sencha-touch-2.0.0-gpl/
+    $ sencha
+    Sencha Command v2.0.0 for Sencha Touch 2
+    Copyright (c) 2012 Sencha Inc.
+    ...
 
-The first step is to set up the simple folder structure that will house the app. Initially all you need is two files and a copy of Sencha Touch. By convention, these are:
+**NOTE**: You **must** be inside either the downloaded SDK directory or a generated Touch app when using the **`sencha`** command.
 
-* **index.html** - a simple HTML file that includes Sencha Touch and your application file
-* **app.js** - a file where you define the app name, home screen icon, and what it's supposed to do on launch
-* **touch** - a copy of the downloaded Sencha Touch folder
+## Generating your first app
 
-Let's start with the index.html file. Here's what it looks like:
+Now you have Sencha Touch and the SDK Tools installed, lets generate an application. Make sure you're still in the
+Sencha Touch SDK folder, and type the following:
 
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Getting Started</title>
-        <link rel="stylesheet" href="touch/resources/css/sencha-touch.css" type="text/css">
-        <script type="text/javascript" src="touch/builds/sencha-touch-all-debug.js"></script>
-        <script type="text/javascript" src="app.js"></script>
-    </head>
-    <body></body>
-    </html>
+    $ sencha generate app GS ../GS
+    [INFO] Created file /Users/nickpoulden/Projects/sencha/GS/.senchasdk
+    [INFO] Created file /Users/nickpoulden/Projects/sencha/GS/index.html
+    [INFO] Created file /Users/nickpoulden/Projects/sencha/GS/app.js
+    ...
 
-This is probably one of the simplest HTML pages you'll ever write. All it does is include Sencha Touch (the JavaScript file and its stylesheet), and your app.js. Note that the body is empty - we'll let Sencha Touch fill that up.
+This will generate a skeleton Sencha Touch application namespaced to the `GS` variable (short for Getting Started) and
+located in the directory `../GS` (one level up from the Sencha Touch SDK directory). The skeleton app contains all the
+files you need to create a Touch application, including the default index.html, a copy of the Touch SDK, CSS, images and
+configuration files for packaging your app for native.
 
-Next, let's look at the contents of our app.js file. We'll keep things simple to start and just call `alert` to make sure everything's working:
+Lets check if your application has generated successfully by opening it in a web browser. Assuming you extracted the SDK
+to your webroot folder, you should be able to nativate to `http://localhost/GS` and see the default app:
 
-    @example raw miniphone
-    Ext.application({
-        name: 'Sencha',
+{@img screen1.png}
 
-        launch: function() {
-            alert('launched');
-        }
-    });
+## Explore the code
 
-That's all you need to get started. Now, launch Safari or Chrome and make sure it works as expected. You can also click the small Preview icon next to the example above to run it. So far it doesn't do very much, but the fact that the alert message pops up means Sencha Touch is on the page and the app launched.
+Open up the GS directory in your favorite IDE or Text editor. The directory structure looks like this:
 
-The last thing we're going to do is create a {@link Ext.Panel Panel} with the time-honored Hello World. This is really simple, all we need to do is update our launch function to use Ext.create, like this:
+{@img files.png}
 
-    @example raw miniphone
-    Ext.application({
-        name: 'Sencha',
+Here's a description of each file and directory:
 
-        launch: function() {
-            Ext.create('Ext.Panel', {
-                fullscreen: true,
-                html: 'Hello World'
-            });
-        }
-    });
+  - **`app`** - directory containing the Models, Views, Controllers and Stores for your app.
+  - **`app.js`** - the main Javascript entry point for your app.
+  - **`app.json`** - your app configuration file - used by the Builder to create a minified version of your app.
+  - **`index.html`** - The HTML file for your app.
+  - **`packager.json`** - The configuration file used by the Packager to create native versions of your app for iOS and Android app stores.
+  - **`resources`** - directory containing the CSS and Images for your app
+  - **`sdk`** - A copy of the Sencha Touch SDK. You shouldn't need to change the contents of this folder.
+
+Open `app.js`, the main entry point for your app, in your editor.
+
+{@img appjs.png}
+
+The `launch` function is the entry point to your application. In the default application, we first hide the application
+loading indictor, then create an instance of our Main view and add it to the Viewport.
+
+The Viewport is a {@link Ext.layout.Card Card layout} to which you can add components to your application. The default
+app adds the `Main` view to the viewport so it is visible on the screen. Lets look at the code inside the Main view.
+
+Open `app/view/Main.js` in your code editor and try editing line 10 to this:
+
+    title: 'Home Tab'
+
+Now change line 19 to this:
+
+    title: 'Woohoo!'
+
+Also, change lines 22-26 to this:
+
+    html: [
+        "I changed the default <b>HTML Contents</b> to something different!"
+    ].join("")
+
+Now refresh the app in your browser to see your changes:
+
+{@img changed.png}
 
 ## Next Steps
 
-Now that we've put together the simplest of pages and achieved Hello World, it's time to create our first simple app. The next step is to go through the <a href="#!/guide/first_app">First Application guide</a>, which builds on what you've just done and builds a simple but powerful app in around 15 minutes.
+The next step is to follow the <a href="#!/guide/first_app">First Application guide</a>, which builds on what you've
+just done and guides your through creating a simple but powerful app in around 15 minutes. You can also follow along
+with the video at the top of this guide.
 
-If you'd like to skip ahead or find out more detailed information about other aspects of the framework we recommend checking out the following guides and resources:
+If you'd like to skip ahead or find out more detailed information about other aspects of the framework we recommend
+checking out the following guides and resources:
 
 ### Guides
 

@@ -4,22 +4,22 @@ Sencha Command is a cross-platform command line tool that helps make developing 
 
 ## Requirements
 
-Please note that all commands only apply to Sencha Touch 2. Only OS X or Windows operating systems are currently supported.
+Please note the content of this guide currently applies only to Sencha Touch 2.
 
 Step 1: Setup an HTTP server on your computer if you don't have one running. This guide assumes that the host name is `localhost`, and the document root is at `/path/to/www`
 
-Step 2: Download and install the [latest SDK Tools](http://www.sencha.com/products/sdk-tools) on your development machine. The latest version as of this writing is 2.0.0 beta.
+Step 2: Download and install the [latest SDK Tools](http://www.sencha.com/products/sdk-tools) on your development machine. The latest version as of this writing is 2.0.0-beta2.
 
-Step 3: Download the [latest Sencha Touch 2 SDK](http://www.sencha.com/products/touch/). Extract the SDK to a local directory.
+Step 3: Download the [latest Sencha Touch 2 SDK](http://www.sencha.com/products/touch/). Extract the SDK to a local directory. The latest version as of this writing is 2.0.1-rc.
 
 Step 4: Verify that Sencha Command is working properly on your machine:
 
-Open a command line terminal, and run the following commands. Replace `/path/to/sencha-touch-2-sdk` with the actual path to the SDK that you extracted to previously, as mentioned in Step 2.
+Open a command line terminal, and run the following commands. Replace `/path/to/sencha-touch-2-sdk` with the actual path to the SDK that you extracted to previously (**not the SDK Tools directory**), as mentioned in Step 2.
 
 	cd /path/to/sencha-touch-2-sdk
 	sencha
 
-If a help message appears with the first line that says: "Sencha Command v2.0.0 for Sencha Touch 2", you are all set.
+If a help message appears with the first line that says: "Sencha Command v2.0.1", you are all set.
 
 ## Getting Started
 
@@ -104,6 +104,18 @@ For example:
 
 The command above will automatically generate a new Model class named `User` with 3 fields of `id`, `name` and `email` to app/model/User.js, and add its reference to your app.js.
 
+## Upgrading Your Application
+
+Generated applications always have their own copies of the SDK from which they were originally generated. Upgrading your application to the a new of the SDK means replacing the old copy with the new one.
+
+Starting from SDK Tools v2.0.0-beta2 and Sencha Touch SDK v2.0.1-rc, you can seamlessly upgrade your application to the new downloaded SDK using `sencha app upgrade`. Firstly do make sure your current working directory is the **new** SDK directory:
+
+	cd /path/to/new_version_of_sdk
+	
+then run:
+
+	sencha app upgrade /path/to/your_application
+
 ## Deploying Your Application
 
 Developing your application simply means editing source code and refreshing the browser. All source files are dynamically loaded on demand. There's no building process involved.
@@ -149,6 +161,47 @@ If you are using OS X and have Xcode installed, this one-liner will automaticall
 
 For more details on working with `packager.json`, please refer to the [Native Package guide](#!/guide/native_packaging)
 
+## Troubleshooting
+
+### Command Not Found
+
+Upon running `sencha`, if there is an error message appears saying "sencha: command not found" on OS X / Linux or "'sencha' is not recognized as an internal or external command,
+operable program or batch file." on Windows, follow these steps to troubleshoot:
+
+- Close all existing terminal / command prompt windows and re-open them. 
+- Make sure that Sencha SDK Tools is properly installed:
+	- The installation directory exists. By default, the installation path is `/Applications/SenchaSDKTools-{version}` on OS X, `/opt/SenchaSDKTools-{version}` on Linux, and `C:\Program Files\SenchaSDKTools-{version}`
+	- The path to SDK Tools directory is prepended to your system's PATH environment variable. From the terminal, run `echo $PATH` (`echo %PATH%` on Windows). The SDK Tools directory should be displayed in part of the output. If this is not the case, add it to your PATH manually.
+	- The environment variable `SENCHA_SDK_TOOLS_{version}` is set, with the value being the absolute path to the installation directory mentioned above. For example: If the installed version is '2.0.0-beta2', a `SENCHA_SDK_TOOLS_2_0_0_BETA2` must be set. From the terminal, run `echo $SENCHA_SDK_TOOLS_2_0_0_BETA2` (`echo %SENCHA_SDK_TOOLS_2_0_0_BETA2%` on Windows). If the output is empty, set the environment variable manually.
+	
+### Wrong Current Directory
+
+A common mistake is not running `sencha` command within either a valid SDK directory or an application directory. If the current directory is not a SDK or application directory, `sencha` command will fallback to backwards-compatible mode. As of SDK Tools release '2.0.0-beta2', you should see a clear warning in such case:
+
+	The current working directory (...) is not a recognized Sencha SDK or application folder. Running in backwards compatible mode.
+	
+Note that a valid application directory is one that was generated by Sencha Command, or one that properly follows the structure described above.
+
+### Errors While Resolving Dependencies
+
+When deploying the application using `sencha app build` command, by default your application is launched via file system protocol inside a headless WebView to extract its dependencies. In other words, your application needs to load without errors for the build process to work properly. 
+
+Always develop with the debugger console enabled (Web Inspector for Safari / Developer Tools for Chrome) and resolve all warnings / error messages as they appear. Whenever you see a warning like this:
+
+	[Ext.Loader] Synchronously loading 'Ext.foo.Bar'; consider adding 'Ext.foo.Bar' explicitly as a require of the corresponding class
+	
+Immediately add 'Ext.foo.Bar' inside the `requires` array property of the class from which the dependency originates. If it is a application-wide dependency, add it to the `requires` array property inside `Ext.application(...)` statement.
+
+If your application relies on any dynamic server-side scripting, for example: loading class configuration from a PHP script, you must set the `'url'` item inside `'app.json'` to the absolute URL from which your application can be loaded on a web browser. For example:
+
+	// app.json
+	{
+		"url": "http://localhost/myapp/",
+		// ...
+	}
+
+		
+			
 
 
 

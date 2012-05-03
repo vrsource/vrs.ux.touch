@@ -19,7 +19,7 @@ Ext.define('Device.view.Information', {
             {
                 cls: 'device-information',
                 id: 'deviceInformation',
-                tpl: '<strong>Name:</strong> {name}<br /><strong>UUID:</strong> {uuid}</br ><strong>Platform:</strong> {platform}'
+                tpl: '<strong>Name:</strong> {name}<br /><strong>UUID:</strong> {uuid}<br /><strong>Platform:</strong> {platform}'
             }
         ]
     },

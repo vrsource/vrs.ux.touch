@@ -9,16 +9,14 @@ One of the biggest benefits of native packaging is access to native APIs. Sencha
 
 ## Getting Started
 
-Because we want to keep our apps small, and because native APIs only apply in native packaged apps, the Ext.device API is not included in the standard build of Sencha Touch 2. It's easy to add it to your project with a simple Ext.require:
+Because we want to keep our apps small, and because native APIs only apply in native packaged apps, the Ext.device API is not included in the standard build of Sencha Touch 2. When you want to use any of the Device API's , you must require them using `Ext.require`:
 
-    Ext.require('Ext.device.*');
-    
+    Ext.require('Ext.device.Connection');
+
     Ext.application({
         name: 'MyApp',
         //the rest of your app follows
     });
-
-This loads each of the Ext.device APIs into your app, ready to be used. That's all we have to do, now on to the APIs themselves.
 
 ## Connection
 
@@ -35,7 +33,7 @@ This is probably the simplest of the APIs offered by Ext.device. If you load thi
 ## Notification
 
 Notifications are used to show native dialog boxes. Notifications work very much like Ext.Msg and can be configured in many different ways. For example, here's how we can display a native notification box with a title and a message:
-    
+
     Ext.device.Notification.show({
         title: 'One Button',
         message: 'This is a simple notification with one button.'
@@ -50,7 +48,7 @@ This is just going to pop up a native message box with our configured title and 
     Ext.device.Notification.show({
         title: 'One Button',
         message: 'This is a simple notification with one button.',
-        
+
         callback: function(button) {
             //When the user taps a button, show another notification
             Ext.device.Notification.show({
@@ -65,7 +63,7 @@ We didn't provide a title for the second message, which is fine - it just shows 
         title: 'Multiple Buttons',
         message: 'This is a notification with multiple buttons.',
         buttons: ["Cancel", "Login", "Another"],
-        
+
         callback: function(button) {
             //When the user taps a button, show another notification
             Ext.device.Notification.show({
@@ -76,7 +74,7 @@ We didn't provide a title for the second message, which is fine - it just shows 
 
 This time we provided three button text strings in the *buttons* array - when we run this code now we see the buttons stacked on top of one another:
 
-{@img notifications-custom.png}    
+{@img notifications-custom.png}
 
 ### Vibration
 
@@ -85,7 +83,7 @@ The final capability of the notification API is to vibrate the device. Making th
     Ext.device.notification.vibrate();
 
 This will cause the device to vibrate for a short time, and can be called as often as desired.
-    
+
 ## Camera
 
 The Camera API allows you to take pictures using the phone's camera, or alternatively select an image from the existing photo library available on the phone. Here's how we can ask the device to prompt the user to take a new picture:
@@ -93,7 +91,7 @@ The Camera API allows you to take pictures using the phone's camera, or alternat
     Ext.device.Camera.capture({
         source: 'camera',
         destination: 'file',
-        
+
         success: function(url) {
             //show the newly captured image in a full screen Ext.Img component:
             Ext.create('Ext.Img', {
@@ -127,7 +125,7 @@ The orientation API yields information about the current orientation of the devi
         var alpha = Math.round(e.alpha),
             beta = Math.round(e.beta),
             gamma = Math.round(e.gamma);
-        
+
         console.log(alpha, beta, gamma);
     });
 

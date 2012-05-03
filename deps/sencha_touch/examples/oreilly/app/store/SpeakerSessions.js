@@ -5,10 +5,10 @@ Ext.define('Oreilly.store.SpeakerSessions', {
         model: 'Oreilly.model.Session',
 
         sorters: [
-        	{
-            	property: 'time',
-            	direction: 'ASC'
+            {
+                property: 'time',
+                direction: 'ASC'
             }
         ]
     }
-})
+});

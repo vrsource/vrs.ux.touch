@@ -46,7 +46,6 @@ Ext.define('Ext.event.recognizer.LongPress', {
 </span>     * @member Ext.dom.Element
      * @event taphold
      * @inheritdoc Ext.dom.Element#longpress
-     * @deprecated 2.0.0 Please add listener to 'longpress' event instead
      */
 
     fireLongPress: function(e) {
@@ -91,7 +90,6 @@ Ext.define('Ext.event.recognizer.LongPress', {
     }
 
 }, function() {
-    //&lt;deprecated product=touch since=2.0&gt;
     this.override({
         handledEvents: ['longpress', 'taphold'],
 
@@ -106,7 +104,6 @@ Ext.define('Ext.event.recognizer.LongPress', {
             return this.callOverridden(arguments);
         }
     });
-    //&lt;/deprecated&gt;
 });
 </pre>
 </body>

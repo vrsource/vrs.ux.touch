@@ -130,14 +130,17 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
   background-color: $color;
 }
 
+@mixin radiomark($color: #000){
+  @extend .x-radiomark-base;
+  background-color: $color;
+}
+
 @mixin selectmark($color: #000){
   @extend .x-selectmark-base;
   background-color: $color;
 }
 <span id='Ext-form-Panel-css_mixin-sencha-form'>/**
 </span> * Includes default form styles.
- *
- * See {@link Global_CSS#background-gradient background-gradient}.
  *
  * @member Ext.form.Panel
  */
@@ -160,12 +163,15 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     @include bevel-text('light');
     padding: $form-spacing;
     display: none !important;
-    @include ellipsis;
     background-color: $form-label-background-color;
 
     span {
       font-size: .8em;
       font-weight: bold;
+    }
+
+    .x-form-label-nowrap &amp; {
+      @include ellipsis;
     }
   }
 
@@ -176,6 +182,7 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
 
     .x-field-input {
       position: relative;
+      min-width: 3.7em;
     }
 
     .x-field-input,
@@ -257,6 +264,7 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
   }
 
   .x-label-align-bottom {
+    @include box-direction(reverse);
 
     &amp;:last-child {
       .x-form-label {
@@ -316,8 +324,16 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     margin-top: -.7em;
   }
 
-  .x-field .x-input-radio,
-  .x-field .x-input-checkbox {
+  // Ext.field.Radio
+  .x-radiomark-base {
+    @include insertion(1.4em, 1.4em, 50%, auto);
+    right: ($form-spacing + .5em);
+    margin-top: -0.7em;
+    -webkit-mask-size: 1.4em;
+    -webkit-mask-image: theme_image($theme-name, &quot;pictos/circle4.png&quot;);
+  }
+
+  .x-field-checkbox .x-input-el {
     position: relative;
     &amp;:after {
       @include checkmark($form-light);
@@ -327,11 +343,36 @@ $form-scrollable-fields: '.x-field-slider, .x-field-toggle';
     }
   }
 
-  .x-field.x-item-disabled {
-    .x-input-radio,
-    .x-input-checkbox {
-      &amp;:checked:after {
-        @include checkmark(mix($form-light, $active-color, 70));
+  .x-field-radio .x-input-el {
+    position: relative;
+    &amp;:before {
+      @include radiomark(darken($form-light, 5));
+    }
+    &amp;:after {
+      @include radiomark($form-light);
+      -webkit-mask-image: theme_image($theme-name, &quot;pictos/circle3.png&quot;);
+    }
+    &amp;:checked:before {
+      background-color: $active-color;
+    }
+  }
+
+  .x-item-disabled {
+    &amp;.x-field-radio {
+      .x-input-el:checked:before {
+        background: mix($form-light, $active-color, 60);
+      }
+
+      .x-input-el:after {
+        background: #eee;
+      }
+    }
+
+    &amp;.x-field-checkbox {
+      .x-input-el {
+        &amp;:checked:after {
+          background: mix($form-light, $active-color, 60);
+        }
       }
     }
   }

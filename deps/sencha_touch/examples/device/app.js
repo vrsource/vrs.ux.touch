@@ -16,14 +16,16 @@ Ext.application({
         'Connection',
         'Notification',
         'Orientation',
-        'Geolocation'
+        'Geolocation',
+        'Push'
     ],
 
     controllers: [
         'Application',
         'Camera',
         'Notification',
-        'Connection'
+        'Connection',
+        'Push'
     ],
 
     launch: function() {

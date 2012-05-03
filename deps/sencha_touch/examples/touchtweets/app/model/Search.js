@@ -6,9 +6,11 @@
  */
 Ext.define('Twitter.model.Search', {
     extend: 'Ext.data.Model',
-    requires: ['Twitter.model.Tweet'],
+    requires: ['Twitter.model.Tweet', 'Ext.data.identifier.Uuid'],
 
     config: {
+        identifier: 'uuid',
+
         fields: [
             { name: "id" },
             { name: "query", type: "string" }

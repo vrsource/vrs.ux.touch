@@ -152,11 +152,22 @@
                 },
                 {
                     "path": "",
-                    "name": "sencha-touch-release.js"
+                    "name": "sencha-touch-debug-suffix.js"
                 },
                 {
                     "path": "bootstrap/",
                     "name": "suffix.js"
+                }
+            ]
+        },
+        {
+            "name": "All Manifest",
+            "target": "pkgs/all_manifest.js",
+            "id": "all_manifest",
+            "files": [
+                {
+                    "path": "",
+                    "name": "sencha-touch-all-debug-suffix.js"
                 }
             ]
         },
@@ -1192,11 +1203,6 @@
                 },
                 {
                     "path": "src/field/",
-                    "name": "Hidden.js",
-                    "clsName": "Ext.field.Hidden"
-                },
-                {
-                    "path": "src/field/",
                     "name": "Radio.js",
                     "clsName": "Ext.field.Radio"
                 },
@@ -1209,6 +1215,11 @@
                     "path": "src/field/",
                     "name": "Email.js",
                     "clsName": "Ext.field.Email"
+                },
+                {
+                    "path": "src/field/",
+                    "name": "Hidden.js",
+                    "clsName": "Ext.field.Hidden"
                 },
                 {
                     "path": "src/field/",
@@ -1563,7 +1574,8 @@
             "packages": [
                 "foundation",
                 "dom",
-                "classes"
+                "classes",
+                "all_manifest"
             ]
         },
         {

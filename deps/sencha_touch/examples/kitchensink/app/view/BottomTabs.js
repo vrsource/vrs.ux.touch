@@ -26,7 +26,7 @@ Ext.define('Kitchensink.view.BottomTabs', {
             },
             {
                 title    : 'Favorites',
-                html     : 'Badges <em>(like the 4, below)</em> can be added by setting <code>badgeText</code> when creating a tab or by using <code>setBadge()</code> on the tab later.',
+                html     : 'Badges <em>(like the 4, below)</em> can be added by setting <code>badgeText</code> when creating a tab or by using <code>setBadgeText()</code> on the tab later.',
                 iconCls  : 'favorites',
                 cls      : 'card dark',
                 badgeText: '4'

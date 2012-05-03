@@ -102,7 +102,8 @@ Ext.define('GeoCon.controller.SplashScreen', {
         });
     },
 
-    onStateChange: function(field, record) {
+    onStateChange: function(field) {
+        var record = field.getRecord();
         if (record) {
             this.currentState = record;
         }

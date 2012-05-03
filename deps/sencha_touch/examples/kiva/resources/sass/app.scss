@@ -27,6 +27,10 @@ $include-default-icons: false;
 @include sencha-toolbar-ui('green', #74B446);
 .x-toolbar-green {
   border-bottom-color: darken(#4B9123, 15) !important;
+
+  .x-title {
+    color: #fff;
+  }
 }
 
 // gray toolbar

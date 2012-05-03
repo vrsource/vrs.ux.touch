@@ -19,11 +19,17 @@ Ext.define('Device.view.Main', {
             {
                 xtype: 'tabbar',
                 docked: 'bottom',
+                scrollable: 'horizontal',
                 items: [
                     {
                         title: 'Notifications',
                         iconCls: 'mail',
                         className: 'Device.view.Information'
+                    },
+                    {
+                        title: 'Push',
+                        iconCls: 'mail',
+                        className: 'Device.view.Push'
                     },
                     {
                         title: 'Camera',
@@ -50,6 +56,7 @@ Ext.define('Device.view.Main', {
 
             { xclass: 'Device.view.Information' },
             { xclass: 'Device.view.Notification' },
+            { xclass: 'Device.view.Push' },
             { xclass: 'Device.view.Camera' },
             { xclass: 'Device.view.Orientation' },
             { xclass: 'Device.view.Connection' },

@@ -225,7 +225,7 @@ Here's an example of the new view in action. Click the Code Editor button to see
             value: 5,
             minValue: 0,
             maxValue: 100,
-            incrementValue: 1,
+            increment: 1,
             listeners: {
                 spin: function(spinner, value) {
                     view.setBorder(value);

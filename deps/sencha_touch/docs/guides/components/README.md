@@ -110,7 +110,7 @@ Sample usage:
             {
                 xtype: 'toolbar',
                 title: 'So is the toolbar',
-                dock: 'top'
+                docked: 'top'
             }
         ]
     });

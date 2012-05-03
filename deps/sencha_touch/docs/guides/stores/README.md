@@ -1,6 +1,6 @@
 # Using Stores
 
-<a href="#!/guide/Models">Models</a> are typically used with a Store, which is basically a collection of model instances. Setting up a store and loading its data is simple:
+<a href="#!/guide/models">Models</a> are typically used with a Store, which is basically a collection of model instances. Setting up a store and loading its data is simple:
 
     Ext.create('Ext.data.Store', {
         model: 'User',

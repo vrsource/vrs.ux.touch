@@ -87,10 +87,40 @@ Ext.define('Ext.field.Slider', {
 </span>     * @event change
      * Fires when an option selection has changed.
      * @param {Ext.field.Slider} me
+     * @param {Ext.slider.Slider} Slider Component
      * @param {Ext.slider.Thumb} thumb
      * @param {Number} newValue the new value of this thumb
      * @param {Number} oldValue the old value of this thumb
      */
+
+<span id='Ext-field-Slider-event-dragstart'>    /**
+</span>    * @event dragstart
+    * Fires when the slider thumb starts a drag
+    * @param {Ext.field.Slider} this
+    * @param {Ext.slider.Slider} Slider Component
+    * @param {Ext.slider.Thumb} thumb The thumb being dragged
+    * @param {Array} value The start value
+    * @param {Ext.EventObject} e
+    */
+
+<span id='Ext-field-Slider-event-drag'>    /**
+</span>    * @event drag
+    * Fires when the slider thumb starts a drag
+    * @param {Ext.field.Slider} this
+    * @param {Ext.slider.Slider} Slider Component
+    * @param {Ext.slider.Thumb} thumb The thumb being dragged
+    * @param {Ext.EventObject} e
+    */
+
+<span id='Ext-field-Slider-event-dragend'>    /**
+</span>    * @event dragend
+    * Fires when the slider thumb starts a drag
+    * @param {Ext.field.Slider} this
+    * @param {Ext.slider.Slider} Slider Component
+    * @param {Ext.slider.Thumb} thumb The thumb being dragged
+    * @param {Array} value The end value
+    * @param {Ext.EventObject} e
+    */
 
     config: {
 <span id='Ext-field-Slider-cfg-cls'>        /**
@@ -152,7 +182,10 @@ Ext.define('Ext.field.Slider', {
 
         this.getComponent().on({
             scope: this,
-            change: 'onSliderChange'
+            change: 'onSliderChange',
+            dragstart: 'onSliderDragStart',
+            drag: 'onSliderDrag',
+            dragend: 'onSliderDragEnd'
         });
     },
 
@@ -161,8 +194,20 @@ Ext.define('Ext.field.Slider', {
         return Ext.factory(config, Ext.slider.Slider);
     },
 
-    onSliderChange: function(me, thumb, newValue, oldValue) {
-        this.fireEvent('change', this, thumb, newValue, oldValue);
+    onSliderChange: function() {
+        this.fireEvent.apply(this, [].concat('change', this, Array.prototype.slice.call(arguments)));
+    },
+
+    onSliderDragStart: function() {
+        this.fireEvent.apply(this, [].concat('dragstart', this, Array.prototype.slice.call(arguments)));
+    },
+
+    onSliderDrag: function() {
+        this.fireEvent.apply(this, [].concat('drag', this, Array.prototype.slice.call(arguments)));
+    },
+
+    onSliderDragEnd: function() {
+        this.fireEvent.apply(this, [].concat('dragend', this, Array.prototype.slice.call(arguments)));
     },
 
 <span id='Ext-field-Slider-method-setValues'>    /**

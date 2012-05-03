@@ -42,8 +42,6 @@ $button-stroke-weight: .1em !default;
 
 <span id='Ext-Button-css_var-S-button-gradient'>/**
 </span> * @var {string} $button-gradient Default gradient for buttons.
- *
- * See {@link Global_CSS#background-gradient background-gradient}.
  */
 $button-gradient: $base-gradient !default;
 
@@ -65,8 +63,6 @@ $include-button-highlights: $include-highlights !default;
 
 <span id='Ext-Button-css_mixin-sencha-buttons'>/**
 </span> * Includes default button styles.
- *
- * See {@link Global_CSS#background-gradient background-gradient}.
  */
 @mixin sencha-buttons {
   // Basic button style
@@ -234,8 +230,8 @@ $include-button-highlights: $include-highlights !default;
     min-height: 0;
     text-shadow: none;
     line-height: auto;
-    height: auto;
-    padding: 0.5em;
+    height: 1.9em;
+    padding: 0em 0.5em;
 
     &amp; &gt; * {
       overflow: visible;

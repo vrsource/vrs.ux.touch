@@ -10,19 +10,19 @@ Ext.define('Oreilly.store.Sessions', {
         grouper: {
             sortProperty: 'time',
             groupFn: function(record) {
-            	return Ext.Date.format(record.get('time'), 'g:ia');
+                return Ext.Date.format(record.get('time'), 'g:ia');
             }
         },
 
         sorters: [
-        	{
-            	property: 'time',
-            	direction: 'ASC'
+            {
+                property: 'time',
+                direction: 'ASC'
             },
-        	{
-            	property: 'title',
-            	direction: 'ASC'
+            {
+                property: 'title',
+                direction: 'ASC'
             }
         ]
     }
-})
+});

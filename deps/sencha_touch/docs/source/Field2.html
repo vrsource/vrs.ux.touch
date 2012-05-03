@@ -87,6 +87,13 @@ Ext.define('Ext.field.Field', {
          */
         labelWidth: '30%',
 
+<span id='Ext-field-Field-cfg-labelWrap'>        /**
+</span>         * @cfg {Boolean} labelWrap True to allow the label to wrap. If set to false, the label will be truncated with
+         * an ellipsis.
+         * @accessor
+         */
+        labelWrap: false,
+
 <span id='Ext-field-Field-cfg-clearIcon'>        /**
 </span>         * @cfg {Boolean} clearIcon True to use a clear icon in this field
          * @accessor
@@ -165,7 +172,9 @@ Ext.define('Ext.field.Field', {
 <span id='Ext-field-Field-cfg-inputCls'>        /**
 </span>         * @cfg {String} inputCls CSS class to add to the input element of this fields {@link #component}
          */
-        inputCls: null
+        inputCls: null,
+
+        bubbleEvents: ['action']
     },
 
 <span id='Ext-field-Field-cfg-isFocused'>    /**
@@ -218,7 +227,7 @@ Ext.define('Ext.field.Field', {
         if (newLabelAlign) {
             renderElement.addCls(prefix + 'label-align-' + newLabelAlign);
 
-            if (newLabelAlign == &quot;top&quot;) {
+            if (newLabelAlign == &quot;top&quot; || newLabelAlign == &quot;bottom&quot;) {
                 this.label.setWidth('100%');
             } else {
                 this.updateLabelWidth(this.getLabelWidth());
@@ -243,12 +252,25 @@ Ext.define('Ext.field.Field', {
 
     // @private
     updateLabelWidth: function(newLabelWidth) {
+        var labelAlign = this.getLabelAlign();
+
         if (newLabelWidth) {
-            if (this.getLabelAlign() == &quot;top&quot;) {
+            if (labelAlign == &quot;top&quot; || labelAlign == &quot;bottom&quot;) {
                 this.label.setWidth('100%');
             } else {
                 this.label.setWidth(newLabelWidth);
             }
+        }
+    },
+
+    // @private
+    updateLabelWrap: function(newLabelWrap, oldLabelWrap) {
+        var cls = Ext.baseCSSPrefix + 'form-label-nowrap';
+
+        if (!newLabelWrap) {
+            this.addCls(cls);
+        } else {
+            this.removeCls(cls);
         }
     },
 

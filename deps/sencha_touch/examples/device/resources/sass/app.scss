@@ -56,6 +56,12 @@
     background-size: contain;
 }
 
+//push
+.logger .x-inner .x-inner {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
 //orientation
 #cube {
     -webkit-transform-style: preserve-3d;

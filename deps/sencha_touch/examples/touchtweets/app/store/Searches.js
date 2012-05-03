@@ -7,7 +7,6 @@ Ext.define('Twitter.store.Searches', {
     extend  : 'Ext.data.Store',
     requires: ['Twitter.model.Search'],
     config: {
-        model   : 'Twitter.model.Search',
-        autoLoad: true
+        model   : 'Twitter.model.Search'
     }
 });
