@@ -29,7 +29,9 @@ Ext.override('Ext.overrides.Map', {
 
 /*
 * Override the parseStatus method to consider 0 as a failure.
+* Fixed in ST 2.0.1
 */
+/*
 Ext.define('Ext.overrides.Connection', {
    override: 'Ext.data.Connection',
 
@@ -44,6 +46,7 @@ Ext.define('Ext.overrides.Connection', {
       return ret_val;
    }
 });
+*/
 
 
 if(0) {
