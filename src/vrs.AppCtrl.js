@@ -85,6 +85,8 @@ Ext.define('vrs.PanelController', {
       *    refs: {
       *       backBtn: '.backBtn'
       *    }
+      *  ...
+      *  obj.getBackBtn()
       */
       refs: {},
 
