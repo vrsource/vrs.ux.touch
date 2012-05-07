@@ -261,7 +261,7 @@ Ext.define('vrs.PanelController', {
    },
 
    _logError: function(msg) {
-      console.error(Ext.getClassName(this) + ': ' + msg);
+      console.error(Ext.getDisplayName(this) + ': ' + msg);
    },
 
    // ----- STATE CHANGE/UPDATE CALLBACKS ---- //
