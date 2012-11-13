@@ -3,14 +3,14 @@
 
 /** Test classes */
 Ext.define('test.ExtPanel1', {
-   extend : 'vrs.PanelController',
+   extend : 'vrs.StackPanelController',
    config: {
       panel: 'panel'
    }
 });
 
 Ext.define('test.ExtPanel2', {
-   extend : 'vrs.PanelController',
+   extend : 'vrs.StackPanelController',
    config: {
       panel: 'panel'
    }
@@ -47,7 +47,7 @@ Ext.define('test.ViewPanel1', {
 });
 
 Ext.define('test.Panel1Controller', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
 
    constructor: function() {
       this.callParent(arguments);
@@ -109,7 +109,7 @@ Ext.define('test.ToolbarReplacePanel', {
 /**
 * Panel that registers events.
 */
-test.EventPanel = Ext.extend(vrs.PanelController, {
+test.EventPanel = Ext.extend(vrs.StackPanelController, {
    constructor: function(config) {
       test.EventPanel.superclass.constructor.call(this, config);
 
@@ -134,7 +134,7 @@ component('PanelController', function() {
       var obj;
 
       // given: an object constructed with a config object
-      obj = new vrs.PanelController({panelHolder: {}, backName: 'myname'});
+      obj = new vrs.StackPanelController({panelHolder: {}, backName: 'myname'});
 
       // then: configured property should be set
       expect(obj.getBackName()).toEqual('myname');
@@ -149,7 +149,7 @@ component('PanelController', function() {
          var panel_obj = test.ViewPanel1.create(),
              obj;
          // given: an object constructed with a panel object
-         obj = vrs.PanelController.create({
+         obj = vrs.StackPanelController.create({
             panelHolder: {},
             panel: panel_obj
          });
@@ -159,7 +159,7 @@ component('PanelController', function() {
 
       it('should support initialization from xtype', function() {
          // given: an object constructed with a panel xtype
-         var obj = vrs.PanelController.create({
+         var obj = vrs.StackPanelController.create({
             panelHolder: {},
             panel: { xtype: 'test_viewpanel1' }
          });
@@ -169,7 +169,7 @@ component('PanelController', function() {
 
       it('should support initialization from config', function() {
          // given: an object constructed with a panel xtype
-         var obj = vrs.PanelController.create({
+         var obj = vrs.StackPanelController.create({
             panelHolder: {},
             panel: {
                xtype: 'test_viewpanel1',
@@ -185,7 +185,7 @@ component('PanelController', function() {
    feature('Ref Initialization', function() {
       it('Should support ref initialization for panel', function() {
          // given: ctrl constructed with a panel
-         var obj = vrs.PanelController.create({
+         var obj = vrs.StackPanelController.create({
             panelHolder: {},
             panel: {
                xtype: 'test_viewpanel1'
@@ -254,7 +254,7 @@ component('PanelController', function() {
 
       it('should allow replacement of back and home buttons', function() {
          // given: ctrl contructed with a panel with button placeholders
-         var obj = vrs.PanelController.create({
+         var obj = vrs.StackPanelController.create({
             panelHolder: test.helpers.createPanelHolderSpy(),
             panel: 'test_btnreplacepanel',
             refs: {
@@ -279,7 +279,7 @@ component('PanelController', function() {
 
       it('should allow replacement of nav toolbar', function() {
          // given: ctrl contructed with a panel with button placeholders
-         var obj = vrs.PanelController.create({
+         var obj = vrs.StackPanelController.create({
             panelHolder: test.helpers.createPanelHolderSpy(),
             panel: 'test_toolbarreplacepanel',
             refs: {
@@ -310,12 +310,12 @@ component('PanelController', function() {
       // If panel holder is not set, it should throw an assertion exception.
       expect(function() {
          /* jshint unused:false */
-         var obj = new vrs.PanelController({});
+         var obj = new vrs.StackPanelController({});
       }).toThrow();
    });
 
    it('should destroy the panel when the control is deactivated', function() {
-      var obj = new vrs.PanelController({panelHolder: {}}),
+      var obj = new vrs.StackPanelController({panelHolder: {}}),
           panel_spy = jasmine.createSpyObj('panel', ['destroy']);
       spyOn(obj, 'getPanel').andReturn(panel_spy);
 

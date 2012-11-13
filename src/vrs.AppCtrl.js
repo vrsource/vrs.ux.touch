@@ -28,6 +28,9 @@ Ext.ns('vrs');
 * TODO:
 *   - See if we can remove the timing issue using apply/update/initialConfig support in ST2.
 *   - Allow panel to be set to a class (instantiate the class for the panel value)
+*   - Investigate extending Evented for this class instead. (could handle initialize, etc)
+*   - May need to split off some of the behavior related to holder and automatic
+*     back buttons and home buttons.  (ie. the stack specific functions)
 */
 Ext.define('vrs.PanelController', {
    mixins: {
@@ -35,27 +38,6 @@ Ext.define('vrs.PanelController', {
    },
 
    config: {
-      /**
-      * If set, this is the text that should be displayed in the back button
-      * of any panels we push onto the stack.  (ie. buttons that come back to us)
-      */
-      backName: null,
-
-      /** Our current panel holder.
-      * Should call to this to push, pop, and clear the stack and do any other holder ops.
-      * (this is set by the controller stack that we get pushed onto)
-      */
-      panelHolder: null,
-
-      /**
-      * If set true, then as part of construction, will set the
-      * controller as base on the holder.  (can only happen for one controller in holder)
-      *
-      * note: we do it this way to make sure the panel construction code knows
-      *       if we are the base controller or not and what our holderPanel is.
-      */
-      isBaseController: false,
-
       /**
       * @cfg {Object} panel The view panel that this controller holds/uses.
       *
@@ -114,11 +96,22 @@ Ext.define('vrs.PanelController', {
       control: {}
    },
 
+   /**
+   * Construct the panel.
+   *
+   * @note: Subclasses must call up to this if they override the constructor.
+   */
    constructor: function(config) {
+      this.initialConfig = config
       this.initConfig(config);
       this.callParent(arguments);
-      assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
+      this.initialize()
    },
+
+   /** Allows customization in derived classes.
+   * Called at end of constructor.
+   */
+   initialize: Ext.emptyFn,
 
    /**
    * Turn the passed value into a panel object.
@@ -131,16 +124,6 @@ Ext.define('vrs.PanelController', {
       panel = Ext.ComponentManager.create(panel, 'component');
 
       return panel;
-   },
-
-   /**
-   * When panel changes, check for placeholders to override.
-   */
-   updatePanel: function(panel, oldPanel) {
-      // Look for and replace any placeholders
-      if(panel) {
-         this._replacePlaceholders();
-      }
    },
 
    /**
@@ -276,8 +259,7 @@ Ext.define('vrs.PanelController', {
    * if we are just being held on the stack for a while.)
    */
    destroy: function() {
-      //console.log("Destroying panel for control: ", this);
-      this.setPanelHolder(null);  // Clear reference to the stack
+      this.callParent(arguments);
       var panel = this.getPanel();
       if(panel)
       { panel.destroy(); }
@@ -291,6 +273,85 @@ Ext.define('vrs.PanelController', {
    onDestroy: function() {
       console.log("[DEPRECATED]: Call destroy instead of onDestroy");
       this.destroy();
+   }
+});
+
+
+/*
+* todo: Merge this up with the Panel controller in a common hierarchy
+*       to get some reuse and commonality.
+*/
+Ext.define('vrs.SubPanelController', {
+   mixins: {
+      observable: 'Ext.mixin.Observable'
+   },
+
+   config: {
+      panel: null
+   },
+
+   destroy: function() {
+      var panel = this.getPanel();
+      if(panel)
+      { panel.destroy(); }
+      this.clearListeners();
+   }
+});
+
+
+/**
+* Slightly customized PanelController that knows how to act as
+* a child of a stack holder (PanelHolder).
+*
+* Note: this should probably be a mixin long term, but for now
+*       we will just use a new class.
+*/
+Ext.define('vrs.StackPanelController', {
+   extend: 'vrs.PanelController',
+
+   config: {
+      /**
+      * If set, this is the text that should be displayed in the back button
+      * of any panels we push onto the stack.  (ie. buttons that come back to us)
+      */
+      backName: null,
+
+      /** Our current panel holder.
+      * Should call to this to push, pop, and clear the stack and do any other holder ops.
+      * (this is set by the controller stack that we get pushed onto)
+      */
+      panelHolder: null,
+
+      /**
+      * If set true, then as part of construction, will set the
+      * controller as base on the holder.  (can only happen for one controller in holder)
+      *
+      * note: we do it this way to make sure the panel construction code knows
+      *       if we are the base controller or not and what our holderPanel is.
+      */
+      isBaseController: false,
+   },
+
+   constructor: function(config) {
+      this.callParent(arguments);
+      assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
+   },
+
+   /**
+   * When panel changes, check for placeholders to override.
+   */
+   updatePanel: function(panel, oldPanel) {
+      //this.callParent(arguments);
+      // Look for and replace any placeholders
+      if(panel) {
+         this._replacePlaceholders();
+      }
+   },
+
+   destroy: function() {
+      //console.log("Destroying panel for control: ", this);
+      this.setPanelHolder(null);  // Clear reference to the stack
+      this.callParent(arguments);
    },
 
    // --- Helpers to figure out where we are being used --- //
@@ -439,7 +500,7 @@ vrs.createNavToolbarPlaceholder = function(config) {
 * with no content.
 */
 Ext.define('vrs.HtmlPanelController', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
 
    config: {
       panelHtml: ''
@@ -460,7 +521,7 @@ Ext.define('vrs.HtmlPanelController', {
 * and an embedded IFrame.
 */
 Ext.define('vrs.HtmlViewerPanelController', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
 
    config: {
       /** URI of the page to view. */
@@ -525,32 +586,8 @@ Ext.define('vrs.HtmlViewerPanel', {
 });
 
 
-
-/*
-* todo: Merge this up with the Panel controller in a common hierarchy
-*       to get some reuse and commonality.
-*/
-Ext.define('vrs.SubPanelController', {
-   mixins: {
-      observable: 'Ext.mixin.Observable'
-   },
-
-   config: {
-      panel: null
-   },
-
-   destroy: function() {
-      var panel = this.getPanel();
-      if(panel)
-      { panel.destroy(); }
-      this.clearListeners();
-   }
-});
-
-
-
 /**
-* Panel Holder
+* (Stack) Panel Holder
 *
 * This is a controller/panel that acts as the holder for PanelControllers.
 * It supports several variations based upon the usage context and is designed
