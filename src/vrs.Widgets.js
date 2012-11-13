@@ -396,7 +396,7 @@ vrs.st1_code = function() {
                hide: function() { form.destroy(); }
             });
          } else if (use_panel) {
-            panelHolder.pushFocusCtrl(new vrs.PanelController({
+            panelHolder.pushFocusCtrl(new vrs.StackPanelController({
                panel       : form,
                panelHolder : panelHolder
             }));
