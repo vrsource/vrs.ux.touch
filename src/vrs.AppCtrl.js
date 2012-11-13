@@ -723,7 +723,7 @@ Ext.define('vrs.PanelHolder', {
    _setFocusCtrl: function(ctrl, animOpts, onComplete) {
       var anim_config;
       onComplete = onComplete || Ext.emptyFn;
-      console.log("============ Setting New Focus ================");
+      //console.log("============ Setting New Focus ================");
 
       assert(this.getBaseController(), 'Must have a base controller.');
       assert(this.getUseStack(), 'Must have stack enabled.');
@@ -800,7 +800,7 @@ Ext.define('vrs.PanelHolder', {
 
       // If there was a control on the stack, then remove that controller
       function on_finish() {
-         console.log("Finish pop");
+         //console.log("Finish pop");
          me._handleCtrlRemoval(cur_ctrl);
       }
 
@@ -843,7 +843,7 @@ Ext.define('vrs.PanelHolder', {
       // store the controller that we need to remove, and then
       // clear them out in the callback function
       function on_finish() {
-         console.log("Clearing all controllers");
+         //console.log("Clearing all controllers");
          Ext.each(ctrls_to_remove, function(ctrl) {
             me._handleCtrlRemoval(ctrl);
          });
@@ -858,7 +858,7 @@ Ext.define('vrs.PanelHolder', {
    * to the controller and should let it know.
    */
    _handleCtrlRemoval: function(ctrl) {
-      console.log('Removing control: ', ctrl);
+      //console.log('Removing control: ', ctrl);
       var me = this,
           panel = ctrl.getPanel();
 

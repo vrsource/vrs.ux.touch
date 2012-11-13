@@ -1,4 +1,3 @@
-/*global simfla: false */
 
 /*
 component('Toggling Button', function() {

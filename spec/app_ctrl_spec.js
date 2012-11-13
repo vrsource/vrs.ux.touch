@@ -1,13 +1,16 @@
-/** Spec for the main app class. */
+/*jshint unused:false*/
+/** Spec for the main controller classes. */
 
 /** Test classes */
-test.ExtPanel1 = Ext.extend(vrs.PanelController, {
+Ext.define('test.ExtPanel1', {
+   extend : 'vrs.PanelController',
    config: {
       panel: 'panel'
    }
 });
 
-test.ExtPanel2 = Ext.extend(vrs.PanelController, {
+Ext.define('test.ExtPanel2', {
+   extend : 'vrs.PanelController',
    config: {
       panel: 'panel'
    }
@@ -46,7 +49,7 @@ Ext.define('test.ViewPanel1', {
 Ext.define('test.Panel1Controller', {
    extend: 'vrs.PanelController',
 
-   constructor: function(config) {
+   constructor: function() {
       this.callParent(arguments);
       this.callCount = 0;
    },
@@ -306,6 +309,7 @@ component('PanelController', function() {
    it('Should require panelHolder to be set', function() {
       // If panel holder is not set, it should throw an assertion exception.
       expect(function() {
+         /* jshint unused:false */
          var obj = new vrs.PanelController({});
       }).toThrow();
    });
