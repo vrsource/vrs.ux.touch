@@ -8,8 +8,48 @@
 //  see jasmine.createSpyClass below.
 //
 Ext.ns('test');
+Ext.ns('vrs');
+
+/** Testing overrides. */
+vrs.inTest = true;
 
 test.helpers = test.helpers || {};
+
+// --- Jasmine Grammar Overrides --- //
+// Based upon names from jasmine-species
+var desc_wrapper = function(prefix) {
+   return function(desc, func) {
+      return describe(prefix + ': ' + desc, func);
+   };
+};
+
+/** SUITES (describe) **/
+feature   = desc_wrapper('Feature');
+story     = desc_wrapper('Story');
+component = desc_wrapper('Component');
+
+concern   = desc_wrapper('Concern');
+context   = desc_wrapper('Context');
+
+/** SPECS (it) */
+var it_wrapper = function(prefix) {
+   return function(desc, func) {
+      return it(prefix + ': ' + desc, func);
+   };
+};
+scenario = it_wrapper('scenario');
+spec     = it_wrapper('spec');
+
+var gw_func = function(desc, func) {
+   return runs(func);
+};
+
+/** Steps (run) */
+given = gw_func;
+when  = gw_func;
+then  = gw_func;
+and   = gw_func;
+but   = gw_func;
 
 /**
  * IDEA: Consider using Ext.override to add these
