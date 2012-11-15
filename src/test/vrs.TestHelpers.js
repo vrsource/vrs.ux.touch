@@ -391,6 +391,28 @@ jasmine.createSpyClass = function(namespace, class_name, methods) {
    return fn;
 };
 
+/**
+ * Extends the jasmine.createSpyObj to take object of methods to override.
+ *
+ * @param {String} baseName name of spy class
+ * @param methods: An object of object methods to include.  If values are null,
+ *                 then they will have spy, if function, then spy that will call fake.
+ * @return The new object with spies.
+ */
+jasmine.createSpyObjEx = function(baseName, methods) {
+   var obj = {};
+
+   // build up methods
+   Ext.iterate(methods, function(k, v) {
+      obj[k] = jasmine.createSpy(baseName + '.' + k);
+      if(!Ext.isEmpty(v)) {
+         obj[k].andCallFake(v);
+      }
+   });
+
+   return obj;
+};
+
 
 // --- Dependencies --- //
 // note: we keep them inline to make it easier to include this file
