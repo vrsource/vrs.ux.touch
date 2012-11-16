@@ -196,3 +196,19 @@ vrs.dumpEvents = function(o, name) {
       console.log(name + " Action: " + actionName, arguments);
    });
 };
+
+/*
+// No mouse version
+Ext.Component.prototype.fireEvent =
+Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
+  if (arguments && arguments[0].indexOf("mouse") === -1 && arguments[0] != "uievent") {
+    console.log(this.$className, arguments, this);
+  }
+  return true;
+});
+
+Ext.Component.prototype.fireEvent =Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
+  console.log(this.$className, arguments, this);
+  return true;
+});
+*/
