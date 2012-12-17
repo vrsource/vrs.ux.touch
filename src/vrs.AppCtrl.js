@@ -331,7 +331,7 @@ Ext.define('vrs.StackPanelController', {
 
    constructor: function(config) {
       this.callParent(arguments);
-      assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
+      //assert(this.getPanelHolder() !== null, "Must set stack controller on new Panels.");
    },
 
    /**
@@ -448,7 +448,7 @@ Ext.define('vrs.StackPanelController', {
           holder = this.getPanelHolder();
 
       // If in stack and not base controller, need navigation
-      if(holder.getUseStack() && !this.isBaseController()) {
+      if(holder && holder.getUseStack() && !this.isBaseController()) {
          // - Create back buttn
          back_btn = new Ext.Button({
             itemId: 'backBtn'
