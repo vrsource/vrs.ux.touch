@@ -17,13 +17,13 @@ vrs.AppObject = {
    launch: function() {
       // Create the core panel stack to slide items onto
       this.baseStack = vrs.PanelHolder.create({
-         id: 'base_stack',
-         fullscreen: true
+         id         : 'base_stack',
+         fullscreen : true
       });
 
       // Create main controller
       this.mainCtrl = vrs.MainMenuController.create({
-         panelHolder : this.baseStack,
+         panelHolder      : this.baseStack,
          isBaseController : true
       });
       this.baseStack.setBaseController(this.mainCtrl);
@@ -33,7 +33,7 @@ vrs.AppObject = {
 
 // --- Main Menu View Controller and Panel --- //
 Ext.define('vrs.MainMenuController', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
    config: {
       backName : 'Main',
       panel    : 'vrs_mainmenupanel',
@@ -93,7 +93,7 @@ Ext.define('vrs.MainMenuPanel', {
 
 // ---- Panel1 Controller and Panel ---- //
 Ext.define('vrs.Panel1Controller', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
    config: {
       backName : 'Panel1',
       panel    : 'vrs_panel1',
@@ -152,7 +152,7 @@ Ext.define('vrs.Panel1', {
 
 // ---- Panel2 Controller and Panel ---- //
 Ext.define('vrs.Panel2Controller', {
-   extend: 'vrs.PanelController',
+   extend: 'vrs.StackPanelController',
    config: {
       backName : 'Panel2',
       panel    : 'vrs_panel2'
