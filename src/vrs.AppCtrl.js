@@ -150,10 +150,17 @@ Ext.define('vrs.PanelController', {
    getRef: function(refName, selector) {
       this.refCache = this.refCache || {};
       var me = this,
+          panel,
           cached = this.refCache[refName];
 
       if(!cached) {
-         cached = this.getPanel().query(selector)[0];
+         panel = this.getPanel();
+         // try panel then sub-panel
+         if(Ext.ComponentQuery.is(panel, selector)) {
+            cached = panel;
+         } else {
+            cached = this.getPanel().query(selector)[0];
+         }
          me.refCache[refName] = cached;
          if(cached) {
             cached.on('destroy', function() {
