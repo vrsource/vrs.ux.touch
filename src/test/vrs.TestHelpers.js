@@ -108,12 +108,6 @@ Ext.merge(test.helpers, {
       spec.after(function() { namespace[objName] = orig_obj; });
    },
 
-   // Howto:
-   //
-   // - Spy on a constructor
-   //
-   //
-
    // ----- Ajax Helpers ----- //
    /**
     * Return the number of pending ajax requests (readyState === 2)
