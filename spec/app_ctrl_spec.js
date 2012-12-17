@@ -337,22 +337,6 @@ component('PanelController', function() {
    });
 });
 
-component('SubPanelController', function() {
-
-   it('should disconnect all listeners when destroyed', function() {
-      // given: a panel with registered events
-      var obj = new test.EventSubPanel();
-      expect(obj.hasListener('direct_event')).toEqual(true);
-
-      // when: destroy the panel
-      obj.destroy();
-
-      // then: should not have the events registered any more
-      expect(obj.hasListener('direct_event')).toEqual(false);
-   });
-});
-
-
 component('Panel Holder', function() {
    var panel_holder = null,
        base_ctrl, ctrl1, ctrl2, ctrl3;

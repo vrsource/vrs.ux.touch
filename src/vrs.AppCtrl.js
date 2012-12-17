@@ -277,28 +277,6 @@ Ext.define('vrs.PanelController', {
 });
 
 
-/*
-* todo: Merge this up with the Panel controller in a common hierarchy
-*       to get some reuse and commonality.
-*/
-Ext.define('vrs.SubPanelController', {
-   mixins: {
-      observable: 'Ext.mixin.Observable'
-   },
-
-   config: {
-      panel: null
-   },
-
-   destroy: function() {
-      var panel = this.getPanel();
-      if(panel)
-      { panel.destroy(); }
-      this.clearListeners();
-   }
-});
-
-
 /**
 * Slightly customized PanelController that knows how to act as
 * a child of a stack holder (PanelHolder).
