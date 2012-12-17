@@ -267,7 +267,7 @@ Ext.define('vrs.PanelController', {
 
       // XXX: this.clearListeners();
       // should happen in base class for observable
-      this.callParent();
+      //this.callParent();
    },
 
    onDestroy: function() {
