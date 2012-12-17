@@ -74,9 +74,9 @@ Ext.define('vrs.MainMenuPanel', {
 
       this.setItems([
          {
-            xtype   : 'toolbar',
-            docked  : 'top',
-            title   : 'Main Menu'
+            xtype  : 'toolbar',
+            docked : 'top',
+            title  : 'Main Menu'
          },
          vrs.containerWrapButton({
             xtype   : 'button',
@@ -105,7 +105,9 @@ Ext.define('vrs.Panel1Controller', {
    },
 
    onButtonTap: function() {
-      var panel2_ctrl = vrs.Panel2Controller.create({panelHolder: this.getPanelHolder()});
+      var panel2_ctrl = vrs.Panel2Controller.create({
+         panelHolder: this.getPanelHolder()
+      });
       this.getPanelHolder().pushFocusCtrl(panel2_ctrl);
    }
 });
@@ -130,13 +132,19 @@ Ext.define('vrs.Panel1', {
 
       this.setItems([
          {
-            xtype : 'toolbar',
-            docked: 'top',
-            title : 'Panel 1',
-            items : [
-               vrs.createBackBtnPlaceholder(),
+            xtype  : 'toolbar',
+            docked : 'top',
+            title  : 'Panel 1',
+            items  : [
+               {
+                  xtype: 'button',
+                  itemId: 'backBtn'
+               },
                { xtype: 'spacer' },
-               vrs.createHomeBtnPlaceholder()
+               {
+                  xtype: 'button',
+                  itemId: 'homeBtn'
+               }
             ]
          },
          vrs.containerWrapButton({
@@ -177,10 +185,12 @@ Ext.define('vrs.Panel2', {
       var me = this;
 
       this.setItems([
-         vrs.createNavToolbarPlaceholder({
-            docked : 'top',
-            title  : 'Panel 2'
-         }),
+         {
+            xtype: 'toolbar',
+            docked: 'top',
+            itemId: 'navToolbar',
+            title: 'Panel 2'
+         },
          {
             html: 'This is Panel 2'
          }

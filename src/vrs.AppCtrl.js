@@ -317,6 +317,16 @@ Ext.define('vrs.StackPanelController', {
       *       if we are the base controller or not and what our holderPanel is.
       */
       isBaseController: false,
+
+      /**
+      * UI selectors for automatically setting up back, home, and navigation
+      * information.  If they are set, then we will try to replace
+      * any UI controls of the given name with controls and settings
+      * for controlling the stack.
+      */
+      backBtnSelector    : '#backBtn',
+      homeBtnSelector    : '#homeBtn',
+      navToolbarSelector : '#navToolbar'
    },
 
    constructor: function(config) {
@@ -371,30 +381,36 @@ Ext.define('vrs.StackPanelController', {
           found;
 
       // Find back button
-      found = panel.query('#backBtn');
-      if(found.length > 1) {
-         console.warn('Found multiple back buttons');
-      }
-      if(found.length > 0) {
-         this._overrideBackBtn(found[0]);
+      if(this.getBackBtnSelector()) {
+         found = panel.query(this.getBackBtnSelector());
+         if(found.length > 1) {
+            console.warn('Found multiple back buttons');
+         }
+         if(found.length > 0) {
+            this._overrideBackBtn(found[0]);
+         }
       }
 
       // Find home button
-      found = panel.query('#homeBtn');
-      if(found.length > 1) {
-         console.warn('Found multiple home buttons');
-      }
-      if(found.length > 0) {
-         this._overrideHomeBtn(found[0]);
+      if(this.getHomeBtnSelector()) {
+         found = panel.query(this.getHomeBtnSelector());
+         if(found.length > 1) {
+            console.warn('Found multiple home buttons');
+         }
+         if(found.length > 0) {
+            this._overrideHomeBtn(found[0]);
+         }
       }
 
       // Find toolbar
-      found = panel.query('#navToolbar');
-      if(found.length > 1) {
-         console.warn('Found multiple nav toolbars');
-      }
-      if(found.length > 0) {
-         this._overrideNavToolbar(found[0]);
+      if(this.getNavToolbarSelector()) {
+         found = panel.query(this.getNavToolbarSelector());
+         if(found.length > 1) {
+            console.warn('Found multiple nav toolbars');
+         }
+         if(found.length > 0) {
+            this._overrideNavToolbar(found[0]);
+         }
       }
    },
 
@@ -461,28 +477,6 @@ Ext.define('vrs.StackPanelController', {
 });
 
 /**
-* Helpers for creating placeholders in view panels.
-*/
-vrs.createBackBtnPlaceholder = function(btnConfig) {
-   return Ext.Button.create(Ext.apply({}, btnConfig, {
-      itemId: 'backBtn'
-   }));
-};
-
-vrs.createHomeBtnPlaceholder = function(btnConfig) {
-   return Ext.Button.create(Ext.apply({}, btnConfig, {
-      itemId: 'homeBtn'
-   }));
-};
-
-vrs.createNavToolbarPlaceholder = function(config) {
-   return Ext.Toolbar.create(Ext.apply({}, config, {
-      itemId: 'navToolbar',
-      docked: 'top'
-   }));
-};
-
-/**
 * Used for testing when we need a panel controller
 * with no content.
 */
@@ -544,10 +538,10 @@ Ext.define('vrs.HtmlViewerPanel', {
       });
 
       this.topToolbar = Ext.Toolbar.create({
-         docked  : 'top',
-         title   : ctrl.title,
-         ui      : 'dark',
-         items   : [
+         docked: 'top',
+         title : ctrl.title,
+         ui    : 'dark',
+         items : [
             this.backBtn,
             { xtype: 'spacer' }
          ]
