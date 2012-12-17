@@ -283,24 +283,33 @@ Ext.define('vrs.PanelController', {
 *
 * Note: this should probably be a mixin long term, but for now
 *       we will just use a new class.
+*
+* TODO:
+*  - Change placeholder values to be configured
 */
 Ext.define('vrs.StackPanelController', {
    extend: 'vrs.PanelController',
 
    config: {
       /**
+      * @cfg backName
+      *
       * If set, this is the text that should be displayed in the back button
       * of any panels we push onto the stack.  (ie. buttons that come back to us)
       */
       backName: null,
 
-      /** Our current panel holder.
+      /**
+      * @cfg panelHolder Our current panel holder.
+      * @required
       * Should call to this to push, pop, and clear the stack and do any other holder ops.
       * (this is set by the controller stack that we get pushed onto)
       */
       panelHolder: null,
 
       /**
+      * @cfg isBaseController
+      *
       * If set true, then as part of construction, will set the
       * controller as base on the holder.  (can only happen for one controller in holder)
       *
@@ -676,15 +685,14 @@ Ext.define('vrs.PanelHolder', {
       */
    },
 
-   /**
-   * Set the base controller.
-   */
+   /** Validate the base controller value. */
    applyBaseController: function(baseController) {
       assert(this.getBaseController() === null, 'Must only call once');
       assert(baseController.isBaseController(), 'Must have been configured as base controller');
       return baseController;
    },
 
+   /** Set the base controller. */
    updateBaseController: function(baseController) {
       baseController.setPanelHolder(this);
 
