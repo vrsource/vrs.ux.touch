@@ -72,9 +72,9 @@ Ext.define('test.BtnReplacePanel', {
             docked: 'top',
             title : 'Panel 1',
             items : [
-               vrs.createBackBtnPlaceholder(),
+               { xtype: 'button', itemId: 'backBtn' },
                { xtype: 'spacer' },
-               vrs.createHomeBtnPlaceholder()
+               { xtype: 'button', itemId: 'homeBtn' }
             ]
          },
          {
@@ -93,10 +93,12 @@ Ext.define('test.ToolbarReplacePanel', {
    config: {
       layout : 'vbox',
       items: [
-         vrs.createNavToolbarPlaceholder({
+         {
+            xtype: 'toolbar',
+            itemId: 'navToolbar',
             docked  : 'top',
             title   : 'Title'
-         }),
+         },
          {
             xtype : 'panel',
             html  : 'Stuff Here'
