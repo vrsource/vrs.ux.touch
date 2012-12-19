@@ -17,28 +17,43 @@ test.helpers = test.helpers || {};
 
 // --- Jasmine Grammar Overrides --- //
 // Based upon names from jasmine-species
-var desc_wrapper = function(prefix) {
+var desc_wrapper = function(prefix, xignore) {
    return function(desc, func) {
-      return describe(prefix + ': ' + desc, func);
+      if(xignore) {
+         return xdescribe(prefix + ': ' + desc, func);
+      } else {
+         return describe(prefix + ': ' + desc, func);
+      }
    };
 };
 
 /** SUITES (describe) **/
-feature   = desc_wrapper('Feature');
-story     = desc_wrapper('Story');
-component = desc_wrapper('Component');
+feature    = desc_wrapper('Feature');
+story      = desc_wrapper('Story');
+component  = desc_wrapper('Component');
+xfeature   = desc_wrapper('Feature', true);
+xstory     = desc_wrapper('Story', true);
+xcomponent = desc_wrapper('Component', true);
 
 concern   = desc_wrapper('Concern');
 context   = desc_wrapper('Context');
+xconcern  = desc_wrapper('Concern', true);
+xcontext  = desc_wrapper('Context', true);
 
 /** SPECS (it) */
-var it_wrapper = function(prefix) {
+var it_wrapper = function(prefix, xignore) {
    return function(desc, func) {
-      return it(prefix + ': ' + desc, func);
+      if(xignore) {
+         return xit(prefix + ': ' + desc, func);
+      } else {
+         return it(prefix + ': ' + desc, func);
+      }
    };
 };
-scenario = it_wrapper('scenario');
-spec     = it_wrapper('spec');
+scenario  = it_wrapper('scenario');
+spec      = it_wrapper('spec');
+xscenario = it_wrapper('scenario', true);
+xspec     = it_wrapper('spec', true);
 
 var gw_func = function(desc, func) {
    return runs(func);
