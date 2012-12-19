@@ -120,15 +120,6 @@ test.EventPanel = Ext.extend(vrs.StackPanelController, {
    }
 });
 
-test.EventSubPanel = Ext.extend(vrs.SubPanelController, {
-   constructor: function(config) {
-      test.EventSubPanel.superclass.constructor.call(this, config);
-
-      // Add a normal event
-      this.on('direct_event', function() { console.log('event'); });
-   }
-});
-
 
 // ---- PANEL CONTROLLER --- //
 component('PanelController', function() {
@@ -308,13 +299,13 @@ component('PanelController', function() {
    });
 
 
-   it('Should require panelHolder to be set', function() {
-      // If panel holder is not set, it should throw an assertion exception.
-      expect(function() {
-         /* jshint unused:false */
-         var obj = new vrs.StackPanelController({});
-      }).toThrow();
-   });
+   //it('Should require panelHolder to be set', function() {
+   //   // If panel holder is not set, it should throw an assertion exception.
+   //   expect(function() {
+   //      /* jshint unused:false */
+   //      var obj = new vrs.StackPanelController({});
+   //   }).toThrow();
+   //});
 
    it('should destroy the panel when the control is deactivated', function() {
       var obj = new vrs.StackPanelController({panelHolder: {}}),
