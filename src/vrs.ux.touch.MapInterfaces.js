@@ -74,9 +74,11 @@ Ext.define('vrs.ux.touch.IMapComponent', {
       maskMapCls: 'x-mask-map'
    },
 
+   /*
    constructor: function() {
       this.callParent(arguments);
    },
+   */
 
    /**
    * Initialize the UI pieces.
