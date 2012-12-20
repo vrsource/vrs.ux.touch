@@ -30,7 +30,7 @@ var pnl = new Ext.Panel({
 Ext.define('vrs.ux.touch.LeafletMap', {
    extend: 'vrs.ux.touch.IMapComponent',
 
-   xtype: 'leaflet_map',
+   alias: 'widget.leaflet_map',
 
    constructor : function() {
       this.callParent(arguments);
@@ -38,6 +38,22 @@ Ext.define('vrs.ux.touch.LeafletMap', {
       if(! window.L) {
          this.setHtml('Leaflet API is required.');
       }
+   },
+
+   /** Return the correct structure for the leaflet map. */
+   getElementConfig: function () {
+      return {
+         reference: 'element',
+         className: 'x-container',
+         children: [{
+            reference: 'innerElement',
+            className: 'x-inner',
+            children: [{
+               reference: 'mapContainer',
+               className: Ext.baseCSSPrefix + 'map-container'
+            }]
+         }]
+      };
    },
 
    renderMap: function() {
@@ -59,8 +75,13 @@ Ext.define('vrs.ux.touch.LeafletMap', {
          closePopupOnClick:  false
       }, map_options);
 
+      // What does this help?
+      if (this.mapContainer.firstChild) {
+         Ext.fly(element.dom.firstChild).destroy();
+      }
 
-      this.setMap(new L.Map(this.element.dom, map_options));
+      //this.setMap(new L.Map(this.element.dom, map_options));
+      this.setMap(new L.Map(this.mapContainer.dom, map_options));
 
       // When we finally get painted, then we need to invalidate our size to
       // reset everything.
