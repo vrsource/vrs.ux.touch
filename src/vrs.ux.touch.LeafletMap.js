@@ -16,8 +16,7 @@ var pnl = new Ext.Panel({
     fullscreen: true,
     items     : [
         {
-            xtype                 : 'leaflet_map',
-            enableLocationTracking: true
+            xtype                 : 'leaflet_map'
         }
     ]
 });</code></pre>
@@ -40,6 +39,11 @@ Ext.define('vrs.ux.touch.LeafletMap', {
       }
    },
 
+   initialize: function() {
+      this.callParent();
+      this.innerElement.on('touchstart', 'onTouchStart', this);
+   },
+
    /** Return the correct structure for the leaflet map. */
    getElementConfig: function () {
       return {
@@ -56,16 +60,11 @@ Ext.define('vrs.ux.touch.LeafletMap', {
       };
    },
 
-   renderMap: function() {
-      /** XXX
-      Ext.applyIf(this.mapOptions, {
-         center: new L.LatLng(0, 0),
-         zoom: 1,
-         attributionControl: false,
-         closePopupOnClick:  false
-      });
-      */
+   onTouchStart: function(e) {
+      e.makeUnpreventable();
+   },
 
+   renderMap: function() {
       // Apply defaults
       var map_options = this.getMapOptions();
       map_options = Ext.merge({

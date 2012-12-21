@@ -21,7 +21,7 @@ Ext.define('vrs.ux.touch.IMapComponent', {
        * @cfg {String} baseCls
        * The base CSS class to apply to the Maps's element (defaults to <code>'x-map'</code>).
        */
-      baseCls: 'x-map',
+      baseCls: Ext.baseCSSPrefix + 'leaflet-map',
 
       /**
        * @cfg {Boolean} enableLocationTracking
