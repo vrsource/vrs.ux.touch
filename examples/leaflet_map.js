@@ -3,7 +3,8 @@ Ext.ns('vrs');
 
 Ext.setup({
    onReady: function() {
-      vrs.ctrl = new vrs.AppCtrl();
+      var ctrl = MapAppCtrl.create();
+      Ext.Viewport.add(ctrl.getPanel());
    },
 
    fullscreen     : true,
@@ -11,14 +12,57 @@ Ext.setup({
 });
 
 
-Ext.define('vrs.AppCtrl', {
-   mixins: {
-      observable: 'Ext.mixin.Observable'
+Ext.define('MapAppCtrl', {
+   extend: 'vrs.PanelController',
+
+   config: {
+      panel: {
+         xtype: 'container',
+         //layout: 'fit',
+         //fullscreen: true,
+         items: [{
+            xtype: 'toolbar',
+            title: 'Test app',
+            itemId: 'toolbar',
+            docked: 'top'
+         }/* {
+            xtype: 'leaflet_map',
+            itemId: 'mapCmp',
+            width: '100%',
+            height: '100%'
+         }*/]         
+      },
+
+      refs: {
+         mapCmp: '#mapCmp',
+         toolbar: '#toolbar'
+      }
    },
 
-   panel: null,
+   initialize: function() {
+      this.callParent(arguments);
 
-   /** List of markers on the map. */
+      var mapOptions = {};
+
+      var map_cmp = vrs.ux.touch.LeafletMap.create({
+         itemId     : 'mapCmp',
+         mapOptions : mapOptions,
+         width      : '100%',
+         height     : '100%'
+      });
+      this.getPanel().add(map_cmp);
+
+      var map = this.getMapCmp().getMap();
+      var layer = new L.TileLayer(
+         'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+         {maxZoom: 17});
+      map.addLayer(layer);
+   }
+});
+
+
+
+/*
    markers: null,
 
    constructor: function(config) {
@@ -55,6 +99,7 @@ Ext.define('vrs.AppCtrl', {
    }
 
 });
+*/
 
 
 /*
