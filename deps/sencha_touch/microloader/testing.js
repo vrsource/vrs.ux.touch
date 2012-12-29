@@ -1,15 +1,48 @@
-/*
+/**
+ * Sencha Blink - Testing
+ * @author Jacky Nguyen <jacky@sencha.com>
+ */
+(function(global) {
+    if (typeof Ext === 'undefined') {
+        var Ext = global.Ext = {};
+    }
 
-This file is part of Sencha Touch 2
+    function write(content) {
+        document.write(content);
+    }
 
-Copyright (c) 2012 Sencha Inc
+    function meta(name, content) {
+        write('<meta name="' + name + '" content="' + content + '">');
+    }
 
-Contact:  http://www.sencha.com/contact
+    Ext.blink = function(options) {
+        var scripts = options.js || [],
+            styleSheets = options.css || [],
+            i, ln, path;
 
-Commercial Usage
-Licensees holding valid commercial licenses may use this file in accordance with the Commercial Software License Agreement provided with the Software or, alternatively, in accordance with the terms contained in a written agreement between you and Sencha.
+        meta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no');
+        meta('apple-mobile-web-app-capable', 'yes');
+        meta('apple-touch-fullscreen', 'yes');
 
-If you are unsure which license is appropriate for your use, please contact the sales department at http://www.sencha.com/contact.
+        for (i = 0,ln = styleSheets.length; i < ln; i++) {
+            path = styleSheets[i];
 
-*/
-(function(c){if(typeof a==="undefined"){var a=c.Ext={}}function b(e){document.write(e)}function d(e,f){b('<meta name="'+e+'" content="'+f+'">')}a.blink=function(f){var e=f.js||[],j=f.css||[],g,h,k;d("viewport","width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no");d("apple-mobile-web-app-capable","yes");d("apple-touch-fullscreen","yes");for(g=0,h=j.length;g<h;g++){k=j[g];if(typeof k!="string"){k=k.path}b('<link rel="stylesheet" href="'+k+'">')}for(g=0,h=e.length;g<h;g++){k=e[g];if(typeof k!="string"){k=k.path}b('<script src="'+k+'"><\/script>')}}})(this);
+            if (typeof path != 'string') {
+                path = path.path;
+            }
+
+            write('<link rel="stylesheet" href="'+path+'">');
+        }
+
+        for (i = 0,ln = scripts.length; i < ln; i++) {
+            path = scripts[i];
+
+            if (typeof path != 'string') {
+                path = path.path;
+            }
+
+            write('<script src="'+path+'"></'+'script>');
+        }
+    }
+
+})(this);

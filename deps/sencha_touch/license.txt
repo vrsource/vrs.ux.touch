@@ -1,5 +1,5 @@
-﻿Sencha Touch - JavaScript Library
-Copyright (c) 2010-2011, Sencha, Inc.
+Sencha Touch - JavaScript Library
+Copyright (c) 2010-2012, Sencha, Inc.
 All rights reserved.
 licensing@sencha.com
 
@@ -42,9 +42,7 @@ Library: Jasmine Š unit testing
 License: MIT
 Location: https://github.com/pivotal/jasmine
 
+
 --
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT OF THIRD-PARTY INTELLECTUAL PROPERTY RIGHTS.
-See the GNU General Public License for more details.
+THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY, FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
