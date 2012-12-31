@@ -69,9 +69,8 @@ Ext.define('vrs.ux.touch.LeafletMap', {
       var map_options = this.getMapOptions();
       map_options = Ext.merge({
          center: new L.LatLng(0, 0),
-         zoom: 1,
-         attributionControl: false,
-         closePopupOnClick:  false
+         zoom: 2,
+         attributionControl: false
       }, map_options);
 
       // What does this help?
@@ -143,19 +142,18 @@ Ext.define('vrs.ux.touch.LeafletMap', {
 Ext.define('vrs.ux.touch.LeafletPopupPanel', {
    extend: 'vrs.ux.touch.IMapPopupPanel',
 
+   /*
+   * Note: Since this is a panel, normal panel configuration settings can
+   *       be passed in.  (ex: items, dockedItems, layout, ...)
+   */
    config: {
       cls: 'x-map-popup'  // 'leaflet-popup'
    },
 
-   /**
-   * Construct the popup panel.
-   *
-   * Note: Since this is a panel, normal panel configuration settings can
-   *       be passed in.  (ex: items, dockedItems, layout, ...)
-   */
+   /** Initialize the panel with the map. */
    initialize: function() {
       // Call parent which will show us.
-      this.callParent();
+      this.callParent(arguments);
 
       this.setRenderTo(this.getMap()._panes.popupPane);
 
@@ -252,5 +250,7 @@ vrs.ux.touch.LeafletDrag = L.Map.Drag.extend({
    }
 });
 // Use our map drag instead of Leaflets
+/*
 vrs.ux.touch._OldLeafletDrag = L.Map.Drag;
 L.Map.Drag = vrs.ux.touch.LeafletDrag;
+*/

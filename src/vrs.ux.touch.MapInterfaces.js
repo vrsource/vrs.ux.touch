@@ -1,7 +1,7 @@
 Ext.ns('vrs.ux.touch');
 
 Ext.define('vrs.ux.touch.IMapComponent', {
-   extend: 'Ext.Component',
+   extend: 'Ext.Container',
 
    /**
    * @event maprender
