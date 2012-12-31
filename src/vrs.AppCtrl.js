@@ -97,6 +97,12 @@ Ext.define('vrs.PanelController', {
    },
 
    /**
+   * @prop Flag that is true only after construction has finished and initialize method
+   *       is completed.
+   */
+   initialized: false,
+
+   /**
    * Construct the panel.
    *
    * @note: Subclasses must call up to this if they override the constructor.
@@ -106,6 +112,7 @@ Ext.define('vrs.PanelController', {
       this.initConfig(config);
       this.callParent(arguments);
       this.initialize()
+      this.initialized = true;
    },
 
    /** Allows customization in derived classes.
