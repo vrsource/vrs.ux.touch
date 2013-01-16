@@ -24,6 +24,41 @@ function assert(exp, message) {
 Ext.format = Ext.util.Format.format;
 
 
+// --------- Mouse and Keyboard support ------ //
+
+/**
+* Add hooks to intercept mouse wheel events.
+*
+* see: http://goo.gl/q9LIf
+*/
+vrs.addMouseWheelHooks = function() {
+   // Native scrolling in Browser
+   document.addEventListener('mousewheel', function(e){
+      var el = e.target;
+      var offset, scroller, _results;
+      _results = [];
+      while (el !== document.body) {
+	 if (el && el.className && el.className.indexOf('x-container') >= 0) {
+	    var cmp = Ext.getCmp(el.id);
+	    if (cmp && typeof cmp.getScrollable == 'function' && cmp.getScrollable()){
+	       var scroller = cmp.getScrollable().getScroller();
+	       if (scroller) {
+		  var offset = {x:0, y: -e.wheelDelta*0.5};
+		  scroller.fireEvent('scrollstart', scroller, scroller.position.x, scroller.position.y, e);
+		  scroller.scrollBy(offset.x, offset.y);
+		  scroller.snapToBoundary();
+		  scroller.fireEvent('scrollend', scroller, scroller.position.x, scroller.position.y-offset.y);
+		  break;
+	       }
+	    }
+	 }
+	 _results.push(el = el.parentNode);
+      }
+      return _results;
+   }, false);
+};
+
+
 /**
 * Custom json writer that doesn't
 * put the written records into an embedded 'records'
