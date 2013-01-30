@@ -775,7 +775,7 @@ Ext.define('vrs.PanelHolder', {
          this.animateActiveItem(ctrl.getPanel(), anim_config);
          assert(this.activeItemAnimation, "Must have animation");
          this.activeItemAnimation.on('animationend', function() {
-            console.log('animation complete');
+            //console.log('animation complete');
             onComplete();
          });
       } else {
