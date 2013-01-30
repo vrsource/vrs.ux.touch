@@ -153,8 +153,9 @@ Ext.define('vrs.PanelController', {
 
    /** Helper method to return the given ref (potentially cached).
    * @private
+   *   @param defaultValue: The default value to return.
    */
-   getRef: function(refName, selector) {
+   getRef: function(refName, selector, defaultValue) {
       this.refCache = this.refCache || {};
       var me = this,
           panel,
@@ -173,6 +174,8 @@ Ext.define('vrs.PanelController', {
             cached.on('destroy', function() {
                me.refCache[refName] = null;
             });
+         } else if (defaultValue !== undefined) {
+            cached = defaultValue;
          } else {
             this._logError('Bad ref lookup [' + refName + ']. not found');
          }
