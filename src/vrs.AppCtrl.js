@@ -151,25 +151,31 @@ Ext.define('vrs.PanelController', {
       return refs;
    },
 
-   /** Helper method to return the given ref (potentially cached).
+   /**
+   * Helper method to return the given ref (potentially cached).
+   *  If the selector is '' or null then return defaultValue.
    * @private
    *   @param defaultValue: The default value to return.
    */
    getRef: function(refName, selector, defaultValue) {
       this.refCache = this.refCache || {};
       var me = this,
+          empty_selector = ((selector === '') || (selector === null)),
           panel,
           cached = this.refCache[refName];
 
       if(!cached) {
-         panel = this.getPanel();
-         // try panel then sub-panel
-         if(Ext.ComponentQuery.is(panel, selector)) {
-            cached = panel;
-         } else {
-            cached = this.getPanel().query(selector)[0];
+         if(!empty_selector) {
+            panel = this.getPanel();
+            // try panel then sub-panel
+            if(Ext.ComponentQuery.is(panel, selector)) {
+               cached = panel;
+            } else {
+               cached = this.getPanel().query(selector)[0];
+            }
+            me.refCache[refName] = cached;
          }
-         me.refCache[refName] = cached;
+
          if(cached) {
             cached.on('destroy', function() {
                me.refCache[refName] = null;
