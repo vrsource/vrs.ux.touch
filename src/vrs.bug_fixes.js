@@ -13,6 +13,41 @@
 * Each fix should include a description, link to forum posting, and a bug number.
 */
 
+/**
+* Fix bug in setting grouped dynamically on a list.
+*
+* See: http://www.sencha.com/forum/showthread.php?248818
+*
+* Should be fixed in 2.2+
+*/
+Ext.define('Ext.ListGroupFix', {
+    override: 'Ext.dataview.List',
+
+    updateGrouped: function(grouped) {
+               var me = this,
+            baseCls = this.getBaseCls(),
+            cls = baseCls + '-grouped',
+            unCls = baseCls + '-ungrouped';
+
+        if (grouped) {
+            me.findGroupHeaderIndices();
+            me.addCls(cls);
+            me.removeCls(unCls);
+            me.updatePinHeaders(me.getPinHeaders());
+        }
+        else {
+            me.addCls(unCls);
+            me.removeCls(cls);
+            me.updatePinHeaders(null);
+        }
+
+        if (me.isPainted() && me.listItems.length) {
+            me.setItemsCount(me.listItems.length);
+        }
+
+    }
+});
+
 /*
 * Ext.Map mapOptions not taking effect.
 *
