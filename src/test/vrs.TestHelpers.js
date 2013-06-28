@@ -17,10 +17,12 @@ test.helpers = test.helpers || {};
 
 // --- Jasmine Grammar Overrides --- //
 // Based upon names from jasmine-species
-var desc_wrapper = function(prefix, xignore) {
+var desc_wrapper = function(prefix, xignore, ddversion) {
    return function(desc, func) {
       if(xignore) {
          return xdescribe(prefix + ': ' + desc, func);
+      } else if(ddversion) {
+         return ddescribe(prefix + ': ' + desc, func);
       } else {
          return describe(prefix + ': ' + desc, func);
       }
@@ -28,32 +30,33 @@ var desc_wrapper = function(prefix, xignore) {
 };
 
 /** SUITES (describe) **/
-feature    = desc_wrapper('Feature');
-story      = desc_wrapper('Story');
-component  = desc_wrapper('Component');
-xfeature   = desc_wrapper('Feature', true);
-xstory     = desc_wrapper('Story', true);
-xcomponent = desc_wrapper('Component', true);
-
-concern   = desc_wrapper('Concern');
-context   = desc_wrapper('Context');
-xconcern  = desc_wrapper('Concern', true);
-xcontext  = desc_wrapper('Context', true);
+_.each(['feature', 'story', 'component',
+        'concern', 'context'], function(name) {
+   prefix = name[0].toUpperCase() + name.slice(1);
+   window[name]           = desc_wrapper(prefix, false, false);
+   window['x' + name]     = desc_wrapper(prefix, false, true);
+   window[name[0] + name] = desc_wrapper(prefix, false, true);
+});
 
 /** SPECS (it) */
-var it_wrapper = function(prefix, xignore) {
+var it_wrapper = function(prefix, xignore, iiversion) {
    return function(desc, func) {
       if(xignore) {
          return xit(prefix + ': ' + desc, func);
+      } else if(iiversion) {
+         return iit(prefix + ': ' + desc, func);
       } else {
          return it(prefix + ': ' + desc, func);
       }
    };
 };
-scenario  = it_wrapper('scenario');
-spec      = it_wrapper('spec');
-xscenario = it_wrapper('scenario', true);
-xspec     = it_wrapper('spec', true);
+
+_.each(['scenario', 'spec'], function(name) {
+   prefix = name[0].toUpperCase() + name.slice(1);
+   window[name]           = it_wrapper(prefix, false, false);
+   window['x' + name]     = it_wrapper(prefix, false, true);
+   window[name[0] + name] = it_wrapper(prefix, false, true);
+});
 
 var gw_func = function(desc, func) {
    return runs(func);
