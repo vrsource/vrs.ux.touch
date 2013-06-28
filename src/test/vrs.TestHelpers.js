@@ -342,7 +342,7 @@ jasmine.Matchers.prototype.toEqualTime = function(expected) {
  *    });
  *
  * TODO:
- *   - Extend to take method fakes as part of call.
+ *   - Extend to take method fakes as part of call. (See: createSpyObjEx)
  * see: http://groups.google.com/group/jasmine-js/browse_thread/thread/db6453000eb4566
  */
 jasmine.createSpyClass = function(namespace, class_name, methods) {
