@@ -456,10 +456,8 @@ Ext.define('vrs.StackPanelController', {
    _overrideHomeBtn: function(btn) {
       var me = this;
 
-      btn.setIconMask(true);
       btn.setUi('action');
       btn.setIconCls('home');
-      btn.setIconMask(true);
       btn.on('tap', function() { me.getPanelHolder().gotoBaseController(); });
    },
 
