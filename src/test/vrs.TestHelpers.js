@@ -17,11 +17,12 @@ test.helpers = test.helpers || {};
 
 // --- Jasmine Grammar Overrides --- //
 // Based upon names from jasmine-species
-var desc_wrapper = function(prefix, xignore, ddversion) {
+// config: {skip: true/false, only: true/false}
+var desc_wrapper = function(prefix, config) {
    return function(desc, func) {
-      if(xignore) {
+      if(config.skip) {
          return xdescribe(prefix + ': ' + desc, func);
-      } else if(ddversion) {
+      } else if(config.only) {
          return ddescribe(prefix + ': ' + desc, func);
       } else {
          return describe(prefix + ': ' + desc, func);
@@ -33,17 +34,18 @@ var desc_wrapper = function(prefix, xignore, ddversion) {
 _.each(['feature', 'story', 'component',
         'concern', 'context'], function(name) {
    prefix = name[0].toUpperCase() + name.slice(1);
-   window[name]           = desc_wrapper(prefix, false, false);
-   window['x' + name]     = desc_wrapper(prefix, false, true);
-   window[name[0] + name] = desc_wrapper(prefix, false, true);
+   window[name]           = desc_wrapper(prefix, {});
+   window['x' + name]     = desc_wrapper(prefix, {skip: true});
+   window[name[0] + name] = desc_wrapper(prefix, {only: true});
 });
 
 /** SPECS (it) */
-var it_wrapper = function(prefix, xignore, iiversion) {
+// config: {skip: true/false, only: true/false}
+var it_wrapper = function(prefix, config) {
    return function(desc, func) {
-      if(xignore) {
+      if(config.skip) {
          return xit(prefix + ': ' + desc, func);
-      } else if(iiversion) {
+      } else if(config.only) {
          return iit(prefix + ': ' + desc, func);
       } else {
          return it(prefix + ': ' + desc, func);
@@ -53,9 +55,9 @@ var it_wrapper = function(prefix, xignore, iiversion) {
 
 _.each(['scenario', 'spec'], function(name) {
    prefix = name[0].toUpperCase() + name.slice(1);
-   window[name]           = it_wrapper(prefix, false, false);
-   window['x' + name]     = it_wrapper(prefix, false, true);
-   window[name[0] + name] = it_wrapper(prefix, false, true);
+   window[name]           = it_wrapper(prefix, {});
+   window['x' + name]     = it_wrapper(prefix, {skip: true});
+   window[name[0] + name] = it_wrapper(prefix, {only: true});
 });
 
 var gw_func = function(desc, func) {
