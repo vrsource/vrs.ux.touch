@@ -12,6 +12,12 @@ test.AClass = Ext.extend(Object, {
    }
 });
 
+test.BClass = Ext.extend(Object, {
+   constructor: function() {
+      this.setThat = true;
+   }
+});
+
 component('vrs.TestHalpers', function() {
    feature('toBeEmpty', function() {
       it('should pass when empty', function() {
@@ -79,6 +85,9 @@ component('vrs.TestHalpers', function() {
          jasmine.createSpyClass(test, 'AClass', ['doSomething']);
          var test_obj = new test.AClass();
          expect(test_obj).toEqual(jasmine.any(test.AClass));
+         var test_objb = new test.BClass();
+         expect(test_objb).not.toEqual(jasmine.any(test.AClass));
+         expect(test_objb).toEqual(jasmine.any(test.BClass));
       });
 
       it('should reset all prototypes along with constructor', function() {
