@@ -41,6 +41,7 @@ component('MenuPanel', function() {
 
    it('Should construct correctly', function() {
       var menu = new vrs.ux.touch.MenuPanel();
+      expect(menu).toBeTruthy();
    });
 
 
