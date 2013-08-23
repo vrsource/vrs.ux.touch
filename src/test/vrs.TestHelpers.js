@@ -152,6 +152,7 @@ Ext.merge(test.helpers, {
     *    * url: <expected url> with full details. (will ignore missing components)
     *    * method: the method expected for the call.
     *    * params: {expected: 'val'}
+    *    * jsonData: <object>
     *    * headers: {expected: 'val'}
     *
     * response: Object with details of the response to provide when we return.
@@ -223,6 +224,11 @@ Ext.merge(test.helpers, {
                var val = (v ? String(v) : v);
                expect(url_params[k]).toEqual(val);
             });
+         }
+
+         if(expectConfig.jsonData) {
+            json_data = Ext.decode(cur_req.params);
+            expect(json_data).toEqual(expectConfig.jsonData);
          }
 
          if(expectConfig.method) {

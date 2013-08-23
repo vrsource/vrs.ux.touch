@@ -150,6 +150,14 @@ component('vrs.TestHalpers', function() {
          expect(resp.success).toEqual(true);
       });
 
+      it('should support testing valid json data passed to POST', function() {
+         var data = {val1: 21, val2: 'value', val3: { v: 10, v2: 20}};
+
+         Ext.Ajax.request({url: '/my_url', method: 'POST', jsonData: data, callback: response_cb});
+         expectAjaxStep({jsonData: data});
+         expect(resp.success).toEqual(true);
+      });
+
       it('should support testing valid params passed to request (GET)', function() {
          Ext.Ajax.request({ url: '/my_url', method: 'GET',
                            params: {p1: '10', p2: 20}, callback: response_cb});
