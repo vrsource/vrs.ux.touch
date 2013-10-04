@@ -108,10 +108,10 @@ Ext.define('vrs.PanelController', {
    * @note: Subclasses must call up to this if they override the constructor.
    */
    constructor: function(config) {
-      this.initialConfig = config
+      this.initialConfig = config;
       this.initConfig(config);
       this.callParent(arguments);
-      this.initialize()
+      this.initialize();
       this.initialized = true;
    },
 
