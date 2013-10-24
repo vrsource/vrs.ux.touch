@@ -80,8 +80,8 @@ component('MenuPanel', function() {
 
       it('should allow specifying left and right icons', function() {
          var menu, left_src, right_src,
-             icon1 = 'resources/img/checked.png',
-             icon2 = 'resources/img/chevron.png';
+             icon1 = vrs.ux.touch.BLANK_IMAGE_URL,
+             icon2 = vrs.ux.touch.BLANK_IMAGE_URL;
 
          menu = new vrs.ux.touch.MenuPanel({
             menuItems: [
