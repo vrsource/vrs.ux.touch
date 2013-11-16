@@ -303,6 +303,12 @@ Ext.define('vrs.PanelController', {
 /**
 * Extension to PanelController that allows for dialog display
 * and interaction.
+*
+* TODO:
+*  - Extend this to allow operation in 3 modes:
+*    - modal central dialog
+*    - slide in sheet (full or partial screen)
+*    - showBy popup window
 */
 Ext.define('vrs.DialogController', {
    extend: 'vrs.PanelController',
@@ -336,6 +342,17 @@ Ext.define('vrs.DialogController', {
    },
 
    show: function(options) {
+      this._preShowPanel(options);
+      this.getPanel().show();
+   },
+
+   showBy: function(component, options) {
+      this._preShowPanel(options);
+      this.getPanel().showBy(component);
+   },
+
+   /** Helper to perform common panel setup operations. */
+   _preShowPanel: function(options) {
       var panel = this.getPanel();
 
       if(!panel.getParent() && Ext.Viewport) {
@@ -344,13 +361,18 @@ Ext.define('vrs.DialogController', {
 
       this.setConfig(options);
 
-      panel.setConfig({
-         modal    : this.getModal(),
-         centered : this.getCentered(),
-         width    : this.getWidth(),
-         height   : this.getHeight()
-      });
-      panel.show();
+      var panel_options = {
+         modal : this.getModal(),
+         centered : this.getCentered()
+      };
+      if(this.getWidth() !== null) {
+         panel_options.width = this.getWidth();
+      }
+      if(this.getHeight() !== null) {
+         panel_options.height = this.getHeight();
+      }
+
+      panel.setConfig(panel_options);
    },
 
    _finishDialog: function(buttonId) {
