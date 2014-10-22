@@ -159,35 +159,49 @@ Ext.define('vrs.PanelController', {
    */
    getRef: function(refName, selector, defaultValue) {
       this.refCache = this.refCache || {};
+
       var me = this,
-          empty_selector = ((selector === '') || (selector === null)),
-          panel,
-          cached = this.refCache[refName];
+          selectors = /([^\(\)]*)(\((.*)\))?/.exec(selector),
+          component_selector = (selectors[1] || '').trim(),
+          css_selector       = (selectors[3] || '').trim(),
+          panel, component, element;
 
-      if(!cached) {
-         if(!empty_selector) {
-            panel = this.getPanel();
-            // try panel then sub-panel
-            if(Ext.ComponentQuery.is(panel, selector)) {
-               cached = panel;
-            } else {
-               cached = this.getPanel().query(selector)[0];
-            }
-            me.refCache[refName] = cached;
+      // Early out since we already have it
+      if (this.refCache[refName]) {
+         return this.refCache[refName];
+      }
+
+      if(component_selector) {
+         panel = this.getPanel();
+         // try panel then sub-panel
+         if(Ext.ComponentQuery.is(panel, component_selector)) {
+            component = panel;
          }
-
-         if(cached) {
-            cached.on('destroy', function() {
-               me.refCache[refName] = null;
-            });
-         } else if (defaultValue !== undefined) {
-            cached = defaultValue;
-         } else {
-            this._logError('Bad ref lookup [' + refName + ']. not found');
+         else {
+            component = this.getPanel().query(component_selector)[0];
          }
       }
 
-      return cached;
+      if (css_selector && component) {
+         element = component.element.down(css_selector);
+      }
+
+      var res = element || component;
+
+      if (res) {
+         me.refCache[refName] = res;
+
+         component.on('destroy', function() {
+            delete me.refCache[refName];
+         });
+      }
+      else if (defaultValue !== undefined) {
+         res = defaultValue;
+      } else {
+         this._logError('Bad ref lookup [' + refName + ']. not found');
+      }
+
+      return res;
    },
 
 
@@ -1017,5 +1031,3 @@ Ext.define('vrs.PanelHolder', {
    }
 
 }); // controller stack panel
-
-
