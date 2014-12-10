@@ -172,14 +172,12 @@ Ext.merge(test.helpers, {
           resp_obj;
 
       // find the oldest request that is pending
-      Ext.each(ajaxRequests, function(req) {
-         if(2 === req.readyState) {
-            cur_req = req;
-            return false;
-         }
-      });
-      if(null === cur_req) {
+      cur_req = _.find(ajaxRequests, {readyState: 2});
+      if(!cur_req) {
          throw new Error('Could not find pending AJAX request');
+      }
+      else {
+         _.remove(ajaxRequests, cur_req);
       }
 
       // Setup URL splits as needed
