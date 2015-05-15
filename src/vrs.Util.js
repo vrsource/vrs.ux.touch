@@ -1,4 +1,4 @@
-/*global PhoneGap: false */
+/*global Ext, PhoneGap, vrs */
 Ext.ns('vrs');
 
 /**
