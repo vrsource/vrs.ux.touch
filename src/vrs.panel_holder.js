@@ -188,7 +188,7 @@ Ext.define('vrs.PanelHolder', {
 
       ctrl.setPanelHolder(this);     // Let the controller know about us
 
-      if(anim_config) {
+      if(anim_config && ctrl.getPanel().isPainted()) {
          this.animateActiveItem(ctrl.getPanel(), anim_config);
          assert(this.activeItemAnimation, "Must have animation");
          this.activeItemAnimation.on('animationend', function() {
