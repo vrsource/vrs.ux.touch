@@ -18,12 +18,6 @@ var wrapPanel = function(menu) {
    return panel;
 };
 
-component('Stuff me', function() {
-   it('should do good stuff', function() {
-      expect(true).toBeTruthy();
-   });
-});
-
 component('MenuPanel', function() {
    var panel;
 
@@ -32,11 +26,16 @@ component('MenuPanel', function() {
    });
 
    afterEach(function() {
-      if(panel !== null)
+      if(panel)
       {
          panel.destroy();
          panel = null;
       }
+      
+      // Clear out pending timers.
+      _.each(window.activeTimeoutCallbacks, function (func, id) {
+         window.clearTimeout(id);
+      });
    });
 
    it('Should construct correctly', function() {
