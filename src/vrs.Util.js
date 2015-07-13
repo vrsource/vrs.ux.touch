@@ -2,8 +2,8 @@
 Ext.ns('vrs');
 
 /**
-* Utility methods
-*/
+ * Utility methods
+ */
 function AssertException(message) {
    this.message = message;
 }
@@ -27,45 +27,82 @@ Ext.format = Ext.util.Format.format;
 // --------- Mouse and Keyboard support ------ //
 
 /**
-* Add hooks to intercept mouse wheel events.
-*
-* see: http://goo.gl/q9LIf
-*/
-vrs.addMouseWheelHooks = function() {
-   // Native scrolling in Browser
-   document.addEventListener('mousewheel', function(e){
-      var el = e.target;
-      var offset, scroller, _results;
-      _results = [];
+ * Add hooks to intercept mouse wheel events.
+ *
+ * see for base concept:
+ * https://www.sencha.com/forum/showthread.php?110792-Add-support-for-mouse-scrolling-%28for-development%29&p=744700&viewfull=1#post744700
+ */
+(function() {
+   // `wheel` events can have different modes to indicate what the delta means.
+   // For our use here we simply need to know how to convert the delta into a
+   // reasonable pixel size for the scroller.
+   var delta_multipliers = {
+      0: 0.5,    // pixels
+      1: 12,     // lines
+      2: 12 * 20 // pages
+   };
+
+   function adjustScroller(scroller, evt) {
+      var multiplier = delta_multipliers[evt.deltaMode] || 0.5,
+          offset = {
+             x: 0,
+             y: evt.deltaY * multiplier
+          };
+
+      scroller.fireEvent('scrollstart', scroller, scroller.position.x, scroller.position.y, evt);
+      scroller.scrollBy(offset.x, offset.y);
+      scroller.snapToBoundary();
+      scroller.fireEvent('scrollend', scroller, scroller.position.x, scroller.position.y - offset.y);
+   }
+
+   function findScroller(el) {
+      var cmp, scroller;
+
       while (el !== document.body) {
-	 if (el && el.className && el.className.indexOf('x-container') >= 0) {
-	    var cmp = Ext.getCmp(el.id);
-	    if (cmp && typeof cmp.getScrollable == 'function' && cmp.getScrollable()){
-	       var scroller = cmp.getScrollable().getScroller();
-	       if (scroller) {
-		  var offset = {x:0, y: -e.wheelDelta*0.5};
-		  scroller.fireEvent('scrollstart', scroller, scroller.position.x, scroller.position.y, e);
-		  scroller.scrollBy(offset.x, offset.y);
-		  scroller.snapToBoundary();
-		  scroller.fireEvent('scrollend', scroller, scroller.position.x, scroller.position.y-offset.y);
-		  break;
-	       }
-	    }
-	 }
-	 _results.push(el = el.parentNode);
+         if (el && el.className && el.className.indexOf('x-container') >= 0) {
+            cmp = Ext.getCmp(el.id);
+            if (cmp && typeof cmp.getScrollable == 'function' && cmp.getScrollable()) {
+               scroller = cmp.getScrollable().getScroller();
+               if (scroller) {
+                  return scroller;
+               }
+            }
+         }
+         el = el.parentNode;
       }
-      return _results;
-   }, false);
-};
+      return null;
+   }
+
+   /**
+    * Event handler for `wheel` events which will search up the DOM looking for
+    * a scroller and adjust the scrollers possition to simulate normal scrolling.
+    *
+    * @param evt https://developer.mozilla.org/en-US/docs/Web/Events/wheel
+    */
+   function onWheelEvent(evt) {
+      var scroller = findScroller(evt.target);
+      if (scroller) {
+         adjustScroller(scroller, evt);
+      }
+   }
+
+   /**
+    * Adds an event mouse whell event listener so that the scroller can behave
+    * correctly on desktops
+    */
+   vrs.addMouseWheelHooks = function() {
+      document.addEventListener('wheel', onWheelEvent, false);
+   };
+}());
 
 
 /**
-* Custom json writer that doesn't
-* put the written records into an embedded 'records'
-* data structure.
-*
-* Just write as one json object or a list of json objects.
-*/
+ * Custom json writer that doesn't
+ * put the written records into an embedded 'records'
+ * data structure.
+ *
+ * Just write as one json object or a list of json objects.
+ */
 Ext.define('vrs.FlatJsonWriter', {
    extend: 'Ext.data.writer.Json',
 
@@ -110,14 +147,14 @@ vrs.number_format = function( number, decimals, dec_point, thousands_sep ) {
    j = (j = i.length) > 3 ? j % 3 : 0;
 
    return s + (j ? i.substr(0, j) + t : "") +
-              i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) +
-              (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) +
+      (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
 /**
-* Return a human readable forme of a filesize.
-* from: http://snipplr.com/view.php?codeview&id=5949
-*/
+ * Return a human readable forme of a filesize.
+ * from: http://snipplr.com/view.php?codeview&id=5949
+ */
 vrs.size_format = function(filesize) {
    if (filesize >= 1073741824) {
       filesize = vrs.number_format(filesize / 1073741824, 2, '.', '') + ' GB';
@@ -127,21 +164,21 @@ vrs.size_format = function(filesize) {
       } else {
          if (filesize >= 1024) {
             filesize = vrs.number_format(filesize / 1024, 0) + ' KB';
-	 } else {
-	    filesize = vrs.number_format(filesize, 0) + ' B';
-	 }
+         } else {
+            filesize = vrs.number_format(filesize, 0) + ' B';
+         }
       }
    }
    return filesize;
 };
 
 /**
-* Return a formatted data string based upon whether the date is the same
-* as the current date or not.
-*
-* If dateVar is today, then return todayFormat.  If not, then return notTodayFormat
-* verion of the data.
-*/
+ * Return a formatted data string based upon whether the date is the same
+ * as the current date or not.
+ *
+ * If dateVar is today, then return todayFormat.  If not, then return notTodayFormat
+ * verion of the data.
+ */
 vrs.format_today_date = function(dateVar, todayFormat, notTodayFormat) {
    var today_date = new Date(),
        is_today = ( (today_date.getYear() === dateVar.getYear()) &&
@@ -193,8 +230,8 @@ vrs.getFileExtension = function(filename)
 };
 
 /* Block threat for number of milliseoconds.
-* DON'T USE IN PRODUCTION
-*/
+ * DON'T USE IN PRODUCTION
+ */
 vrs.sleep = function sleep(milliSeconds){
    var startTime = new Date().getTime(), // get the current time
        cur_time = new Date().getTime();
@@ -203,9 +240,9 @@ vrs.sleep = function sleep(milliSeconds){
 };
 
 /*
-* Capture all events from the specified object and call fn before they run
-* within the scope of scope.
-*/
+ * Capture all events from the specified object and call fn before they run
+ * within the scope of scope.
+ */
 vrs.captureEvents = function(o, fn, scope) {
    o.fireEvent = Ext.Function.createInterceptor(o.fireEvent, fn, scope);
 };
@@ -215,8 +252,8 @@ vrs.captureActions = function(o, fn, scope) {
 };
 
 /** Helper function to display details of all events/actions
-* for the given object.
-*/
+ * for the given object.
+ */
 vrs.dumpEvents = function(o, name) {
    if(name) {
       name = "[" + name + "]";
@@ -233,17 +270,17 @@ vrs.dumpEvents = function(o, name) {
 };
 
 /*
-// No mouse version
-Ext.Component.prototype.fireEvent =
-Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
-  if (arguments && arguments[0].indexOf("mouse") === -1 && arguments[0] != "uievent") {
-    console.log(this.$className, arguments, this);
-  }
-  return true;
-});
+ // No mouse version
+ Ext.Component.prototype.fireEvent =
+ Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
+ if (arguments && arguments[0].indexOf("mouse") === -1 && arguments[0] != "uievent") {
+ console.log(this.$className, arguments, this);
+ }
+ return true;
+ });
 
-Ext.Component.prototype.fireEvent =Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
-  console.log(this.$className, arguments, this);
-  return true;
-});
-*/
+ Ext.Component.prototype.fireEvent =Ext.Function.createInterceptor(Ext.Component.prototype.fireEvent, function() {
+ console.log(this.$className, arguments, this);
+ return true;
+ });
+ */
