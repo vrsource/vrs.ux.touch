@@ -304,21 +304,43 @@ Ext.merge(test.helpers, {
 
 
 // ------ JASMINE EXTENTIONS -------------- //
-jasmine.Matchers.prototype.toBeEmpty = function() {
-   return this.actual.length === 0;
+vrs_custom_matchers = {
+    toBeEmpty: function() {
+        return {
+            compare: function(actual) {
+                return this.actual.length === 0;
+            }
+        };
+    },
+
+    toBeLength: function() {
+        return {
+            compare: function(actual, expected) {
+                return (this.actual.length === expected);
+            }
+        };
+    },
+
+    toBeInstanceOf: function() {
+        return {
+            compare(actual, expected) {
+                return (actual instanceof expected);
+            }
+        };
+    },
+
+    toEqualTime: function() {
+        return {
+            compare(actual, expected) {
+                return (actual.format('c') === expected.format('c'));
+            }
+        }
+    },
 };
 
-jasmine.Matchers.prototype.toBeLength = function(expected) {
-   return (this.actual.length === expected);
-};
-
-jasmine.Matchers.prototype.toBeInstanceOf = function(expected) {
-   return (this.actual instanceof expected);
-};
-
-jasmine.Matchers.prototype.toEqualTime = function(expected) {
-   return (this.actual.format('c') === expected.format('c'));
-};
+beforeEach(function() {
+    jasmine.addMatchers(vrs_custom_matchers);
+});
 
 /**
  * createSpyClass
